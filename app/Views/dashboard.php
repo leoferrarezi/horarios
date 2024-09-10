@@ -607,6 +607,7 @@
         <!-- partial -->
         <div class="main-panel">
           <div class="content-wrapper">
+            <?php echo $content; ?>
           </div>
           <!-- content-wrapper ends -->
           <!-- partial:../../partials/_footer.html -->

@@ -8,4 +8,9 @@ class Home extends BaseController
     {
         return view('login');
     }
+
+    public function sys(): string
+    {
+        return view('dashboard');
+    }
 }

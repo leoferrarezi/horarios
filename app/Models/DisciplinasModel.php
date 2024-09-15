@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class DisciplinasModel extends Model
 {
     protected $table            = 'disciplinas';
-    protected $primaryKey       = 'disciplinas_id';
+    protected $primaryKey       = 'disciplina_id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;

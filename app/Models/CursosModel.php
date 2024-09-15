@@ -7,12 +7,12 @@ use CodeIgniter\Model;
 class CursosModel extends Model
 {
     protected $table            = 'cursos';
-    protected $primaryKey       = 'id';
+    protected $primaryKey       = 'curso_id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['nome', 'matriz'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -28,7 +28,11 @@ class CursosModel extends Model
     protected $deletedField  = 'deleted_at';
 
     // Validation
-    protected $validationRules      = [];
+    protected $validationRules = [
+        'curso_id' => 'permit_empty|is_natural_no_zero|max_length[11]',
+        'nome' => 'required|is_unique[cursos.nome,curso_id,{curso_id}]|max_length[128]',
+        'matriz' => 'required|is_not_unique[matrizes.matriz_id]|max_length[11]'
+    ];
     protected $validationMessages   = [];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;

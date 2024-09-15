@@ -6,13 +6,13 @@ use CodeIgniter\Model;
 
 class MatrizCurricularModel extends Model
 {
-    protected $table            = 'matrizcurriculars';
-    protected $primaryKey       = 'id';
+    protected $table            = 'matrizes';
+    protected $primaryKey       = 'matriz_id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['matriz_id','nome'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -28,7 +28,10 @@ class MatrizCurricularModel extends Model
     protected $deletedField  = 'deleted_at';
 
     // Validation
-    protected $validationRules      = [];
+    protected $validationRules = [
+        'matriz_id' => 'is_natural_no_zero|max_length[11]',
+        'nome' => 'required|max_length[128]',
+    ];
     protected $validationMessages   = [];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;

@@ -43,5 +43,6 @@ class GradeDeHorarios extends Migration
     public function down()
     {
         $this->forge->dropTable('grade_horario');
+        
     }
 }

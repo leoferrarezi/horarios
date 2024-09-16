@@ -9,10 +9,11 @@ class Turmas extends Migration
     public function up()
     {
         $this->forge->addField([
-            'turma_id' => [
+            'id' => [
                 'type'              => 'INT',
                 'constraint'        => 11,
-                'unsigned'          => TRUE
+                'unsigned'          => TRUE,
+                'auto_increment'    => TRUE
             ],
 
             'codigo' => [
@@ -39,7 +40,7 @@ class Turmas extends Migration
                 'unsigned'          => TRUE
             ],
 
-            'curso' => [
+            'curso_id' => [
                 'type'              => 'INT',
                 'constraint'        => 11,
                 'unsigned'          => TRUE
@@ -51,13 +52,13 @@ class Turmas extends Migration
                 'unsigned'          => TRUE
             ],
 
-            'tabela_de_horarios' => [
+            'horario_id' => [
                 'type'              => 'INT',
                 'constraint'        => 11,
                 'unsigned'          => TRUE
             ],
 
-            'tabela_de_horarios_preferenciais' => [
+            'horario_preferencial_id' => [
                 'type'              => 'INT',
                 'constraint'        => 11,
                 'unsigned'          => TRUE,
@@ -65,10 +66,10 @@ class Turmas extends Migration
             ]
         ]);
 
-        $this->forge->addKey('turma_id', true); //chave primária
-        $this->forge->addForeignKey('curso', 'cursos', 'curso_id'); //chave estrangeira
-        $this->forge->addForeignKey('tabela_de_horarios', 'horarios', 'horario_id'); //chave estrangeira
-        $this->forge->addForeignKey('tabela_de_horarios_preferenciais', 'horarios', 'horario_id'); //chave estrangeira
+        $this->forge->addKey('id', true); //chave primária
+        $this->forge->addForeignKey('curso_id', 'cursos', 'id'); //chave estrangeira
+        $this->forge->addForeignKey('horario_id', 'horarios', 'id'); //chave estrangeira
+        $this->forge->addForeignKey('horario_preferencial_id', 'horarios', 'id'); //chave estrangeira
         $this->forge->createTable('turmas');
     }
 

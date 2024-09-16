@@ -4,30 +4,30 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class Matrizes extends Migration
+class GrupoAmbiente extends Migration
 {
     public function up()
     {
         $this->forge->addField([
-            'matriz_id' => [
+            'id' => [
                 'type'              => 'INT',
                 'constraint'        => 11,
-                'unsigned'          => TRUE
+                'unsigned'          => TRUE,
+                'auto_increment'    => TRUE
             ],
 
             'nome' => [
                 'type'          => 'VARCHAR',
-                'constraint'    => 128,
-                'unique'        => TRUE
+                'constraint'    => 128
             ]
         ]);
 
-        $this->forge->addKey('matriz_id', true); //chave primária
-        $this->forge->createTable('matrizes');
+        $this->forge->addKey('id', true); //chave primária        
+        $this->forge->createTable('grupos_de_ambientes');
     }
 
     public function down()
     {
-        $this->forge->dropTable('matrizes', true, true);
+        $this->forge->dropTable('grupos_de_ambientes', true, true);
     }
 }

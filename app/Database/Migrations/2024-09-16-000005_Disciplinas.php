@@ -9,7 +9,7 @@ class Disciplinas extends Migration
     public function up()
     {
         $this->forge->addField([
-            'disciplina_id' => [
+            'id' => [
                 'type'              => 'INT',
                 'constraint'        => 11,
                 'unsigned'          => TRUE,
@@ -26,7 +26,7 @@ class Disciplinas extends Migration
                 'constraint'    => 8
             ],
 
-            'matriz' => [
+            'matriz_id' => [
                 'type'          => 'INT',
                 'constraint'    => 11,
                 'unsigned'      => TRUE
@@ -35,6 +35,12 @@ class Disciplinas extends Migration
             'ch' => [
                 'type'          => 'INT',
                 'constraint'    => 4,
+                'unsigned'      => TRUE
+            ],
+
+            'max_tempos_diarios' => [
+                'type'          => 'INT',
+                'constraint'    => 2,
                 'unsigned'      => TRUE
             ],
 
@@ -48,10 +54,17 @@ class Disciplinas extends Migration
                 'type'          => 'VARCHAR',
                 'constraint'    => 32,
             ],
+
+            'grupo_de_ambientes_id' => [
+                'type'          => 'INT',
+                'constraint'    => 11,
+                'unsigned'      => TRUE
+            ]
         ]);
 
-        $this->forge->addKey('disciplina_id', true); //chave primária
-        $this->forge->addForeignKey('matriz', 'matrizes', 'matriz_id'); //chave estrangeira
+        $this->forge->addKey('id', true); //chave primária
+        $this->forge->addForeignKey('matriz_id', 'matrizes', 'id'); //chave estrangeira
+        $this->forge->addForeignKey('grupo_de_ambientes_id', 'grupos_de_ambientes', 'id'); //chave estrangeira
         $this->forge->createTable('disciplinas');
     }
 

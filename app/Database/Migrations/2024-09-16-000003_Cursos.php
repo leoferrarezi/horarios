@@ -4,12 +4,12 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class Professores extends Migration
+class Cursos extends Migration
 {
     public function up()
     {
         $this->forge->addField([
-            'professor_id' => [
+            'id' => [
                 'type'              => 'INT',
                 'constraint'        => 11,
                 'unsigned'          => TRUE,
@@ -18,25 +18,24 @@ class Professores extends Migration
 
             'nome' => [
                 'type'          => 'VARCHAR',
-                'constraint'    => 96,
+                'constraint'    => 128,
                 'unique'        => TRUE
             ],
 
-            'siape' => [
+            'matriz_id' => [
                 'type'          => 'INT',
-                'constraint'    => 7,
-                'unsigned'      => TRUE,
-                'null'          => TRUE,
-                'unique'        => TRUE
+                'constraint'    => 11,
+                'unsigned'      => TRUE
             ]
         ]);
 
-        $this->forge->addKey('professor_id', true); //chave primária
-        $this->forge->createTable('professores');
+        $this->forge->addKey('id', true); //chave primária
+        $this->forge->addForeignKey('matriz_id', 'matrizes', 'id'); //chave estrangeira
+        $this->forge->createTable('cursos');
     }
 
     public function down()
     {
-        $this->forge->dropTable('professores', true, true);
+        $this->forge->dropTable('cursos', true, true);
     }
 }

@@ -18,12 +18,14 @@ class AmbienteGrupo extends Migration
 
             'ambiente_id' => [
                 'type'          => 'INT',
-                'constraint'    => 11
+                'constraint'    => 11,                
+                'unsigned'      => TRUE,
             ],
 
             'grupo_de_ambiente_id' => [
                 'type'          => 'INT',
-                'constraint'    => 11
+                'constraint'    => 11,                
+                'unsigned'      => TRUE,
             ]
         ]);
 

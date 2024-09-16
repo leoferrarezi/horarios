@@ -18,8 +18,7 @@ class GruposAmbientes extends Migration
 
             'nome' => [
                 'type'          => 'VARCHAR',
-                'constraint'    => 64,
-                'unique'        => TRUE
+                'constraint'    => 64
             ]
         ]);
 

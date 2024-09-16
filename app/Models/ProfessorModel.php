@@ -6,13 +6,13 @@ use CodeIgniter\Model;
 
 class ProfessorModel extends Model
 {
-    protected $table            = 'professors';
-    protected $primaryKey       = 'id';
+    protected $table            = 'professores';
+    protected $primaryKey       = 'professor_id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['nome', 'siape'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -28,7 +28,11 @@ class ProfessorModel extends Model
     protected $deletedField  = 'deleted_at';
 
     // Validation
-    protected $validationRules      = [];
+    protected $validationRules = [
+        'professor_id' => 'permit_empty|is_natural_no_zero|max_length[11]',
+        'nome' => 'required|is_unique[professores.nome,professor_id,{professor_id}]|max_length[96]',
+        'siape' => 'permit_empty|is_unique[professores.siape,professor_id,{professor_id}]|exact_length[7]',
+    ];
     protected $validationMessages   = [];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;

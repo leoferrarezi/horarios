@@ -14,7 +14,7 @@
             <div class="card-body">
                 <h4 class="card-title">Cadastro de Professores</h4>
                 <p class="card-description">Informações Pessoais</p>
-                <form id="cadastroProfessor" class="forms-sample"  method="get" action="#">
+                <form id="cadastroProfessor" class="forms-sample"  method="post" action="#">
                     <div class="form-group">
                         <label for="exampleInputUsername1">Nome Completo</label>
                         <input type="text" class="form-control" id="nome" name="nome" placeholder="Digite seu nome">

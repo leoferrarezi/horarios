@@ -7,3 +7,6 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 $routes->get('/sys', 'Home::sys');
+
+//CRUD Professor
+$routes->get('/sys/professor/cadastro', 'Professor::cadastro');

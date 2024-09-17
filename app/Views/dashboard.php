@@ -626,6 +626,7 @@
     <!-- container-scroller -->
     <!-- plugins:js -->
     <script src="<?php echo base_url("assets/vendors/js/vendor.bundle.base.js"); ?>"></script>
+    <script src="<?php echo base_url("assets/vendors/jquery-validation/jquery.validate.min.js"); ?>"></script>
     <!-- endinject -->
     <!-- Plugin js for this page -->
     <script src="<?php echo base_url("assets/vendors/progressbar.js/progressbar.min.js"); ?>"></script>
@@ -642,5 +643,7 @@
     <!-- Custom js for this page -->
     <script src="<?php echo base_url("assets/js/dashboard.js"); ?>"></script>
     <!-- End custom js for this page -->
+    <script src="<?php echo base_url("assets/js/form-validation.js"); ?>"></script>
+    
   </body>
 </html>

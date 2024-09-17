@@ -35,6 +35,12 @@
         highlight: function(element, errorClass) {
           $(element).parent().addClass('has-danger')
           $(element).addClass('form-control-danger')
+          $(element).removeClass('form-control-success')
+        },
+        unhighlight: function(element, errorClass) {
+          $(element).parent().removeClass('has-danger')
+          $(element).addClass('form-control-success')
+          $(element).removeClass('form-control-danger')
         }
       });
     });

@@ -11,4 +11,10 @@ class Professor extends BaseController
     {
         //
     }
+
+    public function cadastro(): string
+    {
+        $data['content'] = view('sys/cadastro-professor');
+        return view('dashboard', $data);
+    }
 }

@@ -23,27 +23,31 @@
       <div class="container-fluid page-body-wrapper full-page-wrapper">
         <div class="row w-100">
           <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
-            <div class="card col-lg-4 mx-auto">
-              <div class="card-body px-5 py-5">
-                <h3 class="card-title text-start mb-3">Login</h3>
+            <div class="card col-12 col-sm-8 col-md-6 col-lg-4 mx-auto">
+              <div class="card-body px-4 py-5">
+                <!--Logo do Instituto Federal -->
+                <div class="d-flex flex-column flex-md-row align-items-center mb-4">
+                  <img src="<?php echo base_url('assets/images/logo-ifro.png'); ?>" alt="Instituto Federal" class="img-fluid mb-3 mb-md-0" style="width: 150px; margin-right: 25px;">
+                  <h3 class="mb-0 text-center text-md-start">Gerenciador de Horários</h3>
+                </div>
                 <form>
                   <div class="form-group">
-                    <label>Usuário *</label>
+                    <label>Usuário ou e-mail:</label>
                     <input type="text" class="form-control p_input">
                   </div>
                   <div class="form-group">
-                    <label>Senha *</label>
+                    <label>Senha:</label>
                     <input type="text" class="form-control p_input">
                   </div>
                   <div class="form-group d-flex align-items-center justify-content-between">
                     <div class="form-check">
                       <label class="form-check-label">
-                        <input type="checkbox" class="form-check-input"> Lembrar de mim </label>
+                        <input type="checkbox" class="form-check-input"> Manter conectado </label>
                     </div>
-                    <a href="#" class="forgot-pass">Esqueci a senha</a>
+                    <a href="#" class="forgot-pass">Esqueci minha senha</a>
                   </div>
                   <div class="text-center d-grid gap-2">
-                    <button type="submit" class="btn btn-primary btn-block enter-btn">Entrar</button>
+                    <button type="submit" class="btn btn-primary btn-block enter-btn">ENTRAR</button>
                   </div>
                   <!--<div class="d-flex">
                     <button class="btn btn-facebook me-2 col">

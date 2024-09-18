@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="<?php echo base_url("assets/vendors/css/vendor.bundle.base.css"); ?>">
     <!-- endinject -->
     <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="<?php echo base_url("assets/vendors/font-awesome/css/font-awesome.min.css"); ?>"> 
     <!-- End Plugin css for this page -->
     <!-- inject:css -->
     <!-- endinject -->

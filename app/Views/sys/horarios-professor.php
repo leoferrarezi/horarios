@@ -18,6 +18,7 @@
                         <table class="table mb-4">
                             <thead>
                                 <tr>
+                                    <th>Horários</th>
                                     <th>Segunda-feira</th>
                                     <th>Terça-feira</th>
                                     <th>Quarta-feira</th>
@@ -42,7 +43,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario02" id="btnhorario021" autocomplete="off">
                                             <label class="btn" for="btnhorario021">Sem Informações</label>
 
@@ -54,7 +55,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario03" id="btnhorario031" autocomplete="off">
                                             <label class="btn" for="btnhorario031">Sem Informações</label>
 
@@ -66,7 +67,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario04" id="btnhorario041" autocomplete="off">
                                             <label class="btn" for="btnhorario041">Sem Informações</label>
 
@@ -78,7 +79,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario05" id="btnhorario051" autocomplete="off">
                                             <label class="btn" for="btnhorario051">Sem Informações</label>
 
@@ -89,11 +90,23 @@
                                             <label class="btn btn-outline-danger" for="btnhorario053">Restrição Justificada</label>
                                         </div>
                                     </td>
+                                    <td>
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                            <input type="radio" class="btn-check" name="btnhorario36" id="btnhorario361" autocomplete="off">
+                                            <label class="btn" for="btnhorario361">Sem Informações</label>
+
+                                            <input type="radio" class="btn-check" name="btnhorario36" id="btnhorario362" autocomplete="off">
+                                            <label class="btn btn-outline-success" for="btnhorario352">Preferência</label>
+
+                                            <input type="radio" class="btn-check" name="btnhorario36" id="btnhorario363" autocomplete="off">
+                                            <label class="btn btn-outline-danger" for="btnhorario363">Restrição Justificada</label>
+                                        </div>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>08:20</td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario06" id="btnhorario061" autocomplete="off">
                                             <label class="btn" for="btnhorario061">Sem Informações</label>
 
@@ -105,7 +118,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario07" id="btnhorario071" autocomplete="off">
                                             <label class="btn" for="btnhorario071">Sem Informações</label>
 
@@ -117,7 +130,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario08" id="btnhorario081" autocomplete="off">
                                             <label class="btn" for="btnhorario081">Sem Informações</label>
 
@@ -129,7 +142,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario09" id="btnhorario091" autocomplete="off">
                                             <label class="btn" for="btnhorario091">Sem Informações</label>
 
@@ -141,7 +154,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario10" id="btnhorario101" autocomplete="off">
                                             <label class="btn" for="btnhorario101">Sem Informações</label>
 
@@ -152,11 +165,23 @@
                                             <label class="btn btn-outline-danger" for="btnhorario103">Restrição Justificada</label>
                                         </div>
                                     </td>
+                                    <td>
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                            <input type="radio" class="btn-check" name="btnhorario35" id="btnhorario351" autocomplete="off">
+                                            <label class="btn" for="btnhorario351">Sem Informações</label>
+
+                                            <input type="radio" class="btn-check" name="btnhorario35" id="btnhorario352" autocomplete="off">
+                                            <label class="btn btn-outline-success" for="btnhorario352">Preferência</label>
+
+                                            <input type="radio" class="btn-check" name="btnhorario35" id="btnhorario353" autocomplete="off">
+                                            <label class="btn btn-outline-danger" for="btnhorario353">Restrição Justificada</label>
+                                        </div>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>13:00</td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario11" id="btnhorario111" autocomplete="off">
                                             <label class="btn" for="btnhorario111">Sem Informações</label>
 
@@ -168,7 +193,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario12" id="btnhorario121" autocomplete="off">
                                             <label class="btn" for="btnhorario121">Sem Informações</label>
 
@@ -180,7 +205,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario13" id="btnhorario131" autocomplete="off">
                                             <label class="btn" for="btnhorario131">Sem Informações</label>
 
@@ -192,7 +217,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario14" id="btnhorario141" autocomplete="off">
                                             <label class="btn" for="btnhorario141">Sem Informações</label>
 
@@ -204,7 +229,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario15" id="btnhorario151" autocomplete="off">
                                             <label class="btn" for="btnhorario151">Sem Informações</label>
 
@@ -215,11 +240,23 @@
                                             <label class="btn btn-outline-danger" for="btnhorario153">Restrição Justificada</label>
                                         </div>
                                     </td>
+                                    <td>
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                            <input type="radio" class="btn-check" name="btnhorario34" id="btnhorario341" autocomplete="off">
+                                            <label class="btn" for="btnhorario341">Sem Informações</label>
+
+                                            <input type="radio" class="btn-check" name="btnhorario34" id="btnhorario342" autocomplete="off">
+                                            <label class="btn btn-outline-success" for="btnhorario342">Preferência</label>
+
+                                            <input type="radio" class="btn-check" name="btnhorario34" id="btnhorario343" autocomplete="off">
+                                            <label class="btn btn-outline-danger" for="btnhorario343">Restrição Justificada</label>
+                                        </div>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>15:00</td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario16" id="btnhorario161" autocomplete="off">
                                             <label class="btn" for="btnhorario161">Sem Informações</label>
 
@@ -231,7 +268,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario17" id="btnhorario171" autocomplete="off">
                                             <label class="btn" for="btnhorario171">Sem Informações</label>
 
@@ -243,7 +280,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario18" id="btnhorario181" autocomplete="off">
                                             <label class="btn" for="btnhorario181">Sem Informações</label>
 
@@ -255,7 +292,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario19" id="btnhorario191" autocomplete="off">
                                             <label class="btn" for="btnhorario191">Sem Informações</label>
 
@@ -267,7 +304,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario20" id="btnhorario201" autocomplete="off">
                                             <label class="btn" for="btnhorario201">Sem Informações</label>
 
@@ -278,11 +315,23 @@
                                             <label class="btn btn-outline-danger" for="btnhorario203">Restrição Justificada</label>
                                         </div>
                                     </td>
+                                    <td>
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                            <input type="radio" class="btn-check" name="btnhorario33" id="btnhorario331" autocomplete="off">
+                                            <label class="btn" for="btnhorario331">Sem Informações</label>
+
+                                            <input type="radio" class="btn-check" name="btnhorario33" id="btnhorario332" autocomplete="off">
+                                            <label class="btn btn-outline-success" for="btnhorario332">Preferência</label>
+
+                                            <input type="radio" class="btn-check" name="btnhorario33" id="btnhorario333" autocomplete="off">
+                                            <label class="btn btn-outline-danger" for="btnhorario333">Restrição Justificada</label>
+                                        </div>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>19:00</td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario21" id="btnhoraario211" autocomplete="off">
                                             <label class="btn" for="btnhoraario211">Sem Informações</label>
 
@@ -294,7 +343,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario22" id="btnhorario221" autocomplete="off">
                                             <label class="btn" for="btnhorario221">Sem Informações</label>
 
@@ -306,7 +355,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario23" id="btnhorario231" autocomplete="off">
                                             <label class="btn" for="btnhorario231">Sem Informações</label>
 
@@ -318,7 +367,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario24" id="btnhorario241" autocomplete="off">
                                             <label class="btn" for="btnhorario241">Sem Informações</label>
 
@@ -330,7 +379,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario25" id="btnhorario251" autocomplete="off">
                                             <label class="btn" for="btnhorario251">Sem Informações</label>
 
@@ -340,12 +389,24 @@
                                             <input type="radio" class="btn-check" name="btnhorario25" id="btnhorario253" autocomplete="off">
                                             <label class="btn btn-outline-danger" for="btnhorario253">Restrição Justificada</label>
                                         </div>
+                                    <td>
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                            <input type="radio" class="btn-check" name="btnhorario32" id="btnhorario321" autocomplete="off">
+                                            <label class="btn" for="btnhorario321">Sem Informações</label>
+
+                                            <input type="radio" class="btn-check" name="btnhorario32" id="btnhorario322" autocomplete="off">
+                                            <label class="btn btn-outline-success" for="btnhorario322">Preferência</label>
+
+                                            <input type="radio" class="btn-check" name="btnhorario32" id="btnhorario323" autocomplete="off">
+                                            <label class="btn btn-outline-danger" for="btnhorario323">Restrição Justificada</label>
+                                        </div>
+                                    </td>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>21:00</td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario26" id="btnhorario261" autocomplete="off">
                                             <label class="btn" for="btnhorario261">Sem Informações</label>
 
@@ -357,7 +418,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario27" id="btnhorario271" autocomplete="off">
                                             <label class="btn" for="btnhorario271">Sem Informações</label>
 
@@ -369,7 +430,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario28" id="btnhorario281" autocomplete="off">
                                             <label class="btn" for="btnhorario281">Sem Informações</label>
 
@@ -381,7 +442,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario29" id="btnhorario291" autocomplete="off">
                                             <label class="btn" for="btnhorario291">Sem Informações</label>
 
@@ -393,7 +454,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                             <input type="radio" class="btn-check" name="btnhorario30" id="btnhorario301" autocomplete="off">
                                             <label class="btn" for="btnhorario301">Sem Informações</label>
 
@@ -402,6 +463,18 @@
 
                                             <input type="radio" class="btn-check" name="btnhorario30" id="btnhorario303" autocomplete="off">
                                             <label class="btn btn-outline-danger" for="btnhorario303">Restrição Justificada</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                            <input type="radio" class="btn-check" name="btnhorario31" id="btnhorario311" autocomplete="off">
+                                            <label class="btn" for="btnhorario311">Sem Informações</label>
+
+                                            <input type="radio" class="btn-check" name="btnhorario31" id="btnhorario312" autocomplete="off">
+                                            <label class="btn btn-outline-success" for="btnhorario312">Preferência</label>
+
+                                            <input type="radio" class="btn-check" name="btnhorario31" id="btnhorario313" autocomplete="off">
+                                            <label class="btn btn-outline-danger" for="btnhorario313">Restrição Justificada</label>
                                         </div>
                                     </td>
                                 </tr>

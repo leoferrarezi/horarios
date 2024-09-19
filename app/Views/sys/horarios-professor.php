@@ -14,7 +14,7 @@
             <div class="card-body">
                 <h4 class="card-title"> TABELA DE HORÁRIOS </h4>
                 <div class="table-responsive">
-                    <form id="cadastroProfessor" class="forms-sample" method="post" action="#">
+                    <form id="cadastroHorarios" class="forms-sample" method="post" action="#">
                         <table class="table mb-4">
                             <thead>
                                 <tr>

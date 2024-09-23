@@ -1,5 +1,5 @@
 <div class="page-header">
-    <h3 class="page-title">Listagem de Professores</h3>
+    <h3 class="page-title">LISTAGEM DE PROFESSORES</h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Professores</a></li>
@@ -11,7 +11,18 @@
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">LISTA DE PROFESSORES</h4>
+                <div class="row">
+                    <div class="col-6">
+                        <h4 class="card-title">LISTA DE PROFESSORES</h4>
+                    </div>
+                    <div class="col-6 text-end">
+                        <a class="btn btn-primary me-2 btn-icon-text">
+                            <i class="fa fa-plus btn-icon-prepend"></i>Cadastrar Novo</a>
+                        <a class="btn btn-success btn-icon-text">
+                            <i class="fa fa-upload btn-icon-prepend"></i> Importar Professores
+                        </a>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive">

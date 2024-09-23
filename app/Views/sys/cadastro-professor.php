@@ -1,4 +1,5 @@
 <div class="page-header">
+<h3 class="page-title">CADASTRO DE PROFESSOR</h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Professores</a></li>
@@ -11,7 +12,7 @@
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Cadastro de Professor</h4>
+                <h4 class="card-title">INSIRA AS INFORMAÇÕES</h4>
                 <p class="card-description">Informações Pessoais</p>
                 <form id="cadastroProfessor" class="forms-sample"  method="post" action="#">
                     <div class="form-group">

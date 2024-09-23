@@ -7,12 +7,12 @@ use CodeIgniter\Model;
 class MatrizCurricularModel extends Model
 {
     protected $table            = 'matrizes';
-    protected $primaryKey       = 'matriz_id';
+    protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['matriz_id','nome'];
+    protected $allowedFields    = ['nome'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -29,7 +29,7 @@ class MatrizCurricularModel extends Model
 
     // Validation
     protected $validationRules = [
-        'matriz_id' => 'is_natural_no_zero|max_length[11]',
+        'id' => 'permit_empty|is_natural_no_zero|max_length[11]',
         'nome' => 'required|max_length[128]',
     ];
     protected $validationMessages   = [];

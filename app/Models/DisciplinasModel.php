@@ -7,12 +7,12 @@ use CodeIgniter\Model;
 class DisciplinasModel extends Model
 {
     protected $table            = 'disciplinas';
-    protected $primaryKey       = 'disciplina_id';
+    protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['nome', 'codigo', 'matriz', 'ch', 'periodo', 'abreviatura'];
+    protected $allowedFields    = ['nome', 'codigo', 'matriz_id', 'ch', 'max_tempos_diarios', 'periodo', 'abreviatura', 'grupo_de_ambientes_id'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -29,13 +29,15 @@ class DisciplinasModel extends Model
 
     // Validation
     protected $validationRules = [
-        'disciplina_id' => 'permit_empty|is_natural_no_zero|max_length[11]',
+        'id' => 'permit_empty|is_natural_no_zero|max_length[11]',
         'nome' => 'required|max_length[128]',
-        'codigo' => 'required|is_unique[disciplinas.codigo,disciplina_id,{disciplina_id}]',
-        'matriz' => 'required|is_not_unique[matrizes.matriz_id]|max_length[11]',
+        'codigo' => 'required|is_unique[disciplinas.codigo,id,{id}]',
+        'matriz_id' => 'required|is_not_unique[matrizes.id]|max_length[11]',
         'ch' => 'required|integer|max_length[4]',
+        'max_tempos_diarios' => 'required|is_natural|max_length[2]|',
         'periodo' => 'required|integer|max_length[2]',
         'abreviatura' => 'permit_empty|max_length[32]',
+        'grupo_de_ambientes_id' => 'required|is_not_unique[grupo_de_ambientes.id]',
     ];
     protected $validationMessages   = [];
     protected $skipValidation       = false;

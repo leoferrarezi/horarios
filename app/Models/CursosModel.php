@@ -7,12 +7,12 @@ use CodeIgniter\Model;
 class CursosModel extends Model
 {
     protected $table            = 'cursos';
-    protected $primaryKey       = 'curso_id';
+    protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['nome', 'matriz'];
+    protected $allowedFields    = ['nome', 'matriz_id'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -29,9 +29,9 @@ class CursosModel extends Model
 
     // Validation
     protected $validationRules = [
-        'curso_id' => 'permit_empty|is_natural_no_zero|max_length[11]',
-        'nome' => 'required|is_unique[cursos.nome,curso_id,{curso_id}]|max_length[128]',
-        'matriz' => 'required|is_not_unique[matrizes.matriz_id]|max_length[11]'
+        'id' => 'permit_empty|is_natural_no_zero|max_length[11]',
+        'nome' => 'required|is_unique[cursos.nome,id,{id}]|max_length[128]',
+        'matriz_id' => 'required|is_not_unique[matrizes.id]|max_length[11]'
     ];
     protected $validationMessages   = [];
     protected $skipValidation       = false;

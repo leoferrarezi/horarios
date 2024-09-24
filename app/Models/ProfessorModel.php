@@ -7,12 +7,12 @@ use CodeIgniter\Model;
 class ProfessorModel extends Model
 {
     protected $table            = 'professores';
-    protected $primaryKey       = 'professor_id';
+    protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['nome', 'siape'];
+    protected $allowedFields    = ['nome', 'siape', 'email'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -29,9 +29,10 @@ class ProfessorModel extends Model
 
     // Validation
     protected $validationRules = [
-        'professor_id' => 'permit_empty|is_natural_no_zero|max_length[11]',
-        'nome' => 'required|is_unique[professores.nome,professor_id,{professor_id}]|max_length[96]',
-        'siape' => 'permit_empty|is_unique[professores.siape,professor_id,{professor_id}]|exact_length[7]',
+        'id' => 'permit_empty|is_natural_no_zero|max_length[11]',
+        'nome' => 'required|is_unique[professores.nome,id,{id}]|max_length[96]',
+        'siape' => 'permit_empty|is_unique[professores.siape,id,{id}]|exact_length[7]',
+        'email' => 'permit_empty|valid_email|max_length[128]'
     ];
     protected $validationMessages   = [];
     protected $skipValidation       = false;

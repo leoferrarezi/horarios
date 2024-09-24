@@ -7,12 +7,12 @@ use CodeIgniter\Model;
 class TemposAulasModel extends Model
 {
     protected $table            = 'tempos_de_aula';
-    protected $primaryKey       = 'tempo_id';
+    protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['tempo_id','time_inicio', 'time_fim'];
+    protected $allowedFields    = ['horario_id', 'dia_semana', 'hora_inicio', 'minuto_inicio', 'hora_fim', 'minuto_fim'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -29,9 +29,13 @@ class TemposAulasModel extends Model
 
     // Validation
     protected $validationRules = [
-        'tempo_id' => 'is_natural_no_zero|max_length[11]',
-        'time_inicio' => 'required|regex_match[/^([01]\d|2[0-3]):[0-5]\d$/]', //valida de acordo com o hórario 24 horas 00:00 até 23:59
-        'time_fim' => 'required|regex_match[/^([01]\d|2[0-3]):[0-5]\d$/]', //mesma validação de cima :D.
+        'id' => 'permit_empty|is_natural_no_zero|max_length[11]',
+        'horario_id' => 'required|is_not_unique[horarios.id]|max_length[11]',
+        'dia_semana' => 'required|regex_match[/^[0123456]$/]', //o regex verifica se está entre 0 a 6
+        'hora_inicio' => 'required|regex_match[/^(?:[01][0-9]|2[0-3])$/]', //aceita de 00 a 23
+        'minuto_inicio' => 'required|regex_match[/^(?:[0-5][0-9])$/]', //aceita entre 00 a 59
+        'hora_fim' => 'required|regex_match[/^(?:[01][0-9]|2[0-3])$/]', //aceita de 00 a 23
+        'minuto_fim' => 'required|regex_match[/^(?:[0-5][0-9])$/]', //aceita entre 00 a 59
     ];
     protected $validationMessages   = [];
     protected $skipValidation       = false;

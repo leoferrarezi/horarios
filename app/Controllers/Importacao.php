@@ -10,6 +10,7 @@ use PhpOffice\PhpSpreadsheet\Reader\Xls;
 
 require_once APPPATH . 'ThirdParty/PhpSpreadsheet/src/PhpSpreadsheet/Spreadsheet.php';
 require_once APPPATH . 'ThirdParty/PhpSpreadsheet/src/PhpSpreadsheet/Writer/Xlsx.php';
+require_once APPPATH . 'ThirdParty/PhpSpreadsheet/src/PhpSpreadsheet/Writer/BaseWriter.php';
 require_once APPPATH . 'ThirdParty/PhpSpreadsheet/src/PhpSpreadsheet/IOFactory.php';
 
 

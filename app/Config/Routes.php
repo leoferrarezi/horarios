@@ -13,5 +13,5 @@ $routes->get('/sys/professor/cadastro', 'Professor::cadastro');
 
 // Rotas importacao planilhas
 $routes->get('/sys/importacao', 'Importacao::index'); 
-$routes->post('/sys/importacao/importar', 'Importacao::importar_planilha'); 
+$routes->post('index.php/sys/importacao/importar', 'Importacao::importar_planilha'); 
 

@@ -26,9 +26,9 @@
             <div class="card col-12 col-sm-8 col-md-6 col-lg-4 mx-auto">
               <div class="card-body px-4 py-5">
                 <!--Logo do Instituto Federal -->
-                <div class="d-flex flex-column flex-md-row align-items-center mb-4">
-                  <img src="<?php echo base_url('assets/images/logo-ifro.png'); ?>" alt="Instituto Federal" class="img-fluid mb-3 mb-md-0" style="width: 150px; margin-right: 25px;">
-                  <h3 class="mb-0 text-center text-md-start">Gerenciador de Horários</h3>
+                <div class="d-flex flex-column flex-md-row align-items-center justify-content-md-start mb-4">
+                  <img src="<?php echo base_url('assets/images/logo-ifro.png'); ?>" alt="Instituto Federal" class="img-fluid mb-3 mb-md-0" style="width: 140px; margin-left: 5px;">
+                  <h3 class="mb-0 text-center">Gerenciador de Horários</h3>
                 </div>
                 <form>
                   <div class="form-group">
@@ -44,7 +44,6 @@
                       <label class="form-check-label">
                         <input type="checkbox" class="form-check-input"> Manter conectado </label>
                     </div>
-                    <a href="#" class="forgot-pass">Esqueci minha senha</a>
                   </div>
                   <div class="text-center d-grid gap-2">
                     <button type="submit" class="btn btn-primary btn-block enter-btn">ENTRAR</button>

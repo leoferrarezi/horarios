@@ -10,6 +10,7 @@ $routes->get('/sys', 'Home::sys');
 
 //CRUD Professor
 $routes->get('/sys/professor/cadastro', 'Professor::cadastro');
+$routes->post('/sys/professor/salvar', 'Professor::salvar');
 
 // Rotas importacao planilhas
 $routes->get('/sys/importacao', 'Importacao::index'); 

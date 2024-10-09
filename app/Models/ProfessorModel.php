@@ -55,7 +55,13 @@ class ProfessorModel extends Model
         if($id === null){
             $professores = $this->findAll();
         }else{
-            return $this->professores->find($id);
+            return $this->professores->find($id);}
     }
+
+    public function saveData($professorData){
+        if ($professorData){
+            $this->professores->insert($professorData);
+        }
 }
-}
+
+    }

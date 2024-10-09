@@ -3,7 +3,7 @@
       $("#cadastroProfessor").validate({
         submitHandler: function(form) {
             alert("submitted!");
-          //  form.submit();
+          form.submit();
           },
         rules: {
           nome: "required",

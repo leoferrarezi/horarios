@@ -14,7 +14,7 @@
             <div class="card-body">
                 <h4 class="card-title">INSIRA AS INFORMAÇÕES</h4>
                 <p class="card-description">Informações Pessoais</p>
-                <form id="cadastroProf" class="forms-sample"  method="post" action='<?php echo base_url('sys/professor/salvar')?>'>
+                <form id="cadastroProfessor" class="forms-sample"  method="post" action='<?php echo base_url('sys/professor/salvar')?>'>
                 <?= csrf_field() ?> 
                     <div class="form-group">
                         <label for="exampleInputUsername1">Nome Completo</label>
@@ -27,8 +27,7 @@
                     <div class="form-group">
                         <label for="exampleInputPassword1">E-Mail</label>
                         <input type="email" class="form-control" id="email" name="email" placeholder="Digite o email">
-                    </div>
-                
+                    </div>                
                     <button type="submit" class="btn btn-primary me-2">Salvar</button>
                     <button class="btn btn-dark">Cancelar</button>
                 </form>

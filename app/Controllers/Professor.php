@@ -11,6 +11,7 @@ class Professor extends BaseController
 {
     public function index()
     {
+        
     }
 
     public function cadastro(): string

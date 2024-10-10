@@ -5,10 +5,13 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
+
 $routes->get('/', 'Home::index');
 $routes->get('/sys', 'Home::sys');
 
 //CRUD Professor
+$routes->get('/sys/professor', 'Professor::index');
+$routes->get('/sys/professor/listar', 'Professor::index');
 $routes->get('/sys/professor/cadastro', 'Professor::cadastro');
 $routes->post('/sys/professor/salvar', 'Professor::salvar');
 

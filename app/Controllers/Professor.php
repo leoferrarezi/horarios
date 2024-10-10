@@ -20,32 +20,16 @@ class Professor extends BaseController
         return view('dashboard', $data);
     }
 
-    public function salvar()
+    public function salvar(): ResponseInterface
     {
-        // Validação dos dados
-        $validation = $this->validate([
-            'nome' => 'required|min_length[3]',
-            'siape' => 'required|numeric',
-            'email' => 'required|valid_email',
-        ]);
+        $professor = new \App\Models\ProfessorModel();
 
-        if (!$validation) {
-            // Se a validação falhar, retorna para a view com os erros
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        if($professor->insert($this->request->getPost())){
+            echo'inserido com sucesso';
+        }else{
+            print_r($professor->errors()) ;
         }
 
-        // Se passar na validação, salva no banco de dados
-        $professorModel = new ProfessorModel();
-        
-        $professorData = [
-            'nome' => $this->request->getPost('nome'),
-            'siape' => $this->request->getPost('siape'),
-            'email' => $this->request->getPost('email'),
-        ];
-
-        $professorModel->save($professorData);
-
-        // Redireciona com mensagem de sucesso
-        return redirect()->to('/professor/cadastro')->with('success', 'Professor cadastrado com sucesso!');
-    }
+        return redirect()->to(uri: '/sys/professor/cadastro');
+    } 
 }

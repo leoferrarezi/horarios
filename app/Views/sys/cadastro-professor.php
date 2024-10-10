@@ -16,7 +16,6 @@
                 <p class="card-description">Informações Pessoais</p>
                 <form id="cadastroProf" class="forms-sample"  method="post" action='<?php echo base_url('sys/professor/salvar')?>'>
                 <?= csrf_field() ?> 
-
                     <div class="form-group">
                         <label for="exampleInputUsername1">Nome Completo</label>
                         <input type="text" class="form-control" id="nome" name="nome" placeholder="Digite o nome do professor">

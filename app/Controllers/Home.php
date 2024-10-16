@@ -12,7 +12,7 @@ class Home extends BaseController
     public function sys(): string
     {
 
-        $pageContent['title'] = "RRELOU, BEIBE.";
+        $pageContent['title'] = "Página inicial";
 
         $data['content'] = view('sys/home', $pageContent);
 

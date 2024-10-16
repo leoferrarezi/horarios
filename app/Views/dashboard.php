@@ -20,11 +20,19 @@
         <img src="<?php echo base_url("assets/images/logo-ifro-mini.png"); ?>" class="sidebar-brand brand-logo-mini" alt="logo" />
       </div>
       <ul class="nav">
+      <li class="nav-item">
+          <a class="nav-link" href="<?php echo base_url("/sys")?>" style="margin-top:20px;">
+            <span class="menu-icon">
+              <i class="mdi mdi-home"></i>
+            </span>
+            <span class="menu-title">Início</span>
+          </a>
+        </li>
         <li class="nav-item nav-category">
           <span class="nav-link">Cadastros</span>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="<?php echo base_url("/sys/professor/cadastro")?>">
             <span class="menu-icon">
               <i class="mdi mdi-account"></i>
             </span>

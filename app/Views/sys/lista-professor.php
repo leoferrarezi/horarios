@@ -11,12 +11,23 @@
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
+
+                <!-- condição para exibir a mensagem de sucesso ao cadastrar um novo professor -->
+                <?php if(isset($_GET['cadastrado'])): ?>
+                    <div class="row">
+                        <div class="alert alert-fill-success" role="alert">
+                            <i class="mdi mdi-alert-circle"></i> Professor cadastrado com sucesso.
+                        </div>
+                    </div>
+                <?php endif ?>
+                <!------------------------------------------------------------->
+
                 <div class="row">
                     <div class="col-6">
                         <h4 class="card-title">LISTA DE PROFESSORES</h4>
                     </div>
                     <div class="col-6 text-end">
-                        <a class="btn btn-primary me-2 btn-icon-text">
+                        <a class="btn btn-primary me-2 btn-icon-text" href="<?php echo base_url("/sys/professor/cadastro"); ?>">
                             <i class="fa fa-plus btn-icon-prepend"></i>Cadastrar Novo</a>
                         <a class="btn btn-success btn-icon-text">
                             <i class="fa fa-upload btn-icon-prepend"></i> Importar Professores

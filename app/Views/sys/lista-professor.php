@@ -11,12 +11,23 @@
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
+
+                <!-- Exibe mensagem de sucesso se o flashdata estiver com 'sucesso' -->
+                <?php if (session()->getFlashdata('sucesso')): ?>
+                    <div class="row">
+                        <div class="alert alert-fill-success" role="alert">
+                            <i class="mdi mdi-alert-circle"></i> <?php echo session()->getFlashdata('sucesso'); ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
+                <!------------------------------------------------------------->
+
                 <div class="row">
                     <div class="col-6">
                         <h4 class="card-title">LISTA DE PROFESSORES</h4>
                     </div>
                     <div class="col-6 text-end">
-                        <a class="btn btn-primary me-2 btn-icon-text">
+                        <a class="btn btn-primary me-2 btn-icon-text" href="<?php echo base_url("/sys/professor/cadastro"); ?>">
                             <i class="fa fa-plus btn-icon-prepend"></i>Cadastrar Novo</a>
                         <a class="btn btn-success btn-icon-text">
                             <i class="fa fa-upload btn-icon-prepend"></i> Importar Professores
@@ -37,81 +48,33 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>João</td>
-                                        <td>1234567</td>
-                                        <td>joao@gmail.com</td>
-                                        <td>
-                                            <div class="d-flex">
-                                                <a class="justify-content-center align-items-center d-flex btn btn-inverse-success btn-icon me-1"> <i class="fa fa-edit"></i></a>
-                                                <a class="justify-content-center align-items-center d-flex btn btn-inverse-info btn-icon me-1">
-                                                    <i class="fa fa-clock-o"></i>
-                                                </a>
-                                                <a class="justify-content-center align-items-center d-flex btn btn-inverse-danger btn-icon me-1"> <i class="fa fa-trash"></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Maria</td>
-                                        <td>7654321</td>
-                                        <td>maria@gmail.com</td>
-                                        <td>
-                                            <div class="d-flex">
-                                                <a class="justify-content-center align-items-center d-flex btn btn-inverse-success btn-icon me-1"> <i class="fa fa-edit"></i></a>
-                                                <a class="justify-content-center align-items-center d-flex btn btn-inverse-info btn-icon me-1">
-                                                    <i class="fa fa-clock-o"></i>
-                                                </a>
-                                                <a class="justify-content-center align-items-center d-flex btn btn-inverse-danger btn-icon me-1"> <i class="fa fa-trash"></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Igor</td>
-                                        <td>7485961</td>
-                                        <td>igor@gmail.com</td>
-                                        <td>
-                                            <div class="d-flex">
-                                                <a class="justify-content-center align-items-center d-flex btn btn-inverse-success btn-icon me-1"> <i class="fa fa-edit"></i></a>
-                                                <a class="justify-content-center align-items-center d-flex btn btn-inverse-info btn-icon me-1">
-                                                    <i class="fa fa-clock-o"></i>
-                                                </a>
-                                                <a class="justify-content-center align-items-center d-flex btn btn-inverse-danger btn-icon me-1"> <i class="fa fa-trash"></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Matheus</td>
-                                        <td>9685741</td>
-                                        <td>matheus@gmail.com</td>
-                                        <td>
-                                            <div class="d-flex">
-                                                <a class="justify-content-center align-items-center d-flex btn btn-inverse-success btn-icon me-1"> <i class="fa fa-edit"></i></a>
-                                                <a class="justify-content-center align-items-center d-flex btn btn-inverse-info btn-icon me-1">
-                                                    <i class="fa fa-clock-o"></i>
-                                                </a>
-                                                <a class="justify-content-center align-items-center d-flex btn btn-inverse-danger btn-icon me-1"> <i class="fa fa-trash"></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td>Lucas</td>
-                                        <td>3579514</td>
-                                        <td>lucas@gmail.com</td>
-                                        <td>
-                                            <div class="d-flex">
-                                                <a class="justify-content-center align-items-center d-flex btn btn-inverse-success btn-icon me-1"> <i class="fa fa-edit"></i></a>
-                                                <a class="justify-content-center align-items-center d-flex btn btn-inverse-info btn-icon me-1">
-                                                    <i class="fa fa-clock-o"></i>
-                                                </a>
-                                                <a class="justify-content-center align-items-center d-flex btn btn-inverse-danger btn-icon me-1"> <i class="fa fa-trash"></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    <?php if (!empty($professores)): ?>
+                                        <?php foreach ($professores as $professor): ?>
+                                            <tr>
+                                                <td><?php echo $professor['id']; ?></td>
+                                                <td><?php echo $professor['nome']; ?></td>
+                                                <td><?php echo $professor['siape']; ?></td>
+                                                <td><?php echo $professor['email']; ?></td>
+                                                <td>
+                                                    <div class="d-flex">
+                                                        <a class="justify-content-center align-items-center d-flex btn btn-inverse-success btn-icon me-1" href="<?php echo base_url('professor/editar/' . $professor['id']); ?>">
+                                                            <i class="fa fa-edit"></i>
+                                                        </a>
+                                                        <a class="justify-content-center align-items-center d-flex btn btn-inverse-info btn-icon me-1" href="<?php echo base_url('professor/horarios/' . $professor['id']); ?>">
+                                                            <i class="fa fa-clock-o"></i>
+                                                        </a>
+                                                        <a class="justify-content-center align-items-center d-flex btn btn-inverse-danger btn-icon me-1" href="<?php echo base_url('professor/excluir/' . $professor['id']); ?>">
+                                                            <i class="fa fa-trash"></i>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <tr>
+                                            <td colspan="5">Nenhum professor cadastrado.</td>
+                                        </tr>
+                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>

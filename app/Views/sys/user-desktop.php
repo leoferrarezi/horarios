@@ -39,7 +39,7 @@
                     <!-- CAIXAS DE ALERTA -->
                     <div class="col-md-26 grid-margin stretch-card">
                     <div class="row">
-                        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                        <div class="col-xl-3 col-sm-6 grid-margin stretch-card" style="box-shadow: 3px 3px 3px 0px gray;">
                             <div class="card">
                             <div class="card-body">
                                 <div class="row">
@@ -59,7 +59,7 @@
                             </div>
                             </div>
                         </div>
-                        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                        <div class="col-xl-3 col-sm-6 grid-margin stretch-card" style="box-shadow: 3px 3px 3px 0px gray;">
                             <div class="card">
                             <div class="card-body">
                                 <div class="row">
@@ -79,7 +79,7 @@
                             </div>
                             </div>
                         </div>
-                        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                        <div class="col-xl-3 col-sm-6 grid-margin stretch-card" style="box-shadow: 3px 3px 3px 0px gray;">
                             <div class="card">
                             <div class="card-body">
                                 <div class="row">
@@ -99,7 +99,7 @@
                             </div>
                             </div>
                         </div>
-                        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                        <div class="col-xl-3 col-sm-6 grid-margin stretch-card" style="box-shadow: 3px 3px 3px 0px gray;">
                             <div class="card">
                             <div class="card-body">
                                 <div class="row">
@@ -131,20 +131,20 @@
                                 <h4 class="card-title">NOTIFICAÇÕES</h4>
                                 <!-- <p class="card-description"> Add class <code>.alert-fill-*</code> with <code>.alert</code>-->
                                 </p>
-                                <div class="alert alert-fill-primary" role="alert">
-                                    <i class="mdi mdi-alert-circle"></i> Notificação de solicitações da <a href="#" class="solicitacao-link">Coordenação</a>.
+                                <div class="alert alert-fill-primary" style="box-shadow: 5px 5px 5px blue;"role="alert">
+                                    <i class="mdi mdi-alert-circle"></i> Notificação de solicitações da <a href="#" style="color: white; font-weight: bold;" class="solicitacao-link">Coordenação</a>.
                                 </div>
-                                <div class="alert alert-fill-success" role="alert">
-                                    <i class="mdi mdi-alert-circle"></i> Notificação de confirmação do <a href="#" class="confirmacao-link">Coordenador</a>.
+                                <div class="alert alert-fill-success" style="box-shadow: 5px 5px 5px green;" role="alert">
+                                    <i class="mdi mdi-alert-circle"></i> Notificação de confirmação do <a href="#" style="color: white; font-weight: bold;" class="confirmacao-link">Coordenador</a>.
                                 </div>
-                                <div class="alert alert-fill-info" role="alert">
-                                    <i class="mdi mdi-alert-circle"></i> Notificação de confirmação das <a href="#" class="confirmacao-link">Pedagogas</a>. <!-- (para a área de trabalho do Coordenador).-->
+                                <div class="alert alert-fill-info" style="box-shadow: 5px 5px 5px rgb(164 105 191);"role="alert">
+                                    <i class="mdi mdi-alert-circle"></i> Notificação de confirmação das <a href="#" style="color: white; font-weight: bold;" class="confirmacao-link">Pedagogas</a>. <!-- (para a área de trabalho do Coordenador).-->
                                 </div>
-                                <div class="alert alert-fill-warning" role="alert">
-                                    <i class="mdi mdi-alert-circle"></i>Há <a href="#" class="tabela-conflito-link">Conflito de Horários</a>.
+                                <div class="alert alert-fill-warning" style= "box-shadow: 5px 5px 5px rgb(221 131 29);" role="alert">
+                                    <i class="mdi mdi-alert-circle"></i>Há <a href="#" style="color: white; font-weight: bold;" class="tabela-conflito-link">Conflito de Horários</a>.
                                 </div>
-                                <div class="alert alert-fill-danger" role="alert">
-                                    <i class="mdi mdi-alert-circle"></i>12 (doze) <a href="#" class="tabela-disciplinas-link">Disciplinas sem professor associado</a>. 
+                                <div class="alert alert-fill-danger" style="box-shadow: 5px 5px 5px rgb(200 30 30);" role="alert">
+                                    <i class="mdi mdi-alert-circle"></i>12 (doze) <a href="#" style="color: white; font-weight: bold;" class="tabela-disciplinas-link">Disciplinas sem professor associado</a>. 
                                 </div>
                                 </div>
                             </div>
@@ -185,22 +185,22 @@
 
                                         <!-- MENU SUPERIOR DA TABELA - SELEÇÃO DA TURMA - MÉDIO INTEGRADO -->
                                         <div class="col-8 col-sm-8">
-                                        <div class="tab-content tab-content-vertical">
+                                         <div class="tab-content tab-content-vertical">
                                             <div class="tab-pane fade show active" id="integrado" role="tabpanel" aria-labelledby="integrado-tab">
-                                            <ul class="nav nav-tabs" role="tablist">
-                                            <li class="nav-item">
-                                                <a class="nav-link active" id="md01" data-bs-toggle="tab" href="#md01" role="tab" aria-controls="md01" aria-selected="true">MÉDIO - 01</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" id="md02" data-bs-toggle="tab" href="#md02" role="tab" aria-controls="md02" aria-selected="false">MÉDIO - 02</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" id="md03" data-bs-toggle="tab" href="#md03" role="tab" aria-controls="md03" aria-selected="false">MÉDIO - 03</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" id="mdothers" data-bs-toggle="tab" href="#mdothers" role="tab" aria-controls="mdothers" aria-selected="false">...</a>
-                                            </li>
-                                            </ul>
+                                              <ul class="nav nav-tabs" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link active" id="md01" data-bs-toggle="tab" href="#md01" role="tab" aria-controls="md01" aria-selected="true">MÉDIO - 01</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" id="md02" data-bs-toggle="tab" href="#md02" role="tab" aria-controls="md02" aria-selected="false">MÉDIO - 02</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" id="md03" data-bs-toggle="tab" href="#md03" role="tab" aria-controls="md03" aria-selected="false">MÉDIO - 03</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" id="mdothers" data-bs-toggle="tab" href="#mdothers" role="tab" aria-controls="mdothers" aria-selected="false">...</a>
+                                                </li>
+                                                </ul>
                                             <div class="tab-content">
                                             <div class="tab-pane fade show active" id="md01" role="tabpanel" aria-labelledby="md01-tab">
                                                <!-- <div class="media d-block d-sm-flex">-->
@@ -223,7 +223,9 @@
                                                                     <th class="sortStyle">Fim<i class="mdi mdi-chevron-down"></i></th>
                                                                     </tr>
                                                                 </thead>
-                                                                <tbody>
+                                                             <!--  Local para a automação da tabela do front com o banco de dados-->
+                                                                
+                                                                    <tbody>
                                                                     <tr>
                                                                     <td>1</td>
                                                                     <td>Matemática</td>
@@ -264,7 +266,44 @@
                                                                     <td>11:00</td>
                                                                     <td>11:45</td>
                                                                     </tr>
-                                                                </tbody>
+                                                                    </tbody>
+
+                                                                    <tbody>
+                                                                
+                                                                   <!-- SUGESTÃO DE CÓDIGO PARA A AUTOMAÇÃO  
+                                                                        <?php if (!empty($nome_da_tabela)): ?> 
+                                                                        <?php foreach ($nome_da_tabela as $item_da_tabela): ?>
+                                                                            <tr>
+                                                                                <td><?php echo $item_da_tabela['atributo_tempo']; ?></td>
+                                                                                <td><?php echo $item_da_tabela['atributo_disciplina']; ?></td>
+                                                                                <td><?php echo $item_da_tabela['atributo_professor']; ?></td>
+                                                                                <td><?php echo $item_da_tabela['atributo_sala']; ?></td>
+                                                                                <td><?php echo $item_da_tabela['atributo_inicio']; ?></td>
+                                                                                <td><?php echo $item_da_tabela['atributo_fim']; ?></td>
+                                                                                <td>
+                                                                                    <div class="d-flex">
+                                                                                        <a class="justify-content-center align-items-center d-flex btn btn-inverse-success btn-icon me-1" href="<?php echo base_url('horario/editar/' . $item_da_tabela['id']); ?>">
+                                                                                            <i class="fa fa-edit"></i>
+                                                                                        </a>
+                                                                                        <a class="justify-content-center align-items-center d-flex btn btn-inverse-info btn-icon me-1" href="<?php echo base_url('horario/horarios/' . $item_da_tabela['id']); ?>">
+                                                                                            <i class="fa fa-clock-o"></i>
+                                                                                        </a>
+                                                                                        <a class="justify-content-center align-items-center d-flex btn btn-inverse-danger btn-icon me-1" href="<?php echo base_url('horario/excluir/' . $item_da_tabela['id']); ?>">
+                                                                                            <i class="fa fa-trash"></i>
+                                                                                        </a>
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                        <?php endforeach; ?>
+                                                                    <?php else: ?>
+                                                                        <tr>
+                                                                            <td colspan="5">Nenhuma aula prevista para este dia.</td>
+                                                                        </tr>
+                                                                    <?php endif; ?> 
+                                                                </tbody> -->
+
+                                                                <!--  Fim do local para a automação da tabela do front com o banco de dados-->
+
                                                                 </table>
                                                             </div>
                                                             </div>
@@ -275,7 +314,6 @@
                                             </div>
                                             <div class="tab-pane fade" id="md02" role="tabpanel" aria-labelledby="md02-tab">
                                                 <div class="media d-block d-sm-flex">
-                                                <img class="me-3 w-25 rounded" src="../../../assets/images/faces/face12.jpg" alt="sample image">
                                                 <div class="media-body mt-4 mt-sm-0">
                                                     <h4 class="mt-0">ENSINO MÉDIO - TURMA 02</h4>
                                                             <!-- <div class="media d-block d-sm-flex">-->
@@ -296,48 +334,86 @@
                                                                             <th class="sortStyle">Fim<i class="mdi mdi-chevron-down"></i></th>
                                                                             </tr>
                                                                         </thead>
-                                                                        <tbody>
+                                                                                                                                   <!--  Local para a automação da tabela do front com o banco de dados-->
+                                                                
+                                                                    <tbody>
+                                                                    <tr>
+                                                                    <td>1</td>
+                                                                    <td>Matemática</td>
+                                                                    <td>Miguel M.</td>
+                                                                    <td>Sala 06</td>
+                                                                    <td>07:30</td>
+                                                                    <td>08:25</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                    <td>2</td>
+                                                                    <td>Biologia</td>
+                                                                    <td>Russimeire</td>
+                                                                    <td>Sala 06</td>
+                                                                    <td>08:25</td>
+                                                                    <td>09:15</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                    <td>3</td>
+                                                                    <td>Biologia</td>
+                                                                    <td>Russimeire</td>
+                                                                    <td>Sala 06</td>
+                                                                    <td>09:15</td>
+                                                                    <td>10:00</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                    <td>4</td>
+                                                                    <td>Matemática</td>
+                                                                    <td>Miguel M.</td>
+                                                                    <td>Sala 06</td>
+                                                                    <td>10:15</td>
+                                                                    <td>11:00</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                    <td>5</td>
+                                                                    <td>Inglês</td>
+                                                                    <td>Doralice</td>
+                                                                    <td>Sala 06</td>
+                                                                    <td>11:00</td>
+                                                                    <td>11:45</td>
+                                                                    </tr>
+                                                                    </tbody>
+
+                                                                    <tbody>
+                                                                
+                                                                   <!-- SUGESTÃO DE CÓDIGO PARA A AUTOMAÇÃO  
+                                                                        <?php if (!empty($nome_da_tabela)): ?> 
+                                                                        <?php foreach ($nome_da_tabela as $item_da_tabela): ?>
                                                                             <tr>
-                                                                            <td>1</td>
-                                                                            <td>Matemática</td>
-                                                                            <td>Miguel M.</td>
-                                                                            <td>Sala 06</td>
-                                                                            <td>07:30</td>
-                                                                            <td>08:25</td>
+                                                                                <td><?php echo $item_da_tabela['atributo_tempo']; ?></td>
+                                                                                <td><?php echo $item_da_tabela['atributo_disciplina']; ?></td>
+                                                                                <td><?php echo $item_da_tabela['atributo_professor']; ?></td>
+                                                                                <td><?php echo $item_da_tabela['atributo_sala']; ?></td>
+                                                                                <td><?php echo $item_da_tabela['atributo_inicio']; ?></td>
+                                                                                <td><?php echo $item_da_tabela['atributo_fim']; ?></td>
+                                                                                <td>
+                                                                                    <div class="d-flex">
+                                                                                        <a class="justify-content-center align-items-center d-flex btn btn-inverse-success btn-icon me-1" href="<?php echo base_url('horario/editar/' . $item_da_tabela['id']); ?>">
+                                                                                            <i class="fa fa-edit"></i>
+                                                                                        </a>
+                                                                                        <a class="justify-content-center align-items-center d-flex btn btn-inverse-info btn-icon me-1" href="<?php echo base_url('horario/horarios/' . $item_da_tabela['id']); ?>">
+                                                                                            <i class="fa fa-clock-o"></i>
+                                                                                        </a>
+                                                                                        <a class="justify-content-center align-items-center d-flex btn btn-inverse-danger btn-icon me-1" href="<?php echo base_url('horario/excluir/' . $item_da_tabela['id']); ?>">
+                                                                                            <i class="fa fa-trash"></i>
+                                                                                        </a>
+                                                                                    </div>
+                                                                                </td>
                                                                             </tr>
-                                                                            <tr>
-                                                                            <td>2</td>
-                                                                            <td>Biologia</td>
-                                                                            <td>Russimeire</td>
-                                                                            <td>Sala 06</td>
-                                                                            <td>08:25</td>
-                                                                            <td>09:15</td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                            <td>3</td>
-                                                                            <td>Biologia</td>
-                                                                            <td>Russimeire</td>
-                                                                            <td>Sala 06</td>
-                                                                            <td>09:15</td>
-                                                                            <td>10:00</td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                            <td>4</td>
-                                                                            <td>Matemática</td>
-                                                                            <td>Miguel M.</td>
-                                                                            <td>Sala 06</td>
-                                                                            <td>10:15</td>
-                                                                            <td>11:00</td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                            <td>5</td>
-                                                                            <td>Inglês</td>
-                                                                            <td>Doralice</td>
-                                                                            <td>Sala 06</td>
-                                                                            <td>11:00</td>
-                                                                            <td>11:45</td>
-                                                                            </tr>
-                                                                        </tbody>
+                                                                        <?php endforeach; ?>
+                                                                    <?php else: ?>
+                                                                        <tr>
+                                                                            <td colspan="5">Nenhuma aula prevista para este dia.</td>
+                                                                        </tr>
+                                                                    <?php endif; ?> 
+                                                                </tbody> -->
+
+                                                                <!--  Fim do local para a automação da tabela do front com o banco de dados-->
                                                                         </table>
                                                                     </div>
                                                                     </div>
@@ -350,7 +426,6 @@
                                             </div>
                                             <div class="tab-pane fade" id="md03" role="tabpanel" aria-labelledby="md03-tab">
                                                 <div class="media d-block d-sm-flex">
-                                                <img class="me-3 w-25 rounded" src="../../../assets/images/faces/face12.jpg" alt="sample image">
                                                 <div class="media-body mt-4 mt-sm-0">
                                                     <h4 class="mt-0">ENSINO MÉDIO - TURMA 03</h4>
                                                      <!--  <p class="page-description">Add class <code>.sortable-table</code></p>-->
@@ -435,10 +510,12 @@
                                                                     <th class="sortStyle">Fim<i class="mdi mdi-chevron-down"></i></th>
                                                                     </tr>
                                                                 </thead>
-                                                                <tbody>
+                                                         <!--  Local para a automação da tabela do front com o banco de dados-->
+                                                                
+                                                                    <tbody>
                                                                     <tr>
                                                                     <td>1</td>
-                                                                    <td>FIC - Robótica e Saúde</td>
+                                                                    <td>Matemática</td>
                                                                     <td>Miguel M.</td>
                                                                     <td>Sala 06</td>
                                                                     <td>07:30</td>
@@ -446,7 +523,7 @@
                                                                     </tr>
                                                                     <tr>
                                                                     <td>2</td>
-                                                                    <td>FIC - Robótica e Agronegócio</td>
+                                                                    <td>Biologia</td>
                                                                     <td>Russimeire</td>
                                                                     <td>Sala 06</td>
                                                                     <td>08:25</td>
@@ -454,7 +531,7 @@
                                                                     </tr>
                                                                     <tr>
                                                                     <td>3</td>
-                                                                    <td>Pós - Graduação A</td>
+                                                                    <td>Biologia</td>
                                                                     <td>Russimeire</td>
                                                                     <td>Sala 06</td>
                                                                     <td>09:15</td>
@@ -462,7 +539,7 @@
                                                                     </tr>
                                                                     <tr>
                                                                     <td>4</td>
-                                                                    <td>Pós - Graduação B</td>
+                                                                    <td>Matemática</td>
                                                                     <td>Miguel M.</td>
                                                                     <td>Sala 06</td>
                                                                     <td>10:15</td>
@@ -470,13 +547,49 @@
                                                                     </tr>
                                                                     <tr>
                                                                     <td>5</td>
-                                                                    <td>FIC - Lingua Inglesa</td>
+                                                                    <td>Inglês</td>
                                                                     <td>Doralice</td>
                                                                     <td>Sala 06</td>
                                                                     <td>11:00</td>
                                                                     <td>11:45</td>
                                                                     </tr>
-                                                                </tbody>
+                                                                    </tbody>
+
+                                                                    <tbody>
+                                                                
+                                                                   <!-- SUGESTÃO DE CÓDIGO PARA A AUTOMAÇÃO  
+                                                                        <?php if (!empty($nome_da_tabela)): ?> 
+                                                                        <?php foreach ($nome_da_tabela as $item_da_tabela): ?>
+                                                                            <tr>
+                                                                                <td><?php echo $item_da_tabela['atributo_tempo']; ?></td>
+                                                                                <td><?php echo $item_da_tabela['atributo_disciplina']; ?></td>
+                                                                                <td><?php echo $item_da_tabela['atributo_professor']; ?></td>
+                                                                                <td><?php echo $item_da_tabela['atributo_sala']; ?></td>
+                                                                                <td><?php echo $item_da_tabela['atributo_inicio']; ?></td>
+                                                                                <td><?php echo $item_da_tabela['atributo_fim']; ?></td>
+                                                                                <td>
+                                                                                    <div class="d-flex">
+                                                                                        <a class="justify-content-center align-items-center d-flex btn btn-inverse-success btn-icon me-1" href="<?php echo base_url('horario/editar/' . $item_da_tabela['id']); ?>">
+                                                                                            <i class="fa fa-edit"></i>
+                                                                                        </a>
+                                                                                        <a class="justify-content-center align-items-center d-flex btn btn-inverse-info btn-icon me-1" href="<?php echo base_url('horario/horarios/' . $item_da_tabela['id']); ?>">
+                                                                                            <i class="fa fa-clock-o"></i>
+                                                                                        </a>
+                                                                                        <a class="justify-content-center align-items-center d-flex btn btn-inverse-danger btn-icon me-1" href="<?php echo base_url('horario/excluir/' . $item_da_tabela['id']); ?>">
+                                                                                            <i class="fa fa-trash"></i>
+                                                                                        </a>
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                        <?php endforeach; ?>
+                                                                    <?php else: ?>
+                                                                        <tr>
+                                                                            <td colspan="5">Nenhuma aula prevista para este dia.</td>
+                                                                        </tr>
+                                                                    <?php endif; ?> 
+                                                                </tbody> -->
+
+                                                                <!--  Fim do local para a automação da tabela do front com o banco de dados-->
                                                                 </table>
                                                             </div>
                                                             </div>
@@ -490,120 +603,6 @@
                                         </div>
                                         </div>
                                         <!-- MENU SUPERIOR DA TABELA - SELEÇÃO DA TURMA - MÉDIO INTEGRADO -->
-
-                                        <!-- MENU SUPERIOR DA TABELA - SELEÇÃO DA TURMA - MÉDIO SUBSEQUENTE -->
-                                        <div class="col-12 col-sm-8">
-                                            <div class="tab-content tab-content-vertical">
-                                                    <div class="tab-pane fade show active" id="subsequente" role="tabpanel" aria-labelledby="subsequente-tab">
-                                                    <ul class="nav nav-tabs" role="tablist">
-                                                    <li class="nav-item">
-                                                        <a class="nav-link active" id="sb01" data-bs-toggle="tab" href="#sb01" role="tab" aria-controls="sb01" aria-selected="true">MÉDIO - 01</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" id="sb02" data-bs-toggle="tab" href="#sb02" role="tab" aria-controls="sb02" aria-selected="false">MÉDIO - 02</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" id="sb03" data-bs-toggle="tab" href="#sb03" role="tab" aria-controls="sb03" aria-selected="false">MÉDIO - 03</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" id="sbothers" data-bs-toggle="tab" href="#sbothers" role="tab" aria-controls="sbothers" aria-selected="false">...</a>
-                                                    </li>
-                                                    </ul>
-                                                    <div class="tab-content">
-                                                    <div class="tab-pane fade show active" id="sb01" role="tabpanel" aria-labelledby="sb01-tab">
-                                                        <div class="media d-block d-sm-flex">
-                                                        <img class="me-3 w-25 rounded" src="../../../assets/images/samples/300x300/13.jpg" alt="sample image">
-                                                        <div class="media-body mt-4 mt-sm-0">
-                                                            <h4 class="mt-0">SUBSEQUENTE - TURMA 01</h4>
-                                                            <p> COLOCAR AQUI O QUADRO DE AULAS DO DIA</p>
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="tab-pane fade" id="sb02" role="tabpanel" aria-labelledby="sb02-tab">
-                                                        <div class="media d-block d-sm-flex">
-                                                        <img class="me-3 w-25 rounded" src="../../../assets/images/faces/face12.jpg" alt="sample image">
-                                                        <div class="media-body mt-4 mt-sm-0">
-                                                            <h4 class="mt-0">SUBSEQUENTE - TURMA 02</h4>
-                                                            <p> COLOCAR AQUI O QUADRO DE AULAS DO DIA </p>
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="tab-pane fade" id="sb03" role="tabpanel" aria-labelledby="sb03-tab">
-                                                        <div class="media d-block d-sm-flex">
-                                                        <img class="me-3 w-25 rounded" src="../../../assets/images/faces/face12.jpg" alt="sample image">
-                                                        <div class="media-body mt-4 mt-sm-0">
-                                                            <h4 class="mt-0">SUBSEQUENTE - TURMA 03</h4>
-                                                            <p> COLOCAR AQUI O QUADRO DE AULAS DO DIA </p>
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="tab-pane fade" id="sbothers" role="tabpanel" aria-labelledby="sbothers-tab">
-                                                        <h4>Outros cursos: </h4>
-                                                        <p> COLOCAR AQUI A OPÇÃO DE EXPANSÃO DOS OUTROS CURSOS. </p>
-                                                    </div>
-                                            </div>
-                                        </div>    
-                                                </div>               
-                                    
-                                        </div>
-                                        <!-- FIM MENU SUPERIOR DA TABELA - SELEÇÃO DA TURMA - MÉDIO SUBSEQUENTE -->
-                                        
-                                        <!-- MENU SUPERIOR DA TABELA - SELEÇÃO DA TURMA - GRADUAÇÃO -->
-                                        <div class="col-12 col-sm-8">
-                                            <div class="tab-content tab-content-vertical">
-                                                <div class="tab-pane fade show active" id="graduacao" role="tabpanel" aria-labelledby="graduacao-tab">
-                                                    <ul class="nav nav-tabs" role="tablist">
-                                                        <li class="nav-item">
-                                                        <a class="nav-link active" id="ads02" data-bs-toggle="tab" href="#ADS02" role="tab" aria-controls="ADS02" aria-selected="true">ADS - 02</a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                        <a class="nav-link" id="ads04" data-bs-toggle="tab" href="#ADS04" role="tab" aria-controls="ADS04" aria-selected="false">ADS - 04</a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                        <a class="nav-link" id="ads06" data-bs-toggle="tab" href="#ADS06" role="tab" aria-controls="ADS06" aria-selected="false">ADS - 06</a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                        <a class="nav-link" id="others" data-bs-toggle="tab" href="#others" role="tab" aria-controls="others" aria-selected="false">...</a>
-                                                        </li>
-                                                    </ul>
-                                                        <div class="tab-content">
-                                                        <div class="tab-pane fade show active" id="ADS02" role="tabpanel" aria-labelledby="ADS02-tab">
-                                                            <div class="media d-block d-sm-flex">
-                                                            <img class="me-3 w-25 rounded" src="../../../assets/images/samples/300x300/13.jpg" alt="sample image">
-                                                            <div class="media-body mt-4 mt-sm-0">
-                                                                <h4 class="mt-0">Análise e Desenvolvimento de Sistemas - 02° Período</h4>
-                                                                <p> COLOCAR AQUI O QUADRO DE AULAS DO DIA</p>
-                                                            </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="tab-pane fade" id="ADS04" role="tabpanel" aria-labelledby="ADS04-tab">
-                                                            <div class="media d-block d-sm-flex">
-                                                            <img class="me-3 w-25 rounded" src="../../../assets/images/faces/face12.jpg" alt="sample image">
-                                                            <div class="media-body mt-4 mt-sm-0">
-                                                                <h4 class="mt-0">Análise e Desenvolvimento de Sistemas - 04° Período</h4>
-                                                                <p> COLOCAR AQUI O QUADRO DE AULAS DO DIA </p>
-                                                            </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="tab-pane fade" id="ADS06" role="tabpanel" aria-labelledby="ADS06-tab">
-                                                            <div class="media d-block d-sm-flex">
-                                                            <img class="me-3 w-25 rounded" src="../../../assets/images/faces/face12.jpg" alt="sample image">
-                                                            <div class="media-body mt-4 mt-sm-0">
-                                                                <h4 class="mt-0">Análise e Desenvolvimento de Sistemas - 06° Período</h4>
-                                                                <p> COLOCAR AQUI O QUADRO DE AULAS DO DIA </p>
-                                                            </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="tab-pane fade" id="others" role="tabpanel" aria-labelledby="others-tab">
-                                                            <h4>Selecione o curso desejado: </h4>
-                                                            <p> COLOCAR AQUI A OPÇÃO DE EXPANSÃO DOS OUTROS CURSOS. </p>
-                                                        </div>
-                                                        </div>
-                                                </div>    
-                                            </div>               
-                                        </div>
-                                        <!-- FIM MENU SUPERIOR DA TABELA - SELEÇÃO DA TURMA - GRADUAÇÃO -->
-                                    
 
                                     </div>
                                     </div>

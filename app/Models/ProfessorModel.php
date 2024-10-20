@@ -31,9 +31,10 @@ class ProfessorModel extends Model
     protected $validationRules = [
         'id' => 'permit_empty|is_natural_no_zero|max_length[11]',
         'nome' => 'required|is_unique[professores.nome,id,{id}]|max_length[96]',
-        'siape' => 'permit_empty|is_unique[professores.siape,id,{id}]|exact_length[7]',
+        'siape' => 'permit_empty|exact_length[7]',
         'email' => 'permit_empty|valid_email|max_length[128]'
     ];
+
     protected $validationMessages   = [
         "nome" => [
             "required" => "O campo nome é obrigatório",
@@ -64,7 +65,6 @@ class ProfessorModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-
     //função pra retornar todos os professores cadastrados no banco
     public function getProfessores($id = null){
         if($id === null){
@@ -74,3 +74,5 @@ class ProfessorModel extends Model
         }
     }
 }
+
+

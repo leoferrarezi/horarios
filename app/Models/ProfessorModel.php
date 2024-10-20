@@ -34,7 +34,22 @@ class ProfessorModel extends Model
         'siape' => 'permit_empty|is_unique[professores.siape,id,{id}]|exact_length[7]',
         'email' => 'permit_empty|valid_email|max_length[128]'
     ];
-    protected $validationMessages   = [];
+    protected $validationMessages   = [
+        "nome" => [
+            "required" => "O campo nome é obrigatório",
+            "is_unique" => "O campo nome deve ser único",
+            "max_length" => "O tamanho máximo é 96 caracteres",
+        ],
+        "siape" => [
+            "is_unique" => "O siape deve ser único",
+            "exact_length" => "O tamanho máximo e 7 dígitos"
+        ],
+        "email" => [
+            "valid_email" => "O email é invalido",
+            "max_length" => "O tamanho máximo é 128 caracteres"
+        ]
+
+    ];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 
@@ -56,6 +71,6 @@ class ProfessorModel extends Model
             $professores = $this->findAll();
         }else{
             return $this->professores->find($id);
+        }
     }
-}
 }

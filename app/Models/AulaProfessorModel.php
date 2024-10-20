@@ -35,7 +35,22 @@ class AulaProfessorModel extends Model
         'versao_id' => 'is_not_unique[versoes.id]|max_length[11]',
         
     ];
-    protected $validationMessages   = [];
+    protected $validationMessages   = [
+        "professor_id" => [
+            "required" => "O campo professor é obrigatório",
+            "is_not_unique" => "O professor deve estar cadastrado",
+            "max_length" => "O tamanho máximo é de 11 dígitos",
+        ],
+        "aula_id" => [
+            "required" => "O campo aula é obrigatório",
+            "is_not_unique" => "A aula deve estar cadastrada",
+            "max_length" => "O tamanho máximo são 11 digitos",
+        ],
+        "versao_id" => [
+            "is_not_unique" => "A versão precisa ser registrada",
+            "max_length" => "O tamanho máximo são 11 digitos",
+        ]
+    ];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 

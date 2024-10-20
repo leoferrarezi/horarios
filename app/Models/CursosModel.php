@@ -33,7 +33,18 @@ class CursosModel extends Model
         'nome' => 'required|is_unique[cursos.nome,id,{id}]|max_length[128]',
         'matriz_id' => 'required|is_not_unique[matrizes.id]|max_length[11]'
     ];
-    protected $validationMessages   = [];
+    protected $validationMessages   = [
+        "nome" => [
+            "required" => "O campo nome é obrigatório",
+            "is_unique" => "O Curso já cadastrado",
+            "max_length" => "O tamanho máximo são 128 caracteres",
+        ],
+        "matriz_id" => [
+            "required" => "O campo matriz é obrigatório",
+            "is_not_unique" => "A matriz deve estar cadastrada",
+            "max_length" => "O tamanho máximo são 11 dígitos",
+        ]
+    ];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 

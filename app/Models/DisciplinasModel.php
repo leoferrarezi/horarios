@@ -39,7 +39,43 @@ class DisciplinasModel extends Model
         'abreviatura' => 'permit_empty|max_length[32]',
         'grupo_de_ambientes_id' => 'required|is_not_unique[grupo_de_ambientes.id]',
     ];
-    protected $validationMessages   = [];
+    protected $validationMessages   = [
+        "nome" => [
+            "required" => "O campo nome é obrigatório",
+            "max_length" => "O tamanho máximo e 128 dígitos",
+        ],
+        "codigo" => [
+            "required" => "O campo o código é obrigatório",
+            "is_unique" => "O código da disciplina já cadastrado",
+        ],
+        "matriz_id" => [
+            "required" => "O campo matriz é obrigatório",
+            "is_not_unique" => "A matriz deve estar cadastrada",
+            "max_length" => "O tamanho máximo é 11 dígitos",
+        ],
+        "ch" => [
+            "required" => "O campo ch é obrigatório",
+            "integer" => "O campo deve ser um número inteiro",
+            "max_length" => "O tamanho máximo é 4 dígitos",
+        ], 
+        "max_tempos_diarios" => [
+            "required" => "O campo Tempo Máximo Diario é obrigatório",
+            "is_natural" => "O campo deve ser um número",
+            "max_length" => "O tamanho máximo é 2 dígitos",
+        ],
+        "periodo" => [
+            "required" => "O campo período é obrigatório",
+            "integer" => "O campo deve ser um número inteiro",
+            "max_length" => "O tamanho máximo é 2 dígitos",
+        ],
+        "abreviatura" => [
+            "max_length" => "O tamanho máximo é 32 caracteres",
+        ],
+        "grupo_de_ambientes_id" => [
+            "required" => "O campo Grupo de Ambiente é obrigatório",
+            "is_not_unique" => "O Grupo de Ambiente deve estar cadastrado",
+        ]
+    ];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 

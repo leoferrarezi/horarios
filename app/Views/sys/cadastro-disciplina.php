@@ -1,9 +1,9 @@
 <div class="page-header">
-    <h3 class="page-title">CADASTRO DE DISCIPLINAS</h3>
+    <h3 class="page-title">CADASTRO DE DISCIPLINA</h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Disciplinas</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Cadastro de Disciplinas</li>
+            <li class="breadcrumb-item active" aria-current="page">Cadastro de Disciplina</li>
         </ol>
     </nav>
 </div>
@@ -28,7 +28,7 @@
                         <input type="number" class="form-control" id="carga_horaria" name="carga_horaria" placeholder="Digite a carga horária">
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputPassword1">Máximo de tempos de aula diária</label>
+                        <label for="exampleInputPassword1">Tempos de Aula Diária</label>
                         <input type="number" class="form-control" id="maximo_tempo" name="maximo_tempo" placeholder="Digite o MÁXIMO de tempos de aula diária">
                     </div>
                     <div class="form-group">
@@ -37,7 +37,7 @@
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1">Sigla/Abreviatura</label>
-                        <input type="text" class="form-control" id="abreviatura" name="abreviatura">
+                        <input type="text" readonly class="form-control" id="abreviatura" name="abreviatura">
                     </div>
                     <div class="form-group">
                         <label for="exampleFormControlSelect1">Selecione o ambiente</label>

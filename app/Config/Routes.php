@@ -21,3 +21,8 @@ $routes->post('/sys/importacao/importar', 'Importacao::importar_planilha');
 
 //Rota área de trabalho
 $routes->get('/sys/user-desktop', 'AreaTrabalho::areaTrabalho');
+$routes->get('/sys/professor/horarios', 'Professor::horarios');
+$routes->get('/sys/professor/confirmar-importacao', 'Professor::validarImportacao');
+$routes->get('/sys/professor/listar-professor', 'Professor::listaProfessor');
+$routes->get('/sys/professor/importar-professor', 'Professor::importarProfessor');
+$routes->get('/sys/disciplina/cadastro', 'Disciplinas::cadastro');

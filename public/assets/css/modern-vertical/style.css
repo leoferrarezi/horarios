@@ -21327,6 +21327,19 @@ code {
   font-size: calc(0.875rem - 0.05rem);
   font-weight: 300;
 }
+
+.footer-login {
+  background: #191c24;
+  color: color(dark);
+  padding: 20px 1rem;
+  transition: all 0.25s ease;
+  -moz-transition: all 0.25s ease;
+  -webkit-transition: all 0.25s ease;
+  -ms-transition: all 0.25s ease;
+  font-size: calc(0.875rem - 0.05rem);
+  font-weight: 300;
+
+}
 .footer a {
   color: #00d25b;
   font-size: inherit;

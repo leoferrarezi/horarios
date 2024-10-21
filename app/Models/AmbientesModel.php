@@ -32,7 +32,13 @@ class AmbientesModel extends Model
         'id' => 'permit_empty|is_natural_no_zero|max_length[11]',
         'nome' => 'required|is_unique[ambientes.id,id,{id}]|max_length[128]',
     ];
-    protected $validationMessages   = [];
+    protected $validationMessages   = [
+        "nome" => [
+            "required" => "O campo nome é obrigatório",
+            "is_unique" => "O nome deve ser único",
+            "max_length" => "O tamanho máximo e 128 caracteres",
+        ]
+    ];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 

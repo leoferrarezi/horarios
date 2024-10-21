@@ -34,7 +34,23 @@ class ProfessorRegrasModel extends Model
         'tempo_de_aula_id' => 'required|is_not_unique[tempos_de_aula.id]|max_length[11]',
         'tipo' => 'required|is_natural|max_length[1]',
     ];
-    protected $validationMessages   = [];
+    protected $validationMessages   = [
+        "professor_id" => [
+            "required" => "O campo professor é obrigatório",
+            "is_not_unique" => "O professor deve estar cadastrado",
+            "max_length" => "O tamanho máximo é 11 dígito",
+        ],
+        "tempo_de_aula_id" => [
+            "required" => "O campo Tempo de Aula é obrigatório",
+            "is_not_unique" => "O Tempo de Aula deve estar cadastrado",
+            "max_length" => "O tamanho máximo é 11 dígitos",
+        ],
+        "tipo" => [
+            "required" => "O campo tipo deve ser obrigatório",
+            "is_natural" => "O campo deve ser um número",
+            "max_length" => "O tamanho máximo é um dígito",
+        ],
+    ];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 

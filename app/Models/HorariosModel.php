@@ -32,7 +32,12 @@ class HorariosModel extends Model
         'id' => 'permit_empty|is_natural_no_zero|max_length[11]',
         'nome' => 'required|is_unique[horarios.nome,id,{id}]|max_length[64]',
     ];
-    protected $validationMessages   = [];
+    protected $validationMessages   = [
+        "nome" => [
+            "required" => "O campo nome é obrigatório",
+            "is_unique" => "Hórario já cadastrado",
+        ]
+    ];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 

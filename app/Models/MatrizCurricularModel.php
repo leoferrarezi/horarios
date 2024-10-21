@@ -32,7 +32,12 @@ class MatrizCurricularModel extends Model
         'id' => 'permit_empty|is_natural_no_zero|max_length[11]',
         'nome' => 'required|max_length[128]',
     ];
-    protected $validationMessages   = [];
+    protected $validationMessages   = [
+        "nome" => [
+            "required" => "O campo nome é obrigatório",
+            "max_length" => "O tamanho máximo é 128 caracteres"
+        ]
+    ];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 

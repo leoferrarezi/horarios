@@ -36,17 +36,21 @@ class ProfessorModel extends Model
     ];
 
     protected $validationMessages   = [
-        'nome' => [
-            'required'  => 'O campo nome é obrigatório.',
+        "nome" => [
+            "required" => "O campo nome é obrigatório",
+            "is_unique" => "O campo nome deve ser único",
+            "max_length" => "O tamanho máximo é 96 caracteres",
         ],
-        'siape' => [
-            'exact_length'  => 'O SIAPE deve ter exatamente 7 números.'
+        "siape" => [
+            "is_unique" => "O siape deve ser único",
+            "exact_length" => "O tamanho máximo e 7 dígitos"
         ],
-        'email' => [
-            'valid_email'   => 'Por favor, verifique o endereço de e-mail digitado.'
-        ]    
-    ];
+        "email" => [
+            "valid_email" => "O email é invalido",
+            "max_length" => "O tamanho máximo é 128 caracteres"
+        ]
 
+    ];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 
@@ -60,4 +64,15 @@ class ProfessorModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    //função pra retornar todos os professores cadastrados no banco
+    public function getProfessores($id = null){
+        if($id === null){
+            $professores = $this->findAll();
+        }else{
+            return $this->professores->find($id);
+        }
+    }
 }
+
+

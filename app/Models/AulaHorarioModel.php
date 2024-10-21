@@ -34,7 +34,21 @@ class AulaHorarioModel extends Model
         'tempo_de_aula_id' => 'required|is_not_unique[tempos_de_aula.id]',
         'versao_id' => 'is_not_unique[versoes.id]|max_length[11]',
     ];
-    protected $validationMessages   = [];
+    protected $validationMessages   = [
+        "aula_id" => [
+            "required" => "O campo Aula é obrigatório",
+            "is_not_unique" => "A aula já deve estar cadastrada",
+            "max_length" => "O tamanho máximo é 11 dígitos",
+        ],
+        "tempo_de_aula_id" => [
+            "required" => "O campo Tempo de Aula é obrigatório",
+            "is_not_unique" => "O Tempo de Aula deve estar cadatrado",
+        ],
+        "versao_id" => [
+            "is_not_unique" => "A versão deve estar cadastrada",
+            "max_length" => "O tamanho máximo é 11 dígitos"
+        ]
+    ];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 

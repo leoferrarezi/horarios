@@ -37,7 +37,33 @@ class TemposAulasModel extends Model
         'hora_fim' => 'required|regex_match[/^(?:[01][0-9]|2[0-3])$/]', //aceita de 00 a 23
         'minuto_fim' => 'required|regex_match[/^(?:[0-5][0-9])$/]', //aceita entre 00 a 59
     ];
-    protected $validationMessages   = [];
+    protected $validationMessages   = [
+        "horario_id" => [
+            "required" => "O campo hórario é obrigatório",
+            "is_not_unique" => "O hórario deve estar cadastrado",
+            "max_length" => "O tamanho máximo é 11 dígitos",
+        ],
+        'dia_semana' => [
+            'required'    => 'O campo dia da semana é obrigatório.',
+            'regex_match' => 'O campo dia da semana deve ser um número entre 0 e 6.'
+        ],
+        'hora_inicio' => [
+            'required'    => 'O campo hora de início é obrigatório.',
+            'regex_match' => 'O campo hora de início deve estar entre 00 e 23.'
+        ],
+        'minuto_inicio' => [
+            'required'    => 'O campo minuto de início é obrigatório.',
+            'regex_match' => 'O campo minuto de início deve estar entre 00 e 59.'
+        ],
+        'hora_fim' => [
+            'required'    => 'O campo hora de término é obrigatório.',
+            'regex_match' => 'O campo hora de término deve estar entre 00 e 23.'
+        ],
+        'minuto_fim' => [
+            'required'    => 'O campo minuto de término é obrigatório.',
+            'regex_match' => 'O campo minuto de término deve estar entre 00 e 59.'
+        ],
+    ];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 

@@ -17,7 +17,7 @@ $routes->post('/sys/professor/salvar', 'Professor::salvar');
 
 // Rotas importacao planilhas
 $routes->get('/sys/importacao', 'Importacao::index'); 
-$routes->post('index.php/sys/importacao/importar', 'Importacao::importar_planilha'); 
+$routes->post('/sys/importacao/importar', 'Importacao::importar_planilha'); 
 
 //Rota área de trabalho
 $routes->get('/sys/user-desktop', 'AreaTrabalho::areaTrabalho');

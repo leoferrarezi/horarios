@@ -9,10 +9,10 @@ class Home extends BaseController
         return view('login');
     }
 
-    public function sys(): string
+    public function home(): string
     {
 
-        $pageContent['title'] = "RRELOU, BEIBE.";
+        $pageContent['title'] = "BEM - VINDO (A).";
 
         $data['content'] = view('sys/home', $pageContent);
 

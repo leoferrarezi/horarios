@@ -9,6 +9,9 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'Home::index');
 $routes->get('/sys', 'Home::sys');
 
+//CRUD Home
+$routes->get('/sys/home', 'Home::home');
+
 //CRUD Professor
 $routes->get('/sys/professor', 'Professor::index');
 $routes->get('/sys/professor/listar', 'Professor::index');

@@ -7,9 +7,7 @@ use CodeIgniter\Router\RouteCollection;
  */
 
 $routes->get('/', 'Home::index');
-$routes->get('/sys', 'Home::sys');
-
-//CRUD Home
+$routes->get('/sys', 'Home::home');
 $routes->get('/sys/home', 'Home::home');
 $routes->get('/sys/em-construcao', 'Home::emConstrucao');
 

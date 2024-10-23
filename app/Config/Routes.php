@@ -17,14 +17,14 @@ $routes->get('/sys/professor/listar', 'Professor::index');
 $routes->get('/sys/professor/cadastro', 'Professor::cadastro');
 $routes->post('/sys/professor/salvar', 'Professor::salvar');
 
+//CRUD Disciplinas
+$routes->get('/sys/disciplina/cadastro', 'Disciplinas::cadastro');
+
 // Rotas importacao planilhas
 $routes->get('/sys/importacao', 'Importacao::index'); 
-$routes->post('index.php/sys/importacao/importar', 'Importacao::importar_planilha'); 
+$routes->post('/sys/importacao/importar', 'Importacao::importar_planilha'); 
+$routes->get('/sys/professor/confirmar-importacao', 'Professor::validarImportacao');
+$routes->get('/sys/professor/importar-professor', 'Professor::importarProfessor');
 
 //Rota área de trabalho
-$routes->get('/sys/user-desktop', 'AreaTrabalho::areaTrabalho');
 $routes->get('/sys/professor/horarios', 'Professor::horarios');
-$routes->get('/sys/professor/confirmar-importacao', 'Professor::validarImportacao');
-$routes->get('/sys/professor/listar-professor', 'Professor::listaProfessor');
-$routes->get('/sys/professor/importar-professor', 'Professor::importarProfessor');
-$routes->get('/sys/disciplina/cadastro', 'Disciplinas::cadastro');

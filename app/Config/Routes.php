@@ -11,6 +11,7 @@ $routes->get('/sys', 'Home::sys');
 
 //CRUD Home
 $routes->get('/sys/home', 'Home::home');
+$routes->get('/sys/em-construcao', 'Home::emConstrucao');
 
 //CRUD Professor
 $routes->get('/sys/professor', 'Professor::index');

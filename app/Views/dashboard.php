@@ -24,7 +24,15 @@
           <span class="nav-link">Cadastros</span>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="<?php echo base_url('sys/home'); ?>">
+            <span class="menu-icon">
+              <i class="mdi mdi-home"></i>
+            </span>
+            <span class="menu-title">Página inicial</span>
+          </a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="<?php echo base_url('sys/professor'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-account"></i>
             </span>
@@ -32,7 +40,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">
+        <a class="nav-link" href="<?php echo base_url('sys/em-construcao'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-school"></i>
             </span>
@@ -40,7 +48,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">
+        <a class="nav-link" href="<?php echo base_url('sys/em-construcao'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-book-open-variant"></i>
             </span>
@@ -48,7 +56,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">
+        <a class="nav-link" href="<?php echo base_url('sys/em-construcao'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-notebook-check"></i>
             </span>
@@ -56,7 +64,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">
+        <a class="nav-link" href="<?php echo base_url('sys/em-construcao'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-account-group"></i>
             </span>
@@ -64,7 +72,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">
+        <a class="nav-link" href="<?php echo base_url('sys/em-construcao'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-cast-education"></i>
             </span>
@@ -72,7 +80,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">
+        <a class="nav-link" href="<?php echo base_url('sys/em-construcao'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-human-male-board"></i>
             </span>
@@ -80,7 +88,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">
+        <a class="nav-link" href="<?php echo base_url('sys/em-construcao'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-clock-time-eight"></i>
             </span>

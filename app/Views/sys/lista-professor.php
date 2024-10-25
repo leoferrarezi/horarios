@@ -2,8 +2,8 @@
     <h3 class="page-title">LISTAGEM DE PROFESSORES</h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Professores</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Lista Professores</li>
+            <li class="breadcrumb-item"><a href="<?= base_url('/sys')?>">Início</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Professores</li>
         </ol>
     </nav>
 </div>

@@ -2,7 +2,8 @@
     <h3 class="page-title">CADASTRO DE PROFESSOR</h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Professores</a></li>
+            <li class="breadcrumb-item"><a href="<?= base_url('/sys')?>">Início</a></li>
+            <li class="breadcrumb-item"><a href="<?= base_url('/sys/professor')?>">Professores</a></li>
             <li class="breadcrumb-item active" aria-current="page">Cadastro de Professor</li>
         </ol>
     </nav>

@@ -16,6 +16,7 @@ database.default.port = 3306
 ### _**executar no terminal o comando:**_
 ```
 php spark db:create horarios
+
 ```
 ### _**em seguida executar no terminal o comando:**_
 ```

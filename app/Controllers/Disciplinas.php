@@ -11,4 +11,10 @@ class Disciplinas extends BaseController
     {
         //
     }
+    
+    public function cadastro(): string
+    {
+        $data['content'] = view('sys/cadastro-disciplina');
+        return view('dashboard', $data);
+    }
 }

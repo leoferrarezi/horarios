@@ -27,7 +27,7 @@
               <div class="card-body px-4 py-5">
                 <!--Logo do Instituto Federal -->
                 <div class="d-flex flex-column flex-md-row align-items-center justify-content-md-start mb-4">
-                  <img src="<?php echo base_url('assets/images/logo-ifro.png'); ?>" alt="Instituto Federal" class="img-fluid mb-3 mb-md-0" style="width: 140px; margin-left: 5px;">
+                  <img src="<?php echo base_url('assets/images/logo-ifro-mini.png'); ?>" alt="Instituto Federal" class="img-fluid mb-3 mb-md-0" style="width: 50px; margin-right: 20px;">
                   <h3 class="mb-0 text-center">Gerenciador de Horários</h3>
                 </div>
                 <form>
@@ -48,6 +48,14 @@
                   <div class="text-center d-grid gap-2">
                     <button type="submit" class="btn btn-primary btn-block enter-btn">ENTRAR</button>
                   </div>
+                  <footer class="footer-login">
+                    <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                      <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">
+                        Copyright © 2024
+                        <a href="https://ifrocalama.com/"target="_blank">Calama Devs.</a>
+                      </span>
+                    </div>
+                  </footer>
                   <!--<div class="d-flex">
                     <button class="btn btn-facebook me-2 col">
                       <i class="mdi mdi-facebook"></i> Facebook </button>

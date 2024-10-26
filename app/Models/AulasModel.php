@@ -34,7 +34,24 @@ class AulasModel extends Model
         'turma_id' => 'required|is_not_unique[turmas.id]|max_length[11]',
         'versao_id' => 'is_not_unique[versoes.id]|max_length[11]',
     ];
-    protected $validationMessages   = [];
+    protected $validationMessages   = [
+
+        "disciplina_id" => [
+            "required" => "O campo disciplina é obrigatório",
+            "is_not_unique" => "A disciplina deve estar cadastrada",
+            "max_length" => "O tamanho máximo são 11 digitos",
+        ],
+        "turma_id" => [
+            "required" => "O campo turma é obrigatório",
+            "is_not_unique" => "A turma deve estar cadastrada",
+            "max_length" => "O tamanho máximo são 11 digitos",
+        ],
+        "versao_id" => [
+            "is_not_unique" => "A versão precisa ser registrada",
+            "max_length" => "O tamanho máximo são 11 digitos",
+        ]
+
+    ];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 

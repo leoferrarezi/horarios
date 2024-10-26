@@ -32,7 +32,13 @@ class GruposAmbientesModel extends Model
         'id' => 'permit_empty|is_natural_no_zero|max_length[11]',
         'nome' => 'required|max_length[64]|is_unique[grupos_de_ambientes.nome,id,{id}]',
     ];
-    protected $validationMessages   = [];
+    protected $validationMessages   = [
+        "nome" => [
+            "required" => "O campo nome é obrigatório",
+            "max_length" => "O tamanho máximo é 64 caracteres",
+            "is_unique" => "O Grupo Ambiente já cadastrado",
+        ]
+    ];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 

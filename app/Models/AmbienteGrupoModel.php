@@ -33,7 +33,17 @@ class AmbienteGrupo extends Model
         'ambiente_id' => 'required|is_not_unique[ambientes.id]|max_length[11]',
         'grupo_de_ambiente_id' => 'required|is_not_unique[grupos_de_ambientes.id]',
     ];
-    protected $validationMessages   = [];
+    protected $validationMessages   = [
+        "ambiente_id" => [
+            "required" => "O campo ambiente é obrigatório",
+            "is_not_unique" => "Ambiente não cadastrado",
+            "max_length" => "Tamanho limite são 11 dígitos"
+        ],
+        "grupo_de_ambiente_id" => [
+            "required" => "O campo Grupo de ambiente é obrigatório",
+            "is_not_unique" => "Grupo de ambiente não cadastrado"
+        ],
+    ];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 

@@ -287,6 +287,7 @@
   <!-- End custom js for this page -->
   <script src="<?php echo base_url("assets/js/form-validation.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/validacoes/cadastro-professor.js"); ?>"></script>
+  <script src="<?= base_url("assets/js/validacoes/edicao-professor.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/validacoes/cadastro-disciplina.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/validacoes/cadastro-cursos.js"); ?>"></script>
 </body>

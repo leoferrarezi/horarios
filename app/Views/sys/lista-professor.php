@@ -21,14 +21,23 @@
                     </div>
                 <?php endif; ?>
                 <!------------------------------------------------------------->
+                <?php if (session()->has('erros')) : ?>
+                    <div class="alert alert-danger">
+                        <ul>
+                            <?php foreach (session('erros') as $erro) : ?>
+                                <li> <i class="mdi mdi-alert-circle"></i><?= esc($erro) ?></li>
+                            <?php endforeach ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
 
                 <div class="row">
                     <div class="col-6">
                         <h4 class="card-title">LISTA DE PROFESSORES</h4>
                     </div>
                     <div class="col-6 text-end">
-                        <a class="btn btn-primary me-2 btn-icon-text" href="<?php echo base_url("/sys/professor/cadastro"); ?>">
-                            <i class="fa fa-plus btn-icon-prepend"></i>Cadastrar Novo</a>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#modal-cad-prof">Cadastrar Novo</button>
                         <a class="btn btn-success btn-icon-text">
                             <i class="fa fa-upload btn-icon-prepend"></i> Importar Professores
                         </a>
@@ -51,21 +60,26 @@
                                     <?php if (!empty($professores)): ?>
                                         <?php foreach ($professores as $professor): ?>
                                             <tr>
-                                                <td><?php echo $professor['id']; ?></td>
-                                                <td><?php echo $professor['nome']; ?></td>
-                                                <td><?php echo $professor['siape']; ?></td>
-                                                <td><?php echo $professor['email']; ?></td>
+                                                <td><?= esc($professor['id']); ?></td>
+                                                <td><?= esc($professor['nome']); ?></td>
+                                                <td><?= esc($professor['siape']); ?></td>
+                                                <td><?= esc($professor['email']); ?></td>
                                                 <td>
                                                     <div class="d-flex">
-                                                        <a class="justify-content-center align-items-center d-flex btn btn-inverse-success btn-icon me-1" href="<?php echo base_url('professor/editar/' . $professor['id']); ?>">
+                                                        <button onclick="openEditModal(<?= $professor['id']; ?>, '<?=base_url('sys/professor/')?>', '<?=base_url('sys/professor/atualizar/')?>')"
+                                                            class="justify-content-center align-items-center d-flex btn btn-inverse-success btn-icon me-1">
                                                             <i class="fa fa-edit"></i>
-                                                        </a>
+                                                        </button>
                                                         <a class="justify-content-center align-items-center d-flex btn btn-inverse-info btn-icon me-1" href="<?php echo base_url('professor/horarios/' . $professor['id']); ?>">
                                                             <i class="fa fa-clock-o"></i>
                                                         </a>
-                                                        <a class="justify-content-center align-items-center d-flex btn btn-inverse-danger btn-icon me-1" href="<?php echo base_url('professor/excluir/' . $professor['id']); ?>">
+                                                        <button onclick="openDeleteModal(<?= $professor['id']; ?>, '<?=base_url('sys/professor/')?>', '<?=base_url('sys/professor/deletar/')?>')"
+                                                            class="justify-content-center align-items-center d-flex btn btn-inverse-danger btn-icon me-1">
                                                             <i class="fa fa-trash"></i>
-                                                        </a>
+                                                        </button>
+                                                        <!-- <a class="justify-content-center align-items-center d-flex btn btn-inverse-danger btn-icon me-1" href="<?php echo base_url('professor/excluir/' . $professor['id']); ?>">
+                                                            <i class="fa fa-trash"></i>
+                                                        </a> -->
                                                     </div>
                                                 </td>
                                             </tr>
@@ -102,3 +116,8 @@
             </div>
         </div>
     </div>
+    <?= view('components/modal-cad-prof', ['rota' => base_url('sys/professor/salvar')]) ?>
+    <?= view('components/modal-edit-prof') ?>;
+    <?= view('components/modal-deletar-prof') ?>;
+    <script src="<?= base_url('assets/js/modais/abrir-edicao.js') ?>"></script>
+    <script src="<?= base_url('assets/js/modais/modal-deletar.js') ?>"></script>

@@ -9,32 +9,8 @@
             </div>
             <form action="" id="deletarProfessor" method="post">
             <?= csrf_field() ?>
-                <div class="modal-body">
-                    <strong>O registro:</strong><br>
-                    <table class="table mb-4">
-                        <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Nome</th>
-                                <th>Matrícula</th>
-                                <th>Email</th>                                
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td id="Registro-id"></td>
-                            <td id="Registro-nome"></td>
-                            <td id="Registro-siape"></td>
-                            <td id="Registro-email"></td>
-                        <tr>
-                        </tbody>
-                    </table>
-                    <strong>será apagado permanentemente!</strong>
-                    <!-- <div class="alert alert-danger">
-                        O registro: <br>
-                        <span id="Registro-nome"></span><br>
-                        <span id="Registro-nome"></span><br>
-                    </div> -->
+                <div class="modal-body text-break">
+                Confirma a exclusão do professor  <strong id='Registro-nome'></strong> ?
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-danger me-2">Excluir</button>

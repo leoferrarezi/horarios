@@ -8,8 +8,6 @@ function openDeleteModal(id, url_find, url_dest) {
             // Preencher os campos da modal com os dados retornados
             $('#Registro-id').html(id);
             $('#Registro-nome').html(data.nome);
-            $('#Registro-siape').html(data.siape);
-            $('#Registro-email').html(data.email);
             $('#deletarProfessor').attr('action', url_dest + id)
             // Exibir a modal
             $('#modal-deletar-professor').modal('show');

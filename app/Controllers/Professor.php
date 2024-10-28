@@ -7,6 +7,7 @@ use App\Models\ProfessorModel;
 
 class Professor extends BaseController
 {
+    
     public function index()
     {
         // Cria a instância de um model do professor
@@ -27,9 +28,20 @@ class Professor extends BaseController
         return view('dashboard', $data);
     }
 
+    public function professorPorId($id)
+    {
+        $professorModel = new ProfessorModel();
+        $professor = $professorModel->find($id);
+
+        return $this->response->setJSON($professor);
+    }
+
+
     public function salvar()
     {
-        $professor = new \App\Models\ProfessorModel();
+        $professor = new ProfessorModel();
+
+        $data['professores'] = $professor->findAll();
 
         //coloca todos os dados do formulario no vetor dadosPost
         $dadosPost = $this->request->getPost();
@@ -43,15 +55,41 @@ class Professor extends BaseController
         if ($professor->insert($dadosPost)) {
             //se deu certo, direciona pra lista de professores
             session()->setFlashdata('sucesso', 'Professor cadastrado com sucesso.');
-            return redirect()->to(uri: '/sys'); // Redireciona para a página de listagem
-            // return redirect()->to(uri: '/sys/professor?cadastrado');
+            return redirect()->to(base_url('/sys/professor')); // Redireciona para a página de listagem
         } else {
-            //se deu errado, renderiza a view novamente mostrando os erros
-            $prof['erros'] = $professor->errors(); //o(s) erro(s)
-            $prof['campos'] = $dadosPost; //os dados preenchidos no form, pra preencher novamente
+            $data['erros'] = $professor->errors(); //o(s) erro(s)
+            return redirect()->to(base_url('/sys/professor'))->with('erros', $data['erros'])->withInput(); //retora com os erros e os inputs
+        }
+    }
+    public function atualizar($id){
 
-            $data['content'] = view('sys/cadastro-professor', $prof); //renderiza a página de cadastro do prof
-            return view('dashboard', $data); //renderiza a página completa com o cadastro de prof "no meio"
+        $dadosPost = $this->request->getPost();
+        $dadosLimpos['id'] = $id;
+        
+        $dadosLimpos['nome'] = strip_tags($dadosPost['nome']);
+        $dadosLimpos['siape'] = strip_tags($dadosPost['siape']);
+        $dadosLimpos['email'] = strip_tags($dadosPost['email']);
+
+
+        $professorModel = new ProfessorModel();
+        if($professorModel->save($dadosLimpos)){
+            session()->setFlashdata('sucesso', 'Professor Atualizado com sucesso.');
+            return redirect()->to(base_url('/sys/professor')); // Redireciona para a página de listagem
+        } else {
+            $data['erros'] = $professorModel->errors(); //o(s) erro(s)
+            return redirect()->to(base_url('/sys/professor'))->with('erros', $data['erros']); //retora com os erros
+        }
+
+    }
+    public function deletar($id){
+        $professorModel = new ProfessorModel();
+        
+        // Deletar o usuário pelo ID
+        if ($professorModel->delete($id)) {
+            session()->setFlashdata('sucesso', 'Professor Deletado com sucesso.');
+            return redirect()->to(base_url('/sys/professor'));
+        } else {
+            return redirect()->to(base_url('/sys/professor'))->with('erro', 'Falha ao deletar professor');
         }
     }
 }

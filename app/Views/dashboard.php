@@ -20,25 +20,28 @@
         <img src="<?php echo base_url("assets/images/logo-ifro-mini.png"); ?>" class="sidebar-brand brand-logo-mini" alt="logo" />
       </div>
       <ul class="nav">
-      <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url("/sys")?>" style="margin-top:20px;">
-            <span class="menu-icon">
-              <i class="mdi mdi-home"></i>
-            </span>
-            <span class="menu-title">Início</span>
-          </a>
-        </li>
-        <li class="nav-item nav-category">
-          <span class="nav-link">Cadastros</span>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/home'); ?>">
+      <li class="nav-item menu-items"">
+          <a class="nav-link" href="<?php echo base_url("/sys/home")?>" style="margin-top:20px;">
             <span class="menu-icon">
               <i class="mdi mdi-home"></i>
             </span>
             <span class="menu-title">Página inicial</span>
           </a>
         </li>
+
+        <li class="nav-item menu-items">
+          <a class="nav-link" href="<?php echo base_url('sys/relatorios'); ?>">
+            <span class="menu-icon">
+              <i class="mdi mdi-laptop"></i>
+            </span>
+            <span class="menu-title">Relatórios</span>
+          </a>
+        </li>
+
+        <li class="nav-item nav-category">
+          <span class="nav-link">Cadastros</span>
+        </li>
+        
         <li class="nav-item">
         <a class="nav-link" href="<?php echo base_url('sys/professor'); ?>">
             <span class="menu-icon">
@@ -48,7 +51,7 @@
           </a>
         </li>
         <li class="nav-item">
-        <a class="nav-link" href="<?php echo base_url('sys/em-construcao'); ?>">
+        <a class="nav-link" href="<?php echo base_url('sys/cadastro-cursos'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-school"></i>
             </span>
@@ -56,7 +59,7 @@
           </a>
         </li>
         <li class="nav-item">
-        <a class="nav-link" href="<?php echo base_url('sys/em-construcao'); ?>">
+        <a class="nav-link" href="<?php echo base_url('sys/cadastro-disciplinas'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-book-open-variant"></i>
             </span>
@@ -64,7 +67,7 @@
           </a>
         </li>
         <li class="nav-item">
-        <a class="nav-link" href="<?php echo base_url('sys/em-construcao'); ?>">
+        <a class="nav-link" href="<?php echo base_url('sys/matriz-curricular'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-notebook-check"></i>
             </span>
@@ -72,7 +75,7 @@
           </a>
         </li>
         <li class="nav-item">
-        <a class="nav-link" href="<?php echo base_url('sys/em-construcao'); ?>">
+        <a class="nav-link" href="<?php echo base_url('sys/cadastro-turmas'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-account-group"></i>
             </span>
@@ -80,7 +83,7 @@
           </a>
         </li>
         <li class="nav-item">
-        <a class="nav-link" href="<?php echo base_url('sys/em-construcao'); ?>">
+        <a class="nav-link" href="<?php echo base_url('sys/cadastro-ambientes'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-cast-education"></i>
             </span>
@@ -88,7 +91,7 @@
           </a>
         </li>
         <li class="nav-item">
-        <a class="nav-link" href="<?php echo base_url('sys/em-construcao'); ?>">
+        <a class="nav-link" href="<?php echo base_url('sys/cadastro-aulas'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-human-male-board"></i>
             </span>
@@ -96,20 +99,11 @@
           </a>
         </li>
         <li class="nav-item">
-        <a class="nav-link" href="<?php echo base_url('sys/em-construcao'); ?>">
+        <a class="nav-link" href="<?php echo base_url('sys/cadastro-horarios-de-aula'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-clock-time-eight"></i>
             </span>
             <span class="menu-title">Horários de Aula</span>
-          </a>
-        </li>
-
-        <li class="nav-item menu-items">
-          <a class="nav-link" data-bs-toggle="collapse" href="#ui-advanced" aria-expanded="false" aria-controls="ui-advanced">
-            <span class="menu-icon">
-              <i class="mdi mdi-laptop"></i>
-            </span>
-            <span class="menu-title">Relatórios</span>
           </a>
         </li>
       </ul>
@@ -268,7 +262,7 @@
           </div>
         </footer>
         <!-- partial -->
-      </div>
+     </div>
       <!-- main-panel ends -->
     </div>
     <!-- page-body-wrapper ends -->

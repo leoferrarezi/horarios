@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="<?php echo base_url("assets/vendors/font-awesome/css/font-awesome.min.css"); ?>">
   <link rel="stylesheet" href="<?php echo base_url("assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css"); ?>">
   <link rel="stylesheet" href="<?php echo base_url("assets/css/modern-vertical/style.css"); ?>">
+  <link rel="stylesheet" href="<?php echo base_url("assets/css/custom.css"); ?>">
   <link rel="shortcut icon" href="<?php echo base_url("assets/images/logo-ifro-mini.png"); ?>" />
 </head>
 

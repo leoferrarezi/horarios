@@ -64,14 +64,14 @@
                                                 <td>
                                                     <div class="d-flex">
                                                         <button onclick="openEditModal(<?= $professor['id']; ?>, '<?= base_url('sys/professor/') ?>', '<?= base_url('sys/professor/atualizar/') ?>')"
-                                                            class="justify-content-center align-items-center d-flex btn btn-inverse-success btn-icon me-1">
+                                                            class="justify-content-center align-items-center d-flex btn btn-inverse-success button-trans-success btn-icon me-1">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
-                                                        <a class="justify-content-center align-items-center d-flex btn btn-inverse-info btn-icon me-1" href="<?php echo base_url('professor/horarios/' . $professor['id']); ?>">
+                                                        <a class="justify-content-center align-items-center d-flex btn btn-inverse-info button-trans-info btn-icon me-1" href="<?php echo base_url('professor/horarios/' . $professor['id']); ?>">
                                                             <i class="fa fa-clock-o"></i>
                                                         </a>
                                                         <button onclick="openDeleteModal(<?= $professor['id']; ?>, '<?= base_url('sys/professor/') ?>', '<?= base_url('sys/professor/deletar/') ?>')"
-                                                            class="justify-content-center align-items-center d-flex btn btn-inverse-danger btn-icon me-1">
+                                                            class="justify-content-center align-items-center d-flex btn btn-inverse-danger button-trans-danger btn-icon me-1">
                                                             <i class="fa fa-trash"></i>
                                                         </button>
                                                         <!-- <a class="justify-content-center align-items-center d-flex btn btn-inverse-danger btn-icon me-1" href="<?php echo base_url('professor/excluir/' . $professor['id']); ?>">

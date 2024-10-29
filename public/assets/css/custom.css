@@ -1,0 +1,54 @@
+/*Customização dos botoes de edição, gerenciamento e exclusão de itens da listagem*/
+.button-trans-success {
+    background-color: rgba(0, 210, 91, 0.2);
+    transition: background-color 0.3s;
+}
+
+.button-trans-success:hover {
+    background-color: rgba(0, 210, 91, 1);
+}
+
+.button-trans-success > i {
+    color: #00d25b;
+    transition: color 0.3s;
+}
+
+.button-trans-success:hover > i {
+    color: #ffffff;
+}
+
+.button-trans-info {
+    background-color: rgba(143, 95, 232, 0.2);
+    transition: background-color 0.3s;
+}
+
+.button-trans-info:hover {
+    background-color: rgba(143, 95, 232, 1);
+}
+
+.button-trans-info > i {
+    color: #8f5fe8;
+    transition: color 0.3s;
+}
+
+.button-trans-info:hover > i {
+    color: #ffffff;
+}
+
+.button-trans-danger {
+    background-color: rgba(252, 66, 74, 0.2);
+    transition: background-color 0.3s;
+}
+
+.button-trans-danger:hover {
+    background-color: rgba(252, 66, 74, 1);
+}
+
+.button-trans-danger > i {
+    color: #fc424a;
+    transition: color 0.3s;
+}
+
+.button-trans-danger:hover > i {
+    color: #ffffff;
+}

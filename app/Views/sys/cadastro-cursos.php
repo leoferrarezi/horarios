@@ -2,6 +2,7 @@
     <h3 class="page-title">CADASTRO DE CURSOS</h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="<?= base_url('/sys/home')?>">Início</a></li> 
             <li class="breadcrumb-item"><a href="#">Cursos</a></li>
             <li class="breadcrumb-item active" aria-current="page">Cadastro de Curso</li>
         </ol>

@@ -2,7 +2,7 @@
     <h3 class="page-title">LISTAGEM DE PROFESSORES</h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Professores</a></li>
+            <li class="breadcrumb-item"><a href="<?= base_url('/sys/home') ?>">Início</a></li>
             <li class="breadcrumb-item active" aria-current="page">Lista Professores</li>
         </ol>
     </nav>
@@ -32,10 +32,7 @@
                 <?php endif; ?>
 
                 <div class="row">
-                    <div class="col-6">
-                        <h4 class="card-title">LISTA DE PROFESSORES</h4>
-                    </div>
-                    <div class="col-6 text-end">
+                    <div class="col-12 mb-4">
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                             data-bs-target="#modal-cad-prof">Cadastrar Novo</button>
                         <a class="btn btn-success btn-icon-text">
@@ -46,7 +43,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive">
-                            <table class="table mb-4">
+                            <table class="table mb-4" id="listagem-professor">
                                 <thead>
                                     <tr>
                                         <th>Id</th>
@@ -66,14 +63,14 @@
                                                 <td><?= esc($professor['email']); ?></td>
                                                 <td>
                                                     <div class="d-flex">
-                                                        <button onclick="openEditModal(<?= $professor['id']; ?>, '<?=base_url('sys/professor/')?>', '<?=base_url('sys/professor/atualizar/')?>')"
+                                                        <button onclick="openEditModal(<?= $professor['id']; ?>, '<?= base_url('sys/professor/') ?>', '<?= base_url('sys/professor/atualizar/') ?>')"
                                                             class="justify-content-center align-items-center d-flex btn btn-inverse-success btn-icon me-1">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
                                                         <a class="justify-content-center align-items-center d-flex btn btn-inverse-info btn-icon me-1" href="<?php echo base_url('professor/horarios/' . $professor['id']); ?>">
                                                             <i class="fa fa-clock-o"></i>
                                                         </a>
-                                                        <button onclick="openDeleteModal(<?= $professor['id']; ?>, '<?=base_url('sys/professor/')?>', '<?=base_url('sys/professor/deletar/')?>')"
+                                                        <button onclick="openDeleteModal(<?= $professor['id']; ?>, '<?= base_url('sys/professor/') ?>', '<?= base_url('sys/professor/deletar/') ?>')"
                                                             class="justify-content-center align-items-center d-flex btn btn-inverse-danger btn-icon me-1">
                                                             <i class="fa fa-trash"></i>
                                                         </button>
@@ -95,22 +92,10 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6 text-start">
-                        <nav>
-                            <ul class="pagination">
-                                <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-left"></i></a></li>
-                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-right"></i></a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                    <div class="col-6">
-                        <p class="card-description text-end"><i class="fa fa-edit text-success me-4"></i>Editar</p>
-                        <p class="card-description text-end"><i class="fa fa-clock-o text-info me-4"></i>Gerenciar horários</p>
-                        <p class="card-description text-end"><i class="fa fa-trash text-danger me-4"></i>Excluir</p>
+                    <div class="col-12 mt-4">
+                        <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar</p>
+                        <p class="card-description text-end"><i class="fa fa-clock-o text-info me-2"></i>Gerenciar Restrições</p>
+                        <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i>Excluir</p>
                     </div>
                 </div>
             </div>

@@ -15,4 +15,9 @@ class TemposAula extends BaseController
 
         return $this->response->setJSON($data);
     }
+
+    public function cadastro(){
+        $data['content'] = view('sys/em-construcao');
+        return view('dashboard', $data);
+    }
 }

@@ -8,7 +8,9 @@
   <link rel="stylesheet" href="<?php echo base_url("assets/vendors/mdi/css/materialdesignicons.min.css"); ?>">
   <link rel="stylesheet" href="<?php echo base_url("assets/vendors/css/vendor.bundle.base.css"); ?>">
   <link rel="stylesheet" href="<?php echo base_url("assets/vendors/font-awesome/css/font-awesome.min.css"); ?>">
+  <link rel="stylesheet" href="<?php echo base_url("assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css"); ?>">
   <link rel="stylesheet" href="<?php echo base_url("assets/css/modern-vertical/style.css"); ?>">
+  <link rel="stylesheet" href="<?php echo base_url("assets/css/custom.css"); ?>">
   <link rel="shortcut icon" href="<?php echo base_url("assets/images/logo-ifro-mini.png"); ?>" />
 </head>
 
@@ -20,17 +22,28 @@
         <img src="<?php echo base_url("assets/images/logo-ifro-mini.png"); ?>" class="sidebar-brand brand-logo-mini" alt="logo" />
       </div>
       <ul class="nav">
-        <li class="nav-item nav-category">
-          <span class="nav-link">Cadastros</span>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/home'); ?>">
+      <li class="nav-item menu-items"">
+          <a class="nav-link" href="<?php echo base_url("/sys/home")?>" style="margin-top:20px;">
             <span class="menu-icon">
               <i class="mdi mdi-home"></i>
             </span>
             <span class="menu-title">Página inicial</span>
           </a>
         </li>
+
+        <li class="nav-item menu-items">
+          <a class="nav-link" href="<?php echo base_url('sys/relatorios'); ?>">
+            <span class="menu-icon">
+              <i class="mdi mdi-laptop"></i>
+            </span>
+            <span class="menu-title">Relatórios</span>
+          </a>
+        </li>
+
+        <li class="nav-item nav-category">
+          <span class="nav-link">Cadastros</span>
+        </li>
+        
         <li class="nav-item">
           <a class="nav-link" href="<?php echo base_url('sys/professor'); ?>">
             <span class="menu-icon">
@@ -40,7 +53,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/em-construcao'); ?>">
+          <a class="nav-link" href="<?php echo base_url('sys/cadastro-cursos'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-school"></i>
             </span>
@@ -48,7 +61,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/em-construcao'); ?>">
+          <a class="nav-link" href="<?php echo base_url('sys/cadastro-disciplinas'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-book-open-variant"></i>
             </span>
@@ -56,7 +69,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/em-construcao'); ?>">
+          <a class="nav-link" href="<?php echo base_url('sys/matriz-curricular'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-notebook-check"></i>
             </span>
@@ -64,7 +77,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/em-construcao'); ?>">
+          <a class="nav-link" href="<?php echo base_url('sys/cadastro-turmas'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-account-group"></i>
             </span>
@@ -72,7 +85,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/em-construcao'); ?>">
+          <a class="nav-link" href="<?php echo base_url('sys/cadastro-ambientes'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-cast-education"></i>
             </span>
@@ -80,7 +93,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/em-construcao'); ?>">
+          <a class="nav-link" href="<?php echo base_url('sys/cadastro-aulas'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-human-male-board"></i>
             </span>
@@ -88,20 +101,11 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/em-construcao'); ?>">
+          <a class="nav-link" href="<?php echo base_url('sys/cadastro-horarios-de-aula'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-clock-time-eight"></i>
             </span>
             <span class="menu-title">Horários de Aula</span>
-          </a>
-        </li>
-
-        <li class="nav-item menu-items">
-          <a class="nav-link" data-bs-toggle="collapse" href="#ui-advanced" aria-expanded="false" aria-controls="ui-advanced">
-            <span class="menu-icon">
-              <i class="mdi mdi-laptop"></i>
-            </span>
-            <span class="menu-title">Relatórios</span>
           </a>
         </li>
       </ul>
@@ -260,7 +264,7 @@
           </div>
         </footer>
         <!-- partial -->
-      </div>
+     </div>
       <!-- main-panel ends -->
     </div>
     <!-- page-body-wrapper ends -->
@@ -275,6 +279,10 @@
   <script src="<?php echo base_url("assets/vendors/jvectormap/jquery-jvectormap.min.js"); ?>"></script>
   <script src="<?php echo base_url("assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"); ?>"></script>
   <!-- End plugin js for this page -->
+  <!-- Plugin js for this page -->
+  <script src="<?php echo base_url("assets/vendors/datatables.net/jquery.dataTables.js"); ?>"></script>
+  <script src="<?php echo base_url("assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"); ?>"></script>
+  <!-- End plugin js for this page -->
   <!-- inject:js -->
   <script src="<?php echo base_url("assets/js/off-canvas.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/hoverable-collapse.js"); ?>"></script>
@@ -282,6 +290,12 @@
   <script src="<?php echo base_url("assets/js/settings.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/todolist.js"); ?>"></script>
   <!-- endinject -->
+  <!-- Custom js for this page -->
+  <script>
+    const dataTableLangUrl = "<?php echo base_url('assets/js/traducao-dataTable/pt_br.json'); ?>";
+  </script>
+  <script src="<?php echo base_url("assets/js/data-tables/data-table-professor.js"); ?>"></script>
+  <!-- End custom js for this page -->
   <!-- Custom js for this page -->
   <script src="<?php echo base_url("assets/js/dashboard.js"); ?>"></script>
   <!-- End custom js for this page -->

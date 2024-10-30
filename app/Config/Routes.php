@@ -15,6 +15,30 @@ $routes->get('/sys/em-construcao', 'Home::emConstrucao');
 service('auth')->routes($routes);
 service('auth')->routes($routes, ['except' => ['login', 'register']]);
 
+//cadastro cursos
+$routes->get('/sys/cadastro-cursos', 'Cursos::cadastro');
+
+//cadastro disciplinas
+$routes->get('sys/cadastro-disciplinas', 'Disciplinas::cadastro');
+
+//matriz curricular (em construção)
+$routes->get('sys/matriz-curricular', 'MatrizCurricular::index');
+
+//cadastro de turmas (em construção)
+$routes->get('sys/cadastro-turmas', 'Turmas::index');
+
+//cadastro de ambientes (em construção)
+$routes->get('sys/cadastro-ambientes', 'Ambientes::index');
+
+//cadastro de aulas (em construção)
+$routes->get('sys/cadastro-aulas', 'Aulas::index');
+
+//horarios de aula (em construção)
+$routes->get('sys/cadastro-horarios-de-aula', 'TemposAula::cadastro'); 
+
+//Relatórios (em construção)
+$routes->get('sys/relatorios', 'Relatorios::index');
+
 //adicionar o filter (middleware de login no group depois)
 $routes->group('sys', function ($routes) {
     //CRUD Professor

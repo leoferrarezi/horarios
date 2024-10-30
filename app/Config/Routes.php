@@ -6,14 +6,15 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 
+// Shield Auth routes
+service('auth')->routes($routes);
+service('auth')->routes($routes, ['except' => ['login', 'register']]);
+
 $routes->get('/', 'Home::index');
 $routes->get('/sys', 'Home::home');
 $routes->get('/sys/home', 'Home::home');
 $routes->get('/sys/em-construcao', 'Home::emConstrucao');
 
-// Shield Auth routes
-service('auth')->routes($routes);
-service('auth')->routes($routes, ['except' => ['login', 'register']]);
 
 //cadastro cursos
 $routes->get('/sys/cadastro-cursos', 'Cursos::cadastro');
@@ -34,7 +35,7 @@ $routes->get('sys/cadastro-ambientes', 'Ambientes::index');
 $routes->get('sys/cadastro-aulas', 'Aulas::index');
 
 //horarios de aula (em construção)
-$routes->get('sys/cadastro-horarios-de-aula', 'TemposAula::cadastro'); 
+$routes->get('sys/cadastro-horarios-de-aula', 'TemposAula::cadastro');
 
 //Relatórios (em construção)
 $routes->get('sys/relatorios', 'Relatorios::index');

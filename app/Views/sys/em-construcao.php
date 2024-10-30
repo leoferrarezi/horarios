@@ -2,7 +2,7 @@
     <div class="col-12 grid-margin">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title"><?php echo $title; ?></h4>
+                <h4 class="card-title">Página em Construção </h4>
                 <div class="card-description">
                 <div class="row">
                     <div class="col-12 grid-margin">
@@ -16,8 +16,6 @@
                         </div>
                         </div>
                     </div>
-                    </div>
-                </div>
                 </div>
             </div>
         </div>

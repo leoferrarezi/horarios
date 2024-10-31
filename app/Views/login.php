@@ -18,6 +18,8 @@
   <link rel="stylesheet" href="<?php echo base_url("assets/css/modern-vertical/style.css"); ?>">
   <!-- End layout styles -->
   <!--<link rel="shortcut icon" href="<?php echo base_url("assets/images/favicon.png"); ?>" />-->
+
+  <script src='https://www.google.com/recaptcha/api.js?hl=pt-BR'></script>
 </head>
 
 <body>
@@ -64,7 +66,7 @@
                   </div>
                 <?php endif; ?>
 
-
+                <div class="g-recaptcha" data-sitekey="6LcEEXEqAAAAAMJ-gOE6cJbtVJwCHKd8raNKw29X"></div>
                 <div class="text-center d-grid gap-2">
                   <button type="submit" class="btn btn-primary btn-block enter-btn">ENTRAR</button>
                 </div>
@@ -100,11 +102,22 @@
   <!-- Plugin js for this page -->
   <!-- End plugin js for this page -->
   <!-- inject:js -->
+  <script>
+    function onSubmit(token) {
+      document.getElementById("demo-form").submit();
+    }
+  </script>
   <script src="<?php echo base_url("assets/js/off-canvas.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/hoverable-collapse.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/misc.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/settings.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/todolist.js"); ?>"></script>
+
+  <script>
+    function onSubmit(token) {
+      document.getElementById("demo-form").submit();
+    }
+  </script>
   <!-- endinject -->
 </body>
 

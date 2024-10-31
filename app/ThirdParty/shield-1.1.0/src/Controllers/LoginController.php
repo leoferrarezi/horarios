@@ -58,6 +58,12 @@ class LoginController extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        // Verificação do reCAPTCHA
+        $recaptchaResponse = $this->request->getPost('g-recaptcha-response');
+        if (!$this->validateRecaptcha($recaptchaResponse)) {
+            return redirect()->back()->withInput()->with('error', 'Falha na verificação do reCAPTCHA.');
+        }
+
         /** @var array $credentials */
         $credentials             = $this->request->getPost(setting('Auth.validFields')) ?? [];
         $credentials             = array_filter($credentials);
@@ -105,5 +111,17 @@ class LoginController extends BaseController
         auth()->logout();
 
         return redirect()->to($url)->with('message', lang('Auth.successLogout'));
+    }
+
+    // Método para validar o reCAPTCHA
+    protected function validateRecaptcha(string $recaptchaResponse): bool
+    {
+        $secret = '6LcEEXEqAAAAAI7DUKafGPUUyp54wsQ6faY0_m-a';
+        $url = 'https://www.google.com/recaptcha/api/siteverify';
+
+        $response = file_get_contents($url . '?secret=' . $secret . '&response=' . $recaptchaResponse);
+        $responseKeys = json_decode($response, true);
+
+        return intval($responseKeys["success"]) === 1;
     }
 }

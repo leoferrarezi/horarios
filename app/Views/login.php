@@ -71,13 +71,35 @@
                   <button type="submit" class="btn btn-primary btn-block enter-btn">ENTRAR</button>
                 </div>
                 <footer class="footer-login">
-                  <div class="d-sm-flex justify-content-center justify-content-sm-between">
-                    <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">
-                      Copyright © 2024
-                      <a href="https://ifrocalama.com/" target="_blank">Calama Devs.</a>
+                  <div class="d-flex justify-content-center">
+                    <span class="text-muted text-center">
+                      © 2024 Gerenciador de Horários -
+                      <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">Calama Devs.</a>
                     </span>
                   </div>
                 </footer>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Sobre Calama Devs</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <p>Nos somos lindos.</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Modal Ends -->
+
                 <!--<div class="d-flex">
                     <button class="btn btn-facebook me-2 col">
                       <i class="mdi mdi-facebook"></i> Facebook </button>

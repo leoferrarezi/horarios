@@ -10,7 +10,7 @@ use CodeIgniter\Router\RouteCollection;
 service('auth')->routes($routes);
 service('auth')->routes($routes, ['except' => ['login', 'register']]);
 
-$routes->get('/', 'Home::index');
+$routes->get('/', 'Home::home');
 $routes->get('/sys', 'Home::home');
 $routes->get('/sys/home', 'Home::home');
 $routes->get('/sys/em-construcao', 'Home::emConstrucao');

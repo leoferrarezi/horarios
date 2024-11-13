@@ -66,10 +66,16 @@
                   </div>
                 <?php endif; ?>
 
-                <div class="g-recaptcha" data-sitekey="6LcEEXEqAAAAAMJ-gOE6cJbtVJwCHKd8raNKw29X"></div>
+                <!-- CAPTCHA -->
+                <div class="captcha-container">
+                  <div class="g-recaptcha" data-sitekey="6LcEEXEqAAAAAMJ-gOE6cJbtVJwCHKd8raNKw29X"></div>
+                </div>
+
+                <!-- Botão de login -->
                 <div class="text-center d-grid gap-2">
                   <button type="submit" class="btn btn-primary btn-block enter-btn">ENTRAR</button>
                 </div>
+
                 <footer class="footer-login">
                   <div class="d-flex justify-content-center">
                     <span class="text-muted text-center">

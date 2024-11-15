@@ -1,4 +1,4 @@
-<div class="modal fade <?= $size ?? '' ?>" id="modal-cad-prof" tabindex="-1" aria-labelledby="ModalLabel" style="display: none;" aria-hidden="true">
+<div class="modal fade" id="modal-cad-prof" tabindex="-1" aria-labelledby="ModalLabel" style="display: none;" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,20 +7,14 @@
                 <span aria-hidden="true">×</span>
             </button>
             </div>
-            <form id="cadastrarProfessor" class="forms-sample" method="post" action='<?= $rota ?>'>
+            <form id="cadastrarProfessor" class="forms-sample" method="post" action='<?php echo base_url('sys/professor/salvar'); ?>'>
                 <div class="modal-body">
                     <?= csrf_field() ?>
                     <div class="form-group">
-                        <label for="exampleInputUsername1">Nome Completo</label>
+                        <label for="exampleInputUsername1">Nome</label>
                         <input type="text" class="form-control" 
                             id="nome" name="nome" placeholder="Digite o nome do professor" 
                             value="<?= esc(old('nome'))?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Matrícula SIAPE</label>
-                        <input type="text" class="form-control" 
-                            id="siape" name="siape" placeholder="Digite o código do SIAPE"
-                            value="<?= esc(old('siape'))  ?>">
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1">E-Mail</label>

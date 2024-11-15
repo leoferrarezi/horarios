@@ -15,7 +15,6 @@ $routes->get('/sys', 'Home::home');
 $routes->get('/sys/home', 'Home::home');
 $routes->get('/sys/em-construcao', 'Home::emConstrucao');
 
-
 //cadastro cursos
 $routes->get('/sys/cadastro-cursos', 'Cursos::cadastro');
 
@@ -48,9 +47,10 @@ $routes->group('sys', function ($routes) {
         $routes->get('listar', 'Professor::index');
         $routes->get('cadastro', 'Professor::cadastro');
         $routes->post('salvar', 'Professor::salvar');
-        $routes->get('(:num)', 'Professor::professorPorId/$1');
-        $routes->post('atualizar/(:num)', 'Professor::atualizar/$1');
-        $routes->post('deletar/(:num)', 'Professor::deletar/$1');
+        $routes->post('atualizar', 'Professor::atualizar');
+        $routes->post('deletar', 'Professor::deletar');
+
+        $routes->get('(:num)', 'Professor::professorPorId/$1');        
         //Rota área de trabalho
         $routes->get('horarios', 'Professor::horarios');
     });

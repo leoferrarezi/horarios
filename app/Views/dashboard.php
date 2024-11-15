@@ -5,13 +5,22 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>IFRO Calama - Sistemas - by Calama Devs</title>
+
   <link rel="stylesheet" href="<?php echo base_url("assets/vendors/mdi/css/materialdesignicons.min.css"); ?>">
   <link rel="stylesheet" href="<?php echo base_url("assets/vendors/css/vendor.bundle.base.css"); ?>">
   <link rel="stylesheet" href="<?php echo base_url("assets/vendors/font-awesome/css/font-awesome.min.css"); ?>">
   <link rel="stylesheet" href="<?php echo base_url("assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css"); ?>">
   <link rel="stylesheet" href="<?php echo base_url("assets/css/modern-vertical/style.css"); ?>">
+  <link rel="stylesheet" href="<?php echo base_url("assets/vendors/jquery-toast-plugin/jquery.toast.min.css"); ?>">
   <link rel="stylesheet" href="<?php echo base_url("assets/css/custom.css"); ?>">
+
   <link rel="shortcut icon" href="<?php echo base_url("assets/images/logo-ifro-mini.png"); ?>" />
+
+  <!-- plugins:js -->
+  <script src="<?php echo base_url("assets/vendors/js/vendor.bundle.base.js"); ?>"></script>
+  <script src="<?php echo base_url("assets/vendors/jquery-validation/jquery.validate.min.js"); ?>"></script>
+  <script src="<?php echo base_url("assets/vendors/jquery-toast-plugin/jquery.toast.min.js"); ?>"></script>
+  <!-- endinject -->
 </head>
 
 <body>
@@ -22,7 +31,7 @@
         <img src="<?php echo base_url("assets/images/logo-ifro-mini.png"); ?>" class="sidebar-brand brand-logo-mini" alt="logo" />
       </div>
       <ul class="nav">
-      <li class="nav-item menu-items"">
+      <li class="nav-item menu-items">
           <a class="nav-link" href="<?php echo base_url("/sys/home")?>" style="margin-top:20px;">
             <span class="menu-icon">
               <i class="mdi mdi-home"></i>
@@ -270,19 +279,18 @@
     <!-- page-body-wrapper ends -->
   </div>
   <!-- container-scroller -->
-  <!-- plugins:js -->
-  <script src="<?php echo base_url("assets/vendors/js/vendor.bundle.base.js"); ?>"></script>
-  <script src="<?php echo base_url("assets/vendors/jquery-validation/jquery.validate.min.js"); ?>"></script>
-  <!-- endinject -->
+
   <!-- Plugin js for this page -->
   <script src="<?php echo base_url("assets/vendors/progressbar.js/progressbar.min.js"); ?>"></script>
   <script src="<?php echo base_url("assets/vendors/jvectormap/jquery-jvectormap.min.js"); ?>"></script>
   <script src="<?php echo base_url("assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"); ?>"></script>
   <!-- End plugin js for this page -->
+
   <!-- Plugin js for this page -->
   <script src="<?php echo base_url("assets/vendors/datatables.net/jquery.dataTables.js"); ?>"></script>
   <script src="<?php echo base_url("assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"); ?>"></script>
   <!-- End plugin js for this page -->
+
   <!-- inject:js -->
   <script src="<?php echo base_url("assets/js/off-canvas.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/hoverable-collapse.js"); ?>"></script>
@@ -290,20 +298,15 @@
   <script src="<?php echo base_url("assets/js/settings.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/todolist.js"); ?>"></script>
   <!-- endinject -->
-  <!-- Custom js for this page -->
-  <script>
-    const dataTableLangUrl = "<?php echo base_url('assets/js/traducao-dataTable/pt_br.json'); ?>";
-  </script>
-  <script src="<?php echo base_url("assets/js/data-tables/data-table-professor.js"); ?>"></script>
-  <!-- End custom js for this page -->
+
   <!-- Custom js for this page -->
   <script src="<?php echo base_url("assets/js/dashboard.js"); ?>"></script>
-  <!-- End custom js for this page -->
   <script src="<?php echo base_url("assets/js/form-validation.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/validacoes/cadastro-professor.js"); ?>"></script>
-  <script src="<?= base_url("assets/js/validacoes/edicao-professor.js"); ?>"></script>
+  <script src="<?php echo base_url("assets/js/validacoes/edicao-professor.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/validacoes/cadastro-disciplina.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/validacoes/cadastro-cursos.js"); ?>"></script>
+  <!-- End custom js for this page -->
 </body>
 
 </html>

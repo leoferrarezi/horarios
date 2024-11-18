@@ -15,9 +15,6 @@ $routes->get('/sys', 'Home::home');
 $routes->get('/sys/home', 'Home::home');
 $routes->get('/sys/em-construcao', 'Home::emConstrucao');
 
-//cadastro cursos
-$routes->get('/sys/cadastro-cursos', 'Cursos::cadastro');
-
 //cadastro disciplinas
 $routes->get('sys/cadastro-disciplinas', 'Disciplinas::cadastro');
 
@@ -53,6 +50,14 @@ $routes->group('sys', function ($routes) {
         $routes->get('(:num)', 'Professor::professorPorId/$1');        
         //Rota área de trabalho
         $routes->get('horarios', 'Professor::horarios');
+    });
+    $routes->group('curso', function ($routes){
+        $routes->get('', 'Cursos::index');
+        $routes->get('listar', 'Cursos::index');
+        $routes->get('cadastro', 'Cursos::cadastro');
+        $routes->post('salvar', 'Cursos::salvar');
+        $routes->post('atualizar', 'Cursos::atualizar');
+        $routes->post('deletar', 'Cursos::deletar');
     });
     $routes->group('disciplina', function ($routes) {
         //CRUD Disciplinas

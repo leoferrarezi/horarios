@@ -15,8 +15,8 @@ class SeedAdminUser extends Migration
 
     public function down()
     {
-        // Opcional: Remova o usuário admin caso a migration seja revertida
         $db = \Config\Database::connect();
-        $db->table('users')->where('secret', 'admin@admin.com')->delete();
+        $db->table('auth_identities')->where('secret', 'admin@admin.com')->delete();
+        $db->table('users')->where('username', 'admin')->delete();
     }
 }

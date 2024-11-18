@@ -54,6 +54,7 @@ class LoginController extends BaseController
         // like the password, can only be validated properly here.
         $rules = $this->getValidationRules();
 
+        // Valida os dados de login
         if (! $this->validateData($this->request->getPost(), $rules, [], config('Auth')->DBGroup)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
@@ -61,31 +62,30 @@ class LoginController extends BaseController
         // Verificação do reCAPTCHA
         $recaptchaResponse = $this->request->getPost('g-recaptcha-response');
         if (!$this->validateRecaptcha($recaptchaResponse)) {
+            // Caso o reCAPTCHA falhe, retorna erro e não permite o login
             return redirect()->back()->withInput()->with('error', 'Falha na verificação do reCAPTCHA.');
         }
 
         /** @var array $credentials */
-        $credentials             = $this->request->getPost(setting('Auth.validFields')) ?? [];
-        $credentials             = array_filter($credentials);
+        $credentials = $this->request->getPost(setting('Auth.validFields')) ?? [];
+        $credentials = array_filter($credentials);
         $credentials['password'] = $this->request->getPost('password');
-        $remember                = (bool) $this->request->getPost('remember');
+        $remember = (bool) $this->request->getPost('remember');
 
         /** @var Session $authenticator */
         $authenticator = auth('session')->getAuthenticator();
 
-        // Attempt to login
+        // Tentativa de login
         $result = $authenticator->remember($remember)->attempt($credentials);
         if (! $result->isOK()) {
+            // Caso a autenticação falhe, retorna erro com a razão
             return redirect()->route('login')->withInput()->with('error', $result->reason());
         }
 
-        // If an action has been defined for login, start it up.
-        if ($authenticator->hasAction()) {
-            return redirect()->route('auth-action-show')->withCookies();
-        }
-
+        // Redireciona após login bem-sucedido
         return redirect()->to(config('Auth')->loginRedirect())->withCookies();
     }
+
 
     /**
      * Returns the rules that should be used for validation.

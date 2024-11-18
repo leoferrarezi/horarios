@@ -16,6 +16,9 @@
 
   <link rel="shortcut icon" href="<?php echo base_url("assets/images/logo-ifro-mini.png"); ?>" />
 
+  <!-- Select2 -->
+  <link rel="stylesheet" href="<?php echo base_url("assets/vendors/select2/select2.min.css"); ?>">
+  <link rel="stylesheet" href="<?php echo base_url("assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css"); ?>">
   <!-- plugins:js -->
   <script src="<?php echo base_url("assets/vendors/js/vendor.bundle.base.js"); ?>"></script>
   <script src="<?php echo base_url("assets/vendors/jquery-validation/jquery.validate.min.js"); ?>"></script>
@@ -306,6 +309,9 @@
   <script src="<?php echo base_url("assets/js/validacoes/edicao-professor.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/validacoes/cadastro-disciplina.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/validacoes/cadastro-cursos.js"); ?>"></script>
+  <!-- Select2 -->
+  <script src="<?php echo base_url("assets/vendors/select2/select2.min.js"); ?>"></script>
+  
   <!-- End custom js for this page -->
 </body>
 

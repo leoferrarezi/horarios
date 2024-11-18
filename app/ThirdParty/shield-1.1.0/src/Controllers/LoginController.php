@@ -119,9 +119,42 @@ class LoginController extends BaseController
         $secret = '6LcEEXEqAAAAAI7DUKafGPUUyp54wsQ6faY0_m-a';
         $url = 'https://www.google.com/recaptcha/api/siteverify';
 
-        $response = file_get_contents($url . '?secret=' . $secret . '&response=' . $recaptchaResponse);
-        $responseKeys = json_decode($response, true);
+        // Inicializando a requisição cURL
+        $curl = curl_init();
 
-        return intval($responseKeys["success"]) === 1;
+        // Definindo as opções da requisição
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://www.google.com/recaptcha/api/siteverify",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => "secret=6LcEEXEqAAAAAI7DUKafGPUUyp54wsQ6faY0_m-a&response=" . $recaptchaResponse,
+            CURLOPT_SSL_VERIFYHOST => 0,
+            CURLOPT_SSL_VERIFYPEER => 0,
+        ));
+
+        // Executando a requisição
+        $response = curl_exec($curl);
+
+        // Verificando se a requisição falhou
+        if ($response === false) {
+            log_message('error', 'Erro na requisição cURL: ' . curl_error($curl));
+            curl_close($curl);
+            return false;
+        }
+
+        // Fechando a conexão cURL
+        curl_close($curl);
+
+        // Decodificando a resposta JSON
+        $responseArray = json_decode($response, true);
+
+        // Verificando se a resposta foi válida
+        if ($responseArray === null) {
+            log_message('error', 'Erro ao decodificar JSON: ' . json_last_error_msg());
+            return false;
+        }
+
+        // Verificando o sucesso da validação do reCAPTCHA
+        return isset($responseArray["success"]) && $responseArray["success"] === true;
     }
 }

@@ -68,7 +68,7 @@
 
                 <!-- CAPTCHA -->
                 <div class="captcha-container">
-                  <div class="g-recaptcha" data-sitekey="6LcEEXEqAAAAAMJ-gOE6cJbtVJwCHKd8raNKw29X"></div>
+                  <div class="g-recaptcha" data-sitekey="6LcEEXEqAAAAAMJ-gOE6cJbtVJwCHKd8raNKw29X" data-action="LOGIN"></div>
                 </div>
 
                 <!-- Botão de login -->

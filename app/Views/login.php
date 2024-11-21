@@ -90,25 +90,25 @@
                   <div class="modal-dialog" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel-2">Sobre Calama Devs</h5>
+                        <h5 class="modal-title fade-in" id="exampleModalLabel-2">Sobre Calama Devs</h5>
                         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
                       <div class="modal-body">
-                        <p style="font-size: 14px; text-align: justify;">O sistema Gerenciador de Horários foi desenvolvido pelo grupo Calama Devs, formado por alunos do curso de Análise e Desenvolvimento de Sistemas em parceria com o professor e coordenador do curso, Leandro Ferrarezi. Este sistema foi criado com o objetivo de otimizar a gestão de horários no IFRO - Campus Porto Velho Calama, promovendo maior organização acadêmica. O projeto destaca o envolvimento e a colaboração dos integrantes em aplicar seus conhecimentos para atender às necessidades da instituição.</p>
-                        <p style="font-size: 13px;">MEMBROS:</p>
-                        <p style="font-size: 13px;">Igor Vinícius Medonça Barreto</p>
-                        <p style="font-size: 13px;">José Claion Martins de Sousa</p>
-                        <p style="font-size: 13px;">Leandro Ferrarezi Valiante</p>
-                        <p style="font-size: 13px;">Luis Henrique Bergonzini Souza</p>
-                        <p style="font-size: 13px;">Luis Marcelo Fabrício Guimarães</p>
-                        <p style="font-size: 13px;">Poliana Carvalho Lima</p>
-                        <p style="font-size: 13px;">Paloma Carvalho Lima</p>
-                        <p style="font-size: 13px;">Sanmara Letícia Nunes de Souza</p>
-                        <p style="font-size: 13px;">Vitória Oliveira de Lima</p>
-                        <p style="font-size: 13px; color: gray;">Fernanda Coelho Nunes</p>
-                        <p style="font-size: 13px; color: gray;">Maria Luiza Botelho Guimarães</p>
+                        <p class="fade-in" style="font-size: 14px; text-align: justify;">O sistema Gerenciador de Horários foi desenvolvido pelo grupo Calama Devs, formado por alunos do curso de Análise e Desenvolvimento de Sistemas em parceria com o professor e coordenador do curso, Leandro Ferrarezi. Este sistema foi criado com o objetivo de otimizar a gestão de horários no IFRO - Campus Porto Velho Calama, promovendo maior organização acadêmica. O projeto destaca o envolvimento e a colaboração dos integrantes em aplicar seus conhecimentos para atender às necessidades da instituição.</p>
+                        <p class="fade-in" style="font-size: 13px;">MEMBROS:</p>
+                        <p class="fade-in" style="font-size: 13px;">Igor Vinícius Medonça Barreto</p>
+                        <p class="fade-in" style="font-size: 13px;">José Claion Martins de Sousa</p>
+                        <p class="fade-in" style="font-size: 13px;">Leandro Ferrarezi Valiante</p>
+                        <p class="fade-in" style="font-size: 13px;">Luis Henrique Bergonzini Souza</p>
+                        <p class="fade-in" style="font-size: 13px;">Luis Marcelo Fabrício Guimarães</p>
+                        <p class="fade-in" style="font-size: 13px;">Poliana Carvalho Lima</p>
+                        <p class="fade-in" style="font-size: 13px;">Paloma Carvalho Lima</p>
+                        <p class="fade-in" style="font-size: 13px;">Sanmara Letícia Nunes de Souza</p>
+                        <p class="fade-in" style="font-size: 13px;">Vitória Oliveira de Lima</p>
+                        <p class="fade-in" style="font-size: 13px; color: gray;">Fernanda Coelho Nunes</p>
+                        <p class="fade-in" style="font-size: 13px; color: gray;">Maria Luiza Botelho Guimarães</p>
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
@@ -157,6 +157,24 @@
     function onSubmit(token) {
       document.getElementById("demo-form").submit();
     }
+  </script> 
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('exampleModal-2');
+
+  //efeito de fade-in ao abrir a modal
+  modal.addEventListener('show.bs.modal', function() {
+    const fadeElements = modal.querySelectorAll('.fade-in');
+    fadeElements.forEach(el => el.classList.add('fade-in'))
+  });
+
+  //remove o efeito fade-in ao fechar a modal
+  modal.addEventListener('hidden.bs.modal', function() {
+    const fadeElements = modal.querySelectorAll('.fade-in');
+    fadeElements.forEach(el => el.classList.remove('fade-in'));
+    });
+  });
   </script>
   <!-- endinject -->
 </body>

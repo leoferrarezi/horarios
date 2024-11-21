@@ -80,23 +80,35 @@
                   <div class="d-flex justify-content-center">
                     <span class="text-muted text-center">
                       © 2024 Gerenciador de Horários -
-                      <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">Calama Devs.</a>
+                      <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal-2">Calama Devs.</a>
                     </span>
                   </div>
                 </footer>
 
                 <!-- Modal -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                  <div class="modal-dialog modal-lg" role="document">
+                <div class="modal fade" id="exampleModal-2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-2" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Sobre Calama Devs</h5>
+                        <h5 class="modal-title" id="exampleModalLabel-2">Sobre Calama Devs</h5>
                         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
                       <div class="modal-body">
-                        <p>Nos somos lindos.</p>
+                        <p style="font-size: 14px; text-align: justify;">O sistema Gerenciador de Horários foi desenvolvido pelo grupo Calama Devs, formado por alunos do curso de Análise e Desenvolvimento de Sistemas em parceria com o professor e coordenador do curso, Leandro Ferrarezi. Este sistema foi criado com o objetivo de otimizar a gestão de horários no IFRO - Campus Porto Velho Calama, promovendo maior organização acadêmica. O projeto destaca o envolvimento e a colaboração dos integrantes em aplicar seus conhecimentos para atender às necessidades da instituição.</p>
+                        <p style="font-size: 13px;">MEMBROS:</p>
+                        <p style="font-size: 13px;">Igor Vinícius Medonça Barreto</p>
+                        <p style="font-size: 13px;">José Claion Martins de Sousa</p>
+                        <p style="font-size: 13px;">Leandro Ferrarezi Valiante</p>
+                        <p style="font-size: 13px;">Luis Henrique Bergonzini Souza</p>
+                        <p style="font-size: 13px;">Luis Marcelo Fabrício Guimarães</p>
+                        <p style="font-size: 13px;">Poliana Carvalho Lima</p>
+                        <p style="font-size: 13px;">Paloma Carvalho Lima</p>
+                        <p style="font-size: 13px;">Sanmara Letícia Nunes de Souza</p>
+                        <p style="font-size: 13px;">Vitória Oliveira de Lima</p>
+                        <p style="font-size: 13px; color: gray;">Fernanda Coelho Nunes</p>
+                        <p style="font-size: 13px; color: gray;">Maria Luiza Botelho Guimarães</p>
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>

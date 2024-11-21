@@ -30581,4 +30581,17 @@ input:-webkit-autofill {
   -webkit-flex-grow: 1;
   flex-grow: 1;
 }
+
+.fade-in {
+  animation: fadeIn 5s ease-out;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 /*# sourceMappingURL=../maps/modern-vertical/style.css.map */

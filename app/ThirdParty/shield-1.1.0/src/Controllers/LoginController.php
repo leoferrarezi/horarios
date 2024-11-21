@@ -119,42 +119,40 @@ class LoginController extends BaseController
         $secret = '6LcEEXEqAAAAAI7DUKafGPUUyp54wsQ6faY0_m-a';
         $url = 'https://www.google.com/recaptcha/api/siteverify';
 
-        // Inicializando a requisição cURL
-        $curl = curl_init();
+        // Monta os parâmetros para a requisição
+        $postData = http_build_query([
+            'secret' => $secret,
+            'response' => $recaptchaResponse,
+        ]);
 
-        // Definindo as opções da requisição
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://www.google.com/recaptcha/api/siteverify",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => "secret=6LcEEXEqAAAAAI7DUKafGPUUyp54wsQ6faY0_m-a&response=" . $recaptchaResponse,
-            CURLOPT_SSL_VERIFYHOST => 0,
-            CURLOPT_SSL_VERIFYPEER => 0,
-        ));
+        // Inicializa a requisição cURL
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);  // Assegura verificação do certificado SSL
 
-        // Executando a requisição
-        $response = curl_exec($curl);
+        $resposta = curl_exec($ch);
 
-        // Verificando se a requisição falhou
-        if ($response === false) {
-            log_message('error', 'Erro na requisição cURL: ' . curl_error($curl));
-            curl_close($curl);
+        // Verifica se houve erro na execução do cURL
+        if ($resposta === false) {
+            curl_close($ch);
+            log_message('error', 'Erro ao validar reCAPTCHA: ' . curl_error($ch));
             return false;
         }
 
-        // Fechando a conexão cURL
-        curl_close($curl);
+        curl_close($ch);
 
-        // Decodificando a resposta JSON
-        $responseArray = json_decode($response, true);
+        // Log da resposta do reCAPTCHA para depuração
+        log_message('debug', 'Resposta do reCAPTCHA: ' . $resposta);
 
-        // Verificando se a resposta foi válida
-        if ($responseArray === null) {
-            log_message('error', 'Erro ao decodificar JSON: ' . json_last_error_msg());
-            return false;
-        }
+        // Decodifica a resposta do reCAPTCHA
+        $resultado = json_decode($resposta);
 
-        // Verificando o sucesso da validação do reCAPTCHA
-        return isset($responseArray["success"]) && $responseArray["success"] === true;
+        // Log do objeto resultado
+        log_message('debug', 'Resultado do reCAPTCHA: ' . print_r($resultado, true));
+
+        // Verifica se a resposta contém o campo 'success' e se está marcado como verdadeiro
+        return isset($resultado->success) && $resultado->success === true;
     }
 }

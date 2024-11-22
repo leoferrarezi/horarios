@@ -65,8 +65,8 @@ $routes->group('sys', function ($routes) {
     });
     $routes->group('importacao', function ($routes) {
         // Rotas importacao planilhas
-        $routes->get('/sys/importacao', 'Importacao::index');
-        $routes->post('/sys/importacao/importar', 'Importacao::importar_planilha');
+        $routes->get('', 'Importacao::index');
+        $routes->post('importar', 'Importacao::importar_planilha');
         $routes->get('/sys/professor/confirmar-importacao', 'Professor::validarImportacao');
         $routes->get('/sys/professor/importar-professor', 'Professor::importarProfessor');
     });

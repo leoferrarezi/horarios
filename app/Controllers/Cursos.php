@@ -53,7 +53,7 @@ class Cursos extends BaseController
 
         $cursoModel = new CursosModel();
         if($cursoModel->save($dadosLimpos)){
-            session()->setFlashdata('sucesso', 'Professor atualizado com sucesso.');
+            session()->setFlashdata('sucesso', 'Curso atualizado com sucesso.');
             return redirect()->to(base_url('/sys/curso')); // Redireciona para a página de listagem
         } else {
             $data['erros'] = $cursoModel->errors(); //o(s) erro(s)
@@ -72,7 +72,7 @@ class Cursos extends BaseController
             session()->setFlashdata('sucesso', 'Curso excluído com sucesso.');
             return redirect()->to(base_url('/sys/curso'));
         } else {
-            return redirect()->to(base_url('/sys/curso'))->with('erro', 'Falha ao deletar professor');
+            return redirect()->to(base_url('/sys/curso'))->with('erro', 'Falha ao deletar curso');
         }
     }
 }

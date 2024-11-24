@@ -15,9 +15,6 @@ $routes->get('/sys', 'Home::home');
 $routes->get('/sys/home', 'Home::home');
 $routes->get('/sys/em-construcao', 'Home::emConstrucao');
 
-//cadastro disciplinas
-$routes->get('sys/cadastro-disciplinas', 'Disciplinas::cadastro');
-
 //matriz curricular (em construção)
 $routes->get('sys/matriz-curricular', 'MatrizCurricular::index');
 
@@ -61,7 +58,12 @@ $routes->group('sys', function ($routes) {
     });
     $routes->group('disciplina', function ($routes) {
         //CRUD Disciplinas
+        $routes->get('', 'Disciplinas::index');
+        $routes->get('listar', 'Disciplinas::index');
         $routes->get('cadastro', 'Disciplinas::cadastro');
+        $routes->post('salvar', 'Disciplinas::salvar');
+        $routes->post('atualizar', 'Disciplinas::atualizar');
+        $routes->post('deletar', 'Disciplinas::deletar');
     });
     $routes->group('importacao', function ($routes) {
         // Rotas importacao planilhas

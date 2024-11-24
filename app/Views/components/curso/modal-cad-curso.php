@@ -9,12 +9,12 @@
             </div>
             <form id="cadastrarCurso" class="forms-sample" method="post" action='<?php echo base_url('sys/curso/salvar'); ?>'>
                 <div class="modal-body">
-                    <?= csrf_field() ?>
+                    <?php echo csrf_field() ?>
                     <div class="form-group">
                         <label for="exampleInputUsername1">Nome</label>
                         <input type="text" class="form-control" 
                             id="nome" name="nome" placeholder="Digite o nome do curso" 
-                            value="<?= esc(old('nome'))?>">
+                            value="<?php echo esc(old('nome'))?>">
                     </div>
                     <div class="form-group">
                         <label for="matriz">Matriz</label>

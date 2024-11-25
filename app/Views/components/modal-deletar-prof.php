@@ -9,7 +9,7 @@
             </div>
             
             <form id="deletarProfessor" class="forms-sample" method="post" action='<?php echo base_url('sys/professor/deletar'); ?>'>
-                <?= csrf_field() ?>
+                <?php echo csrf_field() ?>
                 <input type="hidden" id="deletar-id" name="id" />
                 <div class="modal-body text-break">Confirma a exclusão do professor <strong id='deletar-nome'></strong>?</div>
                 <div class="modal-footer">

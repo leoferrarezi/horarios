@@ -9,18 +9,18 @@
             </div>
             <form id="cadastrarProfessor" class="forms-sample" method="post" action='<?php echo base_url('sys/professor/salvar'); ?>'>
                 <div class="modal-body">
-                    <?= csrf_field() ?>
+                    <?php echo csrf_field() ?>
                     <div class="form-group">
                         <label for="exampleInputUsername1">Nome</label>
                         <input type="text" class="form-control" 
                             id="nome" name="nome" placeholder="Digite o nome do professor" 
-                            value="<?= esc(old('nome'))?>">
+                            value="<?php echo esc(old('nome'))?>">
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1">E-Mail</label>
                         <input type="email" class="form-control" 
                             id="email" name="email" placeholder="Digite o email" 
-                                value="<?= esc(old('email'))?>">
+                                value="<?php echo esc(old('email'))?>">
                     </div>
                 </div>
                 <div class="modal-footer">

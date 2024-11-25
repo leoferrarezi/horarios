@@ -37,7 +37,7 @@ class DisciplinasModel extends Model
         'max_tempos_diarios' => 'required|is_natural|max_length[2]|',
         'periodo' => 'required|integer|max_length[2]',
         'abreviatura' => 'permit_empty|max_length[32]',
-        'grupo_de_ambientes_id' => 'required|is_not_unique[grupo_de_ambientes.id]',
+        'grupo_de_ambientes_id' => 'required|is_not_unique[grupos_de_ambientes.id]',
     ];
     protected $validationMessages   = [
         "nome" => [
@@ -89,4 +89,11 @@ class DisciplinasModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getDisciplinaWithMatrizAndGrupo() {
+        return $this->select('disciplinas.*, matriz.nome as nome_matriz, ga.nome as grupo_de_ambiente')
+                    ->join('matrizes as matriz', 'matriz.id = disciplinas.matriz_id')
+                    ->join('grupos_de_ambientes as ga', 'ga.id = disciplinas.grupo_de_ambientes_id')
+                    ->findAll();
+    }
 }

@@ -9,7 +9,7 @@
             </div>
             <form id="editarCurso" class="forms-sample" method="post" action='<?php echo base_url('sys/curso/atualizar'); ?>'>
                 <div class="modal-body">
-                    <?= csrf_field() ?>
+                    <?php echo csrf_field() ?>
                     <input type="hidden" id="edit-id" name="id" />
                     <div class="form-group">
                         <label for="exampleInputUsername1">Nome</label>

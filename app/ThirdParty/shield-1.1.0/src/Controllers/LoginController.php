@@ -61,10 +61,20 @@ class LoginController extends BaseController
 
         // Verificação do reCAPTCHA
         $recaptchaResponse = $this->request->getPost('g-recaptcha-response');
-        if (!$this->validateRecaptcha($recaptchaResponse)) {
-            // Caso o reCAPTCHA falhe, retorna erro e não permite o login
-            return redirect()->back()->withInput()->with('error', 'Falha na verificação do reCAPTCHA.');
+        if (!$recaptchaResponse) {
+            // Mensagem de erro quando o reCAPTCHA não foi enviado
+            session()->setFlashdata('error', 'Por favor, complete o reCAPTCHA.');
+            return redirect()->back()->withInput();
         }
+
+        if (!$this->validateRecaptcha($recaptchaResponse)) {
+            // Mensagem de erro quando o reCAPTCHA falha
+            session()->setFlashdata('error', 'Falha na validação do reCAPTCHA. Tente novamente.');
+            return redirect()->back()->withInput();
+        }
+
+        // Mensagem de sucesso para indicar que o reCAPTCHA foi validado
+        session()->setFlashdata('success', 'Validação do reCAPTCHA concluída com sucesso.');
 
         /** @var array $credentials */
         $credentials = $this->request->getPost(setting('Auth.validFields')) ?? [];
@@ -81,6 +91,9 @@ class LoginController extends BaseController
             // Caso a autenticação falhe, retorna erro com a razão
             return redirect()->route('login')->withInput()->with('error', $result->reason());
         }
+
+        // Adiciona uma mensagem de sucesso somente após o reCAPTCHA e o login terem sido validados
+        session()->setFlashdata('success', 'Login realizado com sucesso! ReCAPTCHA verificado.');
 
         // Redireciona após login bem-sucedido
         return redirect()->to(config('Auth')->loginRedirect())->withCookies();
@@ -149,10 +162,13 @@ class LoginController extends BaseController
         // Decodifica a resposta do reCAPTCHA
         $resultado = json_decode($resposta);
 
-        // Log do objeto resultado
-        log_message('debug', 'Resultado do reCAPTCHA: ' . print_r($resultado, true));
-
         // Verifica se a resposta contém o campo 'success' e se está marcado como verdadeiro
-        return isset($resultado->success) && $resultado->success === true;
+        if (isset($resultado->success) && $resultado->success === true) {
+            log_message('info', 'reCAPTCHA validado com sucesso.');
+            return true;
+        }
+
+        log_message('info', 'reCAPTCHA falhou na validação.');
+        return false;
     }
 }

@@ -1,3 +1,10 @@
+<?php if (session()->getFlashdata('success')): ?>
+  <script>
+    alert("<?= session()->getFlashdata('success'); ?>");
+  </script>
+<?php endif; ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,8 +41,8 @@
         <img src="<?php echo base_url("assets/images/logo-ifro-mini.png"); ?>" class="sidebar-brand brand-logo-mini" alt="logo" />
       </div>
       <ul class="nav">
-      <li class="nav-item menu-items">
-          <a class="nav-link" href="<?php echo base_url("/sys/home")?>" style="margin-top:20px;">
+        <li class="nav-item menu-items">
+          <a class="nav-link" href="<?php echo base_url("/sys/home") ?>" style="margin-top:20px;">
             <span class="menu-icon">
               <i class="mdi mdi-home"></i>
             </span>
@@ -55,7 +62,7 @@
         <li class="nav-item nav-category">
           <span class="nav-link">Cadastros</span>
         </li>
-        
+
         <li class="nav-item">
           <a class="nav-link" href="<?php echo base_url('sys/professor'); ?>">
             <span class="menu-icon">
@@ -276,7 +283,7 @@
           </div>
         </footer>
         <!-- partial -->
-     </div>
+      </div>
       <!-- main-panel ends -->
     </div>
     <!-- page-body-wrapper ends -->
@@ -311,7 +318,7 @@
   <script src="<?php echo base_url("assets/js/validacoes/cadastro-cursos.js"); ?>"></script>
   <!-- Select2 -->
   <script src="<?php echo base_url("assets/vendors/select2/select2.min.js"); ?>"></script>
-  
+
   <!-- End custom js for this page -->
 </body>
 

@@ -1,10 +1,3 @@
-<?php if (session()->getFlashdata('success')): ?>
-  <script>
-    alert("<?= session()->getFlashdata('success'); ?>");
-  </script>
-<?php endif; ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -140,6 +133,16 @@
           <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
             <span class="mdi mdi-menu"></span>
           </button>
+          <!-- Flash Data Alert -->
+          <?php if (session()->getFlashdata('success')): ?>
+            <div class="alert alert-success alert-dismissible fade show flash-data-alert" role="alert">
+              <?= session()->getFlashdata('success'); ?>
+              <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true" class="flash-close-btn">&times;</span>
+              </button>
+            </div>
+          <?php endif; ?>
+          <!-- Fim do Flash Data -->
           <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item dropdown border-left">
               <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">

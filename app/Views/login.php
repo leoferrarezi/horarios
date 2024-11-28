@@ -96,19 +96,21 @@
                         </button>
                       </div>
                       <div class="modal-body">
-                        <p class="fade-in" style="font-size: 14px; text-align: justify;">O sistema Gerenciador de Horários foi desenvolvido pelo grupo Calama Devs, formado por alunos do curso de Análise e Desenvolvimento de Sistemas em parceria com o professor e coordenador do curso, Leandro Ferrarezi. Este sistema foi criado com o objetivo de otimizar a gestão de horários no IFRO - Campus Porto Velho Calama, promovendo maior organização acadêmica. O projeto destaca o envolvimento e a colaboração dos integrantes em aplicar seus conhecimentos para atender às necessidades da instituição.</p>
-                        <p class="fade-in" style="font-size: 13px;">MEMBROS:</p>
+                        <p class="fade-in" style="font-size: 14px; text-align: justify;">O Calama Devs é um grupo de desenvolvedores de software formado por alunos e professores do curso de Análise e Desenvolvimento de Sistemas do IFRO - Campus Calama, vinculado ao grupo de pesquisa GPMecatrônica.</p> <br>
+                        <p class="fade-in" style="font-size: 13px; font-weight: bold;">MEMBROS DO GRUPO:</p> <br>
+                        <p class="fade-in" style="font-size: 13px;">Prof. Leandro Ferrarezi Valiante</p>
+                        <p class="fade-in" style="font-size: 13px;">Prof. Paulo Sérgio Tomé</p>
+                        <p class="fade-in" style="font-size: 13px;">Prof. Willians de Paula Pereira</p> <br>
                         <p class="fade-in" style="font-size: 13px;">Igor Vinícius Medonça Barreto</p>
                         <p class="fade-in" style="font-size: 13px;">José Claion Martins de Sousa</p>
-                        <p class="fade-in" style="font-size: 13px;">Leandro Ferrarezi Valiante</p>
                         <p class="fade-in" style="font-size: 13px;">Luis Henrique Bergonzini Souza</p>
                         <p class="fade-in" style="font-size: 13px;">Luis Marcelo Fabrício Guimarães</p>
                         <p class="fade-in" style="font-size: 13px;">Poliana Carvalho Lima</p>
                         <p class="fade-in" style="font-size: 13px;">Paloma Carvalho Lima</p>
                         <p class="fade-in" style="font-size: 13px;">Sanmara Letícia Nunes de Souza</p>
-                        <p class="fade-in" style="font-size: 13px;">Vitória Oliveira de Lima</p>
-                        <p class="fade-in" style="font-size: 13px; color: gray;">Fernanda Coelho Nunes</p>
-                        <p class="fade-in" style="font-size: 13px; color: gray;">Maria Luiza Botelho Guimarães</p>
+                        <p class="fade-in" style="font-size: 13px;">Vitória Oliveira de Lima</p> <br>
+                        <p class="fade-in" style="font-size: 13px; color: gray; text-decoration: line-through">Fernanda Coelho Nunes</p>
+                        <p class="fade-in" style="font-size: 13px; color: gray; text-decoration: line-through">Maria Luiza Botelho Guimarães</p>
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>

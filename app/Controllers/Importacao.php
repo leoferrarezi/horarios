@@ -11,7 +11,9 @@ class Importacao extends BaseController
 {
     public function index()
     {
-        return view('importacao_form'); // view vai aqui
+        // Adiciona o conteúdo específico da página
+        $data['content'] = view('sys/importacao_form');
+        return view('dashboard', $data); // Retorna a dashboard com o conteúdo
     }
 
     public function importar_planilha()
@@ -44,7 +46,7 @@ class Importacao extends BaseController
         }
 
         $sheet = $spreadsheet->getActiveSheet();
-        $data = [];
+        $dataRows = [];
 
         foreach ($sheet->getRowIterator() as $row) {
             $cellIterator = $row->getCellIterator();
@@ -55,10 +57,12 @@ class Importacao extends BaseController
                 $rowData[] = $cell->getValue();
             }
 
-            $data[] = $rowData;
+            $dataRows[] = $rowData;
         }
 
-        
-        return view('importacao_form', ['dados' => $data]);
+        // Passa os dados processados para a variável content
+        $data['dados'] = $dataRows;
+        $data['content'] = view('sys/importacao_form', ['dados' => $dataRows]);
+        return view('dashboard', $data);
     }
 }

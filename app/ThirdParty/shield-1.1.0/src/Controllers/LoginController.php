@@ -54,38 +54,51 @@ class LoginController extends BaseController
         // like the password, can only be validated properly here.
         $rules = $this->getValidationRules();
 
+        // Valida os dados de login
         if (! $this->validateData($this->request->getPost(), $rules, [], config('Auth')->DBGroup)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
         // Verificação do reCAPTCHA
         $recaptchaResponse = $this->request->getPost('g-recaptcha-response');
-        if (!$this->validateRecaptcha($recaptchaResponse)) {
-            return redirect()->back()->withInput()->with('error', 'Falha na verificação do reCAPTCHA.');
+        if (!$recaptchaResponse) {
+            // Mensagem de erro quando o reCAPTCHA não foi enviado
+            session()->setFlashdata('error', 'Por favor, complete o reCAPTCHA.');
+            return redirect()->back()->withInput();
         }
 
+        if (!$this->validateRecaptcha($recaptchaResponse)) {
+            // Mensagem de erro quando o reCAPTCHA falha
+            session()->setFlashdata('error', 'Falha na validação do reCAPTCHA. Tente novamente.');
+            return redirect()->back()->withInput();
+        }
+
+        // Mensagem de sucesso para indicar que o reCAPTCHA foi validado
+        session()->setFlashdata('success', 'Validação do reCAPTCHA concluída com sucesso.');
+
         /** @var array $credentials */
-        $credentials             = $this->request->getPost(setting('Auth.validFields')) ?? [];
-        $credentials             = array_filter($credentials);
+        $credentials = $this->request->getPost(setting('Auth.validFields')) ?? [];
+        $credentials = array_filter($credentials);
         $credentials['password'] = $this->request->getPost('password');
-        $remember                = (bool) $this->request->getPost('remember');
+        $remember = (bool) $this->request->getPost('remember');
 
         /** @var Session $authenticator */
         $authenticator = auth('session')->getAuthenticator();
 
-        // Attempt to login
+        // Tentativa de login
         $result = $authenticator->remember($remember)->attempt($credentials);
         if (! $result->isOK()) {
+            // Caso a autenticação falhe, retorna erro com a razão
             return redirect()->route('login')->withInput()->with('error', $result->reason());
         }
 
-        // If an action has been defined for login, start it up.
-        if ($authenticator->hasAction()) {
-            return redirect()->route('auth-action-show')->withCookies();
-        }
+        // Adiciona uma mensagem de sucesso somente após o reCAPTCHA e o login terem sido validados
+        session()->setFlashdata('success', 'Login realizado com sucesso! ReCAPTCHA verificado.');
 
+        // Redireciona após login bem-sucedido
         return redirect()->to(config('Auth')->loginRedirect())->withCookies();
     }
+
 
     /**
      * Returns the rules that should be used for validation.
@@ -119,9 +132,43 @@ class LoginController extends BaseController
         $secret = '6LcEEXEqAAAAAI7DUKafGPUUyp54wsQ6faY0_m-a';
         $url = 'https://www.google.com/recaptcha/api/siteverify';
 
-        $response = file_get_contents($url . '?secret=' . $secret . '&response=' . $recaptchaResponse);
-        $responseKeys = json_decode($response, true);
+        // Monta os parâmetros para a requisição
+        $postData = http_build_query([
+            'secret' => $secret,
+            'response' => $recaptchaResponse,
+        ]);
 
-        return intval($responseKeys["success"]) === 1;
+        // Inicializa a requisição cURL
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);  // Assegura verificação do certificado SSL
+
+        $resposta = curl_exec($ch);
+
+        // Verifica se houve erro na execução do cURL
+        if ($resposta === false) {
+            curl_close($ch);
+            log_message('error', 'Erro ao validar reCAPTCHA: ' . curl_error($ch));
+            return false;
+        }
+
+        curl_close($ch);
+
+        // Log da resposta do reCAPTCHA para depuração
+        log_message('debug', 'Resposta do reCAPTCHA: ' . $resposta);
+
+        // Decodifica a resposta do reCAPTCHA
+        $resultado = json_decode($resposta);
+
+        // Verifica se a resposta contém o campo 'success' e se está marcado como verdadeiro
+        if (isset($resultado->success) && $resultado->success === true) {
+            log_message('info', 'reCAPTCHA validado com sucesso.');
+            return true;
+        }
+
+        log_message('info', 'reCAPTCHA falhou na validação.');
+        return false;
     }
 }

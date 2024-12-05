@@ -4,20 +4,21 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Reader\Xls;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 class Importacao extends BaseController
 {
     public function index()
     {
-        return view('importacao_form'); // view vai aqui
+        // Adiciona o conteúdo específico da página
+        $data['content'] = view('sys/importacao_form');
+        return view('dashboard', $data); // Retorna a dashboard com o conteúdo
     }
 
     public function importar_planilha()
     {
-        $file = $this->request->getFile('arquivo'); // 
+        $file = $this->request->getFile('arquivo');
 
         if (!$file->isValid()) {
             return $this->response->setStatusCode(ResponseInterface::HTTP_BAD_REQUEST)
@@ -31,16 +32,11 @@ class Importacao extends BaseController
         }
 
         $newFileName = $file->getRandomName();
-        $file->move(WRITEPATH . 'uploads', $newFileName); 
+        $file->move(WRITEPATH . 'uploads', $newFileName);
 
         $filePath = WRITEPATH . 'uploads/' . $newFileName;
 
-        
-        if ($extension === 'xlsx') {
-            $reader = new Xlsx();
-        } else {
-            $reader = new Xls();
-        }
+        $reader = $extension === 'xlsx' ? new Xlsx() : new Xls();
 
         try {
             $spreadsheet = $reader->load($filePath);
@@ -49,11 +45,9 @@ class Importacao extends BaseController
                 ->setBody('Erro ao carregar o arquivo: ' . $e->getMessage());
         }
 
-        
         $sheet = $spreadsheet->getActiveSheet();
-        $data = [];
+        $dataRows = [];
 
-        
         foreach ($sheet->getRowIterator() as $row) {
             $cellIterator = $row->getCellIterator();
             $cellIterator->setIterateOnlyExistingCells(false);
@@ -63,17 +57,12 @@ class Importacao extends BaseController
                 $rowData[] = $cell->getValue();
             }
 
-            $data[] = $rowData;
+            $dataRows[] = $rowData;
         }
 
-            echo '<pre>';
-            print_r($data);
-            echo '</pre>';
-            exit;
-
-        
-
-        return $this->response->setStatusCode(ResponseInterface::HTTP_OK)
-            ->setBody('Arquivo carregado e dados processados com sucesso.');
+        // Passa os dados processados para a variável content
+        $data['dados'] = $dataRows;
+        $data['content'] = view('sys/importacao_form', ['dados' => $dataRows]);
+        return view('dashboard', $data);
     }
 }

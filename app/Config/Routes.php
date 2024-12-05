@@ -15,13 +15,6 @@ $routes->get('/sys', 'Home::home');
 $routes->get('/sys/home', 'Home::home');
 $routes->get('/sys/em-construcao', 'Home::emConstrucao');
 
-
-//cadastro cursos
-$routes->get('/sys/cadastro-cursos', 'Cursos::cadastro');
-
-//cadastro disciplinas
-$routes->get('sys/cadastro-disciplinas', 'Disciplinas::cadastro');
-
 //matriz curricular (em construção)
 $routes->get('sys/matriz-curricular', 'MatrizCurricular::index');
 
@@ -50,20 +43,34 @@ $routes->group('sys', function ($routes) {
         $routes->get('listar', 'Professor::index');
         $routes->get('cadastro', 'Professor::cadastro');
         $routes->post('salvar', 'Professor::salvar');
-        $routes->get('(:num)', 'Professor::professorPorId/$1');
-        $routes->post('atualizar/(:num)', 'Professor::atualizar/$1');
-        $routes->post('deletar/(:num)', 'Professor::deletar/$1');
+        $routes->post('atualizar', 'Professor::atualizar');
+        $routes->post('deletar', 'Professor::deletar');
+
+        $routes->get('(:num)', 'Professor::professorPorId/$1');        
         //Rota área de trabalho
         $routes->get('horarios', 'Professor::horarios');
     });
+    $routes->group('curso', function ($routes){
+        $routes->get('', 'Cursos::index');
+        $routes->get('listar', 'Cursos::index');
+        $routes->get('cadastro', 'Cursos::cadastro');
+        $routes->post('salvar', 'Cursos::salvar');
+        $routes->post('atualizar', 'Cursos::atualizar');
+        $routes->post('deletar', 'Cursos::deletar');
+    });
     $routes->group('disciplina', function ($routes) {
         //CRUD Disciplinas
+        $routes->get('', 'Disciplinas::index');
+        $routes->get('listar', 'Disciplinas::index');
         $routes->get('cadastro', 'Disciplinas::cadastro');
+        $routes->post('salvar', 'Disciplinas::salvar');
+        $routes->post('atualizar', 'Disciplinas::atualizar');
+        $routes->post('deletar', 'Disciplinas::deletar');
     });
     $routes->group('importacao', function ($routes) {
         // Rotas importacao planilhas
-        $routes->get('/sys/importacao', 'Importacao::index');
-        $routes->post('/sys/importacao/importar', 'Importacao::importar_planilha');
+        $routes->get('', 'Importacao::index');
+        $routes->post('importar', 'Importacao::importar_planilha');
         $routes->get('/sys/professor/confirmar-importacao', 'Professor::validarImportacao');
         $routes->get('/sys/professor/importar-professor', 'Professor::importarProfessor');
     });

@@ -1,14 +1,14 @@
 <!-- incluir os componentes modais antes do restante do documento -->
-<?php echo view('components/modal-edit-prof'); ?>
-<?php echo view('components/modal-cad-prof'); ?>    
-<?php echo view('components/modal-deletar-prof') ?>
+<?php echo view('components/disciplina/modal-edit-disciplina'); ?>
+<?php echo view('components/disciplina/modal-cad-disciplina'); ?>
+<?php echo view('components/disciplina/modal-deletar-disciplina') ?>
 
 <div class="page-header">
-    <h3 class="page-title">GERENCIAR PROFESSORES</h3>
+    <h3 class="page-title">GERENCIAR DISCIPLINAS</h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="<?= base_url('/sys/home') ?>">Início</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Lista Professores</li>
+            <li class="breadcrumb-item active" aria-current="page">Lista Disciplinas</li>
         </ol>
     </nav>
 </div>
@@ -32,8 +32,8 @@
 
                 <div class="row">
                     <div class="col-12 mb-4">
-                        <button type="button" class="btn btn-primary btn-icon-text" data-bs-toggle="modal" data-bs-target="#modal-cad-prof"><i class="fa fa-plus-circle btn-icon-prepend"></i> Incluir Professor</button>
-                        <button type="button" class="btn btn-info btn-icon-text"><i class="fa fa-upload btn-icon-prepend"></i> Importar Professores do SUAP</a>
+                        <button type="button" class="btn btn-primary btn-icon-text" data-bs-toggle="modal" data-bs-target="#modal-cad-disciplina"><i class="fa fa-plus-circle btn-icon-prepend"></i> Incluir Disciplina</button>
+                        <button type="button" class="btn btn-info btn-icon-text"><i class="fa fa-upload btn-icon-prepend"></i> Importar Disciplinas do SUAP</a>
                     </div>
                 </div>
 
@@ -42,14 +42,20 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive">
-                            <table class="table mb-4" id="listagem-professor">
-                                
+                            <table class="table mb-4" id="listagem-disciplina">
+
                                 <!-- cabeçalho da tabela -->
                                 <thead>
                                     <tr>
                                         <th>Id</th>
                                         <th>Nome</th>
-                                        <th>Email</th>
+                                        <th>Código</th>
+                                        <th>Matriz</th>
+                                        <th>Carga Hóraria</th>
+                                        <th>Tempo máximo diário</th>
+                                        <th>Período</th>
+                                        <th>Abreviatura</th>
+                                        <th>Grupo Ambiente</th>
                                         <th>Ações</th>
                                     </tr>
                                 </thead>
@@ -58,57 +64,58 @@
 
                                 <tbody>
 
-                                    <?php if (!empty($professores)): //verifica se a tabela tem dados ?>
-                                        <?php foreach ($professores as $professor): //loop para percorrer todos os professores retornados do bd ?>
+                                    <?php if (!empty($disciplinas)): //verifica se a tabela tem dados 
+                                    ?>
+                                        <?php foreach ($disciplinas as $disciplina): //loop para percorrer todos os professores retornados do bd 
+                                        ?>
                                             <tr>
-                                                <td><?php echo esc($professor['id']); ?></td>
-                                                <td><?php echo esc($professor['nome']); ?></td>
-                                                <td><?php echo esc($professor['email']); ?></td>
+                                                <td><?php echo esc($disciplina['id']); ?></td>
+                                                <td><?php echo esc($disciplina['nome']); ?></td>
+                                                <td><?php echo esc($disciplina['codigo']); ?></td>
+                                                <td><?php echo esc($disciplina['nome_matriz']); ?></td>
+                                                <td><?php echo esc($disciplina['ch']); ?></td>
+                                                <td><?php echo esc($disciplina['max_tempos_diarios']); ?></td>
+                                                <td><?php echo esc($disciplina['periodo']); ?></td>
+                                                <td><?php echo esc($disciplina['abreviatura']); ?></td>
+                                                <td><?php echo esc($disciplina['grupo_de_ambiente']); ?></td>
 
                                                 <!-- essa celula monta os botões de ação que acionam modais -->
 
                                                 <td>
                                                     <div class="d-flex">
                                                         <!-- o elemento <span> é apenas para mostrar o tooltip -->
-                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Atualizar dados do professor">
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Atualizar dados da disciplina">
                                                             <!-- botão com estilo, ativação do modal, e dados formados para transmitir ao modal -->
-                                                            <button 
+                                                            <button
                                                                 type="button"
-                                                                class="justify-content-center align-items-center d-flex btn btn-inverse-success button-trans-success btn-icon me-1"                                                                
+                                                                class="justify-content-center align-items-center d-flex btn btn-inverse-success button-trans-success btn-icon me-1"
                                                                 data-bs-toggle="modal"
-                                                                data-bs-target="#modal-edit-prof"
-                                                                data-id="<?php echo esc($professor['id']); ?>"
-                                                                data-nome="<?php echo esc($professor['nome']);?>"
-                                                                data-email="<?php echo esc($professor['email']);?>"
-                                                            >
+                                                                data-bs-target="#modal-edit-disciplina"
+                                                                data-id="<?php echo esc($disciplina['id']); ?>"
+                                                                data-nome="<?php echo esc($disciplina['nome']); ?>"
+                                                                data-codigo="<?php echo esc($disciplina['codigo']); ?>"
+                                                                data-matriz_id="<?php echo esc($disciplina['matriz_id']); ?>"
+                                                                data-ch="<?php echo esc($disciplina['ch']); ?>"
+                                                                data-max-tempos-diarios="<?php echo esc($disciplina['max_tempos_diarios']); ?>"
+                                                                data-periodo="<?php echo esc($disciplina['periodo']); ?>"
+                                                                data-abreviatura="<?php echo esc($disciplina['abreviatura']); ?>"
+                                                                data-grupo-ambiente-id="<?php echo esc($disciplina['grupo_de_ambientes_id']); ?>">
+
                                                                 <!-- icone do botão -->
                                                                 <i class="fa fa-edit"></i>
                                                             </button>
                                                         </span>
-                                                        
+
                                                         <!-- abaixo são repetidos os códigos acima para replicar os outros 2 botões -->
 
-                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Gerenciar restrições de horário do professor">
-                                                            <button 
-                                                                type="button"
-                                                                class="justify-content-center align-items-center d-flex btn btn-inverse-info button-trans-info btn-icon me-1" 
-                                                                data-bs-toggle="modal" 
-                                                                data-bs-target="#modal-restricoes-prof"
-                                                                data-id="<?php echo esc($professor['id']); ?>"
-                                                                data-nome="<?php echo esc($professor['nome']);?>"
-                                                            >
-                                                                <i class="fa fa-clock-o"></i>
-                                                            </button>
-                                                        </span>
-                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Excluir professor">
-                                                            <button 
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Excluir disciplina">
+                                                            <button
                                                                 type="button"
                                                                 class="justify-content-center align-items-center d-flex btn btn-inverse-danger button-trans-danger btn-icon me-1"
-                                                                data-bs-toggle="modal" 
-                                                                data-bs-target="#modal-deletar-professor"
-                                                                data-id="<?php echo esc($professor['id']); ?>"
-                                                                data-nome="<?php echo esc($professor['nome']);?>"
-                                                            >
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modal-deletar-disciplina"
+                                                                data-id="<?php echo esc($disciplina['id']); ?>"
+                                                                data-nome="<?php echo esc($disciplina['nome']); ?>">
                                                                 <i class="fa fa-trash"></i>
                                                             </button>
                                                         </span>
@@ -117,9 +124,9 @@
                                             </tr>
                                         <?php endforeach; ?>
                                     <?php else: ?>
-                                        <!-- caso não haja professor cadastrado -->
+                                        <!-- caso não haja curso cadastrado -->
                                         <tr>
-                                            <td colspan="4">Nenhum professor cadastrado.</td>
+                                            <td colspan="4">Nenhum curso cadastrado.</td>
                                         </tr>
                                     <?php endif; ?>
                                 </tbody>
@@ -131,7 +138,6 @@
                 <div class="row">
                     <div class="col-12 mt-4">
                         <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar</p>
-                        <p class="card-description text-end"><i class="fa fa-clock-o text-info me-2"></i>Gerenciar Restrições</p>
                         <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i>Excluir</p>
                     </div>
                 </div>
@@ -144,15 +150,18 @@
         //Para carregar a tradução dos itens da DataTable
         const dataTableLangUrl = "<?php echo base_url('assets/js/traducao-dataTable/pt_br.json'); ?>";
 
-        //essa linha abaixo é para detectar que o documento foi completamente carregado e executar o código após isso
-        $(document).ready(function(){
 
-            //Verificar se tem professores para então "transformar" a tabela em DataTable
-            <?php if (!empty($professores)): ?>
-                
+
+        //essa linha abaixo é para detectar que o documento foi completamente carregado e executar o código após isso
+        $(document).ready(function() {
+
+
+            //Verificar se tem disciplina para então "transformar" a tabela em DataTable
+            <?php if (!empty($disciplinas)): ?>
+
                 //Cria a DataTable
-                $("#listagem-professor").DataTable({
-                    
+                $("#listagem-disciplina").DataTable({
+
                     //Define as entradas de quantidade de linhas visíveis na tabela
                     aLengthMenu: [
                         [5, 15, 30, -1],
@@ -161,47 +170,63 @@
 
                     //Define as questões de tradução/idioma
                     language: {
-                            search: "Pesquisar:",
-                            url: dataTableLangUrl,
-                        },
+                        search: "Pesquisar:",
+                        url: dataTableLangUrl,
+                    },
 
                     //Ativa ordenação
                     ordering: true,
                     //Diz que a coluna 1 (segunda/nome) deve ser o padrão de ordenação ao carregar a tabela
-                    order: [ [1, 'asc'] ],
-                    //Desativa a ordenação por e-mail e por ações
-                    columns: [null, null, { orderable: false }, { orderable: false }]
+                    order: [
+                        [1, 'asc']
+                    ],
+                    //Desativa a ordenação por ações
+                    columns: [null, null, null, null, null, null, null, null, null, {
+                        orderable: false
+                    }]
                 });
 
-                //programação do modal de Edição do professor
+                //programação do modal de Edição do curso
                 //mais especificamente preenche os campos com os dados atuais
                 //que vêm lá do código HTML do botão de editar
-                $('#modal-edit-prof').on('show.bs.modal', function (event) {
-
+                $('#modal-edit-disciplina').on('show.bs.modal', function(event) {
                     // Obter o DOM do botão que ativou o modal
-                    var button = $(event.relatedTarget); 
+                    var button = $(event.relatedTarget);
 
                     // Extrair as informações dos atributos data-* 
-                    var nome = button.data('nome');
-                    var email = button.data('email');
                     var id = button.data('id');
-                    
+                    var nome = button.data('nome');
+                    var codigo = button.data('codigo');
+                    var matriz = button.data('matriz_id');
+                    var ch = button.data('ch');
+                    var max_tempos_diarios = button.data('max-tempos-diarios');
+                    var periodo = button.data('periodo');
+                    var abreviatura = button.data('abreviatura')
+                    var grupo_ambiente = button.data('grupo-ambiente-id');
+
+
                     // Formar o modal com os dados preenchidos
                     var modal = $(this);
                     modal.find('#edit-id').val(id);
                     modal.find('#edit-nome').val(nome);
-                    modal.find('#edit-email').val(email);
+                    modal.find('#edit-codigo').val(codigo);
+                    modal.find('#edit-matriz').val(matriz);
+                    modal.find('#edit-cargaHoraria').val(ch);
+                    modal.find('#edit-max_tempos_diarios').val(max_tempos_diarios);
+                    modal.find('#edit-periodo').val(periodo);
+                    modal.find('#edit-abreviatura').val(abreviatura);
+                    modal.find('#edit-grupo_ambiente').val(grupo_ambiente);
+
                 });
 
                 //Mesma abordagem do código acima, para o modal de excluir professor
-                $('#modal-deletar-professor').on('show.bs.modal', function (event) {
-
+                $('#modal-deletar-disciplina').on('show.bs.modal', function(event) {
                     // Button that triggered the modal
-                    var button = $(event.relatedTarget); 
+                    var button = $(event.relatedTarget);
 
                     // Extract info from data-* attributes
-                    var nome = button.data('nome');
                     var id = button.data('id');
+                    var nome = button.data('nome');
 
                     var modal = $(this);
                     modal.find('#deletar-id').val(id);
@@ -210,7 +235,7 @@
 
                 //Ativa os tooltips dos botões
                 $('[data-bs-toggle="tooltip"]').tooltip();
-                
+
             <?php endif; ?>
 
             // Exibe mensagem de sucesso se o flashdata estiver com 'sucesso'
@@ -225,6 +250,4 @@
                 });
             <?php endif; ?>
         });
-
-
     </script>

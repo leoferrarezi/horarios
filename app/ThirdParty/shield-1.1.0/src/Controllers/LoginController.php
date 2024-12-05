@@ -50,31 +50,37 @@ class LoginController extends BaseController
      */
     public function loginAction(): RedirectResponse
     {
-        // Validate here first, since some things,
-        // like the password, can only be validated properly here.
-        $rules = $this->getValidationRules();
+        // Validação dos dados de login
+        log_message('info', 'Tentativa de login recebida.');
 
-        // Valida os dados de login
+        $rules = $this->getValidationRules();
         if (! $this->validateData($this->request->getPost(), $rules, [], config('Auth')->DBGroup)) {
+            log_message('error', 'Validação dos dados de login falhou. Erros: ' . json_encode($this->validator->getErrors()));
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
+        log_message('info', 'Dados de login validados com sucesso.');
 
         // Verificação do reCAPTCHA
         $recaptchaResponse = $this->request->getPost('g-recaptcha-response');
         if (!$recaptchaResponse) {
-            // Mensagem de erro quando o reCAPTCHA não foi enviado
+            log_message('error', 'Usuário não completou o reCAPTCHA.');
             session()->setFlashdata('error', 'Por favor, complete o reCAPTCHA.');
             return redirect()->back()->withInput();
         }
+        log_message('info', 'ReCAPTCHA recebido. Verificando...');
 
-        if (!$this->validateRecaptcha($recaptchaResponse)) {
-            // Mensagem de erro quando o reCAPTCHA falha
-            session()->setFlashdata('error', 'Falha na validação do reCAPTCHA. Tente novamente.');
+        try {
+            if (!$this->validateRecaptcha($recaptchaResponse)) {
+                log_message('error', 'Validação do reCAPTCHA falhou. Resposta: ' . $recaptchaResponse);
+                session()->setFlashdata('error', 'Falha na validação do reCAPTCHA. Tente novamente.');
+                return redirect()->back()->withInput();
+            }
+            log_message('info', 'ReCAPTCHA validado com sucesso.');
+        } catch (\Exception $e) {
+            log_message('critical', 'Erro ao validar reCAPTCHA: ' . $e->getMessage());
+            session()->setFlashdata('error', 'Erro interno ao validar o reCAPTCHA.');
             return redirect()->back()->withInput();
         }
-
-        // Mensagem de sucesso para indicar que o reCAPTCHA foi validado
-        session()->setFlashdata('success', 'Validação do reCAPTCHA concluída com sucesso.');
 
         /** @var array $credentials */
         $credentials = $this->request->getPost(setting('Auth.validFields')) ?? [];
@@ -88,16 +94,17 @@ class LoginController extends BaseController
         // Tentativa de login
         $result = $authenticator->remember($remember)->attempt($credentials);
         if (! $result->isOK()) {
-            // Caso a autenticação falhe, retorna erro com a razão
+            log_message('error', 'Falha na tentativa de login. Razão: ' . $result->reason());
             return redirect()->route('login')->withInput()->with('error', $result->reason());
         }
 
-        // Adiciona uma mensagem de sucesso somente após o reCAPTCHA e o login terem sido validados
+        log_message('info', 'Login realizado com sucesso para o usuário: ' . $credentials['email']);
         session()->setFlashdata('success', 'Login realizado com sucesso! ReCAPTCHA verificado.');
 
         // Redireciona após login bem-sucedido
         return redirect()->to(config('Auth')->loginRedirect())->withCookies();
     }
+
 
 
     /**

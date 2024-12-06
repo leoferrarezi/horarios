@@ -22,7 +22,9 @@
                                         <div class="col-9">
                                             <div class="d-flex align-items-center align-self-start">
                                                 <h3 class="mb-0"><?php echo $alert['count']; ?></h3>
-                                                <p class="text-<?php echo $alert['color']; ?> ms-2 mb-0 font-weight-medium"><?php echo $alert['text']; ?></p>
+                                                <p class="text-<?php echo $alert['color']; ?> ms-2 mb-0 font-weight-medium">
+                                                    <?php echo $alert['text']; ?>
+                                                </p>
                                             </div>
                                         </div>
                                         <div class="col-3">
@@ -57,9 +59,12 @@
                             $words = explode(' ', $notification['text']);
                             $last_word = array_pop($words);
                             $text_without_last_word = implode(' ', $words);
-                        ?>
-                            <div class="alert alert-fill-<?php echo $notification['color']; ?> mb-3" style="box-shadow: 5px 5px 5px <?php echo $notification['shadow']; ?>;" role="alert">
-                                <i class="mdi mdi-alert-circle"></i> <?php echo $text_without_last_word; ?> <a href="<?php echo $notification['link']; ?>" style="color: white;"><?php echo $last_word; ?></a>
+                            ?>
+                            <div class="alert alert-fill-<?php echo $notification['color']; ?> mb-3"
+                                style="box-shadow: 5px 5px 5px <?php echo $notification['shadow']; ?>;" role="alert">
+                                <i class="mdi mdi-alert-circle"></i> <?php echo $text_without_last_word; ?> <a
+                                    href="<?php echo $notification['link']; ?>"
+                                    style="color: white;"><?php echo $last_word; ?></a>
                             </div>
                         <?php endforeach; ?>
                     </div>
@@ -68,126 +73,207 @@
             <!-- FIM DAS NOTIFICAÇÕES -->
 
             <!-- QUADRO DE HORÁRIOS -->
-            <div class="col-md-12 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">QUADRO DE AULAS</h4>
-                        <p class="card-description">Aulas agendadas para a data de hoje</p>
-                        <div class="row">
-                            <div class="col-12 col-sm-4">
-                                <!-- MENU LATERAL DA TABELA - SELEÇÃO DO NÍVEL -->
-                                <ul class="nav nav-tabs nav-tabs-vertical" role="tablist">
-                                    <?php
-                                    $levels = ['Integrado', 'Subsequente', 'Graduação', 'Outros'];
-                                    foreach ($levels as $index => $level): ?>
-                                        <li class="nav-item">
-                                            <a class="nav-link <?php echo $index === 0 ? 'active' : ''; ?>" id="<?php echo strtolower($level); ?>" data-bs-toggle="tab" href="#<?php echo strtolower($level); ?>" role="tab" aria-controls="<?php echo strtolower($level); ?>" aria-selected="<?php echo $index === 0 ? 'true' : 'false'; ?>">
-                                                <i class="mdi mdi-school text-<?php echo ['info', 'success', 'warning', 'danger'][$index]; ?> me-2"></i> <?php echo $level; ?>
-                                            </a>
-                                        </li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </div>
-
-                            <!-- MENU SUPERIOR DA TABELA - SELEÇÃO DA TURMA - MÉDIO INTEGRADO -->
-                            <div class="col-8 col-sm-8">
-                                <div class="tab-content tab-content-vertical">
-                                    <?php
-                                    $classes = ['MÉDIO - 01', 'MÉDIO - 02', 'MÉDIO - 03', '...'];
-                                    foreach ($levels as $index => $level): ?>
-                                        <div class="tab-pane fade <?php echo $index === 0 ? 'show active' : ''; ?>" id="<?php echo strtolower($level); ?>" role="tabpanel" aria-labelledby="<?php echo strtolower($level); ?>-tab">
-                                            <ul class="nav nav-tabs" role="tablist">
-                                                <?php foreach ($classes as $classIndex => $class): ?>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link <?php echo $classIndex === 0 ? 'active' : ''; ?>" id="md<?php echo $classIndex + 1; ?>" data-bs-toggle="tab" href="#md<?php echo $classIndex + 1; ?>" role="tab" aria-controls="md<?php echo $classIndex + 1; ?>" aria-selected="<?php echo $classIndex === 0 ? 'true' : 'false'; ?>"><?php echo $class; ?></a>
-                                                    </li>
-                                                <?php endforeach; ?>
-                                            </ul>
-                                            <div class="tab-content">
-                                                <?php foreach ($classes as $classIndex => $class): ?>
-                                                    <div class="tab-pane fade <?php echo $classIndex === 0 ? 'show active' : ''; ?>" id="md<?php echo $classIndex + 1; ?>" role="tabpanel" aria-labelledby="md<?php echo $classIndex + 1; ?>-tab">
-                                                        <div class="media-body mt-4 mt-sm-0">
-                                                            <h4 class="mt-0">ENSINO MÉDIO - TURMA <?php echo $classIndex + 1; ?></h4>
-                                                            <div class="card">
-                                                                <div class="card-body">
-                                                                    <h4 class="card-title">EM - Turma <?php echo $classIndex + 1; ?> - Manhã</h4>
-                                                                    <div class="row">
-                                                                        <div class="table-sorter-wrapper col-lg-12 table-responsive">
-                                                                            <table id="sortable-table-1" class="table">
-                                                                                <thead>
-                                                                                    <tr>
-                                                                                        <th>Tempo</th>
-                                                                                        <th class="sortStyle">Disciplina<i class="mdi mdi-chevron-down"></i></th>
-                                                                                        <th class="sortStyle">Professor<i class="mdi mdi-chevron-down"></i></th>
-                                                                                        <th class="sortStyle">Sala<i class="mdi mdi-chevron-down"></i></th>
-                                                                                        <th class="sortStyle">Início<i class="mdi mdi-chevron-down"></i></th>
-                                                                                        <th class="sortStyle">Fim<i class="mdi mdi-chevron-down"></i></th>
-                                                                                    </tr>
-                                                                                </thead>
-                                                                                <tbody>
-                                                                                    <tr>
-                                                                                        <td>1</td>
-                                                                                        <td>Matemática</td>
-                                                                                        <td>Miguel M.</td>
-                                                                                        <td>Sala 06</td>
-                                                                                        <td>07:30</td>
-                                                                                        <td>08:25</td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td>2</td>
-                                                                                        <td>Biologia</td>
-                                                                                        <td>Russimeire</td>
-                                                                                        <td>Sala 06</td>
-                                                                                        <td>08:25</td>
-                                                                                        <td>09:15</td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td>3</td>
-                                                                                        <td>Biologia</td>
-                                                                                        <td>Russimeire</td>
-                                                                                        <td>Sala 06</td>
-                                                                                        <td>09:15</td>
-                                                                                        <td>10:00</td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td>4</td>
-                                                                                        <td>Matemática</td>
-                                                                                        <td>Miguel M.</td>
-                                                                                        <td>Sala 06</td>
-                                                                                        <td>10:15</td>
-                                                                                        <td>11:00</td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td>5</td>
-                                                                                        <td>Inglês</td>
-                                                                                        <td>Doralice</td>
-                                                                                        <td>Sala 06</td>
-                                                                                        <td>11:00</td>
-                                                                                        <td>11:45</td>
-                                                                                    </tr>
-                                                                                </tbody>
-                                                                            </table>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                <?php endforeach; ?>
-                                            </div>
-                                        </div>
-                                    <?php endforeach; ?>
-                                </div>
-                            </div>
-                            <!-- MENU SUPERIOR DA TABELA - SELEÇÃO DA TURMA - MÉDIO INTEGRADO -->
+            <div class="card-body">
+                <h4 class="card-title">Quadro de Aulas</h4>
+                <p class="card-description">Aulas agendadas para a data de hoje</p>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table id="order-listing" class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Ordem #</th>
+                                        <th>Nível</th>
+                                        <th>Turno</th>
+                                        <th>Turma</th>
+                                        <th>Disciplina</th>
+                                        <th>Professor</th>
+                                        <th>Sala</th>
+                                        <th>Início</th>
+                                        <th>Fim</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Médio</td>
+                                        <td>Manhã</td>
+                                        <td>Terceiro - 01</td>
+                                        <td>Matemática</td>
+                                        <td>Miguel</td>
+                                        <td>Sala 05</td>
+                                        <td>07:30</td>
+                                        <td>08:25</td>
+                                        <td>
+                                            <label class="badge badge-success">Em progresso.</label>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-outline-primary">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Médio</td>
+                                        <td>Manhã</td>
+                                        <td>Terceiro - 02</td>
+                                        <td>Biologia</td>
+                                        <td>Russimeire</td>
+                                        <td>Sala 06</td>
+                                        <td>08:25</td>
+                                        <td>09:15</td>
+                                        <td>
+                                            <label class="badge badge-danger">Pendente</label>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-outline-primary">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Integrado</td>
+                                        <td>Manhã</td>
+                                        <td>Segundo - 01</td>
+                                        <td>Biologia</td>
+                                        <td>Russimeire</td>
+                                        <td>Sala 07</td>
+                                        <td>09:15</td>
+                                        <td>10:00</td>
+                                        <td>
+                                            <label class="badge badge-info">Prevista</label>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-outline-primary">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>Integrado</td>
+                                        <td>Manhã</td>
+                                        <td>Segundo - 02</td>
+                                        <td>Química</td>
+                                        <td>Mônica</td>
+                                        <td>Sala 06</td>
+                                        <td>10:15</td>
+                                        <td>11:00</td>
+                                        <td>
+                                            <label class="badge badge-info">Prevista</label>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-outline-primary">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>5</td>
+                                        <td>Graduação</td>
+                                        <td>Noite</td>
+                                        <td>ADS - 01</td>
+                                        <td>Inglês</td>
+                                        <td>Doralice</td>
+                                        <td>Sala 03</td>
+                                        <td>19:00</td>
+                                        <td>19:45</td>
+                                        <td>
+                                            <label class="badge badge-info">Prevista</label>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-outline-primary">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>6</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            <label class="badge badge-info">Prevista</label>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-outline-primary">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>7</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            <label class="badge badge-info">Prevista</label>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-outline-primary">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>8</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            <label class="badge badge-info">Prevista</label>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-outline-primary">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>9</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            <label class="badge badge-info">Prevista</label>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-outline-primary">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>10</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            <label class="badge badge-danger">Pending</label>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-outline-primary">View</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
+
+                <!-- MENU SUPERIOR DA TABELA - SELEÇÃO DA TURMA - MÉDIO INTEGRADO -->
             </div>
-            <!-- FIM QUADRO DE HORÁRIOS -->
         </div>
-        </p>
     </div>
+</div>
+</p>
+</div>
+</div>
+</div>
+<!-- FIM QUADRO DE HORÁRIOS -->
+<!-- FIM QUADRO DE HORÁRIOS -->
+</div>
+</p>
+</div>
 </div>
 <script src="../../../assets/vendors/js/vendor.bundle.base.js"></script>
 <script src="../../../assets/js/off-canvas.js"></script>

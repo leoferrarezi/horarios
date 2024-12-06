@@ -9,7 +9,7 @@ class Relatorios extends BaseController
 {
     public function index()
     {
-        $data['content'] = view('sys/em-construcao');
+        $data['content'] = view('sys/relatorios.php');
         return view('dashboard', $data);
 
     }

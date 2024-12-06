@@ -58,26 +58,20 @@ class LoginController extends BaseController
             log_message('error', 'Validação dos dados de login falhou. Erros: ' . json_encode($this->validator->getErrors()));
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
-        log_message('info', 'Dados de login validados com sucesso.');
 
         // Verificação do reCAPTCHA
         $recaptchaResponse = $this->request->getPost('g-recaptcha-response');
         if (!$recaptchaResponse) {
-            log_message('error', 'Usuário não completou o reCAPTCHA.');
             session()->setFlashdata('error', 'Por favor, complete o reCAPTCHA.');
             return redirect()->back()->withInput();
         }
-        log_message('info', 'ReCAPTCHA recebido. Verificando...');
 
         try {
             if (!$this->validateRecaptcha($recaptchaResponse)) {
-                log_message('error', 'Validação do reCAPTCHA falhou. Resposta: ' . $recaptchaResponse);
                 session()->setFlashdata('error', 'Falha na validação do reCAPTCHA. Tente novamente.');
                 return redirect()->back()->withInput();
             }
-            log_message('info', 'ReCAPTCHA validado com sucesso.');
         } catch (\Exception $e) {
-            log_message('critical', 'Erro ao validar reCAPTCHA: ' . $e->getMessage());
             session()->setFlashdata('error', 'Erro interno ao validar o reCAPTCHA.');
             return redirect()->back()->withInput();
         }
@@ -163,19 +157,14 @@ class LoginController extends BaseController
 
         curl_close($ch);
 
-        // Log da resposta do reCAPTCHA para depuração
-        log_message('debug', 'Resposta do reCAPTCHA: ' . $resposta);
-
         // Decodifica a resposta do reCAPTCHA
         $resultado = json_decode($resposta);
 
         // Verifica se a resposta contém o campo 'success' e se está marcado como verdadeiro
         if (isset($resultado->success) && $resultado->success === true) {
-            log_message('info', 'reCAPTCHA validado com sucesso.');
             return true;
         }
 
-        log_message('info', 'reCAPTCHA falhou na validação.');
         return false;
     }
 }

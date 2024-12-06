@@ -23,6 +23,8 @@ $routes->get('sys/cadastro-turmas', 'Turmas::index');
 
 //cadastro de ambientes (em construção)
 $routes->get('sys/cadastro-ambientes', 'Ambientes::index');
+$routes->post('sys/cadastro-ambientes/salvar', 'Ambientes::salvar');
+$routes->post('sys/cadastro-ambientes/deletar/(:num)', 'Ambientes::deletar/$1');
 
 //cadastro de aulas (em construção)
 $routes->get('sys/cadastro-aulas', 'Aulas::index');

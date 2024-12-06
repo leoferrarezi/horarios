@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\ProfessorModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use PhpOffice\PhpSpreadsheet\Reader\Xls;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
@@ -11,9 +12,9 @@ class Importacao extends BaseController
 {
     public function index()
     {
-        // Adiciona o conteúdo específico da página
+        // Exibe a página de upload da planilha
         $data['content'] = view('sys/importacao_form');
-        return view('dashboard', $data); // Retorna a dashboard com o conteúdo
+        return view('dashboard', $data); // Certifique-se de que a view 'dashboard' existe e está configurada
     }
 
     public function importar_planilha()
@@ -48,6 +49,7 @@ class Importacao extends BaseController
         $sheet = $spreadsheet->getActiveSheet();
         $dataRows = [];
 
+        // Lê os dados da planilha e captura apenas as colunas Nome e E-mail
         foreach ($sheet->getRowIterator() as $row) {
             $cellIterator = $row->getCellIterator();
             $cellIterator->setIterateOnlyExistingCells(false);
@@ -57,12 +59,29 @@ class Importacao extends BaseController
                 $rowData[] = $cell->getValue();
             }
 
-            $dataRows[] = $rowData;
+            // Captura apenas Nome (índice 1) e E-mail (índice 4)
+            $dataRows[] = [
+                'nome' => $rowData[1] ?? null, // Nome
+                'email' => $rowData[4] ?? null // E-mail
+            ];
         }
 
-        // Passa os dados processados para a variável content
-        $data['dados'] = $dataRows;
-        $data['content'] = view('sys/importacao_form', ['dados' => $dataRows]);
-        return view('dashboard', $data);
+        // Remove o cabeçalho da planilha
+        array_shift($dataRows);
+
+        // Inserção no banco de dados
+        $professorModel = new ProfessorModel();
+        $insertedCount = 0;
+
+        foreach ($dataRows as $data) {
+            if (!empty($data['nome']) && !empty($data['email'])) {
+                $professorModel->insert($data);
+                $insertedCount++;
+            }
+        }
+
+        // Retorna uma mensagem de sucesso
+        session()->setFlashdata('sucesso', "{$insertedCount} registros importados com sucesso!");
+        return redirect()->to(base_url('/sys/importacao'));
     }
 }

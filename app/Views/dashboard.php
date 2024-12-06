@@ -310,6 +310,7 @@
   <script src="<?php echo base_url("assets/js/misc.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/settings.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/todolist.js"); ?>"></script>
+  <script src="<?php echo base_url("assets/js/tabs.js"); ?>"></script>
   <!-- endinject -->
 
   <!-- Custom js for this page -->

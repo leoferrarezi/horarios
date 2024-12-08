@@ -14,7 +14,7 @@ class Importacao extends BaseController
     {
         // Exibe a página de upload da planilha
         $data['content'] = view('sys/importacao_form');
-        return view('dashboard', $data); // Certifique-se de que a view 'dashboard' existe e está configurada
+        return view('dashboard', $data);
     }
 
     public function importar_planilha()
@@ -32,15 +32,10 @@ class Importacao extends BaseController
                 ->setBody('Erro: Formato de arquivo não suportado. Apenas XLSX ou XLS');
         }
 
-        $newFileName = $file->getRandomName();
-        $file->move(WRITEPATH . 'uploads', $newFileName);
-
-        $filePath = WRITEPATH . 'uploads/' . $newFileName;
-
         $reader = $extension === 'xlsx' ? new Xlsx() : new Xls();
 
         try {
-            $spreadsheet = $reader->load($filePath);
+            $spreadsheet = $reader->load($file->getRealPath());
         } catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) {
             return $this->response->setStatusCode(ResponseInterface::HTTP_INTERNAL_SERVER_ERROR)
                 ->setBody('Erro ao carregar o arquivo: ' . $e->getMessage());
@@ -49,7 +44,7 @@ class Importacao extends BaseController
         $sheet = $spreadsheet->getActiveSheet();
         $dataRows = [];
 
-        // Lê os dados da planilha e captura apenas as colunas Nome e E-mail
+        // Lê os dados da planilha e captura Nome e E-mail
         foreach ($sheet->getRowIterator() as $row) {
             $cellIterator = $row->getCellIterator();
             $cellIterator->setIterateOnlyExistingCells(false);
@@ -59,28 +54,42 @@ class Importacao extends BaseController
                 $rowData[] = $cell->getValue();
             }
 
-            // Captura apenas Nome (índice 1) e E-mail (índice 4)
             $dataRows[] = [
-                'nome' => $rowData[1] ?? null, // Nome
-                'email' => $rowData[4] ?? null // E-mail
+                'nome' => $rowData[1] ?? null,
+                'email' => $rowData[4] ?? null,
             ];
         }
 
-        // Remove o cabeçalho da planilha
+        // Remove cabeçalho
         array_shift($dataRows);
 
-        // Inserção no banco de dados
+        // Exibe os dados lidos na view
+        $data['professores'] = $dataRows;
+        $data['content'] = view('sys/importacao_form', $data);
+        return view('dashboard', $data);
+    }
+
+    public function importar_selecionados()
+    {
+        $selecionados = $this->request->getPost('selecionados');
+
+        if (empty($selecionados)) {
+            session()->setFlashdata('erro', 'Nenhum registro selecionado para importação.');
+            return redirect()->to(base_url('/sys/importacao'));
+        }
+
         $professorModel = new ProfessorModel();
         $insertedCount = 0;
 
-        foreach ($dataRows as $data) {
-            if (!empty($data['nome']) && !empty($data['email'])) {
-                $professorModel->insert($data);
+        foreach ($selecionados as $registroJson) {
+            $registro = json_decode($registroJson, true);
+
+            if (!empty($registro['nome']) && !empty($registro['email'])) {
+                $professorModel->insert($registro);
                 $insertedCount++;
             }
         }
 
-        // Retorna uma mensagem de sucesso
         session()->setFlashdata('sucesso', "{$insertedCount} registros importados com sucesso!");
         return redirect()->to(base_url('/sys/importacao'));
     }

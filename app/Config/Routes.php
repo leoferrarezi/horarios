@@ -35,7 +35,7 @@ $routes->get('sys/relatorios', 'Relatorios::index');
 
 //adicionar o filter (middleware de login no group depois)
 $routes->group('sys', function ($routes) {
-    //CRUD Professor
+
     $routes->group('professor', function ($routes) {
         $routes->get('', 'Professor::index');
         $routes->get('listar', 'Professor::index');
@@ -55,6 +55,14 @@ $routes->group('sys', function ($routes) {
         $routes->post('salvar', 'MatrizCurricular::salvar');
         $routes->post('atualizar', 'MatrizCurricular::atualizar');
         $routes->post('deletar', 'MatrizCurricular::deletar');
+    });
+
+    $routes->group('horario', function ($routes){
+        $routes->get('', 'Horario::index');
+        $routes->get('cadastro', 'Horario::cadastro');
+        $routes->post('salvar', 'Horario::salvar');
+        $routes->post('atualizar', 'Horario::atualizar');
+        $routes->post('deletar', 'Horario::deletar');
     });
 
     $routes->group('curso', function ($routes){

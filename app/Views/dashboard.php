@@ -65,7 +65,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/cadastro-cursos'); ?>">
+          <a class="nav-link" href="<?php echo base_url('sys/curso'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-school"></i>
             </span>
@@ -73,7 +73,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/cadastro-disciplinas'); ?>">
+          <a class="nav-link" href="<?php echo base_url('sys/disciplina'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-book-open-variant"></i>
             </span>
@@ -81,7 +81,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/matriz-curricular'); ?>">
+          <a class="nav-link" href="<?php echo base_url('sys/matriz'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-notebook-check"></i>
             </span>
@@ -312,7 +312,8 @@
   <script src="<?php echo base_url("assets/js/validacoes/cadastro-cursos.js"); ?>"></script>
   <!-- Select2 -->
   <script src="<?php echo base_url("assets/vendors/select2/select2.min.js"); ?>"></script>
-
+  <!-- Sweet alert -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- End custom js for this page -->
 </body>
 

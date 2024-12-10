@@ -15,9 +15,6 @@ $routes->get('/sys', 'Home::home');
 $routes->get('/sys/home', 'Home::home');
 $routes->get('/sys/em-construcao', 'Home::emConstrucao');
 
-//matriz curricular (em construção)
-$routes->get('sys/matriz-curricular', 'MatrizCurricular::index');
-
 //cadastro de turmas (em construção)
 $routes->get('sys/cadastro-turmas', 'Turmas::index');
 
@@ -51,6 +48,15 @@ $routes->group('sys', function ($routes) {
         //Rota área de trabalho
         $routes->get('horarios', 'Professor::horarios');
     });
+
+    $routes->group('matriz', function ($routes){
+        $routes->get('', 'MatrizCurricular::index');
+        $routes->get('cadastro', 'MatrizCurricular::cadastro');
+        $routes->post('salvar', 'MatrizCurricular::salvar');
+        $routes->post('atualizar', 'MatrizCurricular::atualizar');
+        $routes->post('deletar', 'MatrizCurricular::deletar');
+    });
+
     $routes->group('curso', function ($routes){
         $routes->get('', 'Cursos::index');
         $routes->get('listar', 'Cursos::index');

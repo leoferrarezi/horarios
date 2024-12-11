@@ -97,6 +97,14 @@
           </a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" href="<?php echo base_url('sys/tempoAula'); ?>">
+            <span class="menu-icon">
+              <i class="mdi mdi-chair-school"></i>
+            </span>
+            <span class="menu-title">Tempo de Aula</span>
+          </a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="<?php echo base_url('sys/cadastro-ambientes'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-cast-education"></i>

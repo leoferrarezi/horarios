@@ -97,6 +97,14 @@
           </a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" href="<?php echo base_url('sys/tempoAula'); ?>">
+            <span class="menu-icon">
+              <i class="mdi mdi-chair-school"></i>
+            </span>
+            <span class="menu-title">Tempo de Aula</span>
+          </a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="<?php echo base_url('sys/cadastro-ambientes'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-cast-education"></i>
@@ -113,7 +121,15 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/cadastro-horarios-de-aula'); ?>">
+          <a class="nav-link" href="<?php echo base_url('sys/horario'); ?>">
+            <span class="menu-icon">
+              <i class="mdi mdi-calendar-cursor-outline"></i>
+            </span>
+            <span class="menu-title">Horários</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="">
             <span class="menu-icon">
               <i class="mdi mdi-clock-time-eight"></i>
             </span>

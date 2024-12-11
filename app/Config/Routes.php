@@ -35,7 +35,7 @@ $routes->get('sys/relatorios', 'Relatorios::index');
 
 //adicionar o filter (middleware de login no group depois)
 $routes->group('sys', function ($routes) {
-    //CRUD Professor
+
     $routes->group('professor', function ($routes) {
         $routes->get('', 'Professor::index');
         $routes->get('listar', 'Professor::index');
@@ -57,6 +57,14 @@ $routes->group('sys', function ($routes) {
         $routes->post('deletar', 'MatrizCurricular::deletar');
     });
 
+    $routes->group('horario', function ($routes){
+        $routes->get('', 'Horario::index');
+        $routes->get('cadastro', 'Horario::cadastro');
+        $routes->post('salvar', 'Horario::salvar');
+        $routes->post('atualizar', 'Horario::atualizar');
+        $routes->post('deletar', 'Horario::deletar');
+    });
+
     $routes->group('curso', function ($routes){
         $routes->get('', 'Cursos::index');
         $routes->get('listar', 'Cursos::index');
@@ -73,6 +81,15 @@ $routes->group('sys', function ($routes) {
         $routes->post('salvar', 'Disciplinas::salvar');
         $routes->post('atualizar', 'Disciplinas::atualizar');
         $routes->post('deletar', 'Disciplinas::deletar');
+    });
+    $routes->group('tempoAula', function ($routes) {
+        //CRUD Disciplinas
+        $routes->get('', 'TemposAula::index');
+        $routes->get('listar', 'TemposAula::index');
+        $routes->get('cadastro', 'TemposAula::cadastro');
+        $routes->post('salvar', 'TemposAula::salvar');
+        $routes->post('atualizar', 'TemposAula::atualizar');
+        $routes->post('deletar', 'TemposAula::deletar');
     });
     $routes->group('importacao', function ($routes) {
         // Rotas importacao planilhas

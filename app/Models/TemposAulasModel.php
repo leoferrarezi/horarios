@@ -77,4 +77,10 @@ class TemposAulasModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getTemposAulaWithHorario() {
+        return $this->select('tempos_de_aula.*, horario.nome as nome_horario')
+                    ->join('horarios as horario', 'horario.id = tempos_de_aula.horario_id') // Relacionamento com a tabela users
+                    ->findAll(); // Retorna todos os registros
+    }
 }

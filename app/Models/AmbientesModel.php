@@ -30,7 +30,7 @@ class AmbientesModel extends Model
     // Validation
     protected $validationRules      = [
         'id' => 'permit_empty|is_natural_no_zero|max_length[11]',
-        'nome' => 'required|is_unique[ambientes.id,id,{id}]|max_length[128]',
+        'nome' => 'required|is_unique[ambientes.nome,id,{id}]|max_length[128]',
     ];
     protected $validationMessages   = [
         "nome" => [

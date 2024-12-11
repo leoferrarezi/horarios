@@ -126,7 +126,7 @@
                                     <?php else: ?>
                                         <!-- caso não haja curso cadastrado -->
                                         <tr>
-                                            <td colspan="4">Nenhum curso cadastrado.</td>
+                                            <td colspan="4">Nenhum disciplina cadastrada.</td>
                                         </tr>
                                     <?php endif; ?>
                                 </tbody>

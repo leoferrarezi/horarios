@@ -82,6 +82,15 @@ $routes->group('sys', function ($routes) {
         $routes->post('atualizar', 'Disciplinas::atualizar');
         $routes->post('deletar', 'Disciplinas::deletar');
     });
+    $routes->group('tempoAula', function ($routes) {
+        //CRUD Disciplinas
+        $routes->get('', 'TemposAula::index');
+        $routes->get('listar', 'TemposAula::index');
+        $routes->get('cadastro', 'TemposAula::cadastro');
+        $routes->post('salvar', 'TemposAula::salvar');
+        $routes->post('atualizar', 'TemposAula::atualizar');
+        $routes->post('deletar', 'TemposAula::deletar');
+    });
     $routes->group('importacao', function ($routes) {
         // Rotas importacao planilhas
         $routes->get('', 'Importacao::index');

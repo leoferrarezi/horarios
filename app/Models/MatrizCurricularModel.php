@@ -57,15 +57,14 @@ class MatrizCurricularModel extends Model
     public function verificarReferencias(array $data)
     {
         $id = $data['id'];
-        $nome = $this->find($id)[0]['nome'];
-
 
         $referencias = $this->verificarReferenciasEmTabelas($id);
-        $referencias = implode(" ,", $referencias);
+        $referencias = implode(", ", $referencias);
         // Se o ID for referenciado em outras tabelas, lança a exceção
         if (!empty($referencias)) {
             // Passa o nome das tabelas onde o ID foi encontrado para a exceção
-            throw new ReferenciaException("A matriz {$nome} não pode ser excluída, pois está sendo usada em " . $referencias . ". Primeiro apague os vinculos em " . $referencias . " para deletar a matriz");
+            throw new ReferenciaException("Está matriz não pode ser excluída, porque está em uso. <br>
+                    Para excluir está matriz, primeiro remova as associações em {$referencias} que estão utilizando está matriz'.");
         }
 
         // Se não houver referências, retorna os dados para permitir a exclusão

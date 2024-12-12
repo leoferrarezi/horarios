@@ -43,6 +43,8 @@ $routes->group('sys', function ($routes) {
         $routes->post('salvar', 'Professor::salvar');
         $routes->post('atualizar', 'Professor::atualizar');
         $routes->post('deletar', 'Professor::deletar');
+        $routes->post('importar', 'Professor::importar');
+        $routes->post('processarImportacao', 'Professor::processarImportacao');
 
         $routes->get('(:num)', 'Professor::professorPorId/$1');
         //Rota área de trabalho
@@ -90,12 +92,6 @@ $routes->group('sys', function ($routes) {
         $routes->post('salvar', 'TemposAula::salvar');
         $routes->post('atualizar', 'TemposAula::atualizar');
         $routes->post('deletar', 'TemposAula::deletar');
-    });
-    $routes->group('importacao', function ($routes) {
-        // Rotas importacao planilhas
-        $routes->get('', 'Importacao::index');
-        $routes->post('importar', 'Importacao::importar_planilha');
-        $routes->post('salvar', 'Importacao::importar_selecionados');
     });
 
     // Rotas para alteração da senha do usuário

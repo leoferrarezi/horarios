@@ -2,6 +2,7 @@
 <?php echo view('components/modal-edit-prof'); ?>
 <?php echo view('components/modal-cad-prof'); ?>
 <?php echo view('components/modal-deletar-prof') ?>
+<?php echo view('components/modal-import-prof') ?>
 
 <div class="page-header">
     <h3 class="page-title">GERENCIAR PROFESSORES</h3>
@@ -33,8 +34,9 @@
                 <div class="row">
                     <div class="col-12 mb-4">
                         <button type="button" class="btn btn-primary btn-icon-text" data-bs-toggle="modal" data-bs-target="#modal-cad-prof"><i class="fa fa-plus-circle btn-icon-prepend"></i> Incluir Professor</button>
-                        <a href="<?php echo base_url('sys/importacao'); ?>" class="btn btn-info btn-icon-text"><i class="fa fa-upload btn-icon-prepend"></i> Importar Professores do SUAP
-                        </a>
+                        <span data-bs-toggle="tooltip" data-placement="top" title="Importar lista de professores exportada através do SUAP">
+                            <button class="btn btn-info btn-icon-text" data-bs-toggle="modal" data-bs-target="#modal-import-prof"><i class="fa fa-upload btn-icon-prepend"></i> Importar Professores</button>
+                        </span>
                     </div>
                 </div>
 
@@ -46,6 +48,7 @@
                             <table class="table mb-4" id="listagem-professor">
 
                                 <!-- cabeçalho da tabela -->
+
                                 <thead>
                                     <tr>
                                         <th>Id</th>

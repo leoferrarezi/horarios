@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use CodeIgniter\Exceptions\ReferenciaException;
 
 class MatrizCurricularModel extends Model
 {
@@ -49,6 +50,54 @@ class MatrizCurricularModel extends Model
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
-    protected $beforeDelete   = [];
+    protected $beforeDelete   = ['verificarReferencias'];
     protected $afterDelete    = [];
+
+
+    public function verificarReferencias(array $data)
+    {
+        $id = $data['id'];
+        $nome = $this->find($id)[0]['nome'];
+
+
+        $referencias = $this->verificarReferenciasEmTabelas($id);
+        $referencias = implode(" ,", $referencias);
+        // Se o ID for referenciado em outras tabelas, lança a exceção
+        if (!empty($referencias)) {
+            // Passa o nome das tabelas onde o ID foi encontrado para a exceção
+            throw new ReferenciaException("A matriz {$nome} não pode ser excluída, pois está sendo usada em " . $referencias . ". Primeiro apague os vinculos em " . $referencias . " para deletar a matriz");
+        }
+
+        // Se não houver referências, retorna os dados para permitir a exclusão
+        return $data;
+    }
+
+    private function verificarReferenciasEmTabelas($id)
+    {
+        // Conectar ao banco de dados
+        $db = \Config\Database::connect();
+
+        // Tabelas e colunas de chave estrangeira a serem verificadas
+        $tabelas = [
+            'cursos' => 'matriz_id',
+            'disciplinas' => 'matriz_id',
+        ];
+
+        $referenciasEncontradas = [];
+
+        // Verificar se o ID é referenciado
+        foreach ($tabelas as $tabela => $fk_coluna) {
+            $builder = $db->table($tabela);
+            $builder->where($fk_coluna, $id);
+            $query = $builder->get();
+
+            if ($query->getNumRows() > 0) {
+                // Adiciona a tabela à lista de referências encontradas
+                $referenciasEncontradas[] = $tabela;
+            }
+        }
+
+        // Retorna as tabelas onde o ID foi encontrado
+        return $referenciasEncontradas;
+    }
 }

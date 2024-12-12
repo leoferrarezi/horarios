@@ -56,19 +56,17 @@
                   <label for="floatingPasswordInput"><?= lang('Auth.password') ?></label>
                 </div>
 
-                <!-- Remember me -->
-                <?php if (setting('Auth.sessionConfig')['allowRemembering']): ?>
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input type="checkbox" name="remember" class="form-check-input" <?php if (old('remember')): ?> checked<?php endif ?>>
+                <!-- Remember Me e Captcha -->
+                <div class="d-flex flex-column flex-md-row align-items-center justify-content-between mb-3">
+                  <div class="form-check mb-3 mb-md-0">
+                    <input type="checkbox" name="remember" class="form-check-input" id="rememberMe" <?php if (old('remember')): ?> checked<?php endif ?>>
+                    <label class="form-check-label" for="rememberMe">
                       <?= lang('Auth.rememberMe') ?>
                     </label>
                   </div>
-                <?php endif; ?>
-
-                <!-- CAPTCHA -->
-                <div class="captcha-container">
-                  <div class="g-recaptcha" data-sitekey="6LcEEXEqAAAAAMJ-gOE6cJbtVJwCHKd8raNKw29X" data-action="LOGIN"></div>
+                  <div class="captcha-container">
+                    <div class="g-recaptcha" data-sitekey="6LcEEXEqAAAAAMJ-gOE6cJbtVJwCHKd8raNKw29X" data-action="LOGIN"></div>
+                  </div>
                 </div>
 
                 <!-- Botão de login -->
@@ -159,24 +157,24 @@
     function onSubmit(token) {
       document.getElementById("demo-form").submit();
     }
-  </script> 
+  </script>
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-    const modal = document.getElementById('exampleModal-2');
+      const modal = document.getElementById('exampleModal-2');
 
-  //efeito de fade-in ao abrir a modal
-  modal.addEventListener('show.bs.modal', function() {
-    const fadeElements = modal.querySelectorAll('.fade-in');
-    fadeElements.forEach(el => el.classList.add('fade-in'))
-  });
+      //efeito de fade-in ao abrir a modal
+      modal.addEventListener('show.bs.modal', function() {
+        const fadeElements = modal.querySelectorAll('.fade-in');
+        fadeElements.forEach(el => el.classList.add('fade-in'))
+      });
 
-  //remove o efeito fade-in ao fechar a modal
-  modal.addEventListener('hidden.bs.modal', function() {
-    const fadeElements = modal.querySelectorAll('.fade-in');
-    fadeElements.forEach(el => el.classList.remove('fade-in'));
+      //remove o efeito fade-in ao fechar a modal
+      modal.addEventListener('hidden.bs.modal', function() {
+        const fadeElements = modal.querySelectorAll('.fade-in');
+        fadeElements.forEach(el => el.classList.remove('fade-in'));
+      });
     });
-  });
   </script>
   <!-- endinject -->
 </body>

@@ -44,12 +44,12 @@ $routes->group('sys', function ($routes) {
         $routes->post('atualizar', 'Professor::atualizar');
         $routes->post('deletar', 'Professor::deletar');
 
-        $routes->get('(:num)', 'Professor::professorPorId/$1');        
+        $routes->get('(:num)', 'Professor::professorPorId/$1');
         //Rota área de trabalho
         $routes->get('horarios', 'Professor::horarios');
     });
 
-    $routes->group('matriz', function ($routes){
+    $routes->group('matriz', function ($routes) {
         $routes->get('', 'MatrizCurricular::index');
         $routes->get('cadastro', 'MatrizCurricular::cadastro');
         $routes->post('salvar', 'MatrizCurricular::salvar');
@@ -57,7 +57,7 @@ $routes->group('sys', function ($routes) {
         $routes->post('deletar', 'MatrizCurricular::deletar');
     });
 
-    $routes->group('horario', function ($routes){
+    $routes->group('horario', function ($routes) {
         $routes->get('', 'Horario::index');
         $routes->get('cadastro', 'Horario::cadastro');
         $routes->post('salvar', 'Horario::salvar');
@@ -65,7 +65,7 @@ $routes->group('sys', function ($routes) {
         $routes->post('deletar', 'Horario::deletar');
     });
 
-    $routes->group('curso', function ($routes){
+    $routes->group('curso', function ($routes) {
         $routes->get('', 'Cursos::index');
         $routes->get('listar', 'Cursos::index');
         $routes->get('cadastro', 'Cursos::cadastro');
@@ -96,6 +96,9 @@ $routes->group('sys', function ($routes) {
         $routes->get('', 'Importacao::index');
         $routes->post('importar', 'Importacao::importar_planilha');
         $routes->post('salvar', 'Importacao::importar_selecionados');
-        
     });
+
+    // Rotas para alteração da senha do usuário
+    $routes->get('alterar-senha', 'AdminController::changePassword');
+    $routes->post('alterar-senha', 'AdminController::updatePassword');
 });

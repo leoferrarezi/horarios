@@ -89,7 +89,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/cadastro-turmas'); ?>">
+          <a class="nav-link" href="<?php echo base_url('sys/turma'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-account-group"></i>
             </span>
@@ -134,6 +134,14 @@
               <i class="mdi mdi-clock-time-eight"></i>
             </span>
             <span class="menu-title">Horários de Aula</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<?php echo base_url('sys/versao'); ?>">
+            <span class="menu-icon">
+              <i class="mdi mdi-multicast"></i>
+            </span>
+            <span class="menu-title">Versões</span>
           </a>
         </li>
       </ul>

@@ -58,4 +58,10 @@ class CursosModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getCursosWithMatriz() {
+        return $this->select('cursos.*, matriz.nome as nome_matriz')
+                    ->join('matrizes as matriz', 'matriz.id = cursos.matriz_id') // Relacionamento com a tabela users
+                    ->findAll(); // Retorna todos os registros
+    }
 }

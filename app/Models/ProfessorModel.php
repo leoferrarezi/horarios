@@ -65,14 +65,28 @@ class ProfessorModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    //função pra retornar todos os professores cadastrados no banco
-    public function getProfessores($id = null){
-        if($id === null){
+
+     //função pra retornar todos os professores cadastrados no banco
+    public function getProfessores($id = null)
+    {
+        if ($id === null) {
             $professores = $this->findAll();
-        }else{
+        } else {
             return $this->professores->find($id);
         }
     }
+
+    public function getProfessoresNome()
+    {
+        $builder = $this->builder();
+        $builder->select('nome');
+        $query = $builder->get();
+        return $query->getResultArray();
+    }
 }
+
+
+
+
 
 

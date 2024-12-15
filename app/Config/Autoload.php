@@ -40,12 +40,14 @@ class Autoload extends AutoloadConfig
      * @var array<string, list<string>|string>
      */
     public $psr4 = [
-        APP_NAMESPACE => APPPATH,  
+        APP_NAMESPACE => APPPATH,
         'PhpOffice\\PhpSpreadsheet' => APPPATH . 'ThirdParty/phpoffice/phpspreadsheet/src/PhpSpreadsheet',
-        'Psr\\SimpleCache' => APPPATH . 'ThirdParty/psr/simple-cache/src/', 
+        'Psr\\SimpleCache' => APPPATH . 'ThirdParty/psr/simple-cache/src/',
+        'CodeIgniter\\Settings' => APPPATH . 'ThirdParty/settings-2.2.0/src',
+        'CodeIgniter\\Shield' => APPPATH . 'ThirdParty/shield-1.1.0/src',
     ];
-    
-    
+
+
 
     /**
      * -------------------------------------------------------------------
@@ -81,7 +83,10 @@ class Autoload extends AutoloadConfig
      *
      * @var list<string>
      */
-    public $files = [];
+    public $files = [
+        APPPATH . 'ThirdParty/shield-1.1.0/src/Helpers/auth_helper.php',
+        APPPATH . 'ThirdParty/shield-1.1.0/src/Helpers/email_helper.php',
+    ];
 
     /**
      * -------------------------------------------------------------------
@@ -94,5 +99,5 @@ class Autoload extends AutoloadConfig
      *
      * @var list<string>
      */
-    public $helpers = [];
+    public $helpers = ['auth', 'setting'];
 }

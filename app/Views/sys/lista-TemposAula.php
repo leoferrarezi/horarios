@@ -94,7 +94,7 @@
                                                 <td> <!-- Aqui é a célula para as Ações (botões de editar e excluir) -->
                                                     <div class="d-flex">
                                                         <!-- Botão para editar -->
-                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Atualizar dados do horário">
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Atualizar dados dO Tempo de Aula">
                                                             <button type="button" class="justify-content-center align-items-center d-flex btn btn-inverse-success button-trans-success btn-icon me-1"
                                                                 data-bs-toggle="modal" data-bs-target="#modal-edit-tempoAula"
                                                                 data-id="<?php echo esc($ta['id']); ?>"
@@ -108,7 +108,7 @@
                                                             </button>
                                                         </span>
                                                         <!-- Botão para excluir -->
-                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Excluir horário">
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Excluir Tempo de Aula">
                                                             <button type="button" class="justify-content-center align-items-center d-flex btn btn-inverse-danger button-trans-danger btn-icon me-1"
                                                                 data-bs-toggle="modal" data-bs-target="#modal-deletar-tempoAula"
                                                                 data-id="<?php echo esc($ta['id']); ?>"

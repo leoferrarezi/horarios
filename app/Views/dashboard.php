@@ -89,7 +89,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/cadastro-turmas'); ?>">
+          <a class="nav-link" href="<?php echo base_url('sys/turma'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-account-group"></i>
             </span>
@@ -113,7 +113,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/cadastro-aulas'); ?>">
+          <a class="nav-link" href="">
             <span class="menu-icon">
               <i class="mdi mdi-human-male-board"></i>
             </span>
@@ -134,6 +134,14 @@
               <i class="mdi mdi-clock-time-eight"></i>
             </span>
             <span class="menu-title">Horários de Aula</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<?php echo base_url('sys/versao'); ?>">
+            <span class="menu-icon">
+              <i class="mdi mdi-multicast"></i>
+            </span>
+            <span class="menu-title">Versões</span>
           </a>
         </li>
       </ul>
@@ -287,7 +295,7 @@
         <!-- partial:../../partials/_footer.html -->
         <footer class="footer">
           <div class="d-sm-flex justify-content-center justify-content-sm-between">
-            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2024 <a href="https://ifrocalama.com/" target="_blank">Calama Devs</a>.</span>
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2024 <a href="<?php echo base_url('sys/modal-sobre'); ?>">Calama Devs</a>.</span>
             <span class="text-muted float-none float-sm-end d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i></span>
           </div>
         </footer>

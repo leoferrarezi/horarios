@@ -113,7 +113,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/aulas'); ?>">
+          <a class="nav-link" href="">
             <span class="menu-icon">
               <i class="mdi mdi-human-male-board"></i>
             </span>
@@ -129,7 +129,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/aulaHorario'); ?>">
+          <a class="nav-link" href="">
             <span class="menu-icon">
               <i class="mdi mdi-clock-time-eight"></i>
             </span>

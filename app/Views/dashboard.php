@@ -65,7 +65,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/cadastro-cursos'); ?>">
+          <a class="nav-link" href="<?php echo base_url('sys/curso'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-school"></i>
             </span>
@@ -73,7 +73,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/cadastro-disciplinas'); ?>">
+          <a class="nav-link" href="<?php echo base_url('sys/disciplina'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-book-open-variant"></i>
             </span>
@@ -81,7 +81,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/matriz-curricular'); ?>">
+          <a class="nav-link" href="<?php echo base_url('sys/matriz'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-notebook-check"></i>
             </span>
@@ -89,11 +89,19 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/cadastro-turmas'); ?>">
+          <a class="nav-link" href="<?php echo base_url('sys/turma'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-account-group"></i>
             </span>
             <span class="menu-title">Turmas</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<?php echo base_url('sys/tempoAula'); ?>">
+            <span class="menu-icon">
+              <i class="mdi mdi-chair-school"></i>
+            </span>
+            <span class="menu-title">Tempo de Aula</span>
           </a>
         </li>
         <li class="nav-item">
@@ -105,7 +113,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/cadastro-aulas'); ?>">
+          <a class="nav-link" href="">
             <span class="menu-icon">
               <i class="mdi mdi-human-male-board"></i>
             </span>
@@ -113,11 +121,27 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/cadastro-horarios-de-aula'); ?>">
+          <a class="nav-link" href="<?php echo base_url('sys/horario'); ?>">
+            <span class="menu-icon">
+              <i class="mdi mdi-calendar-cursor-outline"></i>
+            </span>
+            <span class="menu-title">Horários</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="">
             <span class="menu-icon">
               <i class="mdi mdi-clock-time-eight"></i>
             </span>
             <span class="menu-title">Horários de Aula</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<?php echo base_url('sys/versao'); ?>">
+            <span class="menu-icon">
+              <i class="mdi mdi-multicast"></i>
+            </span>
+            <span class="menu-title">Versões</span>
           </a>
         </li>
       </ul>
@@ -301,6 +325,7 @@
   <script src="<?php echo base_url("assets/js/settings.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/todolist.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/tabs.js"); ?>"></script>
+  <script src="<?php echo base_url("assets/js/file-upload.js"); ?>"></script>
   <!-- endinject -->
 
   <!-- Custom js for this page -->
@@ -312,7 +337,8 @@
   <script src="<?php echo base_url("assets/js/validacoes/cadastro-cursos.js"); ?>"></script>
   <!-- Select2 -->
   <script src="<?php echo base_url("assets/vendors/select2/select2.min.js"); ?>"></script>
-
+  <!-- Sweet alert -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- End custom js for this page -->
 </body>
 

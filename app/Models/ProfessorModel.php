@@ -75,6 +75,14 @@ class ProfessorModel extends Model
             return $this->professores->find($id);
         }
     }
+
+    public function getProfessoresNome()
+    {
+        $builder = $this->builder();
+        $builder->select('nome');
+        $query = $builder->get();
+        return $query->getResultArray();
+    }
 }
 
 

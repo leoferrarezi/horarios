@@ -34,24 +34,24 @@
                                     value="<?php echo esc(old('ano')) ?>">
                             </div>
                         </div>
-                        <div class="col-md-4 col-sm-12">
+                        <div class="col-md-2 col-sm-12">
                             <div class="form-group">
                                 <label for="semestres">Semestre</label>
                                 <div id="semestres">
                                     <div class="form-check form-check-inline d-flex m-0">
-                                        <div class="form-check form-check-inline">
+                                        <div class="form-check form-check-inline me-3">
                                             <input class="form-check-input" type="radio" name="semestre" id="inlineRadio1" value="1" <?php echo (old('semestre') == '1') ? 'checked' : '' ?>>
-                                            <label class="form-check-label" for="inlineRadio1">1</label>
+                                            <label class="form-check-label text-light" for="inlineRadio1">1</label>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="semestre" id="inlineRadio2" value="2" <?php echo (old('semestre') == '2') ? 'checked' : '' ?>>
-                                            <label class="form-check-label" for="inlineRadio2">2</label>
+                                            <label class="form-check-label text-light" for="inlineRadio2">2</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4 col-sm-12">
+                        <div class="col-md-6 col-sm-12">
                             <div class="form-group">
                                 <label for="edit-curso_id">Curso</label>
                                 <select class="form-select" id="edit-curso_id" name="curso_id">

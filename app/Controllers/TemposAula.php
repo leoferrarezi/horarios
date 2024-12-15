@@ -30,7 +30,7 @@ class TemposAula extends BaseController
         //coloca todos os dados do formulario no vetor dadosPost
         $dadosPost = $this->request->getPost();
 
-        $dadosLimpos['dia_semana'] = strip_tags($dadosPost['dia_semana']);
+        //$dadosLimpos['dia_semana'] = strip_tags($dadosPost['dia_semana']);
         $dadosLimpos['horario_id'] = strip_tags($dadosPost['horario_id']);
 
         if (!empty($dadosPost['tempo_inicio'])) {
@@ -46,8 +46,21 @@ class TemposAula extends BaseController
             $dadosLimpos['minuto_fim'] = $horaFim->format('i');
         }
 
-        //tenta cadastrar o novo professor no banco
-        if ($tempoAulaModel->insert($dadosLimpos)) {
+        $deuErro = false;
+
+        //Iterar por todos os possíveis dias da semana
+        for($i = 0 ; $i < 7 ; $i++) {
+            if(isset($dadosPost["$i"])) {
+                $dadosLimpos['dia_semana'] = $i;
+                if($tempoAulaModel->insert($dadosLimpos) == false)
+                {
+                    $deuErro = true;
+                    break;
+                }
+            }
+        }
+
+        if (!$deuErro) {
             //se deu certo, direciona pra lista de cursos
             session()->setFlashdata('sucesso', 'Tempo de aula cadastrado com sucesso.');
             return redirect()->to(base_url('/sys/tempoAula')); // Redireciona para a página de listagem
@@ -56,6 +69,7 @@ class TemposAula extends BaseController
             return redirect()->to(base_url('/sys/tempoAula'))->with('erros', $data['erros'])->withInput(); //retora com os erros e os inputs
         }
     }
+
     public function atualizar()
     {
 

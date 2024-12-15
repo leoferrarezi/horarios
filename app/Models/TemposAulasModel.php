@@ -31,7 +31,7 @@ class TemposAulasModel extends Model
     protected $validationRules = [
         'id' => 'permit_empty|is_natural_no_zero|max_length[11]',
         'horario_id' => 'required|is_not_unique[horarios.id]|max_length[11]',
-        'dia_semana' => 'required|regex_match[/^[0123456]$/]', //o regex verifica se está entre 0 a 6
+        'dia_semana' => 'required', //o regex verifica se está entre 0 a 6
         'hora_inicio' => 'required|regex_match[/^(?:[01][0-9]|2[0-3])$/]', //aceita de 00 a 23
         'minuto_inicio' => 'required|regex_match[/^(?:[0-5][0-9])$/]', //aceita entre 00 a 59
         'hora_fim' => 'required|regex_match[/^(?:[01][0-9]|2[0-3])$/]', //aceita de 00 a 23
@@ -81,6 +81,7 @@ class TemposAulasModel extends Model
     public function getTemposAulaWithHorario() {
         return $this->select('tempos_de_aula.*, horario.nome as nome_horario')
                     ->join('horarios as horario', 'horario.id = tempos_de_aula.horario_id') // Relacionamento com a tabela users
+                    ->orderBy('dia_semana,hora_inicio,minuto_inicio')
                     ->findAll(); // Retorna todos os registros
     }
 }

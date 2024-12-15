@@ -1,14 +1,14 @@
 <!-- incluir os componentes modais antes do restante do documento -->
-<?php echo view('components/matriz/modal-edit-matriz'); ?>
-<?php echo view('components/matriz/modal-cad-matriz'); ?>    
-<?php echo view('components/matriz/modal-deletar-matriz') ?>
+<?php echo view('components/versoes/modal-edit-versoes'); ?>
+<?php echo view('components/versoes/modal-cad-versoes'); ?>    
+<?php echo view('components/versoes/modal-deletar-versoes') ?>
 
 <div class="page-header">
-    <h3 class="page-title">GERENCIAR MATRIZES</h3>
+    <h3 class="page-title">GERENCIAR VERSÕES</h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="<?= base_url('/sys/home') ?>">Início</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Lista Matrizes</li>
+            <li class="breadcrumb-item active" aria-current="page">Lista Versões</li>
         </ol>
     </nav>
 </div>
@@ -32,8 +32,7 @@
 
                 <div class="row">
                     <div class="col-12 mb-4">
-                        <button type="button" class="btn btn-primary btn-icon-text" data-bs-toggle="modal" data-bs-target="#modal-cad-matriz"><i class="fa fa-plus-circle btn-icon-prepend"></i> Incluir Matriz</button>
-                        <button type="button" class="btn btn-info btn-icon-text"><i class="fa fa-upload btn-icon-prepend"></i> Importar Matrizes do SUAP</a>
+                        <button type="button" class="btn btn-primary btn-icon-text" data-bs-toggle="modal" data-bs-target="#modal-cad-versoes"><i class="fa fa-plus-circle btn-icon-prepend"></i> Incluir Versão</button>
                     </div>
                 </div>
 
@@ -42,7 +41,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive">
-                            <table class="table mb-4" id="listagem-matriz">
+                            <table class="table mb-4" id="listagem-versao">
                                 
                                 <!-- cabeçalho da tabela -->
                                 <thead>
@@ -57,26 +56,26 @@
 
                                 <tbody>
 
-                                    <?php if (!empty($matrizes)): //verifica se a tabela tem dados ?>
-                                        <?php foreach ($matrizes as $matriz): //loop para percorrer todos os professores retornados do bd ?>
+                                    <?php if (!empty($versoes)): //verifica se a tabela tem dados ?>
+                                        <?php foreach ($versoes as $versao): //loop para percorrer todos os professores retornados do bd ?>
                                             <tr>
-                                                <td><?php echo esc($matriz['id']); ?></td>
-                                                <td><?php echo esc($matriz['nome']); ?></td>
+                                                <td><?php echo esc($versao['id']); ?></td>
+                                                <td><?php echo esc($versao['nome']); ?></td>
 
                                                 <!-- essa celula monta os botões de ação que acionam modais -->
 
                                                 <td>
                                                     <div class="d-flex">
                                                         <!-- o elemento <span> é apenas para mostrar o tooltip -->
-                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Atualizar dados do matriz">
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Atualizar dados da versão">
                                                             <!-- botão com estilo, ativação do modal, e dados formados para transmitir ao modal -->
                                                             <button 
                                                                 type="button"
                                                                 class="justify-content-center align-items-center d-flex btn btn-inverse-success button-trans-success btn-icon me-1"                                                                
                                                                 data-bs-toggle="modal"
-                                                                data-bs-target="#modal-edit-matriz"
-                                                                data-id="<?php echo esc($matriz['id']); ?>"
-                                                                data-nome="<?php echo esc($matriz['nome']);?>"
+                                                                data-bs-target="#modal-edit-versoes"
+                                                                data-id="<?php echo esc($versao['id']); ?>"
+                                                                data-nome="<?php echo esc($versao['nome']);?>"
                                                             >
                                                                 <!-- icone do botão -->
                                                                 <i class="fa fa-edit"></i>
@@ -85,14 +84,14 @@
                                                         
                                                         <!-- abaixo são repetidos os códigos acima para replicar os outros 2 botões -->
 
-                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Excluir matriz">
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Excluir Versão">
                                                             <button 
                                                                 type="button"
                                                                 class="justify-content-center align-items-center d-flex btn btn-inverse-danger button-trans-danger btn-icon me-1"
                                                                 data-bs-toggle="modal" 
-                                                                data-bs-target="#modal-deletar-matriz"
-                                                                data-id="<?php echo esc($matriz['id']); ?>"
-                                                                data-nome="<?php echo esc($matriz['nome']);?>"
+                                                                data-bs-target="#modal-deletar-versoes"
+                                                                data-id="<?php echo esc($versao['id']); ?>"
+                                                                data-nome="<?php echo esc($versao['nome']);?>"
                                                             >
                                                                 <i class="fa fa-trash"></i>
                                                             </button>
@@ -104,7 +103,7 @@
                                     <?php else: ?>
                                         <!-- caso não haja matriz cadastrado -->
                                         <tr>
-                                            <td colspan="4">Nenhum matriz cadastrado.</td>
+                                            <td colspan="4">Nenhuma versão cadastrada.</td>
                                         </tr>
                                     <?php endif; ?>
                                 </tbody>
@@ -132,10 +131,10 @@
         $(document).ready(function(){
 
             //Verificar se tem curso para então "transformar" a tabela em DataTable
-            <?php if (!empty($matrizes)): ?>
+            <?php if (!empty($versoes)): ?>
                 
                 //Cria a DataTable
-                $("#listagem-matriz").DataTable({
+                $("#listagem-versao").DataTable({
                     
                     //Define as entradas de quantidade de linhas visíveis na tabela
                     aLengthMenu: [
@@ -158,7 +157,7 @@
                 });
 
 
-                $('#modal-edit-matriz').on('show.bs.modal', function (event) {
+                $('#modal-edit-versoes').on('show.bs.modal', function (event) {
                     // Obter o DOM do botão que ativou o modal
                     var button = $(event.relatedTarget); 
                     
@@ -173,7 +172,7 @@
                     
                 });
 
-                $('#modal-deletar-matriz').on('show.bs.modal', function (event) {
+                $('#modal-deletar-versoes').on('show.bs.modal', function (event) {
                     // Button that triggered the modal
                     var button = $(event.relatedTarget); 
 

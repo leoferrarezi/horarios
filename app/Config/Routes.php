@@ -85,13 +85,30 @@ $routes->group('sys', function ($routes) {
         $routes->post('deletar', 'Disciplinas::deletar');
     });
     $routes->group('tempoAula', function ($routes) {
-        //CRUD Disciplinas
+        
         $routes->get('', 'TemposAula::index');
         $routes->get('listar', 'TemposAula::index');
         $routes->get('cadastro', 'TemposAula::cadastro');
         $routes->post('salvar', 'TemposAula::salvar');
         $routes->post('atualizar', 'TemposAula::atualizar');
         $routes->post('deletar', 'TemposAula::deletar');
+    });
+    $routes->group('turma', function ($routes) { 
+        $routes->get('', 'Turmas::index');
+        $routes->get('listar', 'Turmas::index');
+        $routes->get('cadastro', 'Turmas::cadastro');
+        $routes->post('salvar', 'Turmas::salvar');
+        $routes->post('atualizar', 'Turmas::atualizar');
+        $routes->post('deletar', 'Turmas::deletar');
+    });
+    $routes->group('versao', function ($routes) {
+        
+        $routes->get('', 'Versao::index');
+        $routes->get('listar', 'Versao::index');
+        $routes->get('cadastro', 'Versao::cadastro');
+        $routes->post('salvar', 'Versao::salvar');
+        $routes->post('atualizar', 'Versao::atualizar');
+        $routes->post('deletar', 'Versao::deletar');
     });
 
     // Rotas para alteração da senha do usuário

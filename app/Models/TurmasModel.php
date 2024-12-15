@@ -29,20 +29,20 @@ class TurmasModel extends Model
 
     // Validation
     protected $validationRules = [
-        'id' => 'is_natural_no_zero|max_length[11]',
-        'codigo' => 'required|max_length[32]',
+        'id' => 'permit_empty|is_natural_no_zero|max_length[11]',
+        'codigo' => 'required|is_unique[turmas.codigo,id,{id}]|max_length[32]',
         'sigla' => 'required|max_length[32]',
         'ano' => 'required|regex_match[/^(20)\d{2}$/]', //regex valida se o ano começa com 20 e aceita qualquer outros 2 dígitos no fim | 2000 até 2099. issue RF05.
         'semestre' => 'required|regex_match[/^[12]$/]', //verifica se 1 ou 2.
-        'curso_id' => 'required|max_length[11]|is_not_unique[cursos.curso_id]',
-        'tempos_diarios' => 'permit_empty|is_natural, max_length[2]',
+        'curso_id' => 'required|max_length[11]|is_not_unique[cursos.id]',
+        'tempos_diarios' => 'permit_empty|is_natural|max_length[2]',
         'horario_id' => 'required|is_not_unique[horarios.id]|max_length[11]',
         'horario_preferencial_id' => 'permit_empty|is_not_unique[horarios.id]|max_length[11]',
     ];
     protected $validationMessages   = [
         'codigo' => [
-        'required'    => 'O campo código é obrigatório.',
-        'max_length'  => 'O campo código não pode exceder 32 caracteres.'
+            'required'    => 'O campo código é obrigatório.',
+            'max_length'  => 'O campo código não pode exceder 32 caracteres.'
         ],
         'sigla' => [
             'required'    => 'O campo sigla é obrigatório.',
@@ -90,4 +90,14 @@ class TurmasModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+
+    public function getTurmasWithHorarioAndCursos()
+    {
+        return $this->select('turmas.*, horario.nome as horario, hp.nome as horario_preferencial, curso.nome as curso')
+            ->join('horarios as horario', 'horario.id = turmas.horario_id')
+            ->join('horarios as hp', 'hp.id = turmas.horario_preferencial_id')
+            ->join('cursos as curso', 'curso.id = turmas.curso_id')
+            ->findAll();
+    }
 }

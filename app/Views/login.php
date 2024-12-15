@@ -103,8 +103,8 @@
                         <p class="fade-in" style="font-size: 13px;">José Claion Martins de Sousa</p>
                         <p class="fade-in" style="font-size: 13px;">Luis Henrique Bergonzini Souza</p>
                         <p class="fade-in" style="font-size: 13px;">Luis Marcelo Fabrício Guimarães</p>
-                        <p class="fade-in" style="font-size: 13px;">Poliana Carvalho Lima</p>
                         <p class="fade-in" style="font-size: 13px;">Paloma Carvalho Lima</p>
+                        <p class="fade-in" style="font-size: 13px;">Poliana Carvalho Lima</p>
                         <p class="fade-in" style="font-size: 13px;">Sanmara Letícia Nunes de Souza</p>
                         <p class="fade-in" style="font-size: 13px;">Vitória Oliveira de Lima</p> <br>
                         <p class="fade-in" style="font-size: 13px; color: gray; text-decoration: line-through">Fernanda Coelho Nunes</p>

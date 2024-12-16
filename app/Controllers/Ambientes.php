@@ -3,20 +3,41 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+
+use App\Models\AmbienteGrupoModel;
 use App\Models\AmbientesModel;
+use App\Models\GruposAmbientesModel;
 
 class Ambientes extends BaseController
 {
     public function index()
     {
         $ambientesModel = new AmbientesModel();
+        $gruposAmbientesModel = new GruposAmbientesModel();
+        $ambienteGrupoModel = new AmbienteGrupoModel();
+
+        // Carrega todos os ambientes e grupos
         $data['ambientes'] = $ambientesModel->findAll();
+        $data['grupos'] = $gruposAmbientesModel->findAll();
+
+        // Para cada grupo, recuperar os ambientes associados
+        foreach ($data['grupos'] as &$grupo) {
+            // recupera os ambientes associados ao grupo específico
+            $grupo['ambientes'] = $ambienteGrupoModel
+                ->where('grupo_de_ambiente_id', $grupo['id'])
+                ->join('ambientes', 'ambientes.id = ambiente_grupo.ambiente_id') // Certifique-se de que a relação está correta
+                ->findAll();
+        }
 
         $data['content'] = view('sys/cadastro-ambientes', $data);
-        return view('dashboard', $data);
+        return view('dashboard', [
+            'ambientes' => $data['ambientes'],
+            'grupos' => $data['grupos'],
+            'content' => view('sys/cadastro-ambientes', $data)
+        ]);
     }
 
-    public function salvar()
+    public function salvarAmbiente()
     {
         $ambiente = new AmbientesModel();
 
@@ -24,14 +45,13 @@ class Ambientes extends BaseController
 
         $dadosPost = $this->request->getPost();
 
-        //verifica se já existe um ambiente com o mesmo nome
         if ($ambiente->where('nome', $dadosPost['nome'])->first()) {
             session()->setFlashdata('erro', 'Nome do ambiente já cadastrado');
             return redirect()->to(base_url('sys/cadastro-ambientes'))->withInput();
         }
 
         if ($ambiente->insert($dadosPost)) {
-            session()->setFlashdata('sucesso', 'ambiente cadastrado com sucesso.');
+            session()->setFlashdata('sucesso', 'Ambiente cadastrado com sucesso.');
             return redirect()->to(base_url('sys/cadastro-ambientes'));
         } else {
             $data['erros'] = $ambiente->errors();
@@ -39,35 +59,164 @@ class Ambientes extends BaseController
         }
     }
 
-    public function atualizar($id)
+    public function atualizarAmbiente()
     {
-        $ambienteModel = new ambientesModel();
 
-        $novoNome = trim($this->request->getPost('nome'));
+        $ambiente = new AmbientesModel();
 
-        if ($ambienteModel->where('nome', $novoNome)->first()) {
-            session()->setFlashdata('erro', 'Já existe um ambiente com este nome.');
-            return redirect()->to(base_url('sys/cadastro-ambientes'))->withInput();
-        }
-        if ($ambienteModel->update($id, ['nome' => $novoNome])) {
-            session()->setFlashdata('sucesso', 'Ambiente atualizado com sucesso.');
-            return redirect()->to(base_url('sys/cadastro-ambientes'));
+        $dadosPost = $this->request->getPost();
+
+        $idAmbiente = strip_tags($dadosPost['id']);
+        $novoNome = strip_tags($dadosPost['nome']);
+
+
+        if ($ambiente->update($idAmbiente, ['nome' => $novoNome])) {
+            session()->setFlashdata('sucesso', 'Nome do ambiente atualizado com sucesso.');
         } else {
-            session()->setFlashdata('erro', 'Erro ao atualizar o ambiente.');
-            return redirect()->to(base_url('sys/cadastro-ambientes'))->withInput();
+            session()->setFlashdata('erro', 'Erro ao atualizar o nome do ambiente.');
+        }
+
+        return redirect()->to(base_url('/sys/cadastro-ambientes'));
+    }
+
+    public function deletarAmbiente()
+    {
+        $ambienteId = $this->request->getPost('id');
+        $ambienteModel = new AmbientesModel();
+        $ambienteGrupoModel = new AmbienteGrupoModel();
+
+        $ambiente = $ambienteModel->find($ambienteId);
+        if (!$ambiente) {
+            session()->setFlashdata('erro', 'Ambiente não encontrado.');
+            return redirect()->to(base_url('/sys/cadastro-ambientes'));
+        }
+
+        $relacoes = $ambienteGrupoModel->where('ambiente_id', $ambienteId)->findAll();
+        foreach ($relacoes as $relacao) {
+            $ambienteGrupoModel->delete($relacao['id']);
+        }
+
+        if ($ambienteModel->delete($ambienteId)) {
+            session()->setFlashdata('sucesso', 'Ambiente excluído com sucesso.');
+        } else {
+            session()->setFlashdata('erro', 'Erro ao excluir o ambiente.');
+        }
+
+        return redirect()->to(base_url('/sys/cadastro-ambientes'));
+    }
+
+    public function salvarGrupoAmbientes()
+    {
+        $grupoAmbientesModel = new GruposAmbientesModel();
+
+        $dadosPost = $this->request->getPost();
+        $dadosLimpos['nome'] = strip_tags($dadosPost['nome']);
+
+        if ($grupoAmbientesModel->insert($dadosLimpos)) {
+            session()->setFlashdata('sucesso', 'Grupo de Ambiente cadastrado com sucesso');
+            return redirect()->to(base_url('/sys/cadastro-ambientes'));
+        } else {
+            $data['erros'] = $grupoAmbientesModel->errors();
+            return redirect()->to(base_url('/sys/cadastro-ambientes'))->with('erros', $data['erros'])->withInput();
         }
     }
 
-    public function deletar($id)
+    public function editarGrupoAmbientes()
     {
-        $ambienteModel = new ambientesModel();
+        $dadosPost = $this->request->getPost();
 
-        // Deletar o ambiente pelo ID
-        if ($ambienteModel->delete($id)) {
-            session()->setFlashdata('sucesso', 'Ambiente deletado com sucesso.');
-            return redirect()->to(base_url('/sys/cadastro-ambientes'));
+        $idGrupo = strip_tags($dadosPost['id']);
+        $novoNome = strip_tags($dadosPost['nome']);
+
+        $gruposModel = new GruposAmbientesModel();
+
+        if ($gruposModel->update($idGrupo, ['nome' => $novoNome])) {
+            session()->setFlashdata('sucesso', 'Nome do grupo atualizado com sucesso.');
         } else {
-            return redirect()->to(base_url('/sys/cadastro-ambientes'))->with('erro', 'Falha ao deletar ambiente');
+            session()->setFlashdata('erro', 'Erro ao atualizar o nome do grupo.');
         }
+
+        return redirect()->to(base_url('/sys/cadastro-ambientes'));
+    }
+
+    public function deletarGrupoAmbientes()
+    {
+        $grupoId = $this->request->getPost('id');
+        $gruposAmbientesModel = new GruposAmbientesModel();
+        $ambienteGrupoModel = new AmbienteGrupoModel();
+
+        $grupo = $gruposAmbientesModel->find($grupoId);
+        if (!$grupo) {
+            session()->setFlashdata('erro', 'Grupo não encontrado.');
+            return redirect()->to(base_url('/sys/cadastro-ambientes'));
+        }
+
+        $relacoes = $ambienteGrupoModel->where('grupo_de_ambiente_id', $grupoId)->findAll();
+        foreach ($relacoes as $relacao) {
+            $ambienteGrupoModel->delete($relacao['id']);
+        }
+
+        if ($gruposAmbientesModel->delete($grupoId)) {
+            session()->setFlashdata('sucesso', 'Grupo de ambientes excluído com sucesso.');
+        } else {
+            session()->setFlashdata('erro', 'Erro ao excluir o grupo de ambientes.');
+        }
+
+        return redirect()->to(base_url('/sys/cadastro-ambientes'));
+    }
+
+    public function adicionarAmbientesAoGrupo()
+    {
+        $ambienteGrupoModel = new AmbienteGrupoModel();
+        $gruposAmbientesModel = new GruposAmbientesModel();
+
+        $grupoId = $this->request->getPost('idGrupo');
+        $ambientes = $this->request->getPost('ambientes');
+
+        if (!$gruposAmbientesModel->find($grupoId)) {
+            session()->setFlashdata('erro', 'Grupo de ambientes não encontrado.');
+            return redirect()->to(base_url('/sys/cadastro-ambientes'));
+        }
+
+        if (empty($ambientes)) {
+            session()->setFlashdata('erro', 'Nenhum ambiente foi selecionado para adicionar ao grupo.');
+            return redirect()->to(base_url('/sys/cadastro-ambientes'));
+        }
+
+        foreach ($ambientes as $ambienteId) {
+            $ambienteGrupoModel->insert([
+                'grupo_de_ambiente_id' => $grupoId,
+                'ambiente_id' => $ambienteId,
+            ]);
+        }
+
+        session()->setFlashdata('sucesso', 'Ambientes adicionados ao grupo com sucesso.');
+        return redirect()->to(base_url('/sys/cadastro-ambientes'));
+    }
+
+    public function removerAmbienteDoGrupo()
+    {
+        $grupoId = $this->request->getPost('grupo_id');
+        $ambienteId = $this->request->getPost('ambiente_id');
+
+        $ambienteGrupoModel = new AmbienteGrupoModel();
+
+        $relacao = $ambienteGrupoModel
+            ->where('grupo_de_ambiente_id', $grupoId)
+            ->where('ambiente_id', $ambienteId)
+            ->first();
+
+        if (!$relacao) {
+            session()->setFlashdata('erro', 'Ambiente não encontrado no grupo.');
+            return redirect()->to(base_url('/sys/cadastro-ambientes'));
+        }
+
+        if ($ambienteGrupoModel->delete($relacao['id'])) {
+            session()->setFlashdata('sucesso', 'Ambiente removido do grupo com sucesso.');
+        } else {
+            session()->setFlashdata('erro', 'Falha ao remover o ambiente do grupo.');
+        }
+
+        return redirect()->to(base_url('/sys/cadastro-ambientes'));
     }
 }

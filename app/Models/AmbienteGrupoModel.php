@@ -4,7 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class AmbienteGrupo extends Model
+class AmbienteGrupoModel extends Model
 {
     protected $table            = 'ambiente_grupo';
     protected $primaryKey       = 'id';

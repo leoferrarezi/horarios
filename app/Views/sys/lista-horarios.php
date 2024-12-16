@@ -33,7 +33,6 @@
                 <div class="row">
                     <div class="col-12 mb-4">
                         <button type="button" class="btn btn-primary btn-icon-text" data-bs-toggle="modal" data-bs-target="#modal-cad-horario"><i class="fa fa-plus-circle btn-icon-prepend"></i> Incluir Horário</button>
-                        <button type="button" class="btn btn-info btn-icon-text"><i class="fa fa-upload btn-icon-prepend"></i> Importar Horários do SUAP</a>
                     </div>
                 </div>
 

@@ -97,15 +97,6 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/curso'); ?>">
-            <span class="menu-icon">
-              <i class="mdi mdi-school"></i>
-            </span>
-            <span class="menu-title">Cursos</span>
-          </a>
-        </li>
-
-        <li class="nav-item">
           <a class="nav-link" href="<?php echo base_url('sys/disciplina'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-book-open-variant"></i>
@@ -113,6 +104,15 @@
             <span class="menu-title">Disciplinas</span>
           </a>
         </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="<?php echo base_url('sys/curso'); ?>">
+            <span class="menu-icon">
+              <i class="mdi mdi-school"></i>
+            </span>
+            <span class="menu-title">Cursos</span>
+          </a>
+        </li>        
         
         <li class="nav-item">
           <a class="nav-link" href="<?php echo base_url('sys/turma'); ?>">

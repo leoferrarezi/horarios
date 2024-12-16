@@ -33,6 +33,9 @@ $routes->get('sys/cadastro-horarios-de-aula', 'TemposAula::cadastro');
 //Relatórios (em construção)
 $routes->get('sys/relatorios', 'Relatorios::index');
 
+//Tabela Geral de Horários (em construção)
+$routes->get('sys/tabela-geral-horarios', 'TabelaGeral::index');
+
 //adicionar o filter (middleware de login no group depois)
 $routes->group('sys', function ($routes) {
 

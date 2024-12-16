@@ -112,7 +112,7 @@ class MatrizCurricular extends BaseController
             array_push($data['matrizesExistentes'],$k['nome']);
         }
 
-        // Lê os dados da planilha e captura Nome e E-mail
+        // Lê os dados da planilha
         foreach ($sheet->getRowIterator() as $row) {
             $cellIterator = $row->getCellIterator();
             $cellIterator->setIterateOnlyExistingCells(false);
@@ -122,9 +122,23 @@ class MatrizCurricular extends BaseController
                 $rowData[] = $cell->getValue();
             }
 
-            $dataRows[] = [
-                'nome' => $rowData[1] ?? null
-            ];
+            $jaTem = false;
+
+            foreach($dataRows as $k => $v)
+            {
+                foreach($v as $k2 => $v2)
+                {                    
+                    if(strcasecmp($rowData[1], $v2) == 0) {
+                        $jaTem = true;
+                    }                    
+                }
+            }
+            
+            if(!$jaTem) {
+                $dataRows[] = [
+                    'nome' => $rowData[1] ?? null
+                ];
+            }            
         }
 
         // Remove cabeçalho

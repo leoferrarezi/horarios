@@ -81,6 +81,7 @@ $routes->group('sys', function ($routes) {
         $routes->post('salvar', 'Cursos::salvar');
         $routes->post('atualizar', 'Cursos::atualizar');
         $routes->post('deletar', 'Cursos::deletar');
+        $routes->post('importar', 'Cursos::importar');
     });
     $routes->group('disciplina', function ($routes) {
         //CRUD Disciplinas

@@ -38,6 +38,9 @@ $routes->get('sys/cadastro-horarios-de-aula', 'TemposAula::cadastro');
 //Relatórios (em construção)
 $routes->get('sys/relatorios', 'Relatorios::index');
 
+//Tabela Geral de Horários (em construção)
+$routes->get('sys/tabela-geral-horarios', 'TabelaGeral::index');
+
 //adicionar o filter (middleware de login no group depois)
 $routes->group('sys', function ($routes) {
 
@@ -62,6 +65,8 @@ $routes->group('sys', function ($routes) {
         $routes->post('salvar', 'MatrizCurricular::salvar');
         $routes->post('atualizar', 'MatrizCurricular::atualizar');
         $routes->post('deletar', 'MatrizCurricular::deletar');
+        $routes->post('importar', 'MatrizCurricular::importar');
+        $routes->post('processarImportacao', 'MatrizCurricular::processarImportacao');
     });
 
     $routes->group('horario', function ($routes) {

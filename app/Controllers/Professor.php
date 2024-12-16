@@ -39,7 +39,6 @@ class Professor extends BaseController
         return $this->response->setJSON($professor);
     }
 
-
     public function salvar()
     {
         $professor = new ProfessorModel();
@@ -64,6 +63,7 @@ class Professor extends BaseController
             return redirect()->to(base_url('/sys/professor'))->with('erros', $data['erros'])->withInput(); //retora com os erros e os inputs
         }
     }
+
     public function atualizar(){
 
         $dadosPost = $this->request->getPost();
@@ -82,6 +82,7 @@ class Professor extends BaseController
         }
 
     }
+
     public function deletar() {
         
         $dadosPost = $this->request->getPost();
@@ -180,5 +181,10 @@ class Professor extends BaseController
 
         session()->setFlashdata('sucesso', "{$insertedCount} registros importados com sucesso!");
         return redirect()->to(base_url('/sys/professor'));
+    }
+
+    public function salvarRestricoes()
+    {
+        /*...*/
     }
 }

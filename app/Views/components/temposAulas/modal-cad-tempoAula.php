@@ -10,40 +10,78 @@
             <form id="cadastrarTempoAula" class="forms-sample" method="post" action='<?php echo base_url('sys/tempoAula/salvar'); ?>'>
                 <div class="modal-body">
                     <?php echo csrf_field() ?>
+
                     <div class="form-group">
-                        <label for="exampleInputUsername1">Horário</label>
+                        <label for="horario_id">Horário</label>
                         <select class="form-select" name="horario_id">
                             <?php foreach ($horarios as $h): ?>
                                 <option value="<?php echo esc($h['id']) ?>"><?php echo esc($h['nome']) ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
+
                     <div class="form-group">
-                        <label for="exampleInputUsername1">Dia da semana</label>
-                        <select class="form-select" name="dia_semana">
-                            <option value="0">Domingo</option>
-                            <option value="1">Segunda-feira</option>
-                            <option value="2">Terça-feira</option>
-                            <option value="3">Quarta-feira</option>
-                            <option value="4">Quinta-feira</option>
-                            <option value="5">Sexta-feira</option>
-                            <option value="6">Sábado</option>
-                        </select>
+
+                        <label for="dia_semana">Dia da semana</label>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-check form-check-primary">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" name="1" class="form-check-input" value="1" checked> Segunda </label>
+                                </div>
+                                <div class="form-check form-check-primary">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" name="4" class="form-check-input" value="4" checked> Quinta </label>
+                                </div>
+                                <div class="form-check form-check-primary">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" name="0" class="form-check-input" value="0"> Domingo </label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check form-check-primary">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" name="2" class="form-check-input" value="2" checked> Terça </label>
+                                </div>
+                                <div class="form-check form-check-primary">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" name="5" class="form-check-input" value="5" checked> Sexta </label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check form-check-primary">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" name="3" class="form-check-input" value="3" checked> Quarta </label>
+                                </div>
+                                <div class="form-check form-check-primary">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" name="6" class="form-check-input" value="6"> Sábado </label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="form-group">
-                        <label for="exampleInputUsername1">Hora e Minuto Início</label>
-                        <input type="time" class="form-control" name="tempo_inicio">
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputUsername1">Hora e Minuto Fim</label>
-                        <input type="time" class="form-control" name="tempo_fim">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="tempo_inicio">Hora e Minuto Início</label>
+                                <input type="time" class="form-control" name="tempo_inicio">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="tempo_fim">Hora e Minuto Fim</label>
+                                <input type="time" class="form-control" name="tempo_fim">
+                            </div>
+                        </div>
                     </div>
 
                 </div>
+
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary me-2">Salvar</button>
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
                 </div>
+
             </form>
         </div>
     </div>

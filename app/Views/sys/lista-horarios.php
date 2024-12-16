@@ -4,7 +4,7 @@
 <?php echo view('components/horarios/modal-deletar-horarios') ?>
 
 <div class="page-header">
-    <h3 class="page-title">GERENCIAR HORÁRIOS</h3>
+    <h3 class="page-title">GERENCIAR GRADES DE HORÁRIO</h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="<?= base_url('/sys/home') ?>">Início</a></li>
@@ -33,21 +33,19 @@
                 <div class="row">
                     <div class="col-12 mb-4">
                         <button type="button" class="btn btn-primary btn-icon-text" data-bs-toggle="modal" data-bs-target="#modal-cad-horario"><i class="fa fa-plus-circle btn-icon-prepend"></i> Incluir Horário</button>
-                        <button type="button" class="btn btn-info btn-icon-text"><i class="fa fa-upload btn-icon-prepend"></i> Importar Horários do SUAP</a>
                     </div>
                 </div>
 
                 <!-- início da tabela -->
 
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-9">
                         <div class="table-responsive">
                             <table class="table mb-4" id="listagem-horarios">
                                 
                                 <!-- cabeçalho da tabela -->
                                 <thead>
                                     <tr>
-                                        <th>Id</th>
                                         <th>Nome</th>
                                         <th>Ações</th>
                                     </tr>
@@ -60,7 +58,7 @@
                                     <?php if (!empty($horarios)): //verifica se a tabela tem dados ?>
                                         <?php foreach ($horarios as $horario): //loop para percorrer todos os professores retornados do bd ?>
                                             <tr>
-                                                <td><?php echo esc($horario['id']); ?></td>
+                                                <!--<td><?php echo esc($horario['id']); ?></td>-->
                                                 <td><?php echo esc($horario['nome']); ?></td>
 
                                                 <!-- essa celula monta os botões de ação que acionam modais -->
@@ -114,9 +112,9 @@
                 </div>
                 <!-- legendas no canto inferior da tela -->
                 <div class="row">
-                    <div class="col-12 mt-4">
-                        <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar</p>
-                        <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i>Excluir</p>
+                    <div class="col-9 mt-4">
+                        <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar &nbsp; &nbsp; &nbsp; &nbsp;
+                        <i class="fa fa-trash text-danger me-2"></i>Excluir</p>
                     </div>
                 </div>
             </div>
@@ -154,7 +152,7 @@
                     //Diz que a coluna 1 (segunda/nome) deve ser o padrão de ordenação ao carregar a tabela
                     order: [ [1, 'asc'] ],
                     //Desativa a ordenação por ações
-                    columns: [null, null, { orderable: false }]
+                    columns: [null, { orderable: false }]
                 });
 
 

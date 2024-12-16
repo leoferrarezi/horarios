@@ -41,16 +41,29 @@
             </span>
             <span class="menu-title">Página inicial</span>
           </a>
+        </li>        
+
+        <li class="nav-item nav-category">
+          <span class="nav-link">Gestão de Horários</span>
         </li>
 
-        <li class="nav-item menu-items">
-          <a class="nav-link" href="<?php echo base_url('sys/relatorios'); ?>">
+        <li class="nav-item">
+          <a class="nav-link" href="<?php echo base_url('sys/versao'); ?>">
             <span class="menu-icon">
-              <i class="mdi mdi-laptop"></i>
+              <i class="mdi mdi-multicast"></i>
             </span>
-            <span class="menu-title">Relatórios</span>
+            <span class="menu-title">Versões de Horários</span>
           </a>
         </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="">
+            <span class="menu-icon">
+              <i class="mdi mdi-clock-time-eight"></i>
+            </span>
+            <span class="menu-title">Horários de Aula</span>
+          </a>
+        </li>        
 
         <li class="nav-item nav-category">
           <span class="nav-link">Cadastros</span>
@@ -63,23 +76,8 @@
             </span>
             <span class="menu-title">Professores</span>
           </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/curso'); ?>">
-            <span class="menu-icon">
-              <i class="mdi mdi-school"></i>
-            </span>
-            <span class="menu-title">Cursos</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/disciplina'); ?>">
-            <span class="menu-icon">
-              <i class="mdi mdi-book-open-variant"></i>
-            </span>
-            <span class="menu-title">Disciplinas</span>
-          </a>
-        </li>
+        </li>        
+
         <li class="nav-item">
           <a class="nav-link" href="<?php echo base_url('sys/matriz'); ?>">
             <span class="menu-icon">
@@ -88,6 +86,25 @@
             <span class="menu-title">Matriz Curricular</span>
           </a>
         </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="<?php echo base_url('sys/disciplina'); ?>">
+            <span class="menu-icon">
+              <i class="mdi mdi-book-open-variant"></i>
+            </span>
+            <span class="menu-title">Disciplinas</span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="<?php echo base_url('sys/curso'); ?>">
+            <span class="menu-icon">
+              <i class="mdi mdi-school"></i>
+            </span>
+            <span class="menu-title">Cursos</span>
+          </a>
+        </li>        
+        
         <li class="nav-item">
           <a class="nav-link" href="<?php echo base_url('sys/turma'); ?>">
             <span class="menu-icon">
@@ -96,12 +113,22 @@
             <span class="menu-title">Turmas</span>
           </a>
         </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="<?php echo base_url('sys/horario'); ?>">
+            <span class="menu-icon">
+              <i class="mdi mdi-calendar-cursor-outline"></i>
+            </span>
+            <span class="menu-title">Grade de Horários</span>
+          </a>
+        </li>
+
         <li class="nav-item">
           <a class="nav-link" href="<?php echo base_url('sys/tempoAula'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-chair-school"></i>
             </span>
-            <span class="menu-title">Tempo de Aula</span>
+            <span class="menu-title">Tempos de Aula</span>
           </a>
         </li>
         <li class="nav-item">
@@ -120,30 +147,22 @@
             <span class="menu-title">Aulas</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/horario'); ?>">
+
+        <li class="nav-item nav-category">
+          <span class="nav-link">Relatórios</span>
+        </li>
+
+        <li class="nav-item menu-items">
+          <a class="nav-link" href="<?php echo base_url('sys/relatorios'); ?>">
             <span class="menu-icon">
-              <i class="mdi mdi-calendar-cursor-outline"></i>
+              <i class="mdi mdi-laptop"></i>
             </span>
-            <span class="menu-title">Horários</span>
+            <span class="menu-title">Em construção...</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="">
-            <span class="menu-icon">
-              <i class="mdi mdi-clock-time-eight"></i>
-            </span>
-            <span class="menu-title">Horários de Aula</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('sys/versao'); ?>">
-            <span class="menu-icon">
-              <i class="mdi mdi-multicast"></i>
-            </span>
-            <span class="menu-title">Versões</span>
-          </a>
-        </li>
+        
+        
+
       </ul>
     </nav>
     <!-- partial -->
@@ -158,6 +177,7 @@
             <span class="mdi mdi-menu"></span>
           </button>
           <ul class="navbar-nav navbar-nav-right">
+            <!--
             <li class="nav-item dropdown border-left">
               <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="mdi mdi-email"></i>
@@ -246,11 +266,12 @@
                 <p class="p-3 mb-0 text-center">See all notifications</p>
               </div>
             </li>
+-->
             <li class="nav-item dropdown">
               <a class="nav-link" id="profileDropdown" href="#" data-bs-toggle="dropdown">
                 <div class="navbar-profile">
-                  <img class="img-xs rounded-circle" src="<?php echo base_url("assets/images/faces/face15.jpg"); ?>" alt="">
-                  <p class="mb-0 d-none d-sm-block navbar-profile-name">Henry Klein</p>
+                  <!--<img class="img-xs rounded-circle" src="<?php echo base_url("assets/images/faces/face15.jpg"); ?>" alt="">-->
+                  <p class="mb-0 d-none d-sm-block navbar-profile-name"><?php echo auth()->user()->username;?></p>
                   <i class="mdi mdi-menu-down d-none d-sm-block"></i>
                 </div>
               </a>
@@ -295,7 +316,7 @@
         <!-- partial:../../partials/_footer.html -->
         <footer class="footer">
           <div class="d-sm-flex justify-content-center justify-content-sm-between">
-            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2024 <a href="https://ifrocalama.com/" target="_blank">Calama Devs</a>.</span>
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2024 <a href="<?php echo base_url('sys/modal-sobre'); ?>">Calama Devs</a>.</span>
             <span class="text-muted float-none float-sm-end d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i></span>
           </div>
         </footer>

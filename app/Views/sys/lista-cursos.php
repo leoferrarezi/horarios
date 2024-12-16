@@ -47,7 +47,6 @@
                                 <!-- cabeçalho da tabela -->
                                 <thead>
                                     <tr>
-                                        <th>Id</th>
                                         <th>Nome</th>
                                         <th>Matriz</th>
                                         <th>Ações</th>
@@ -61,7 +60,7 @@
                                     <?php if (!empty($cursos)): //verifica se a tabela tem dados ?>
                                         <?php foreach ($cursos as $curso): //loop para percorrer todos os professores retornados do bd ?>
                                             <tr>
-                                                <td><?php echo esc($curso['id']); ?></td>
+                                                <!--<td><?php echo esc($curso['id']); ?></td>-->
                                                 <td><?php echo esc($curso['nome']); ?></td>
                                                 <td><?php echo esc($curso['nome_matriz']); ?></td>
 
@@ -86,8 +85,6 @@
                                                             </button>
                                                         </span>
                                                         
-                                                        <!-- abaixo são repetidos os códigos acima para replicar os outros 2 botões -->
-
                                                         <span data-bs-toggle="tooltip" data-placement="top" title="Excluir curso">
                                                             <button 
                                                                 type="button"
@@ -100,6 +97,20 @@
                                                                 <i class="fa fa-trash"></i>
                                                             </button>
                                                         </span>
+
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Importar Turmas">
+                                                            <button 
+                                                                type="button"
+                                                                class="justify-content-center align-items-center d-flex btn btn-inverse-info button-trans-info btn-icon me-1"
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#modal-importar-turmas"
+                                                                data-id="<?php echo esc($curso['id']); ?>"
+                                                                data-nome="<?php echo esc($curso['nome']);?>"
+                                                            >
+                                                                <i class="fa fa-upload"></i>
+                                                            </button>
+                                                        </span>
+
                                                     </div>
                                                 </td>
                                             </tr>
@@ -184,7 +195,7 @@
                     //Diz que a coluna 1 (segunda/nome) deve ser o padrão de ordenação ao carregar a tabela
                     order: [ [1, 'asc'] ],
                     //Desativa a ordenação por ações
-                    columns: [null, null, null, { orderable: false }]
+                    columns: [null, null, { orderable: false }]
                 });
 
                 //programação do modal de Edição do curso

@@ -33,7 +33,6 @@
                 <div class="row">
                     <div class="col-12 mb-4">
                         <button type="button" class="btn btn-primary btn-icon-text" data-bs-toggle="modal" data-bs-target="#modal-cad-disciplina"><i class="fa fa-plus-circle btn-icon-prepend"></i> Incluir Disciplina</button>
-                        <button type="button" class="btn btn-info btn-icon-text"><i class="fa fa-upload btn-icon-prepend"></i> Importar Disciplinas do SUAP</a>
                     </div>
                 </div>
 
@@ -47,7 +46,6 @@
                                 <!-- cabeçalho da tabela -->
                                 <thead>
                                     <tr>
-                                        <th>Id</th>
                                         <th>Nome</th>
                                         <th>Código</th>
                                         <th>Matriz</th>
@@ -69,7 +67,6 @@
                                         <?php foreach ($disciplinas as $disciplina): //loop para percorrer todos os professores retornados do bd 
                                         ?>
                                             <tr>
-                                                <td><?php echo esc($disciplina['id']); ?></td>
                                                 <td><?php echo esc($disciplina['nome']); ?></td>
                                                 <td><?php echo esc($disciplina['codigo']); ?></td>
                                                 <td><?php echo esc($disciplina['nome_matriz']); ?></td>
@@ -181,7 +178,7 @@
                         [1, 'asc']
                     ],
                     //Desativa a ordenação por ações
-                    columns: [null, null, null, null, null, null, null, null, null, {
+                    columns: [null, null, null, null, null, null, null, null, {
                         orderable: false
                     }]
                 });

@@ -4,11 +4,11 @@
 <?php echo view('components/temposAulas/modal-deletar'); ?>
 
 <div class="page-header">
-    <h3 class="page-title">GERENCIAR TEMPO DE AULA</h3>
+    <h3 class="page-title">GERENCIAR TEMPOS DE AULA</h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="<?= base_url('/sys/home') ?>">Início</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Lista Tempo de Aula</li>
+            <li class="breadcrumb-item active" aria-current="page">Tempos de Aula</li>
         </ol>
     </nav>
 </div>
@@ -33,7 +33,6 @@
                 <div class="row">
                     <div class="col-12 mb-4">
                         <button type="button" class="btn btn-primary btn-icon-text" data-bs-toggle="modal" data-bs-target="#modal-cad-tempoAula"><i class="fa fa-plus-circle btn-icon-prepend"></i> Incluir Tempo de Aula</button>
-                        <button type="button" class="btn btn-info btn-icon-text"><i class="fa fa-upload btn-icon-prepend"></i> Importar Tempos de Aula do SUAP</a>
                     </div>
                 </div>
 
@@ -47,9 +46,8 @@
                                 <!-- Cabeçalho da tabela -->
                                 <thead>
                                     <tr>
-                                        <th>Id</th>
-                                        <th>Dia da semana</th>
-                                        <th>Horário</th>
+                                        <th>Grade de Horário</th>    
+                                        <th>Dia da semana</th>                                        
                                         <th>Início</th>
                                         <th>Fim</th>
                                         <th>Ações</th>
@@ -63,7 +61,7 @@
                                         <?php foreach ($temposAulas as $ta): // Loop para percorrer os dados 
                                         ?>
                                             <tr>
-                                                <td><?php echo esc($ta['id']); ?></td>
+                                                <td><?php echo esc($ta['nome_horario']); ?></td>
                                                 <td><?php
                                                     // Array de mapeamento dos dias da semana
                                                     $diasSemana = [
@@ -76,8 +74,7 @@
                                                         6 => 'Sábado'
                                                     ];
                                                     echo esc($diasSemana[$ta['dia_semana']]); ?>
-                                                </td>
-                                                <td><?php echo esc($ta['nome_horario']); ?></td>
+                                                </td>                                                
                                                 <td>
                                                     <?php
                                                     // Formata hora e minuto de início para HH:mm
@@ -172,10 +169,10 @@
                     ordering: true,
                     //Diz que a coluna 1 (segunda/nome) deve ser o padrão de ordenação ao carregar a tabela
                     order: [
-                        [1, 'asc']
+                        [2, 'asc']
                     ],
                     //Desativa a ordenação por ações
-                    columns: [null, null, null, null, null, {
+                    columns: [null, null, null, null, {
                         orderable: false
                     }]
                 });

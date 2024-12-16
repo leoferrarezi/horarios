@@ -41,7 +41,7 @@
                         <span data-bs-toggle="tooltip" data-placement="top"
                               title="Importar lista de professores exportada através do SUAP">
                             <button class="btn btn-info btn-icon-text" data-bs-toggle="modal"
-                                    data-bs-target="#modal-import-prof"><i class="fa fa-upload btn-icon-prepend"></i> Importar Professores</button>
+                                    data-bs-target="#modal-import-prof"><i class="fa fa-upload btn-icon-prepend"></i> Importar Professores do SUAP</button>
                         </span>
                     </div>
                 </div>
@@ -57,7 +57,6 @@
 
                                 <thead>
                                 <tr>
-                                    <th>Id</th>
                                     <th>Nome</th>
                                     <th>Email</th>
                                     <th>Ações</th>
@@ -71,7 +70,6 @@
                                 <?php if (!empty($professores)): //verifica se a tabela tem dados ?>
                                     <?php foreach ($professores as $professor): //loop para percorrer todos os professores retornados do bd ?>
                                         <tr>
-                                            <td><?php echo esc($professor['id']); ?></td>
                                             <td><?php echo esc($professor['nome']); ?></td>
                                             <td><?php echo esc($professor['email']); ?></td>
 
@@ -184,7 +182,7 @@
                 //Diz que a coluna 1 (segunda/nome) deve ser o padrão de ordenação ao carregar a tabela
                 order: [[1, 'asc']],
                 //Desativa a ordenação por e-mail e por ações
-                columns: [null, null, {orderable: false}, {orderable: false}]
+                columns: [null, null, {orderable: false}]
             });
 
             //programação do modal de Edição do professor

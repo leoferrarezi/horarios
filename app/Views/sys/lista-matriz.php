@@ -47,7 +47,6 @@
                                 <!-- cabeçalho da tabela -->
                                 <thead>
                                     <tr>
-                                        <th>Id</th>
                                         <th>Nome</th>
                                         <th>Ações</th>
                                     </tr>
@@ -60,7 +59,7 @@
                                     <?php if (!empty($matrizes)): //verifica se a tabela tem dados ?>
                                         <?php foreach ($matrizes as $matriz): //loop para percorrer todos os professores retornados do bd ?>
                                             <tr>
-                                                <td><?php echo esc($matriz['id']); ?></td>
+                                                <!--<td><?php echo esc($matriz['id']); ?></td>-->
                                                 <td><?php echo esc($matriz['nome']); ?></td>
 
                                                 <!-- essa celula monta os botões de ação que acionam modais -->
@@ -83,8 +82,6 @@
                                                             </button>
                                                         </span>
                                                         
-                                                        <!-- abaixo são repetidos os códigos acima para replicar os outros 2 botões -->
-
                                                         <span data-bs-toggle="tooltip" data-placement="top" title="Excluir matriz">
                                                             <button 
                                                                 type="button"
@@ -95,6 +92,19 @@
                                                                 data-nome="<?php echo esc($matriz['nome']);?>"
                                                             >
                                                                 <i class="fa fa-trash"></i>
+                                                            </button>
+                                                        </span>
+
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Importar disciplinas da Matriz">
+                                                            <button 
+                                                                type="button"
+                                                                class="justify-content-center align-items-center d-flex btn btn-inverse-info button-trans-info btn-icon me-1"
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#modal-importar-disciplinas"
+                                                                data-id="<?php echo esc($matriz['id']); ?>"
+                                                                data-nome="<?php echo esc($matriz['nome']);?>"
+                                                            >
+                                                                <i class="fa fa-upload"></i>
                                                             </button>
                                                         </span>
                                                     </div>
@@ -154,7 +164,7 @@
                     //Diz que a coluna 1 (segunda/nome) deve ser o padrão de ordenação ao carregar a tabela
                     order: [ [1, 'asc'] ],
                     //Desativa a ordenação por ações
-                    columns: [null, null, { orderable: false }]
+                    columns: [null, { orderable: false }]
                 });
 
 

@@ -41,16 +41,7 @@
             </span>
             <span class="menu-title">Página inicial</span>
           </a>
-        </li>
-
-        <li class="nav-item menu-items">
-          <a class="nav-link" href="<?php echo base_url('sys/relatorios'); ?>">
-            <span class="menu-icon">
-              <i class="mdi mdi-laptop"></i>
-            </span>
-            <span class="menu-title">Relatórios</span>
-          </a>
-        </li>
+        </li>        
 
         <li class="nav-item nav-category">
           <span class="nav-link">Gestão de Horários</span>
@@ -154,6 +145,19 @@
               <i class="mdi mdi-human-male-board"></i>
             </span>
             <span class="menu-title">Aulas</span>
+          </a>
+        </li>
+
+        <li class="nav-item nav-category">
+          <span class="nav-link">Relatórios</span>
+        </li>
+
+        <li class="nav-item menu-items">
+          <a class="nav-link" href="<?php echo base_url('sys/relatorios'); ?>">
+            <span class="menu-icon">
+              <i class="mdi mdi-laptop"></i>
+            </span>
+            <span class="menu-title">Em construção...</span>
           </a>
         </li>
         

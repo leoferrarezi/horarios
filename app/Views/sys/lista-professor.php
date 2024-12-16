@@ -1,9 +1,9 @@
 <!-- incluir os componentes modais antes do restante do documento -->
-<?php echo view('components/modal-edit-prof'); ?>
-<?php echo view('components/modal-cad-prof'); ?>
-<?php echo view('components/modal-deletar-prof') ?>
-<?php echo view('components/modal-import-prof') ?>
-<?php echo view('components/modal-restricoes-prof') ?>
+<?php echo view('components/professor/modal-edit-prof'); ?>
+<?php echo view('components/professor/modal-cad-prof'); ?>
+<?php echo view('components/professor/modal-deletar-prof') ?>
+<?php echo view('components/professor/modal-import-prof') ?>
+<?php echo view('components/professor/modal-restricoes-prof') ?>
 
 <div class="page-header">
     <h3 class="page-title">GERENCIAR PROFESSORES</h3>

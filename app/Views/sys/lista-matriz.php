@@ -2,6 +2,7 @@
 <?php echo view('components/matriz/modal-edit-matriz'); ?>
 <?php echo view('components/matriz/modal-cad-matriz'); ?>    
 <?php echo view('components/matriz/modal-deletar-matriz') ?>
+<?php echo view('components/matriz/modal-import-matriz') ?>
 
 <div class="page-header">
     <h3 class="page-title">GERENCIAR MATRIZES</h3>
@@ -33,7 +34,8 @@
                 <div class="row">
                     <div class="col-12 mb-4">
                         <button type="button" class="btn btn-primary btn-icon-text" data-bs-toggle="modal" data-bs-target="#modal-cad-matriz"><i class="fa fa-plus-circle btn-icon-prepend"></i> Incluir Matriz</button>
-                        <button type="button" class="btn btn-info btn-icon-text"><i class="fa fa-upload btn-icon-prepend"></i> Importar Matrizes do SUAP</a>
+                        <button class="btn btn-info btn-icon-text" data-bs-toggle="modal"
+                                    data-bs-target="#modal-import-matriz"><i class="fa fa-upload btn-icon-prepend"></i> Importar Matrizes do SUAP</button>
                     </div>
                 </div>
 

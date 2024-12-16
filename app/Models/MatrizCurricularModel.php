@@ -99,4 +99,12 @@ class MatrizCurricularModel extends Model
         // Retorna as tabelas onde o ID foi encontrado
         return $referenciasEncontradas;
     }
+
+    public function getMatrizesNome()
+    {
+        $builder = $this->builder();
+        $builder->select('nome');
+        $query = $builder->get();
+        return $query->getResultArray();
+    }
 }

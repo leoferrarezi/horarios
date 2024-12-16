@@ -62,6 +62,8 @@ $routes->group('sys', function ($routes) {
         $routes->post('deletar', 'MatrizCurricular::deletar');
         $routes->post('importar', 'MatrizCurricular::importar');
         $routes->post('processarImportacao', 'MatrizCurricular::processarImportacao');
+        $routes->post('importarDisciplinas', 'MatrizCurricular::importarDisciplinas');
+        $routes->post('processarImportacaoDisciplinas', 'MatrizCurricular::processarImportacaoDisciplinas');        
     });
 
     $routes->group('horario', function ($routes) {

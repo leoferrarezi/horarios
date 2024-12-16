@@ -3,6 +3,7 @@
 <?php echo view('components/matriz/modal-cad-matriz'); ?>    
 <?php echo view('components/matriz/modal-deletar-matriz') ?>
 <?php echo view('components/matriz/modal-import-matriz') ?>
+<?php echo view('components/matriz/modal-import-disciplinas') ?>
 
 <div class="page-header">
     <h3 class="page-title">GERENCIAR MATRIZES</h3>
@@ -102,7 +103,7 @@
                                                                 type="button"
                                                                 class="justify-content-center align-items-center d-flex btn btn-inverse-info button-trans-info btn-icon me-1"
                                                                 data-bs-toggle="modal" 
-                                                                data-bs-target="#modal-importar-disciplinas"
+                                                                data-bs-target="#modal-import-disciplinas"
                                                                 data-id="<?php echo esc($matriz['id']); ?>"
                                                                 data-nome="<?php echo esc($matriz['nome']);?>"
                                                             >
@@ -196,6 +197,19 @@
                     var modal = $(this);
                     modal.find('#deletar-id').val(id);
                     modal.find('#deletar-nome').text(nome);
+                });
+
+                $('#modal-import-disciplinas').on('show.bs.modal', function (event) {
+                    // Button that triggered the modal
+                    var button = $(event.relatedTarget); 
+
+                    // Extract info from data-* attributes
+                    var nome = button.data('nome');
+                    var id = button.data('id');
+
+                    var modal = $(this);
+                    modal.find('#matriz-id').val(id);
+                    modal.find('#matriz-nome').text(nome);
                 });
 
                 //Ativa os tooltips dos botões

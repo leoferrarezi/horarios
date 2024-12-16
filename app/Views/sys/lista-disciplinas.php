@@ -41,7 +41,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive">
-                            <table class="table mb-4" id="listagem-disciplina">
+                            <table class="table table-sm" id="listagem-disciplina">
 
                                 <!-- cabeçalho da tabela -->
                                 <thead>
@@ -50,7 +50,7 @@
                                         <th>Código</th>
                                         <th>Matriz</th>
                                         <th>Carga Hóraria</th>
-                                        <th>Tempo máximo diário</th>
+                                        <th>Máx CH Dia</th>
                                         <th>Período</th>
                                         <th>Abreviatura</th>
                                         <th>Grupo Ambiente</th>
@@ -72,7 +72,7 @@
                                                 <td><?php echo esc($disciplina['nome_matriz']); ?></td>
                                                 <td><?php echo esc($disciplina['ch']); ?></td>
                                                 <td><?php echo esc($disciplina['max_tempos_diarios']); ?></td>
-                                                <td><?php echo esc($disciplina['periodo']); ?></td>
+                                                <td><?php echo ($disciplina['periodo'] == "0") ? "-" : esc($disciplina['periodo']) . "º"; ?></td>
                                                 <td><?php echo esc($disciplina['abreviatura']); ?></td>
                                                 <td><?php echo esc($disciplina['grupo_de_ambiente']); ?></td>
 

@@ -1,10 +1,10 @@
-<div class="modal fade" id="modal-import-matriz" tabindex="-1" aria-labelledby="ModalLabel" style="display: none;" aria-hidden="true">
+<div class="modal fade" id="modal-import-disciplinas" tabindex="-1" aria-labelledby="ModalLabel" style="display: none;" aria-hidden="true">
     <div class="modal-dialog" role="document">
-
         <div class="modal-content">
 
             <div class="modal-header">
-                <h5 class="modal-title" id="ModalLabel">Importar Matrizes</h5>
+                <h5 class="modal-title" id="ModalLabel">Importar Disciplinas da Matriz:<br>
+                <span id="matriz-nome"></span></h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -16,15 +16,17 @@
                         <i class="fa fa-info-circle"></i><strong>Caminho para exportação destes dados no SUAP:</strong><br>
                         Ensino -> Cursos, Matrizes e Componentes -> Matrizes Curriculares<br>
                         Aplicar os devidos filtros (Campus)<br>
+                        Clicar na "lupa" para listar as disciplinas da matriz correspondente<br>
                         Clicar no botão [Exportar para XLS], no canto superior direito.<br>
                         Salvar o arquivo e então enviar através do campo abaixo.
                     </div>
                 </div>
             </div>
 
-            <form id="importarMatriz" class="forms-sample" method="post" action='<?php echo base_url('sys/matriz/importar'); ?>' enctype="multipart/form-data">
+            <form id="importarDisciplinaMatriz" class="forms-sample" method="post" action='<?php echo base_url('sys/matriz/importarDisciplinas'); ?>' enctype="multipart/form-data">
                 <div class="modal-body">
                     <?php echo csrf_field() ?>
+                    <input type="hidden" id="matriz-id" name="matriz-id" />
                     <div class="form-group">
                         <label>Enviar arquivo</label>
                         <input type="file" name="arquivo" class="file-upload-default">

@@ -2,6 +2,7 @@
 <?php echo view('components/curso/modal-edit-curso'); ?>
 <?php echo view('components/curso/modal-cad-curso'); ?>    
 <?php echo view('components/curso/modal-deletar-curso') ?>
+<?php echo view('components/curso/modal-import-curso') ?>
 
 <div class="page-header">
     <h3 class="page-title">GERENCIAR CURSOS</h3>
@@ -33,7 +34,8 @@
                 <div class="row">
                     <div class="col-12 mb-4">
                         <button type="button" class="btn btn-primary btn-icon-text" data-bs-toggle="modal" data-bs-target="#modal-cad-curso"><i class="fa fa-plus-circle btn-icon-prepend"></i> Incluir Curso</button>
-                        <button type="button" class="btn btn-info btn-icon-text"><i class="fa fa-upload btn-icon-prepend"></i> Importar Cursos do SUAP</a>
+                        <button class="btn btn-info btn-icon-text" data-bs-toggle="modal"
+                                    data-bs-target="#modal-import-curso"><i class="fa fa-upload btn-icon-prepend"></i> Importar Cursos do SUAP</button>
                     </div>
                 </div>
 
@@ -95,19 +97,6 @@
                                                                 data-nome="<?php echo esc($curso['nome']);?>"
                                                             >
                                                                 <i class="fa fa-trash"></i>
-                                                            </button>
-                                                        </span>
-
-                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Importar Turmas">
-                                                            <button 
-                                                                type="button"
-                                                                class="justify-content-center align-items-center d-flex btn btn-inverse-info button-trans-info btn-icon me-1"
-                                                                data-bs-toggle="modal" 
-                                                                data-bs-target="#modal-importar-turmas"
-                                                                data-id="<?php echo esc($curso['id']); ?>"
-                                                                data-nome="<?php echo esc($curso['nome']);?>"
-                                                            >
-                                                                <i class="fa fa-upload"></i>
                                                             </button>
                                                         </span>
 

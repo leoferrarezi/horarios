@@ -64,4 +64,12 @@ class CursosModel extends Model
                     ->join('matrizes as matriz', 'matriz.id = cursos.matriz_id') // Relacionamento com a tabela users
                     ->findAll(); // Retorna todos os registros
     }
+
+    public function getCursosNome()
+    {
+        $builder = $this->builder();
+        $builder->select('nome');
+        $query = $builder->get();
+        return $query->getResultArray();
+    }
 }

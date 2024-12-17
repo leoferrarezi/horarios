@@ -6,6 +6,8 @@ use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\CursosModel;
 use App\Models\MatrizCurricularModel;
+use PhpOffice\PhpSpreadsheet\Reader\Xls;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 class Cursos extends BaseController
 {
@@ -74,5 +76,79 @@ class Cursos extends BaseController
         } else {
             return redirect()->to(base_url('/sys/curso'))->with('erro', 'Falha ao deletar curso');
         }
+    }
+
+    public function importar() {
+
+        $file = $this->request->getFile('arquivo');
+
+        if (!$file->isValid()) {
+            return $this->response->setStatusCode(ResponseInterface::HTTP_BAD_REQUEST)
+                ->setBody('Erro: Arquivo não enviado.');
+        }
+
+        $extension = $file->getClientExtension();
+        if (!in_array($extension, ['xls', 'xlsx'])) {
+            return $this->response->setStatusCode(ResponseInterface::HTTP_UNSUPPORTED_MEDIA_TYPE)
+                ->setBody('Erro: Formato de arquivo não suportado. Apenas XLSX ou XLS');
+        }
+
+        $reader = $extension === 'xlsx' ? new Xlsx() : new Xls();
+
+        try {
+            $spreadsheet = $reader->load($file->getRealPath());
+        } catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) {
+            return $this->response->setStatusCode(ResponseInterface::HTTP_INTERNAL_SERVER_ERROR)
+                ->setBody('Erro ao carregar o arquivo: ' . $e->getMessage());
+        }
+
+        $sheet = $spreadsheet->getActiveSheet();
+        $dataRows = [];
+
+        $cursosModel = new CursosModel();
+        $data['cursosExistentes'] = [];
+
+        foreach($cursosModel->getCursosNome() as $k)
+        {
+            array_push($data['cursosExistentes'],$k['nome']);
+        }
+
+        // Lê os dados da planilha
+        foreach ($sheet->getRowIterator() as $row) {
+            $cellIterator = $row->getCellIterator();
+            $cellIterator->setIterateOnlyExistingCells(false);
+
+            $rowData = [];
+            foreach ($cellIterator as $cell) {
+                $rowData[] = $cell->getValue();
+            }
+
+            $jaTem = false;
+
+            foreach($dataRows as $k => $v)
+            {
+                foreach($v as $k2 => $v2)
+                {                    
+                    if(strcasecmp($rowData[1], $v2) == 0) {
+                        $jaTem = true;
+                    }                    
+                }
+            }
+            
+            if(!$jaTem) {
+                $dataRows[] = [
+                    'nome' => $rowData[1] ?? null,
+                    'matriz' => $rowData[33] ?? null, //75 - Análise e Desenvolvimento de Sistemas 2015 (2015) - 2549.99 horas
+                ];
+            }            
+        }
+
+        // Remove cabeçalho
+        array_shift($dataRows);
+
+        // Exibe os dados lidos na view
+        $data['matrizes'] = $dataRows;
+        $data['content'] = view('sys/importar-curso-form', $data);
+        return view('dashboard', $data);
     }
 }

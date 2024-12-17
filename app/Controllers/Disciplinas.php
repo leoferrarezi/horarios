@@ -38,7 +38,7 @@ class Disciplinas extends BaseController
         $dadosLimpos['max_tempos_diarios'] = strip_tags($dadosPost['max_tempos_diarios']);
         $dadosLimpos['periodo'] = strip_tags($dadosPost['periodo']);
         $dadosLimpos['abreviatura'] = strip_tags($dadosPost['abreviatura']);
-        $dadosLimpos['grupo_de_ambientes_id'] = strip_tags($dadosPost['grupo_de_ambientes_id']);
+        $dadosLimpos['grupo_de_ambientes_id'] = strip_tags($dadosPost['grupo_de_ambientes_id']) ?? "";
 
         //tenta cadastrar o nova disciplina no banco
         if ($disciplinaModel->insert($dadosLimpos)) {
@@ -62,7 +62,7 @@ class Disciplinas extends BaseController
         $dadosLimpos['max_tempos_diarios'] = strip_tags($dadosPost['max_tempos_diarios']);
         $dadosLimpos['periodo'] = strip_tags($dadosPost['periodo']);
         $dadosLimpos['abreviatura'] = strip_tags($dadosPost['abreviatura']);
-        $dadosLimpos['grupo_de_ambientes_id'] = strip_tags($dadosPost['grupo_de_ambientes_id']);
+        $dadosLimpos['grupo_de_ambientes_id'] = $dadosPost['grupo_de_ambientes_id'] ?? null;
 
         $disciplinaModel = new DisciplinasModel();
         if($disciplinaModel->save($dadosLimpos)){

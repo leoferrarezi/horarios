@@ -9,12 +9,11 @@
 <?php echo view('components/grupo-ambientes/modal-listar-ambientes'); ?>
 
 <div class="page-header">
-    <h3 class="page-title">CADASTRO DE AMBIENTES E GRUPOS DE AMBIENTES</h3>
+    <h3 class="page-title">GERENCIAMENTO DE AMBIENTES</h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="<?= base_url('/sys/home') ?>">Início</a></li>
-            <li class="breadcrumb-item"><a href="#">Ambientes</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Cadastro de ambientes</li>
+            <li class="breadcrumb-item active" aria-current="page">Gerenciamento de Ambientes</li>
         </ol>
     </nav>
 </div>
@@ -50,7 +49,7 @@
     <div class="col-md-4 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">AMBIENTE - INSIRA AS INFORMAÇÕES</h4>
+                <h4 class="card-title">AMBIENTES</h4>
                 <?php if (!empty($erros)): ?>
                     <?php foreach ($erros as $campo => $erro): ?>
                         <div class="alert alert-fill-danger" role="alert">
@@ -66,63 +65,64 @@
                     </div>
                 </div>
 
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="table-responsive">
-                        <table class="table mb-4">
-                            <thead>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>Nome</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if (!empty($ambientes)): ?>
-                                    <?php foreach ($ambientes as $ambiente): ?>
-                                        <tr>
-                                            <td><?= esc($ambiente['id']); ?></td>
-                                            <td><?= esc($ambiente['nome']); ?></td>
-                                            <td>
-                                                <div class="d-flex">
-                                                    <span data-bs-toggle="tooltip" data-placement="top" title="Atualizar dados do grupo">
-                                                        <!-- botão com estilo, ativação do modal, e dados formados para transmitir ao modal -->
-                                                        <button
-                                                            type="button"
-                                                            class="justify-content-center align-items-center d-flex btn btn-inverse-success button-trans-success btn-icon me-1"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#modal-edit-ambientes-<?= $ambiente['id']; ?>"
-                                                            data-id="<?php echo esc($ambiente['id']); ?>"
-                                                            data-nome="<?php echo esc($ambiente['nome']); ?>">
-                                                            <!-- icone do botão -->
-                                                            <i class="fa fa-edit"></i>
-                                                        </button>
-                                                    </span>
 
-
-                                                    <span data-bs-toggle="tooltip" data-placement="top" title="Excluir Grupo">
-                                                        <button
-                                                            type="button"
-                                                            class="justify-content-center align-items-center d-flex btn btn-inverse-danger button-trans-danger btn-icon me-1"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#modal-deletar-ambientes-<?= $ambiente['id']; ?>"
-                                                            data-id="<?php echo esc($ambiente['id']); ?>"
-                                                            data-nome="<?php echo esc($ambiente['nome']); ?>">
-                                                            <i class="fa fa-trash"></i>
-                                                        </button>
-                                                    </span>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table class="table mb-4">
+                                <thead>
                                     <tr>
-                                        <td colspan="5">Nenhum ambiente cadastrado.</td>
+                                        <th>Id</th>
+                                        <th>Nome</th>
+                                        <th>Ações</th>
                                     </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    <?php if (!empty($ambientes)): ?>
+                                        <?php foreach ($ambientes as $ambiente): ?>
+                                            <tr>
+                                                <td><?= esc($ambiente['id']); ?></td>
+                                                <td><?= esc($ambiente['nome']); ?></td>
+                                                <td>
+                                                    <div class="d-flex">
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Atualizar dados do grupo">
+                                                            <!-- botão com estilo, ativação do modal, e dados formados para transmitir ao modal -->
+                                                            <button
+                                                                type="button"
+                                                                class="justify-content-center align-items-center d-flex btn btn-inverse-success button-trans-success btn-icon me-1"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modal-edit-ambientes-<?= $ambiente['id']; ?>"
+                                                                data-id="<?php echo esc($ambiente['id']); ?>"
+                                                                data-nome="<?php echo esc($ambiente['nome']); ?>">
+                                                                <!-- icone do botão -->
+                                                                <i class="fa fa-edit"></i>
+                                                            </button>
+                                                        </span>
+
+
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Excluir Grupo">
+                                                            <button
+                                                                type="button"
+                                                                class="justify-content-center align-items-center d-flex btn btn-inverse-danger button-trans-danger btn-icon me-1"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modal-deletar-ambientes-<?= $ambiente['id']; ?>"
+                                                                data-id="<?php echo esc($ambiente['id']); ?>"
+                                                                data-nome="<?php echo esc($ambiente['nome']); ?>">
+                                                                <i class="fa fa-trash"></i>
+                                                            </button>
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <tr>
+                                            <td colspan="5">Nenhum ambiente cadastrado.</td>
+                                        </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -133,7 +133,7 @@
     <div class="col-md-8 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">GRUPO DE AMBIENTES - INSIRA AS INFORMAÇÕES</h4>
+                <h4 class="card-title">GRUPO DE AMBIENTES</h4>
                 <?php if (!empty($erros)): ?>
                     <?php foreach ($erros as $campo => $erro): ?>
                         <div class="alert alert-fill-danger" role="alert">

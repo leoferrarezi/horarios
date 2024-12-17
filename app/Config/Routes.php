@@ -20,9 +20,14 @@ $routes->get('sys/cadastro-turmas', 'Turmas::index');
 
 //cadastro de ambientes (em construção)
 $routes->get('sys/cadastro-ambientes', 'Ambientes::index');
-$routes->post('sys/cadastro-ambientes/salvar', 'Ambientes::salvar');
-$routes->post('sys/cadastro-ambientes/deletar/(:num)', 'Ambientes::deletar/$1');
-$routes->post('sys/cadastro-ambientes/atualizar/(:num)', 'Ambientes::atualizar/$1');
+$routes->post('sys/cadastro-ambientes/salvar-ambiente', 'Ambientes::salvarAmbiente');
+$routes->post('sys/cadastro-ambientes/deletar-ambiente', 'Ambientes::deletarAmbiente');
+$routes->post('sys/cadastro-ambientes/atualizar-ambiente', 'Ambientes::atualizarAmbiente');
+$routes->post('sys/cadastro-ambientes/salvar-grupo-ambientes', 'Ambientes::salvarGrupoAmbientes');
+$routes->post('sys/cadastro-ambientes/deletar-grupo-ambientes', 'Ambientes::deletarGrupoAmbientes');
+$routes->post('sys/cadastro-ambientes/editar-grupo-ambientes', 'Ambientes::editarGrupoAmbientes');
+$routes->post('sys/cadastro-ambientes/adicionar-ambientes-grupo', 'Ambientes::adicionarAmbientesAoGrupo');
+$routes->post('sys/cadastro-ambientes/remover-ambientes-grupo', 'Ambientes::removerAmbienteDoGrupo');
 
 //cadastro de aulas (em construção)
 $routes->get('sys/cadastro-aulas', 'Aulas::index');

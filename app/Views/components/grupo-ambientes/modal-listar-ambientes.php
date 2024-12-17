@@ -13,7 +13,7 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="table-responsive">
-                                <table class="table mb-4">
+                                <table class="table mb-4 custom-table">
                                     <thead>
                                         <tr>
                                             <th>Nome do Ambiente</th>

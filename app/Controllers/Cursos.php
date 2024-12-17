@@ -108,13 +108,22 @@ class Cursos extends BaseController
         $cursosModel = new CursosModel();
         $data['cursosExistentes'] = [];
 
+        $matrizModel = new MatrizCurricularModel();
+
         foreach($cursosModel->getCursosNome() as $k)
         {
             array_push($data['cursosExistentes'],$k['nome']);
         }
 
         // Lê os dados da planilha
+        $primeiraLinha = true;
         foreach ($sheet->getRowIterator() as $row) {
+
+            if($primeiraLinha) {
+                $primeiraLinha = false;
+                continue;
+            }
+
             $cellIterator = $row->getCellIterator();
             $cellIterator->setIterateOnlyExistingCells(false);
 
@@ -136,9 +145,18 @@ class Cursos extends BaseController
             }
             
             if(!$jaTem) {
+                $matriz = (isset($rowData[33])) ? explode(" - ", $rowData[33]) : null;
+                $matriz = (is_array($matriz)) ? $matriz[count($matriz)-2] : null;
+                $matriz = substr($matriz, 0, -7);
+
+                $existe = 0;
+                if($matrizModel->checkMatrizExists($matriz) > 0)
+                    $existe = 1;                    
+
                 $dataRows[] = [
                     'nome' => $rowData[1] ?? null,
-                    'matriz' => $rowData[33] ?? null, //75 - Análise e Desenvolvimento de Sistemas 2015 (2015) - 2549.99 horas
+                    'matriz' => $matriz ?? null,
+                    'matrizExiste' => $existe,
                 ];
             }            
         }
@@ -147,8 +165,40 @@ class Cursos extends BaseController
         array_shift($dataRows);
 
         // Exibe os dados lidos na view
-        $data['matrizes'] = $dataRows;
+        $data['cursos'] = $dataRows;
         $data['content'] = view('sys/importar-curso-form', $data);
         return view('dashboard', $data);
+    }
+
+    public function processarImportacao() {
+
+        $selecionados = $this->request->getPost('selecionados');
+
+        if (empty($selecionados)) {
+            session()->setFlashdata('erro', 'Nenhum registro selecionado para importação.');
+            return redirect()->to(base_url('/sys/curso'));
+        }
+
+        $cursoModel = new CursosModel();
+        $matrizModel = new MatrizCurricularModel();
+
+        $insertedCount = 0;
+
+        foreach ($selecionados as $registroJson) {
+
+            $registro = json_decode($registroJson, true);
+
+            unset($registro['matrizExiste']);
+
+            $registro['matriz_id'] = $matrizModel->getIdByNome($registro['matriz']);
+
+            if (!empty($registro['nome'])) {
+                $cursoModel->insert($registro);
+                $insertedCount++;
+            }
+        }
+
+        session()->setFlashdata('sucesso', "{$insertedCount} registros importados com sucesso!");
+        return redirect()->to(base_url('/sys/curso'));
     }
 }

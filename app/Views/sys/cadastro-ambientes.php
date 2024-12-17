@@ -55,7 +55,6 @@
                         <div class="alert alert-fill-danger" role="alert">
                             <i class="mdi mdi-alert-circle"></i> <?php echo esc($erro) ?>
                         </div>
-
                     <?php endforeach; ?>
                 <?php endif; ?>
 
@@ -65,14 +64,12 @@
                     </div>
                 </div>
 
-
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive">
-                            <table class="table mb-4">
+                            <table class="table mb-4 custom-table">
                                 <thead>
                                     <tr>
-                                        <th>Id</th>
                                         <th>Nome</th>
                                         <th>Ações</th>
                                     </tr>
@@ -81,11 +78,10 @@
                                     <?php if (!empty($ambientes)): ?>
                                         <?php foreach ($ambientes as $ambiente): ?>
                                             <tr>
-                                                <td><?= esc($ambiente['id']); ?></td>
                                                 <td><?= esc($ambiente['nome']); ?></td>
                                                 <td>
                                                     <div class="d-flex">
-                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Atualizar dados do grupo">
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Atualizar dados do ambiente">
                                                             <!-- botão com estilo, ativação do modal, e dados formados para transmitir ao modal -->
                                                             <button
                                                                 type="button"
@@ -99,8 +95,7 @@
                                                             </button>
                                                         </span>
 
-
-                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Excluir Grupo">
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Excluir ambiente">
                                                             <button
                                                                 type="button"
                                                                 class="justify-content-center align-items-center d-flex btn btn-inverse-danger button-trans-danger btn-icon me-1"
@@ -152,10 +147,9 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive">
-                            <table class="table mb-4">
+                            <table class="table mb-4 custom-table">
                                 <thead>
                                     <tr>
-                                        <th>Id</th>
                                         <th>Nome</th>
                                         <th>Ações</th>
                                     </tr>
@@ -164,7 +158,6 @@
                                     <?php if (!empty($grupos)): ?>
                                         <?php foreach ($grupos as $grupo): ?>
                                             <tr>
-                                                <td><?= esc($grupo['id']); ?></td>
                                                 <td><?= esc($grupo['nome']); ?></td>
                                                 <td>
                                                     <div class="d-flex">
@@ -240,3 +233,28 @@
         </div>
     </div>
 </div>
+
+<!-- Estilização das tabelas -->
+<style>
+    .custom-table td,
+    .custom-table th {
+        padding: 0.3rem 0.5rem;
+    }
+
+    .button-trans-success,
+    .button-trans-danger {
+        margin: 0;
+    }
+
+    .d-flex .btn-icon {
+        margin-right: 0.3rem;
+        width: 2rem;
+        height:2rem;;
+    }
+
+    .table td,
+    .table th {
+        line-height: 1.2;
+        height: auto;
+    }
+</style>

@@ -184,12 +184,19 @@ class Ambientes extends BaseController
         }
 
         foreach ($ambientes as $ambienteId) {
+            if ($ambienteGrupoModel
+                ->where('grupo_de_ambiente_id', $grupoId)
+                ->where('ambiente_id', $ambienteId)
+                ->first()
+            ) {
+                session()->setFlashdata('erro', "O ambiente já está no grupo.");
+                return redirect()->to(base_url('/sys/cadastro-ambientes'))->withInput();
+            }
             $ambienteGrupoModel->insert([
                 'grupo_de_ambiente_id' => $grupoId,
                 'ambiente_id' => $ambienteId,
             ]);
         }
-
         session()->setFlashdata('sucesso', 'Ambientes adicionados ao grupo com sucesso.');
         return redirect()->to(base_url('/sys/cadastro-ambientes'));
     }

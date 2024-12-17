@@ -4,9 +4,13 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
+
 use App\Models\TurmasModel;
 use App\Models\HorariosModel;
 use App\Models\CursosModel;
+
+use PhpOffice\PhpSpreadsheet\Reader\Xls;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 class Turmas extends BaseController
 {
@@ -75,6 +79,7 @@ class Turmas extends BaseController
             return redirect()->to(base_url('/sys/turma'))->with('erros', $data['erros']); //retora com os erros
         }
     }
+
     public function deletar()
     {
 
@@ -89,5 +94,77 @@ class Turmas extends BaseController
         } else {
             return redirect()->to(base_url('/sys/turma'))->with('erro', 'Falha ao deletar disciplina');
         }
+    }
+
+    public function importar() {
+
+        $file = $this->request->getFile('arquivo');
+
+        if (!$file->isValid()) {
+            return $this->response->setStatusCode(ResponseInterface::HTTP_BAD_REQUEST)
+                ->setBody('Erro: Arquivo não enviado.');
+        }
+
+        $extension = $file->getClientExtension();
+        if (!in_array($extension, ['xls', 'xlsx'])) {
+            return $this->response->setStatusCode(ResponseInterface::HTTP_UNSUPPORTED_MEDIA_TYPE)
+                ->setBody('Erro: Formato de arquivo não suportado. Apenas XLSX ou XLS');
+        }
+
+        $reader = $extension === 'xlsx' ? new Xlsx() : new Xls();
+
+        try {
+            $spreadsheet = $reader->load($file->getRealPath());
+        } catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) {
+            return $this->response->setStatusCode(ResponseInterface::HTTP_INTERNAL_SERVER_ERROR)
+                ->setBody('Erro ao carregar o arquivo: ' . $e->getMessage());
+        }
+
+        $sheet = $spreadsheet->getActiveSheet();
+        $dataRows = [];
+
+        $turmaModel = new TurmasModel();
+        $data['turmasExistentes'] = [];
+
+        // Lê os dados da planilha
+        $primeiraLinha = true;
+        foreach ($sheet->getRowIterator() as $row) {
+
+            if($primeiraLinha) {
+                $primeiraLinha = false;
+                continue;
+            }
+
+            $cellIterator = $row->getCellIterator();
+            $cellIterator->setIterateOnlyExistingCells(false);
+
+            $rowData = [];
+            foreach ($cellIterator as $cell) {
+                $rowData[] = $cell->getValue();
+            }
+
+            $curso = (isset($rowData[1])) ? explode(", ", $rowData[1]) : null;
+            $curso = (is_array($curso)) ? $curso[0] : null;
+
+            $codigo = (isset($rowData[0])) ? explode(".", $rowData[0]) : null;
+            $periodo = (is_array($codigo)) ? $codigo[1] : null;
+
+            $dataRows[] = [
+                'codigo' => $rowData[0] ?? null,
+                'sigla' => $rowData[2] ?? null,
+                'ano' => $rowData[3] ?? null,
+                'semestre' => $rowData[4] ?? null,
+                'curso' => $curso,
+                'periodo' => $periodo
+            ];            
+        }
+
+        // Remove cabeçalho
+        array_shift($dataRows);
+
+        // Exibe os dados lidos na view
+        $data['turmas'] = $dataRows;
+        $data['content'] = view('sys/importar-turmas-form', $data);
+        return view('dashboard', $data);
     }
 }

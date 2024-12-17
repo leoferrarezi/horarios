@@ -36,8 +36,8 @@ class TurmasModel extends Model
         'semestre' => 'required|regex_match[/^[12]$/]', //verifica se 1 ou 2.
         'curso_id' => 'required|max_length[11]|is_not_unique[cursos.id]',
         'tempos_diarios' => 'permit_empty|is_natural|max_length[2]',
-        'horario_id' => 'required|is_not_unique[horarios.id]|max_length[11]',
-        'horario_preferencial_id' => 'permit_empty|is_not_unique[horarios.id]|max_length[11]',
+        'horario_id' => 'permit_empty|is_not_unique[horarios.id]|max_length[11]',
+        'horario_preferencial_id' => 'permit_empty|is_not_unique[horarios.id]|max_length[11]'
     ];
     protected $validationMessages   = [
         'codigo' => [
@@ -67,7 +67,7 @@ class TurmasModel extends Model
             'max_length'   => 'O campo tempos diários não pode exceder 2 caracteres.'
         ],
         'horario_id' => [
-            'required'      => 'O campo horário é obrigatório.',
+            'permit_empty'  => 'O campo horário é opcional.',
             'is_not_unique' => 'O horário informado não existe no banco de dados.',
             'max_length'    => 'O campo horário não pode exceder 11 caracteres.'
         ],

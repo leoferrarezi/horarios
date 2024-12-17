@@ -2,6 +2,7 @@
 <?php echo view('components/turmas/modal-edit-turma'); ?>
 <?php echo view('components/turmas/modal-cad-turma'); ?>
 <?php echo view('components/turmas/modal-deletar-turma') ?>
+<?php echo view('components/turmas/modal-import-turma') ?>
 
 <div class="page-header">
     <h3 class="page-title">GERENCIAR TURMAS</h3>
@@ -33,6 +34,8 @@
                 <div class="row">
                     <div class="col-12 mb-4">
                         <button type="button" class="btn btn-primary btn-icon-text" data-bs-toggle="modal" data-bs-target="#modal-cad-turmas"><i class="fa fa-plus-circle btn-icon-prepend"></i> Incluir Turma</button>
+                        <button class="btn btn-info btn-icon-text" data-bs-toggle="modal"
+                                    data-bs-target="#modal-import-turmas"><i class="fa fa-upload btn-icon-prepend"></i> Importar Turmas do SUAP</button>
                     </div>
                 </div>
 

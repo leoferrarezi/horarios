@@ -89,6 +89,7 @@ $routes->group('sys', function ($routes) {
         $routes->post('importar', 'Cursos::importar');
         $routes->post('processarImportacao', 'Cursos::processarImportacao');
     });
+
     $routes->group('disciplina', function ($routes) {
         //CRUD Disciplinas
         $routes->get('', 'Disciplinas::index');
@@ -98,6 +99,7 @@ $routes->group('sys', function ($routes) {
         $routes->post('atualizar', 'Disciplinas::atualizar');
         $routes->post('deletar', 'Disciplinas::deletar');
     });
+
     $routes->group('tempoAula', function ($routes) {
         
         $routes->get('', 'TemposAula::index');
@@ -107,6 +109,7 @@ $routes->group('sys', function ($routes) {
         $routes->post('atualizar', 'TemposAula::atualizar');
         $routes->post('deletar', 'TemposAula::deletar');
     });
+
     $routes->group('turma', function ($routes) { 
         $routes->get('', 'Turmas::index');
         $routes->get('listar', 'Turmas::index');
@@ -114,7 +117,10 @@ $routes->group('sys', function ($routes) {
         $routes->post('salvar', 'Turmas::salvar');
         $routes->post('atualizar', 'Turmas::atualizar');
         $routes->post('deletar', 'Turmas::deletar');
+        $routes->post('importar', 'Turmas::importar');
+        $routes->post('processarImportacao', 'Turmas::processarImportacao');
     });
+
     $routes->group('versao', function ($routes) {
         
         $routes->get('', 'Versao::index');

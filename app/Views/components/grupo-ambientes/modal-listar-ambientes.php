@@ -16,7 +16,6 @@
                                 <table class="table mb-4">
                                     <thead>
                                         <tr>
-                                            <th>Id</th>
                                             <th>Nome do Ambiente</th>
                                             <th>Ações</th>
                                         </tr>
@@ -25,7 +24,6 @@
                                         <?php if (!empty($grupo['ambientes'])): ?>
                                             <?php foreach ($grupo['ambientes'] as $ambiente): ?>
                                                 <tr>
-                                                    <td><?= esc($ambiente['id']); ?></td>
                                                     <td><?= esc($ambiente['nome']); ?></td>
                                                     <td>
                                                     <span data-bs-toggle="tooltip" data-placement="top" title="Remover ambiente do grupo">

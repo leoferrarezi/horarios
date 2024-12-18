@@ -12,7 +12,7 @@ class TurmasModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['codigo', 'sigla', 'ano', 'semestre', 'curso_id', 'tempos_diarios', 'horario_id', 'horario_preferencial_id'];
+    protected $allowedFields    = ['codigo', 'sigla', 'ano', 'semestre', 'periodo', 'curso_id', 'tempos_diarios', 'horario_id', 'horario_preferencial_id'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -34,6 +34,7 @@ class TurmasModel extends Model
         'sigla' => 'required|max_length[32]',
         'ano' => 'required|regex_match[/^(20)\d{2}$/]', //regex valida se o ano começa com 20 e aceita qualquer outros 2 dígitos no fim | 2000 até 2099. issue RF05.
         'semestre' => 'required|regex_match[/^[12]$/]', //verifica se 1 ou 2.
+        'periodo' => 'required',
         'curso_id' => 'required|max_length[11]|is_not_unique[cursos.id]',
         'tempos_diarios' => 'permit_empty|is_natural|max_length[2]',
         'horario_id' => 'permit_empty|is_not_unique[horarios.id]|max_length[11]',
@@ -55,6 +56,9 @@ class TurmasModel extends Model
         'semestre' => [
             'required'    => 'O campo semestre é obrigatório.',
             'regex_match' => 'O campo semestre deve ser "1" ou "2".'
+        ],
+        'periodo' => [
+            'required'    => 'O campo semestre é obrigatório.'
         ],
         'curso_id' => [
             'required'       => 'O campo curso é obrigatório.',

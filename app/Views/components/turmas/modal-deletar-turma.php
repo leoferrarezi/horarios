@@ -8,7 +8,7 @@
                 </button>
             </div>
             
-            <form id="deletarTurmas" class="forms-sample" method="post" action='<?php echo base_url('sys/turmas/deletar'); ?>'>
+            <form id="deletarTurmas" class="forms-sample" method="post" action='<?php echo base_url('sys/turma/deletar'); ?>'>
                 <?php echo csrf_field() ?>
                 <input type="hidden" id="deletar-id" name="id" />
                 <div class="modal-body text-break">Confirma a exclusão da turma <strong id='deletar-nome'></strong>?</div>

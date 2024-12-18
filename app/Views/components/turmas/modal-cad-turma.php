@@ -11,7 +11,7 @@
                 <div class="modal-body">
                     <?= csrf_field() ?>
                     <div class="row">
-                        <div class="col-md-4 col-sm-12">
+                        <div class="col-md-3 col-sm-12">
                             <div class="form-group">
                                 <label for="codigo">Código</label>
                                 <input type="text" class="form-control"
@@ -19,20 +19,28 @@
                                     value="<?php echo esc(old('codigo')) ?>">
                             </div>
                         </div>
-                        <div class="col-md-4 col-sm-12">
+                        <div class="col-md-3 col-sm-12">
                             <div class="form-group">
                                 <label for="sigla">Sigla</label>
                                 <input class="form-control" type="text" name="sigla" id="sigla"
                                     value="<?php echo esc(old('codigo')) ?>">
                             </div>
                         </div>
-                        <div class="col-md-4 col-sm 12">
+                        <div class="col-md-3 col-sm 12">
                             <div class="form-group">
                                 <label for="ano">Ano</label>
                                 <input type="number" min="2000" max="2099" class="form-control" id="ano" name="ano"
                                     value="<?php echo esc(old('ano')) ?>">
                             </div>
                         </div>
+                        <div class="col-md-3 col-sm 12">
+                            <div class="form-group">
+                                <label for="periodo">Período</label>
+                                <input type="number" min="1" max="12" class="form-control" id="periodo" name="periodo"
+                                    value="<?php echo esc(old('periodo')) ?>">
+                            </div>
+                        </div>
+
                         <div class="col-md-2 col-sm-12">
                             <div class="form-group">
                                 <label for="semestres">Semestre</label>
@@ -50,6 +58,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="col-md-6 col-sm-12">
                             <div class="form-group">
                                 <label for="curso_id">Curso</label>
@@ -62,7 +71,7 @@
                         </div>
                         <div class="col-md-4 col-sm 12">
                             <div class="form-group">
-                                <label for="tempos_diarios">Tempos de aulas díarios</label>
+                                <label for="tempos_diarios">Tempos de aulas diários</label>
                                 <input type="number" min="1" max="99" class="form-control" id="tempos_diarios" name="tempos_diarios"
                                     value="<?php echo esc(old('tempos_diarios')) ?>">
                             </div>

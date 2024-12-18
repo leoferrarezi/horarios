@@ -30,7 +30,7 @@ class TurmasModel extends Model
     // Validation
     protected $validationRules = [
         'id' => 'permit_empty|is_natural_no_zero|max_length[11]',
-        'codigo' => 'required|is_unique[turmas.codigo,id,{id}]|max_length[32]',
+        'codigo' => 'required|max_length[32]',
         'sigla' => 'required|max_length[32]',
         'ano' => 'required|regex_match[/^(20)\d{2}$/]', //regex valida se o ano começa com 20 e aceita qualquer outros 2 dígitos no fim | 2000 até 2099. issue RF05.
         'semestre' => 'required|regex_match[/^[12]$/]', //verifica se 1 ou 2.
@@ -40,6 +40,7 @@ class TurmasModel extends Model
         'horario_id' => 'permit_empty|is_not_unique[horarios.id]|max_length[11]',
         'horario_preferencial_id' => 'permit_empty|is_not_unique[horarios.id]|max_length[11]'
     ];
+
     protected $validationMessages   = [
         'codigo' => [
             'required'    => 'O campo código é obrigatório.',
@@ -58,7 +59,7 @@ class TurmasModel extends Model
             'regex_match' => 'O campo semestre deve ser "1" ou "2".'
         ],
         'periodo' => [
-            'required'    => 'O campo semestre é obrigatório.'
+            'required'    => 'O campo período é obrigatório.'
         ],
         'curso_id' => [
             'required'       => 'O campo curso é obrigatório.',
@@ -81,6 +82,7 @@ class TurmasModel extends Model
             'max_length'    => 'O campo horário preferencial não pode exceder 11 caracteres.'
         ],
     ];
+
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 
@@ -95,12 +97,11 @@ class TurmasModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-
     public function getTurmasWithHorarioAndCursos()
     {
         return $this->select('turmas.*, horario.nome as horario, hp.nome as horario_preferencial, curso.nome as curso')
-            ->join('horarios as horario', 'horario.id = turmas.horario_id')
-            ->join('horarios as hp', 'hp.id = turmas.horario_preferencial_id')
+            ->join('horarios as horario', 'horario.id = turmas.horario_id', 'left')
+            ->join('horarios as hp', 'hp.id = turmas.horario_preferencial_id', 'left')
             ->join('cursos as curso', 'curso.id = turmas.curso_id')
             ->findAll();
     }

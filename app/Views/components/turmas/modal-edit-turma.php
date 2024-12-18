@@ -12,7 +12,7 @@
                     <?php echo csrf_field() ?>
                     <input type="hidden" id="edit-id" name="id" />
                     <div class="row">
-                        <div class="col-md-4 col-sm-12">
+                        <div class="col-md-3 col-sm-12">
                             <div class="form-group">
                                 <label for="edit-codigo">Código</label>
                                 <input type="text" class="form-control"
@@ -20,20 +20,29 @@
                                     value="<?php echo esc(old('codigo')) ?>">
                             </div>
                         </div>
-                        <div class="col-md-4 col-sm-12">
+                        <div class="col-md-3 col-sm-12">
                             <div class="form-group">
                                 <label for="edit-sigla">Sigla</label>
                                 <input class="form-control" type="text" name="sigla" id="edit-sigla"
                                     value="<?php echo esc(old('codigo')) ?>">
                             </div>
                         </div>
-                        <div class="col-md-4 col-sm 12">
+                        <div class="col-md-3 col-sm 12">
                             <div class="form-group">
                                 <label for="edit-ano">Ano</label>
                                 <input type="number" min="2000" max="2099" class="form-control" id="edit-ano" name="ano"
                                     value="<?php echo esc(old('ano')) ?>">
                             </div>
                         </div>
+                        <div class="col-md-3 col-sm 12">
+                            <div class="form-group">
+                                <label for="edit-ano">Período</label>
+                                <input type="number" min="1" max="12" class="form-control" id="edit-periodo" name="periodo"
+                                    value="<?php echo esc(old('periodo')) ?>">
+                            </div>
+                        </div>
+
+
                         <div class="col-md-2 col-sm-12">
                             <div class="form-group">
                                 <label for="semestres">Semestre</label>

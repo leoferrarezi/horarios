@@ -72,4 +72,13 @@ class CursosModel extends Model
         $query = $builder->get();
         return $query->getResultArray();
     }
+
+    public function getIdByNome($nome)
+    {
+        $builder = $this->builder();
+        $builder->where('nome', $nome);
+        $query = $builder->get();
+        $res = $query->getResultArray();
+        return $res[0]['id'];
+    }
 }

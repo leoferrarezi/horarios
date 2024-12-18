@@ -16,14 +16,13 @@ class Turmas extends BaseController
 {
     public function index()
     {
-
         $turmas = new TurmasModel();
         $horarios = new HorariosModel();
         $cursos = new CursosModel();
+
         $data['turmas'] = $turmas->orderBy('sigla', 'asc')->getTurmasWithHorarioAndCursos();
         $data['horarios'] = $horarios->orderBy('nome', 'asc')->findAll();
         $data['cursos'] = $cursos->orderBy('nome', 'asc')->findAll();
-
 
         $data['content'] = view('sys/lista-turmas', $data);
         return view('dashboard', $data);
@@ -40,14 +39,14 @@ class Turmas extends BaseController
         $dadosLimpos['sigla'] = strip_tags($dadosPost['sigla']);
         $dadosLimpos['ano'] = strip_tags($dadosPost['ano']);
         $dadosLimpos['semestre'] = strip_tags($dadosPost['semestre']);
+        $dadosLimpos['periodo'] = strip_tags($dadosPost['periodo']);
         $dadosLimpos['curso_id'] = strip_tags($dadosPost['curso_id']);
         $dadosLimpos['tempos_diarios'] = strip_tags($dadosPost['tempos_diarios']);
-        $dadosLimpos['horario_id'] = strip_tags($dadosPost['horario_id']);
-        $dadosLimpos['horario_preferencial_id'] = strip_tags($dadosPost['horario_preferencial_id']);
+        $dadosLimpos['horario_id'] = $dadosPost['horario_id'] ?? "";
+        $dadosLimpos['horario_preferencial_id'] = $dadosPost['horario_preferencial_id'] ?? "";
 
         //tenta cadastrar o nova disciplina no banco
         if ($turmas->insert($dadosLimpos)) {
-
             session()->setFlashdata('sucesso', 'Turma cadastrada com sucesso.');
             return redirect()->to(base_url('/sys/turma')); // Redireciona para a página de listagem
         } else {
@@ -65,10 +64,11 @@ class Turmas extends BaseController
         $dadosLimpos['sigla'] = strip_tags($dadosPost['sigla']);
         $dadosLimpos['ano'] = strip_tags($dadosPost['ano']);
         $dadosLimpos['semestre'] = strip_tags($dadosPost['semestre']);
+        $dadosLimpos['periodo'] = strip_tags($dadosPost['periodo']);
         $dadosLimpos['curso_id'] = strip_tags($dadosPost['curso_id']);
         $dadosLimpos['tempos_diarios'] = strip_tags($dadosPost['tempos_diarios']);
-        $dadosLimpos['horario_id'] = strip_tags($dadosPost['horario_id']);
-        $dadosLimpos['horario_preferencial_id'] = strip_tags($dadosPost['horario_preferencial_id']);
+        $dadosLimpos['horario_id'] = $dadosPost['horario_id'] ?? "";
+        $dadosLimpos['horario_preferencial_id'] = $dadosPost['horario_preferencial_id'] ?? "";
 
         $turmas = new TurmasModel();
         if ($turmas->save($dadosLimpos)) {
@@ -159,12 +159,42 @@ class Turmas extends BaseController
             ];            
         }
 
-        // Remove cabeçalho
-        array_shift($dataRows);
-
         // Exibe os dados lidos na view
         $data['turmas'] = $dataRows;
         $data['content'] = view('sys/importar-turmas-form', $data);
         return view('dashboard', $data);
     }
+
+
+    public function processarImportacao() {
+
+        $selecionados = $this->request->getPost('selecionados');
+
+        if (empty($selecionados)) {
+            session()->setFlashdata('erro', 'Nenhum registro selecionado para importação.');
+            return redirect()->to(base_url('/sys/matriz'));
+        }
+
+        $turmaModel = new TurmasModel();
+        $cursoModel = new CursosModel();
+        $insertedCount = 0;
+
+        foreach ($selecionados as $registroJson) {
+            $registro = json_decode($registroJson, true);
+
+            $registro['curso_id'] = $cursoModel->getIdByNome($registro['curso']);
+            unset($registro['curso']);
+
+            if (!empty($registro['sigla'])) {
+                $turmaModel->insert($registro);
+                //print_r($turmaModel->errors());
+                //die();
+                $insertedCount++;
+            }
+        }
+
+        session()->setFlashdata('sucesso', "{$insertedCount} registros importados com sucesso!");
+        return redirect()->to(base_url('/sys/turma'));
+    }
+
 }

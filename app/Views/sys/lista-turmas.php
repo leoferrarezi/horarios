@@ -52,11 +52,12 @@
                                         <th>Código</th>
                                         <th>Sigla</th>
                                         <th>Ano</th>
-                                        <th>Semestre</th>
+                                        <th>Sem.</th>
+                                        <th>Per.</th>
                                         <th>Curso</th>
-                                        <th>Tempos de Aulas Diários</th>
+                                        <th>Aulas Dia</th>
                                         <th>Horário</th>
-                                        <th>Horário Preferencial</th>
+                                        <th>Horário Pref</th>
                                         <th>Ações</th>
                                     </tr>
                                 </thead>
@@ -74,6 +75,7 @@
                                                 <td><?php echo esc($t['sigla']); ?></td>
                                                 <td><?php echo esc($t['ano']); ?></td>
                                                 <td><?php echo esc($t['semestre']); ?></td>
+                                                <td><?php echo esc($t['periodo']); ?>º</td>
                                                 <td><?php echo esc($t['curso']); ?></td>
                                                 <td><?php echo esc($t['tempos_diarios']); ?></td>
                                                 <td><?php echo esc($t['horario']); ?></td>
@@ -96,6 +98,7 @@
                                                                 data-sigla="<?php echo esc($t['sigla']); ?>"
                                                                 data-ano="<?php echo esc($t['ano']); ?>"
                                                                 data-semestre="<?php echo esc($t['semestre']); ?>"
+                                                                data-periodo="<?php echo esc($t['periodo']); ?>"
                                                                 data-curso_id="<?php echo esc($t['curso_id']); ?>"
                                                                 data-tempos_diarios="<?php echo esc($t['tempos_diarios']); ?>"
                                                                 data-horario_id="<?php echo esc($t['horario_id']); ?>"
@@ -180,7 +183,7 @@
                         [1, 'asc']
                     ],
                     //Desativa a ordenação por ações
-                    columns: [null, null, null, null, null, null, null, null, {
+                    columns: [null, null, null, null, null, null, null, null, null, {
                         orderable: false
                     }]
                 });
@@ -198,6 +201,7 @@
                     var sigla = button.data('sigla');
                     var ano = button.data('ano');
                     var semestre = button.data('semestre');
+                    var periodo = button.data('periodo');
                     var cursoId = button.data('curso_id');
                     var temposDiarios = button.data('tempos_diarios');
                     var horarioId = button.data('horario_id');
@@ -211,6 +215,7 @@
                     modal.find('#edit-codigo').val(codigo); // Preenche o campo com o código
                     modal.find('#edit-sigla').val(sigla); // Preenche o campo com a sigla
                     modal.find('#edit-ano').val(ano); // Preenche o campo com o ano
+                    modal.find('#edit-periodo').val(periodo); // Preenche o campo com o periodo
                     modal.find('input[name="semestre"][value="' + semestre + '"]').prop('checked', true);
                     modal.find('#edit-curso_id').val(cursoId); // Preenche o campo com o curso_id
                     modal.find('#edit-tempos_diarios').val(temposDiarios); // Preenche o campo com tempos_diarios

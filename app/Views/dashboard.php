@@ -24,6 +24,27 @@
   <script src="<?php echo base_url("assets/vendors/jquery-validation/jquery.validate.min.js"); ?>"></script>
   <script src="<?php echo base_url("assets/vendors/jquery-toast-plugin/jquery.toast.min.js"); ?>"></script>
   <!-- endinject -->
+
+    <!-- Estilização para tabelas menores -->
+  <style>
+      .button-trans-success,
+      .button-trans-danger {
+          margin: 0;
+      }
+
+      .d-flex .btn-icon {
+          margin-right: 0.3rem;
+          width: 2rem;
+          height:2rem;;
+      }
+
+      .table td,
+      .table th {
+          line-height: 1.2;
+          height: auto;
+          padding: 0.3rem 0.5rem;
+      }
+  </style>
 </head>
 
 <body>

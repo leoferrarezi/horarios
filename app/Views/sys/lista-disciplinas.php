@@ -47,13 +47,12 @@
                                 <thead>
                                     <tr>
                                         <th>Nome</th>
-                                        <th>Código</th>
                                         <th>Matriz</th>
-                                        <th>Carga Hóraria</th>
-                                        <th>Máx CH Dia</th>
+                                        <th>C.H.</th>
+                                        <th>C.H. Dia</th>
                                         <th>Período</th>
                                         <th>Abreviatura</th>
-                                        <th>Grupo Ambiente</th>
+                                        <th>Ambiente</th>
                                         <th>Ações</th>
                                     </tr>
                                 </thead>
@@ -68,7 +67,6 @@
                                         ?>
                                             <tr>
                                                 <td><?php echo esc($disciplina['nome']); ?></td>
-                                                <td><?php echo esc($disciplina['codigo']); ?></td>
                                                 <td><?php echo esc($disciplina['nome_matriz']); ?></td>
                                                 <td><?php echo esc($disciplina['ch']); ?></td>
                                                 <td><?php echo esc($disciplina['max_tempos_diarios']); ?></td>
@@ -178,7 +176,7 @@
                         [1, 'asc']
                     ],
                     //Desativa a ordenação por ações
-                    columns: [null, null, null, null, null, null, null, null, {
+                    columns: [null, null, null, null, null, null, null, {
                         orderable: false
                     }]
                 });

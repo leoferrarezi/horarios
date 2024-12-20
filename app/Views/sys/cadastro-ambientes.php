@@ -1,28 +1,3 @@
-<!-- Estilização das tabelas -->
-<style>
-    .custom-table td,
-    .custom-table th {
-        padding: 0.3rem 0.5rem;
-    }
-
-    .button-trans-success,
-    .button-trans-danger {
-        margin: 0;
-    }
-
-    .d-flex .btn-icon {
-        margin-right: 0.3rem;
-        width: 2rem;
-        height:2rem;;
-    }
-
-    .table td,
-    .table th {
-        line-height: 1.2;
-        height: auto;
-    }
-</style>
-
 <?php echo view('components/ambientes/modal-cad-ambientes'); ?>
 <?php echo view('components/ambientes/modal-edit-ambientes'); ?>
 <?php echo view('components/ambientes/modal-deletar-ambientes'); ?>

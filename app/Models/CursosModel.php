@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use CodeIgniter\Exceptions\ReferenciaException;
 
 class CursosModel extends Model
 {
@@ -56,7 +57,7 @@ class CursosModel extends Model
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
-    protected $beforeDelete   = [];
+    protected $beforeDelete   = ['verificarReferencias'];
     protected $afterDelete    = [];
 
     public function getCursosWithMatriz() {
@@ -80,5 +81,50 @@ class CursosModel extends Model
         $query = $builder->get();
         $res = $query->getResultArray();
         return $res[0]['id'];
+    }
+
+    public function verificarReferencias(array $data)
+    {
+        $id = $data['id'];
+
+        $referencias = $this->verificarReferenciasEmTabelas($id);
+        $referencias = implode(", ", $referencias);
+        // Se o ID for referenciado em outras tabelas, lança a exceção
+        if (!empty($referencias)) {
+            // Passa o nome das tabelas onde o ID foi encontrado para a exceção
+            throw new ReferenciaException("Este curso não pode ser excluído, porque está em uso. <br>
+                    Para excluir este curso, primeiro remova as associações em {$referencias} que estão utilizando este curso'.");
+        }
+
+        // Se não houver referências, retorna os dados para permitir a exclusão
+        return $data;
+    }
+
+    private function verificarReferenciasEmTabelas($id)
+    {
+        // Conectar ao banco de dados
+        $db = \Config\Database::connect();
+
+        // Tabelas e colunas de chave estrangeira a serem verificadas
+        $tabelas = [
+            'turmas' => 'curso_id',
+        ];
+
+        $referenciasEncontradas = [];
+
+        // Verificar se o ID é referenciado
+        foreach ($tabelas as $tabela => $fk_coluna) {
+            $builder = $db->table($tabela);
+            $builder->where($fk_coluna, $id);
+            $query = $builder->get();
+
+            if ($query->getNumRows() > 0) {
+                // Adiciona a tabela à lista de referências encontradas
+                $referenciasEncontradas[] = $tabela;
+            }
+        }
+
+        // Retorna as tabelas onde o ID foi encontrado
+        return $referenciasEncontradas;
     }
 }

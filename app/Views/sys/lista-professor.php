@@ -24,7 +24,7 @@
                     <div class="alert alert-danger">
                         <ul>
                             <?php foreach (session('erros') as $erro): ?>
-                                <li> <i class="mdi mdi-alert-circle"></i><?=esc($erro)?></li>
+                                <li> <i class="mdi mdi-alert-circle"></i><?=$erro?></li>
                             <?php endforeach?>
                         </ul>
                     </div>

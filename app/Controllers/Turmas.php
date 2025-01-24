@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
-
+use CodeIgniter\Exceptions\ReferenciaException;
 use App\Models\TurmasModel;
 use App\Models\HorariosModel;
 use App\Models\CursosModel;
@@ -87,12 +87,15 @@ class Turmas extends BaseController
         $id = strip_tags($dadosPost['id']);
 
         $turmas = new TurmasModel();
-
-        if ($turmas->delete($id)) {
-            session()->setFlashdata('sucesso', 'Turma excluída com sucesso.');
-            return redirect()->to(base_url('/sys/turma'));
-        } else {
-            return redirect()->to(base_url('/sys/turma'))->with('erro', 'Falha ao deletar disciplina');
+        try {
+            if ($turmas->delete($id)) {
+                session()->setFlashdata('sucesso', 'Turma excluída com sucesso.');
+                return redirect()->to(base_url('/sys/turma'));
+            } else {
+                return redirect()->to(base_url('/sys/turma'))->with('erro', 'Falha ao deletar disciplina');
+            }
+        } catch (ReferenciaException $e) {
+            return redirect()->to(base_url('/sys/turma'))->with('erros', ['erro' => $e->getMessage()]);
         }
     }
 

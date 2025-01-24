@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use CodeIgniter\Exceptions\ReferenciaException;
 
 class ProfessorModel extends Model
 {
@@ -62,7 +63,7 @@ class ProfessorModel extends Model
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
-    protected $beforeDelete   = [];
+    protected $beforeDelete   = ['verificarReferencias'];
     protected $afterDelete    = [];
 
 
@@ -82,6 +83,52 @@ class ProfessorModel extends Model
         $builder->select('nome');
         $query = $builder->get();
         return $query->getResultArray();
+    }
+
+    public function verificarReferencias(array $data)
+    {
+        $id = $data['id'];
+
+        $referencias = $this->verificarReferenciasEmTabelas($id);
+        $referencias = implode(", ", $referencias);
+        // Se o ID for referenciado em outras tabelas, lança a exceção
+        if (!empty($referencias)) {
+            // Passa o nome das tabelas onde o ID foi encontrado para a exceção
+            throw new ReferenciaException("Este professor(a) não pode ser excluído(a), porque está em uso. <br>
+                    Para excluir este professor(a), primeiro remova as associações em {$referencias} que estão utilizando este professor(a)'.");
+        }
+
+        // Se não houver referências, retorna os dados para permitir a exclusão
+        return $data;
+    }
+
+    private function verificarReferenciasEmTabelas($id)
+    {
+        // Conectar ao banco de dados
+        $db = \Config\Database::connect();
+
+        // Tabelas e colunas de chave estrangeira a serem verificadas
+        $tabelas = [
+            'aula_professor' => 'professor_id',
+            'professor_regras' => 'professor_id',
+        ];
+
+        $referenciasEncontradas = [];
+
+        // Verificar se o ID é referenciado
+        foreach ($tabelas as $tabela => $fk_coluna) {
+            $builder = $db->table($tabela);
+            $builder->where($fk_coluna, $id);
+            $query = $builder->get();
+
+            if ($query->getNumRows() > 0) {
+                // Adiciona a tabela à lista de referências encontradas
+                $referenciasEncontradas[] = $tabela;
+            }
+        }
+
+        // Retorna as tabelas onde o ID foi encontrado
+        return $referenciasEncontradas;
     }
 }
 

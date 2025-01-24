@@ -7,6 +7,7 @@ use App\Models\ProfessorModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use PhpOffice\PhpSpreadsheet\Reader\Xls;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use CodeIgniter\Exceptions\ReferenciaException;
 
 class Professor extends BaseController
 {
@@ -89,12 +90,15 @@ class Professor extends BaseController
         $id = strip_tags($dadosPost['id']);
 
         $professorModel = new ProfessorModel();
-        
-        if ($professorModel->delete($id)) {
-            session()->setFlashdata('sucesso', 'Professor excluído com sucesso.');
-            return redirect()->to(base_url('/sys/professor'));
-        } else {
-            return redirect()->to(base_url('/sys/professor'))->with('erro', 'Falha ao deletar professor');
+        try {
+            if ($professorModel->delete($id)) {
+                session()->setFlashdata('sucesso', 'Professor excluído com sucesso.');
+                return redirect()->to(base_url('/sys/professor'));
+            } else {
+                return redirect()->to(base_url('/sys/professor'))->with('erro', 'Falha ao deletar professor');
+            }
+        } catch (ReferenciaException $e) {
+            return redirect()->to(base_url('/sys/professor'))->with('erros', ['erro' => $e->getMessage()]);
         }
     }
 

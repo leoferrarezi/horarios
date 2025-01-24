@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\CursosModel;
 use App\Models\MatrizCurricularModel;
+use CodeIgniter\Exceptions\ReferenciaException;
 use PhpOffice\PhpSpreadsheet\Reader\Xls;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
@@ -69,12 +70,15 @@ class Cursos extends BaseController
         $id = strip_tags($dadosPost['id']);
 
         $cursoModel = new CursosModel();
-        
-        if ($cursoModel->delete($id)) {
-            session()->setFlashdata('sucesso', 'Curso excluído com sucesso.');
-            return redirect()->to(base_url('/sys/curso'));
-        } else {
-            return redirect()->to(base_url('/sys/curso'))->with('erro', 'Falha ao deletar curso');
+        try {
+            if ($cursoModel->delete($id)) {
+                session()->setFlashdata('sucesso', 'Curso excluído com sucesso.');
+                return redirect()->to(base_url('/sys/curso'));
+            } else {
+                return redirect()->to(base_url('/sys/curso'))->with('erro', 'Falha ao deletar curso');
+            }
+        } catch (ReferenciaException $e) {
+            return redirect()->to(base_url('/sys/curso'))->with('erros', ['erro' => $e->getMessage()]);
         }
     }
 

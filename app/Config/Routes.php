@@ -123,6 +123,7 @@ $routes->group('sys', function ($routes) {
 
     $routes->group('aulas', function ($routes) { 
         $routes->get('', 'Aulas::index');
+        $routes->post('salvar', 'Aulas::salvar');
     });
 
     $routes->group('versao', function ($routes) {

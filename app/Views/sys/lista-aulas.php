@@ -60,8 +60,10 @@
                                 <?php if (!empty($aulas)): ?>
                                     <?php foreach ($aulas as $aula): ?>
                                         <tr>
-                                            <td><?php echo esc($professor['nome']); ?></td>
-                                            <td><?php echo esc($professor['email']); ?></td>
+                                            <td><?php echo esc($aula['disciplina_id']); ?></td>
+                                            <td><?php echo esc($aula['disciplina_id']); ?></td>
+                                            <td><?php echo esc($aula['turma_id']); ?></td>
+                                            <td><?php echo esc($aula['turma_id']); ?></td>
                                             <td>
                                                 <div class="d-flex">
                                                     <span data-bs-toggle="tooltip" data-placement="top" title="Atualizar dados da aula">
@@ -71,9 +73,9 @@
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#modal-edit-aula"
                                                                 data-id="<?php echo esc($aula['id']); ?>"
-                                                                data-disciplina="<?php echo esc($aula['disciplina']); ?>"
-                                                                data-turma="<?php echo esc($professor['turma']); ?>"
-                                                                data-profs="<?php echo esc($professor['professores']); ?>"
+                                                                data-disciplina="<?php //echo esc($aula['disciplina']); ?>"
+                                                                data-turma="<?php //echo esc($aula['turma']); ?>"
+                                                                data-profs="<?php //echo esc($aula['professores']); ?>"
                                                         >
                                                             <i class="fa fa-edit"></i>
                                                         </button>

@@ -46,28 +46,3 @@
         }
     })(jQuery);
 </script>
-
-<style>
-    .select2-container--default .select2-selection--multiple {
-        background-color: #2a3038;
-    }
-
-    .select2-container {
-        z-index: 9999;
-    }
-
-    .select2-dropdown {
-        z-index: 1050;
-    }
-
-    .select2-container--default .select2-selection--multiple .select2-selection__choice {
-        color: #ffffff;
-        border: 0;
-        border-radius: 3px;
-        padding: 6px;
-        font-size: 0.8rem;
-        font-family: inherit;
-
-
-    }
-</style>

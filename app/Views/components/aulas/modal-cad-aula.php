@@ -7,7 +7,7 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form id="cadastrarAula" class="forms-sample" method="post" action='<?php echo base_url('sys/aula/salvar'); ?>'>
+            <form id="cadastrarAula" class="forms-sample" method="post" action='<?php echo base_url('sys/aulas/salvar'); ?>'>
                 <div class="modal-body">
                     <?php echo csrf_field() ?>
 

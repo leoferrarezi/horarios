@@ -15,10 +15,10 @@ $routes->get('/sys', 'Home::home');
 $routes->get('/sys/home', 'Home::home');
 $routes->get('/sys/em-construcao', 'Home::emConstrucao');
 
-//cadastro de turmas (em construção)
+//cadastro de turmas
 $routes->get('sys/cadastro-turmas', 'Turmas::index');
 
-//cadastro de ambientes (em construção)
+//cadastro de ambientes
 $routes->get('sys/cadastro-ambientes', 'Ambientes::index');
 $routes->post('sys/cadastro-ambientes/salvar-ambiente', 'Ambientes::salvarAmbiente');
 $routes->post('sys/cadastro-ambientes/deletar-ambiente', 'Ambientes::deletarAmbiente');
@@ -29,16 +29,16 @@ $routes->post('sys/cadastro-ambientes/editar-grupo-ambientes', 'Ambientes::edita
 $routes->post('sys/cadastro-ambientes/adicionar-ambientes-grupo', 'Ambientes::adicionarAmbientesAoGrupo');
 $routes->post('sys/cadastro-ambientes/remover-ambientes-grupo', 'Ambientes::removerAmbienteDoGrupo');
 
-//cadastro de aulas (em construção)
+//cadastro de aulas
 $routes->get('sys/cadastro-aulas', 'Aulas::index');
 
-//horarios de aula (em construção)
+//horarios de aula
 $routes->get('sys/cadastro-horarios-de-aula', 'TemposAula::cadastro');
 
-//Relatórios (em construção)
+//Relatórios
 $routes->get('sys/relatorios', 'Relatorios::index');
 
-//Tabela Geral de Horários (em construção)
+//Tabela Geral de Horários
 $routes->get('sys/tabela-geral-horarios', 'TabelaGeral::index');
 
 //adicionar o filter (middleware de login no group depois)
@@ -119,6 +119,10 @@ $routes->group('sys', function ($routes) {
         $routes->post('deletar', 'Turmas::deletar');
         $routes->post('importar', 'Turmas::importar');
         $routes->post('processarImportacao', 'Turmas::processarImportacao');
+    });
+
+    $routes->group('aulas', function ($routes) { 
+        $routes->get('', 'Aulas::index');
     });
 
     $routes->group('versao', function ($routes) {

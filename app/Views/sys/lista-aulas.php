@@ -1,7 +1,7 @@
 <!-- incluir os componentes modais antes do restante do documento -->
-<?php echo view('components/professor/modal-edit-aula'); ?>
-<?php echo view('components/professor/modal-cad-aula'); ?>
-<?php echo view('components/professor/modal-deletar-aula') ?>
+<?php echo view('components/aulas/modal-edit-aula'); ?>
+<?php echo view('components/aulas/modal-cad-aula'); ?>
+<?php echo view('components/aulas/modal-deletar-aula') ?>
 
 <div class="page-header">
     <h3 class="page-title">GERENCIAR AULAS</h3>
@@ -31,9 +31,8 @@
                 <!-- botões da parte de cima -->
                 <div class="row">
                     <div class="col-12 mb-4">
-                        <button type="button" class="btn btn-primary btn-icon-text" data-bs-toggle="modal"
-                                data-bs-target="#modal-cad-prof"><i class="fa fa-plus-circle btn-icon-prepend"></i>
-                            Incluir Aula
+                        <button type="button" class="btn btn-primary btn-icon-text" data-bs-toggle="modal" data-bs-target="#modal-cad-aula">
+                                <i class="fa fa-plus-circle btn-icon-prepend"></i> Incluir Aula
                         </button>                        
                     </div>
                 </div>

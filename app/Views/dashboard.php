@@ -13,37 +13,57 @@
   <link rel="stylesheet" href="<?php echo base_url("assets/css/modern-vertical/style.css"); ?>">
   <link rel="stylesheet" href="<?php echo base_url("assets/vendors/jquery-toast-plugin/jquery.toast.min.css"); ?>">
   <link rel="stylesheet" href="<?php echo base_url("assets/css/custom.css"); ?>">
+  <link rel="stylesheet" href="<?php echo base_url("assets/vendors/select2/select2.min.css"); ?>">
+  <link rel="stylesheet" href="<?php echo base_url("assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css"); ?>">
 
   <link rel="shortcut icon" href="<?php echo base_url("assets/images/logo-ifro-mini.png"); ?>" />
 
-  <!-- Select2 -->
-  <link rel="stylesheet" href="<?php echo base_url("assets/vendors/select2/select2.min.css"); ?>">
-  <link rel="stylesheet" href="<?php echo base_url("assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css"); ?>">
-  <!-- plugins:js -->
   <script src="<?php echo base_url("assets/vendors/js/vendor.bundle.base.js"); ?>"></script>
   <script src="<?php echo base_url("assets/vendors/jquery-validation/jquery.validate.min.js"); ?>"></script>
   <script src="<?php echo base_url("assets/vendors/jquery-toast-plugin/jquery.toast.min.js"); ?>"></script>
-  <!-- endinject -->
+  <script src="<?php echo base_url("assets/vendors/select2/select2.min.js"); ?>"></script>
+  <script src="<?php echo base_url('assets/vendors/typeahead.js/typeahead.bundle.min.js') ?>"></script>
+  <script src="<?php echo base_url('assets/js/typeahead.js') ?>"></script>
 
-    <!-- Estilização para tabelas menores -->
+
   <style>
-      .button-trans-success,
-      .button-trans-danger {
-          margin: 0;
-      }
+    /*Estilização para tabelas menores*/
+    .button-trans-success,
+    .button-trans-danger {
+      margin: 0;
+    }
+    .d-flex .btn-icon {
+      margin-right: 0.3rem;
+      width: 2rem;
+      height: 2rem;
+      ;
+    }
+    .table td,
+    .table th {
+      line-height: 1.2;
+      height: auto;
+      padding: 0.3rem 0.5rem;
+    }
 
-      .d-flex .btn-icon {
-          margin-right: 0.3rem;
-          width: 2rem;
-          height:2rem;;
-      }
+    /*Estilização para select2*/
+    .select2-container--default .select2-selection--multiple {
+      background-color: #2a3038;
+    }
+    .select2-container {
+      z-index: 9999;
+    }
+    .select2-dropdown {
+      z-index: 1050;
+    }
+    .select2-container--default .select2-selection--multiple .select2-selection__choice {
+      color: #ffffff;
+      border: 0;
+      border-radius: 3px;
+      padding: 6px;
+      font-size: 0.8rem;
+      font-family: inherit;
+    }
 
-      .table td,
-      .table th {
-          line-height: 1.2;
-          height: auto;
-          padding: 0.3rem 0.5rem;
-      }
   </style>
 </head>
 
@@ -62,7 +82,7 @@
             </span>
             <span class="menu-title">Página inicial</span>
           </a>
-        </li>        
+        </li>
 
         <li class="nav-item nav-category">
           <span class="nav-link">Gestão de Horários</span>
@@ -84,7 +104,7 @@
             </span>
             <span class="menu-title">Horários de Aula</span>
           </a>
-        </li>        
+        </li>
 
         <li class="nav-item nav-category">
           <span class="nav-link">Cadastros</span>
@@ -97,7 +117,7 @@
             </span>
             <span class="menu-title">Professores</span>
           </a>
-        </li>        
+        </li>
 
         <li class="nav-item">
           <a class="nav-link" href="<?php echo base_url('sys/matriz'); ?>">
@@ -124,8 +144,8 @@
             </span>
             <span class="menu-title">Cursos</span>
           </a>
-        </li>        
-        
+        </li>
+
         <li class="nav-item">
           <a class="nav-link" href="<?php echo base_url('sys/turma'); ?>">
             <span class="menu-icon">
@@ -181,8 +201,8 @@
             <span class="menu-title">Em construção...</span>
           </a>
         </li>
-        
-        
+
+
 
       </ul>
     </nav>
@@ -292,7 +312,7 @@
               <a class="nav-link" id="profileDropdown" href="#" data-bs-toggle="dropdown">
                 <div class="navbar-profile">
                   <!--<img class="img-xs rounded-circle" src="<?php echo base_url("assets/images/faces/face15.jpg"); ?>" alt="">-->
-                  <p class="mb-0 d-none d-sm-block navbar-profile-name"><?php echo auth()->user()->username;?></p>
+                  <p class="mb-0 d-none d-sm-block navbar-profile-name"><?php echo auth()->user()->username; ?></p>
                   <i class="mdi mdi-menu-down d-none d-sm-block"></i>
                 </div>
               </a>
@@ -349,18 +369,12 @@
   </div>
   <!-- container-scroller -->
 
-  <!-- Plugin js for this page -->
   <script src="<?php echo base_url("assets/vendors/progressbar.js/progressbar.min.js"); ?>"></script>
   <script src="<?php echo base_url("assets/vendors/jvectormap/jquery-jvectormap.min.js"); ?>"></script>
   <script src="<?php echo base_url("assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"); ?>"></script>
-  <!-- End plugin js for this page -->
-
-  <!-- Plugin js for this page -->
   <script src="<?php echo base_url("assets/vendors/datatables.net/jquery.dataTables.js"); ?>"></script>
   <script src="<?php echo base_url("assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"); ?>"></script>
-  <!-- End plugin js for this page -->
 
-  <!-- inject:js -->
   <script src="<?php echo base_url("assets/js/off-canvas.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/hoverable-collapse.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/misc.js"); ?>"></script>
@@ -368,20 +382,16 @@
   <script src="<?php echo base_url("assets/js/todolist.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/tabs.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/file-upload.js"); ?>"></script>
-  <!-- endinject -->
 
-  <!-- Custom js for this page -->
   <script src="<?php echo base_url("assets/js/dashboard.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/form-validation.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/validacoes/cadastro-professor.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/validacoes/edicao-professor.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/validacoes/cadastro-disciplina.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/validacoes/cadastro-cursos.js"); ?>"></script>
-  <!-- Select2 -->
-  <script src="<?php echo base_url("assets/vendors/select2/select2.min.js"); ?>"></script>
-  <!-- Sweet alert -->
+
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <!-- End custom js for this page -->
+
 </body>
 
 </html>

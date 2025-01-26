@@ -36,10 +36,16 @@
 <?php endif; ?>
 
 
-<script src="<?= base_url('assets/vendors/select2/select2.min.js') ?>"></script>
-<script src="<?= base_url('assets/js/select2.js') ?>"></script>
-<script src="<?= base_url('assets/vendors/typeahead.js/typeahead.bundle.min.js') ?>"></script>
-<script src="<?= base_url('assets/js/typeahead.js') ?>"></script>
+<script>
+    (function($) {
+        'use strict';
+
+        if ($(".js-example-basic-multiple").length) 
+        {
+            $(".js-example-basic-multiple").select2();
+        }
+    })(jQuery);
+</script>
 
 <style>
     .select2-container--default .select2-selection--multiple {

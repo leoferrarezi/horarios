@@ -31,4 +31,10 @@ class Aulas extends BaseController
         $data['content'] = view('sys/lista-aulas', $data);
         return view('dashboard', $data);
     }
+
+    public function teste(){
+        $aulaModel = new AulasModel();
+        $dados = $aulaModel->getAulasComTurmaDisciplinaEProfessores();
+        return $this->response->setJSON($dados);
+    }
 }

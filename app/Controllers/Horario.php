@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\HorariosModel;
 use CodeIgniter\HTTP\ResponseInterface;
+use CodeIgniter\Exceptions\ReferenciaException;
 
 class Horario extends BaseController
 {
@@ -57,12 +58,15 @@ class Horario extends BaseController
         $id = strip_tags($dadosPost['id']);
 
         $horarioModel = new HorariosModel();
-        
-        if ($horarioModel->delete($id)) {
-            session()->setFlashdata('sucesso', 'Horário excluído com sucesso.');
-            return redirect()->to(base_url('/sys/horario'));
-        } else {
-            return redirect()->to(base_url('/sys/horario'))->with('erro', 'Falha ao deletar horário');
+        try {
+            if ($horarioModel->delete($id)) {
+                session()->setFlashdata('sucesso', 'Horário excluído com sucesso.');
+                return redirect()->to(base_url('/sys/horario'));
+            } else {
+                return redirect()->to(base_url('/sys/horario'))->with('erro', 'Falha ao deletar horário');
+            }
+        } catch (ReferenciaException $e) {
+            return redirect()->to(base_url('/sys/horario'))->with('erros', ['erro' => $e->getMessage()]);
         }
     }
 }

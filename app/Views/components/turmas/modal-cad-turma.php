@@ -90,6 +90,7 @@
                             <div class="form-group">
                                 <label for="horario_preferencial_id">Horário Preferencial</label>
                                 <select class="form-select" id="horario_preferencial_id" name="horario_preferencial_id">
+                                <option value="">Selecione...</option>
                                     <?php foreach ($horarios as $hp): ?>
                                         <option value="<?php echo esc($hp['id']) ?>"><?php echo esc($hp['nome']) ?></option>
                                     <?php endforeach; ?>

@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\TemposAulasModel;
 use App\Models\HorariosModel;
+use CodeIgniter\Exceptions\ReferenciaException;
 use DateTime;
 
 class TemposAula extends BaseController
@@ -108,12 +109,15 @@ class TemposAula extends BaseController
         $id = strip_tags($dadosPost['id']);
 
         $tempoAulaModel = new TemposAulasModel();
-
-        if ($tempoAulaModel->delete($id)) {
-            session()->setFlashdata('sucesso', 'Tempo de Aula excluído com sucesso.');
-            return redirect()->to(base_url('/sys/tempoAula'));
-        } else {
-            return redirect()->to(base_url('/sys/tempoAula'))->with('erro', 'Falha ao deletar Tempo de Aula');
+        try {
+            if ($tempoAulaModel->delete($id)) {
+                session()->setFlashdata('sucesso', 'Tempo de Aula excluído com sucesso.');
+                return redirect()->to(base_url('/sys/tempoAula'));
+            } else {
+                return redirect()->to(base_url('/sys/tempoAula'))->with('erro', 'Falha ao deletar Tempo de Aula');
+            }
+        } catch (ReferenciaException $e) {
+            return redirect()->to(base_url('/sys/tempoAula'))->with('erros', ['erro' => $e->getMessage()]);
         }
     }
 }

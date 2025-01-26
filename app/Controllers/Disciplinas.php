@@ -7,6 +7,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\DisciplinasModel;
 use App\Models\MatrizCurricularModel;
 use App\Models\GruposAmbientesModel;
+use CodeIgniter\Exceptions\ReferenciaException;
 
 class Disciplinas extends BaseController
 {
@@ -79,12 +80,15 @@ class Disciplinas extends BaseController
         $id = strip_tags($dadosPost['id']);
 
         $disciplinaModel = new DisciplinasModel();
-        
-        if ($disciplinaModel->delete($id)) {
-            session()->setFlashdata('sucesso', 'Disciplina excluída com sucesso.');
-            return redirect()->to(base_url('/sys/disciplina'));
-        } else {
-            return redirect()->to(base_url('/sys/disciplina'))->with('erro', 'Falha ao deletar disciplina');
+        try {
+            if ($disciplinaModel->delete($id)) {
+                session()->setFlashdata('sucesso', 'Disciplina excluída com sucesso.');
+                return redirect()->to(base_url('/sys/disciplina'));
+            } else {
+                return redirect()->to(base_url('/sys/disciplina'))->with('erro', 'Falha ao deletar disciplina');
+            }
+        } catch (ReferenciaException $e) {
+            return redirect()->to(base_url('/sys/disciplina'))->with('erros', ['erro' => $e->getMessage()]);
         }
     }
 }

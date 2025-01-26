@@ -59,7 +59,6 @@ class Versao extends BaseController
 
         $versao = new VersoesModel();
         try {
-            
             if ($versao->delete($id)) {
                 session()->setFlashdata('sucesso', 'Versão excluído com sucesso.');
                 return redirect()->to(base_url('/sys/versao'));

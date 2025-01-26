@@ -161,7 +161,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="">
+          <a class="nav-link" href="<?php echo base_url('sys/aulas'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-human-male-board"></i>
             </span>

@@ -1,6 +1,6 @@
 <!-- incluir os componentes modais antes do restante do documento -->
-<?php echo view('components/aulas/modal-edit-aula'); ?>
 <?php echo view('components/aulas/modal-cad-aula'); ?>
+<?php echo view('components/aulas/modal-edit-aula'); ?>
 <?php echo view('components/aulas/modal-deletar-aula') ?>
 
 <div class="page-header">
@@ -73,9 +73,14 @@
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#modal-edit-aula"
                                                                 data-id="<?php echo esc($aula['id']); ?>"
-                                                                data-disciplina="<?php //echo esc($aula['disciplina']); ?>"
-                                                                data-turma="<?php //echo esc($aula['turma']); ?>"
-                                                                data-profs="<?php //echo esc($aula['professores']); ?>"
+                                                                data-curso="<?php echo esc($aula['curso_nome']); ?>"
+                                                                data-curso_id="<?php echo esc($aula['curso_id']); ?>"
+                                                                data-turma="<?php echo esc($aula['turma_sigla']); ?>"
+                                                                data-turma_id="<?php echo esc($aula['turma_id']); ?>"
+                                                                data-disciplina="<?php echo esc($aula['disciplina_nome']); ?>"
+                                                                data-disciplina_id="<?php echo esc($aula['disciplina_id']); ?>"
+                                                                data-profs="<?php echo esc($aula['professores_nome']); ?>"
+                                                                data-profs_id="<?php echo esc($aula['professores_id']); ?>"
                                                         >
                                                             <i class="fa fa-edit"></i>
                                                         </button>
@@ -151,15 +156,22 @@
             {
                 var button = $(event.relatedTarget);
 
-                var disc = button.data('disciplina');
-                var turma = button.data('turma');
-                var prof = button.data('profs');
                 var id = button.data('id');
+                var curso = button.data('curso');
+                var curso_id = button.data('curso_id');
+                var disciplina = button.data('disciplina');
+                var disciplina_id = button.data('disciplina_id');
+                var turma = button.data('turma');
+                var turma_id = button.data('turma_id');
+                var profs_id = button.data('profs_id') + "";
+                var prof = (profs_id.indexOf(",") > -1) ? profs_id.split(',') : profs_id;
 
-                //var modal = $(this);
-                //modal.find('#edit-id').val(id);
-                //modal.find('#edit-nome').val(nome);
-                //modal.find('#edit-email').val(email);
+                var modal = $(this);
+                modal.find('#edit-id').val(id);
+                modal.find('#cursoEdit').val(curso_id).change();
+                modal.find('#turmaEdit').val(turma_id).change();
+                modal.find('#disciplinaEdit').val(disciplina_id).change();
+                modal.find('.select2-professoresEdit').val(prof).change();
             });
 
             //Mesma abordagem do código acima, para o modal de excluir professor

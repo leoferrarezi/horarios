@@ -117,10 +117,14 @@ class AulasModel extends Model
     {        
         return $this->select(
             "aulas.*, 
-            turma.sigla as turma_sigla, 
-            disciplina.nome as disciplina_nome, 
+            turma.sigla as turma_sigla,
+            turma.id as turma_id,
+            disciplina.nome as disciplina_nome,
+            disciplina.id as disciplina_id,
             curso.nome as curso_nome,
-            GROUP_CONCAT(professores.nome) as professores_nome"
+            curso.id as curso_id,
+            GROUP_CONCAT(professores.nome) as professores_nome,
+            GROUP_CONCAT(professores.id) as professores_id"
             )
             ->join("disciplinas as disciplina", "aulas.disciplina_id = disciplina.id")
             ->join("turmas as turma", "aulas.turma_id = turma.id")

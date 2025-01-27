@@ -1,26 +1,51 @@
-<div class="modal fade" id="modal-edit-prof" tabindex="-1" role="dialog" aria-labelledby="modal-edit-prof-label" style="display: none;" aria-hidden="true">
+<div class="modal fade" id="modal-edit-aula" tabindex="-1" aria-labelledby="ModalLabel" style="display: none;" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-            <h5 class="modal-title" id="ModalLabel">Editar Professor</h5>
-            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-            </button>
+                <h5 class="modal-title" id="ModalLabel">Editar Aula</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
             </div>
-            <form id="cadastrarProfessor" class="forms-sample" method="post" action='<?php echo base_url('sys/professor/atualizar'); ?>'>
+            <form id="editarAula" class="forms-sample" method="post" action='<?php echo base_url('sys/aulas/atualizar'); ?>'>
                 <div class="modal-body">
+
                     <?php echo csrf_field() ?>
-                    <input type="hidden" id="edit-id" name="id" />
+
+                    <input type="hidden" id="edit-id" name="idEdit" />
+
                     <div class="form-group">
-                        <label for="exampleInputUsername1">Nome</label>
-                        <input type="text" class="form-control" 
-                            id="edit-nome" name="nome" placeholder="Digite o nome do professor">
+                        <label for="curso">Curso</label>
+                        <select class="form-select" id="cursoEdit" name="cursoEdit">
+                            <?php foreach ($cursos as $curso): ?>
+                                <option value="<?php echo esc($curso['id']) ?>"><?php echo esc($curso['nome']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
+
                     <div class="form-group">
-                        <label for="exampleInputPassword1">E-Mail</label>
-                        <input type="email" class="form-control" 
-                            id="edit-email" name="email" placeholder="Digite o email">
+                        <label>Turma(s)</label>
+                        <select class="form-select" id="turmaEdit" name="turmaEdit">
+                            <!-- preenchido dinamicamente -->
+                        </select>
                     </div>
+
+                    <div class="form-group">
+                        <label for="disciplinaEdit">Disciplina</label>
+                        <select class="form-select" id="disciplinaEdit" name="disciplina">
+                            <!-- preenchido dinamicamente -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="professores">Professor(es)</label>
+                        <select class="select2-professoresEdit" name="professores[]" multiple="multiple" style="width:100%;">
+                            <?php foreach ($professores as $professor): ?>
+                                <option value="<?= esc($professor['id']) ?>"><?= esc($professor['nome']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary me-2">Salvar</button>
@@ -30,3 +55,55 @@
         </div>
     </div>
 </div>
+
+<script>  
+
+    function updateSelectTurmasEdit() {
+        $('#turmaEdit').empty();
+        turmas.forEach(function(obj) {
+            if (obj.curso == $("#cursoEdit option:selected").val()) {
+                $("#turmaEdit").append($('<option>', {
+                    value: obj.id,
+                    text: obj.sigla
+                }));
+            }
+        });
+    }
+
+    function getMatrizFromCursoEdit() {
+        var matriz = -1;
+        cursos.forEach(function(obj) {
+            if(obj.id == $("#cursoEdit option:selected").val()) {
+                matriz = obj.matriz;
+            }
+        });
+        return matriz;
+    }
+
+    function updateSelectDisciplinasEdit() {
+        let matriz = getMatrizFromCursoEdit();
+        $('#disciplinaEdit').empty();
+        disciplinas.forEach(function(obj) {
+            if (obj.matriz == matriz) {
+                $("#disciplinaEdit").append($('<option>', {
+                    value: obj.id,
+                    text: obj.nome
+                }));
+            }
+        });
+    }
+
+    (function($) {
+        'use strict';
+
+        if ($(".select2-professoresEdit").length)
+            $(".select2-professoresEdit").select2();
+
+        $("#cursoEdit").on("change", function() {
+            updateSelectTurmasEdit();
+            updateSelectDisciplinasEdit();
+        });
+
+    })(jQuery);
+    
+</script>

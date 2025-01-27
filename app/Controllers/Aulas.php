@@ -52,4 +52,10 @@ class Aulas extends BaseController
 		session()->setFlashdata('sucesso', 'Aula(s) cadastrada(s) com sucesso.');
 		return redirect()->to(base_url('/sys/aulas'));
 	}
+
+    public function teste(){
+        $aulaModel = new AulasModel();
+        $dados = $aulaModel->getAulasComTurmaDisciplinaEProfessores();
+        return $this->response->setJSON($dados);
+    }
 }

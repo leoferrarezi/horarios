@@ -10,6 +10,8 @@ use CodeIgniter\Router\RouteCollection;
 service('auth')->routes($routes);
 service('auth')->routes($routes, ['except' => ['login', 'register']]);
 
+$routes->get("/sys/test", "Aulas::teste");
+
 $routes->get('/', 'Home::home');
 $routes->get('/sys', 'Home::home');
 $routes->get('/sys/home', 'Home::home');

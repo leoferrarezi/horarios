@@ -12,7 +12,7 @@ class AulaProfessorModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['professor_id', 'aula_id', 'versao_id'];
+    protected $allowedFields    = ['professor_id', 'aula_id'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -31,10 +31,9 @@ class AulaProfessorModel extends Model
     protected $validationRules      = [
         'id' => 'permit_empty|is_natural_no_zero|max_length[11]',
         'professor_id' => 'required|is_not_unique[professores.id]|max_length[11]',
-        'aula_id' => 'required|is_not_unique[aulas.id]|max_length[11]',
-        'versao_id' => 'is_not_unique[versoes.id]|max_length[11]',
-        
+        'aula_id' => 'required|is_not_unique[aulas.id]|max_length[11]'        
     ];
+
     protected $validationMessages   = [
         "professor_id" => [
             "required" => "O campo professor é obrigatório",
@@ -44,10 +43,6 @@ class AulaProfessorModel extends Model
         "aula_id" => [
             "required" => "O campo aula é obrigatório",
             "is_not_unique" => "A aula deve estar cadastrada",
-            "max_length" => "O tamanho máximo são 11 digitos",
-        ],
-        "versao_id" => [
-            "is_not_unique" => "A versão precisa ser registrada",
             "max_length" => "O tamanho máximo são 11 digitos",
         ]
     ];

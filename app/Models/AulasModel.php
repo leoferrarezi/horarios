@@ -114,15 +114,20 @@ class AulasModel extends Model
     }
 
     public function getAulasComTurmaDisciplinaEProfessores()
-    {
-        
-        return $this->select("aulas.*, turma.codigo as turma_codigo, disciplina.nome as disciplina_nome, GROUP_CONCAT(professores.nome) as professores_nome")
+    {        
+        return $this->select(
+            "aulas.*, 
+            turma.sigla as turma_sigla, 
+            disciplina.nome as disciplina_nome, 
+            curso.nome as curso_nome,
+            GROUP_CONCAT(professores.nome) as professores_nome"
+            )
             ->join("disciplinas as disciplina", "aulas.disciplina_id = disciplina.id")
             ->join("turmas as turma", "aulas.turma_id = turma.id")
+            ->join("cursos as curso", "turma.curso_id = curso.id")
             ->join("aula_professor as ap", "aulas.id = ap.aula_id") // Relaciona aula com os professores
             ->join("professores as professores", "ap.professor_id = professores.id") // Relaciona a aula_professor com os professores
             ->groupBy("aulas.id") // Agrupa por ID da aula
             ->findAll();
     }
-
 }

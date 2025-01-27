@@ -57,13 +57,13 @@
 
                                 <!-- corpo da tabela -->
                                 <tbody>
-                                <?php if (!empty($aulas)): ?>
-                                    <?php foreach ($aulas as $aula): ?>
+                                <?php if (!empty($consulta)): ?>
+                                    <?php foreach ($consulta as $aula): ?>
                                         <tr>
-                                            <td><?php echo esc($aula['disciplina_id']); ?></td>
-                                            <td><?php echo esc($aula['disciplina_id']); ?></td>
-                                            <td><?php echo esc($aula['turma_id']); ?></td>
-                                            <td><?php echo esc($aula['turma_id']); ?></td>
+                                            <td><?php echo esc($aula['curso_nome']); ?></td>
+                                            <td><?php echo esc($aula['turma_sigla']); ?></td>
+                                            <td><?php echo esc($aula['disciplina_nome']); ?></td>
+                                            <td><?php echo str_replace(",","<br />", esc($aula['professores_nome'])); ?></td>
                                             <td>
                                                 <div class="d-flex">
                                                     <span data-bs-toggle="tooltip" data-placement="top" title="Atualizar dados da aula">
@@ -88,6 +88,9 @@
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#modal-deletar-aula"
                                                                 data-id="<?php echo esc($aula['id']); ?>"
+                                                                data-curso="<?php echo esc($aula['curso_nome']); ?>"
+                                                                data-turma="<?php echo esc($aula['turma_sigla']); ?>"
+                                                                data-disciplina="<?php echo esc($aula['disciplina_nome']); ?>"
                                                         >
                                                             <i class="fa fa-trash"></i>
                                                         </button>
@@ -163,9 +166,17 @@
             $('#modal-deletar-aula').on('show.bs.modal', function (event) {
 
                 var button = $(event.relatedTarget);
+
                 var id = button.data('id');
+                var curso = button.data('curso');
+                var turma = button.data('turma');
+                var disciplina = button.data('disciplina');
+
                 var modal = $(this);
                 modal.find('#deletar-id').val(id);
+                modal.find('#deletar-curso').text(curso);
+                modal.find('#deletar-turma').text(turma);
+                modal.find('#deletar-disciplina').text(disciplina);
             });
 
             //Ativa os tooltips dos botões

@@ -10,8 +10,6 @@ use CodeIgniter\Router\RouteCollection;
 service('auth')->routes($routes);
 service('auth')->routes($routes, ['except' => ['login', 'register']]);
 
-$routes->get("/sys/test", "Aulas::teste");
-
 $routes->get('/', 'Home::home');
 $routes->get('/sys', 'Home::home');
 $routes->get('/sys/home', 'Home::home');
@@ -30,9 +28,6 @@ $routes->post('sys/cadastro-ambientes/deletar-grupo-ambientes', 'Ambientes::dele
 $routes->post('sys/cadastro-ambientes/editar-grupo-ambientes', 'Ambientes::editarGrupoAmbientes');
 $routes->post('sys/cadastro-ambientes/adicionar-ambientes-grupo', 'Ambientes::adicionarAmbientesAoGrupo');
 $routes->post('sys/cadastro-ambientes/remover-ambientes-grupo', 'Ambientes::removerAmbienteDoGrupo');
-
-//cadastro de aulas
-$routes->get('sys/cadastro-aulas', 'Aulas::index');
 
 //horarios de aula
 $routes->get('sys/cadastro-horarios-de-aula', 'TemposAula::cadastro');
@@ -126,6 +121,7 @@ $routes->group('sys', function ($routes) {
     $routes->group('aulas', function ($routes) { 
         $routes->get('', 'Aulas::index');
         $routes->post('salvar', 'Aulas::salvar');
+        $routes->post('deletar', 'Aulas::deletar');
     });
 
     $routes->group('versao', function ($routes) {

@@ -19,7 +19,12 @@
                                 <label>Selecione os Ambientes</label>
                                 <select class="js-example-basic-multiple" name="ambientes[]" multiple="multiple" style="width:100%;">
                                     <?php foreach ($ambientes as $ambiente): ?>
-                                        <option value="<?= esc($ambiente['id']) ?>"><?= esc($ambiente['nome']) ?></option>
+                                        <?php
+                                        $isAssigned = in_array($ambiente['id'], array_column($grupo['ambientes'], 'id'));
+                                        ?>
+                                        <option value="<?= esc($ambiente['id']) ?>" <?= $isAssigned ? 'selected' : '' ?>>
+                                            <?= esc($ambiente['nome']) ?>
+                                        </option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -37,12 +42,18 @@
 
 
 <script>
-    (function($) {
-        'use strict';
+    $(document).ready(function() {
+        $('.js-example-basic-multiple').select2();
 
-        if ($(".js-example-basic-multiple").length) 
-        {
-            $(".js-example-basic-multiple").select2();
-        }
-    })(jQuery);
+        $('#addAmbientesGrupo-<?= $grupo['id'] ?>').on('submit', function(e) {
+            const selectElement = $(this).find('select[name="ambientes[]"]');
+
+            const selectedOptions = selectElement.select2('data');
+
+            selectedOptions.forEach(function(option) {
+                const optionElement = selectElement.find('option[value="' + option.id + '"]');
+                optionElement.removeAttr('selected');
+            });
+        });
+    });
 </script>

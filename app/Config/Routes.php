@@ -122,6 +122,7 @@ $routes->group('sys', function ($routes) {
         $routes->get('', 'Aulas::index');
         $routes->post('salvar', 'Aulas::salvar');
         $routes->post('deletar', 'Aulas::deletar');
+        $routes->post('atualizar', 'Aulas::atualizar');
     });
 
     $routes->group('versao', function ($routes) {

@@ -35,6 +35,7 @@ class AulasModel extends Model
         'turma_id' => 'required|is_not_unique[turmas.id]|max_length[11]',
         'versao_id' => 'is_not_unique[versoes.id]|max_length[11]',
     ];
+
     protected $validationMessages   = [
 
         "disciplina_id" => [
@@ -116,21 +117,21 @@ class AulasModel extends Model
     public function getAulasComTurmaDisciplinaEProfessores()
     {        
         return $this->select(
-            "aulas.*, 
-            turma.sigla as turma_sigla,
-            turma.id as turma_id,
-            disciplina.nome as disciplina_nome,
-            disciplina.id as disciplina_id,
-            curso.nome as curso_nome,
-            curso.id as curso_id,
-            GROUP_CONCAT(professores.nome) as professores_nome,
-            GROUP_CONCAT(professores.id) as professores_id"
+                "aulas.*, 
+                turma.sigla as turma_sigla,
+                turma.id as turma_id,
+                disciplina.nome as disciplina_nome,
+                disciplina.id as disciplina_id,
+                curso.nome as curso_nome,
+                curso.id as curso_id,
+                GROUP_CONCAT(professores.nome) as professores_nome,
+                GROUP_CONCAT(professores.id) as professores_id"
             )
             ->join("disciplinas as disciplina", "aulas.disciplina_id = disciplina.id")
             ->join("turmas as turma", "aulas.turma_id = turma.id")
             ->join("cursos as curso", "turma.curso_id = curso.id")
-            ->join("aula_professor as ap", "aulas.id = ap.aula_id") // Relaciona aula com os professores
-            ->join("professores as professores", "ap.professor_id = professores.id") // Relaciona a aula_professor com os professores
+            ->join("aula_professor as ap", "aulas.id = ap.aula_id",'left') // Relaciona aula com os professores
+            ->join("professores as professores", "ap.professor_id = professores.id",'left') // Relaciona a aula_professor com os professores
             ->groupBy("aulas.id") // Agrupa por ID da aula
             ->findAll();
     }

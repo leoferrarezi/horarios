@@ -52,6 +52,7 @@
                                     <th>Turma</th>
                                     <th>Disciplina</th>
                                     <th>Professor(es)</th>
+                                    <th></th>
                                 </tr>
                                 </thead>
 
@@ -135,11 +136,11 @@
         {
             <?php if (!empty($aula)): ?>
 
-            $("#listagem-aula").DataTable({
+            $("#listagem-aulas").DataTable({
 
                 aLengthMenu: [
-                    [5, 15, 30, -1],
-                    [5, 15, 30, "Todos"],
+                    [-1, 5, 15, 30],
+                    ["Todos", 5, 15, 30],
                 ],
 
                 language: {
@@ -148,8 +149,11 @@
                 },
 
                 ordering: true,
-                order: [[1, 'asc']],
-                columns: [null, null, null, null]
+                order: [
+                    [0,'asc'],
+                    [1,'asc']
+                ],
+                columns: [null, null, null, null, null]
             });
 
             $('#modal-edit-aula').on('show.bs.modal', function (event)

@@ -29,7 +29,7 @@
 
                     <div class="form-group">
                         <label for="disciplina">Disciplina</label>
-                        <select class="form-select" id="disciplina" name="disciplina">
+                        <select class="form-select" id="disciplina" name="disciplina" style="width:100%;">
                             <!-- preenchido dinamicamente -->
                         </select>
                     </div>
@@ -125,12 +125,32 @@
                     noResults:function(){
                         return"Nenhum resultado encontrado"
                     }
-                }
+                },
+                dropdownParent: $('#modal-cad-aula')
             });
         }
 
-        if ($(".select2-professores").length)
-            $(".select2-professores").select2();
+        if ($(".select2-professores").length){
+            $(".select2-professores").select2({
+                language: {
+                    noResults:function(){
+                        return"Nenhum resultado encontrado"
+                    }
+                },
+                dropdownParent: $('#modal-cad-aula')
+            });
+        }
+
+        if ($("#disciplina").length) {
+            $("#disciplina").select2({
+                language: {
+                    noResults:function(){
+                        return"Nenhum resultado encontrado"
+                    }
+                },
+                dropdownParent: $('#modal-cad-aula')
+            });
+        }
 
         $("#curso").on("change", function() {
             updateSelectTurmas();

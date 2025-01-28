@@ -12,7 +12,7 @@
 
                     <?php echo csrf_field() ?>
 
-                    <input type="hidden" id="edit-id" name="idEdit" />
+                    <input type="hidden" id="edit-id" name="id" />
 
                     <div class="form-group">
                         <label for="curso">Curso</label>
@@ -25,14 +25,14 @@
 
                     <div class="form-group">
                         <label>Turma(s)</label>
-                        <select class="form-select" id="turmaEdit" name="turmaEdit">
+                        <select class="form-select" id="turmaEdit" name="turma">
                             <!-- preenchido dinamicamente -->
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="disciplinaEdit">Disciplina</label>
-                        <select class="form-select" id="disciplinaEdit" name="disciplina">
+                        <select class="form-select" id="disciplinaEdit" name="disciplina" style="width:100%;">
                             <!-- preenchido dinamicamente -->
                         </select>
                     </div>
@@ -96,8 +96,27 @@
     (function($) {
         'use strict';
 
-        if ($(".select2-professoresEdit").length)
-            $(".select2-professoresEdit").select2();
+        if ($(".select2-professoresEdit").length) {
+            $(".select2-professoresEdit").select2({
+                language: {
+                    noResults:function(){
+                        return"Nenhum resultado encontrado"
+                    }
+                },
+                dropdownParent: $('#modal-edit-aula')
+            });
+        }
+
+        if ($("#disciplinaEdit").length) {
+            $("#disciplinaEdit").select2({
+                language: {
+                    noResults:function(){
+                        return"Nenhum resultado encontrado"
+                    }
+                },
+                dropdownParent: $('#modal-edit-aula')
+            });
+        }
 
         $("#cursoEdit").on("change", function() {
             updateSelectTurmasEdit();

@@ -28239,7 +28239,7 @@ body.avgrund-active {
 }
 .select2-container--default .select2-selection--single .select2-selection__rendered {
   color: #ffffff;
-  line-height: 14px;
+  line-height: 14px; 
 }
 .select2-container--default .select2-dropdown {
   font-size: 0.8125rem;

@@ -139,17 +139,11 @@
             $(selectElement).select2({
                 dropdownParent: $(modalId)  // Faz o dropdown renderizar dentro do modal
             });
-
-            // Após o Select2 ser renderizado, removemos o padding
-            $('.select2-container--default .select2-selection--single').css('background-color', '#2A3038');
-            $('.select2-container--default .select2-selection--single').css('color', '#FFFFFF');
-            $('.select2-container--default .select2-selection--single').css('padding', '0');
-            $('.select2-container--default .select2-selection__rendered').css('padding', '0 0 0 10');
-            $('.select2-container--default .select2-selection__rendered').css('color', '#FFFFFF');
         }
 
         //essa linha abaixo é para detectar que o documento foi completamente carregado e executar o código após isso
-        $(document).ready(function(){
+        $(document).ready(function()
+        {
 
 
             initSelect2('Select2Matriz', '#modal-cad-curso');

@@ -4,16 +4,57 @@ namespace App\Controllers;
 
 use CodeIgniter\Controller;
 use CodeIgniter\Shield\Entities\User;
+use App\Models\GroupModel;
+use App\Models\UserGroupModel;
 
 class AdminController extends Controller
 {
     protected $helpers = ['form'];
+    protected $groupModel;
+    protected $userGroupModel;
 
+    public function __construct()
+    {
+        // Carrega os modelos necessários
+        $this->groupModel = new GroupModel();
+        $this->userGroupModel = new UserGroupModel();
+    }
+
+    /**
+     * Exibe a página inicial da administração.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse|string
+     */
+    public function index()
+    {
+        // Verifica se o usuário é um admin
+        /* if (!auth()->user()->inGroup('admin')) {
+            return redirect()->to('/')->with('error', 'Acesso negado.');
+        } */
+
+        // Busca todos os usuários e grupos
+        $data['users'] = auth()->getProvider()->findAll();
+        $data['groups'] = $this->groupModel->findAll();
+
+        // Carrega a view da página inicial da admin
+        return view('admin/index', $data);
+    }
+
+    /**
+     * Exibe a página para alterar a senha.
+     *
+     * @return string
+     */
     public function changePassword()
     {
         return view('sys/alterar-senha');
     }
 
+    /**
+     * Processa a atualização da senha.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse
+     */
     public function updatePassword()
     {
         $validation = service('validation');
@@ -75,5 +116,79 @@ class AdminController extends Controller
         log_message('info', 'Senha alterada com sucesso para o e-mail: ' . $email);
 
         return redirect()->to('/sys/home')->with('success', 'Senha alterada com sucesso.');
+    }
+
+    /**
+     * Exibe a página de gerenciamento de usuários.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse|string
+     */
+    public function manageUsers()
+    {
+        // Verifica se o usuário é um admin
+        /* if (!auth()->user()->inGroup('admin')) {
+        return redirect()->to('/')->with('error', 'Acesso negado.');
+    } */
+
+        // Busca todos os usuários e grupos
+        $usersArray = auth()->getProvider()->findAll(); // Retorna um array de arrays
+        $data['users'] = array_map(function ($userData) {
+            return new \CodeIgniter\Shield\Entities\User($userData); // Converte cada array em um objeto User
+        }, $usersArray);
+
+        $data['groups'] = $this->groupModel->findAll(); // Retorna uma coleção de objetos Group
+
+        return view('admin/manage_users', $data);
+    }
+
+    /**
+     * Atribui um grupo a um usuário.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse
+     */
+    public function assignGroup()
+    {
+        // Verifica se o usuário é um admin
+        if (!auth()->user()->inGroup('admin')) {
+            return redirect()->to('/')->with('error', 'Acesso negado.');
+        }
+
+        $userId = $this->request->getPost('user_id');
+        $groupId = $this->request->getPost('group_id');
+
+        // Verifica se o usuário já está no grupo
+        $existing = $this->userGroupModel->where('user_id', $userId)->where('group_id', $groupId)->first();
+        if ($existing) {
+            return redirect()->back()->with('error', 'O usuário já está neste grupo.');
+        }
+
+        // Atribui o grupo ao usuário
+        $this->userGroupModel->insert([
+            'user_id' => $userId,
+            'group_id' => $groupId
+        ]);
+
+        return redirect()->back()->with('success', 'Grupo atribuído com sucesso.');
+    }
+
+    /**
+     * Remove um grupo de um usuário.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse
+     */
+    public function removeGroup()
+    {
+        // Verifica se o usuário é um admin
+        if (!auth()->user()->inGroup('admin')) {
+            return redirect()->to('/')->with('error', 'Acesso negado.');
+        }
+
+        $userId = $this->request->getPost('user_id');
+        $groupId = $this->request->getPost('group_id');
+
+        // Remove o grupo do usuário
+        $this->userGroupModel->where('user_id', $userId)->where('group_id', $groupId)->delete();
+
+        return redirect()->back()->with('success', 'Grupo removido com sucesso.');
     }
 }

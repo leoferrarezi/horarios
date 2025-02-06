@@ -1,3 +1,5 @@
+<?php echo view('components/gerenciar-usuarios/modal-cad-user.php'); ?>
+
 <div class="page-header">
     <h3 class="page-title">GERENCIAR USUÁRIOS</h3>
     <nav aria-label="breadcrumb">
@@ -21,6 +23,17 @@
                                 <li> <i class="mdi mdi-alert-circle"></i><?= $erro ?></li>
                             <?php endforeach ?>
                         </ul>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Mensagens de sucesso ou erro -->
+                <?php if (session()->getFlashdata('success')): ?>
+                    <div class="alert alert-success">
+                        <?= session()->getFlashdata('success') ?>
+                    </div>
+                <?php elseif (session()->getFlashdata('error')): ?>
+                    <div class="alert alert-danger">
+                        <?= session()->getFlashdata('error') ?>
                     </div>
                 <?php endif; ?>
 
@@ -51,9 +64,15 @@
                                     <?php if (!empty($usuarios)): ?>
                                         <?php foreach ($usuarios as $usuario): ?>
                                             <tr>
-                                                <td><?php echo esc($usuario['nome']); ?></td>
-                                                <td><?php echo esc($usuario['email']); ?></td>
-                                                <td><?php echo esc($usuario['grupo']); ?></td>
+                                                <td><?= esc($usuario->username) ?></td>
+                                                <td><?= esc($usuario->email) ?></td>
+                                                <td>
+                                                    <?php if (!empty($usuario->grupos)): ?>
+                                                        <?= esc(implode(', ', $usuario->grupos)) ?>
+                                                    <?php else: ?>
+                                                        Nenhum grupo atribuído
+                                                    <?php endif; ?>
+                                                </td>
                                                 <td>
                                                     <div class="d-flex">
                                                         <span data-bs-toggle="tooltip" data-placement="top"
@@ -70,11 +89,14 @@
                                                             </button>
                                                         </span>
 
-                                                        <span data-bs-toggle="tooltip" data-placement="top"
-                                                            title="Excluir usuário">
-                                                            <button type="button" class="btn btn-inverse-danger btn-icon me-1">
-                                                                <i class="fa fa-trash"></i>
-                                                            </button>
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Excluir usuário">
+                                                            <form action="<?= site_url('/sys/admin/excluir-usuario') ?>" method="post" onsubmit="return confirm('Tem certeza que deseja excluir este usuário?');">
+                                                                <?= csrf_field(); ?>
+                                                                <input type="hidden" name="user_id" value="<?= $usuario->id ?>">
+                                                                <button type="submit" class="btn btn-inverse-danger btn-icon me-1">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
+                                                            </form>
                                                         </span>
 
                                                         <span data-bs-toggle="tooltip" data-placement="top"

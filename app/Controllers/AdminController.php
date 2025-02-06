@@ -2,194 +2,109 @@
 
 namespace App\Controllers;
 
-use CodeIgniter\Controller;
-use CodeIgniter\Shield\Entities\User;
-use App\Models\GroupModel;
 use App\Models\UserGroupModel;
+use App\Models\AuthIdentityModel;
+use CodeIgniter\Controller;
+use CodeIgniter\Shield\Models\UserModel;
 
 class AdminController extends Controller
 {
-    protected $helpers = ['form'];
-    protected $groupModel;
     protected $userGroupModel;
+    protected $userModel;
+    protected $authIdentityModel;
 
     public function __construct()
     {
-        // Carrega os modelos necessários
-        $this->groupModel = new GroupModel();
         $this->userGroupModel = new UserGroupModel();
+        $this->userModel = new UserModel();
+        $this->authIdentityModel = new AuthIdentityModel();
     }
 
-    /**
-     * Exibe a página inicial da administração.
-     *
-     * @return \CodeIgniter\HTTP\RedirectResponse|string
-     */
+    // Método index - carrega o container (dashboard) com os usuários
     public function index()
     {
-        // Verifica se o usuário é um admin
-        /* if (!auth()->user()->inGroup('admin')) {
-            return redirect()->to('/')->with('error', 'Acesso negado.');
-        } */
+        // Chama o método gerenciarUsuarios para obter os dados dos usuários
+        $usuarios = $this->gerenciarUsuarios();
 
-        // Busca todos os usuários e grupos
-        $data['users'] = auth()->getProvider()->findAll();
-        $data['groups'] = $this->groupModel->findAll();
+        // Passa os dados de usuários para a view do dashboard
+        $data['usuarios'] = $usuarios;
+        $data['content'] = view('sys/gerenciar-usuarios', $data); // Caminho correto para a view
 
-        // Carrega a view da página inicial da admin
-        $data['content'] = view('sys/gerenciar-usuarios', $data);
         return view('dashboard', $data);
     }
 
-    /**
-     * Exibe a página para alterar a senha.
-     *
-     * @return string
-     */
-    public function changePassword()
+    // Método que busca os usuários e seus grupos
+    public function gerenciarUsuarios()
     {
-        return view('sys/alterar-senha');
+        // Verifique se está fazendo a consulta correta no modelo UserModel
+        $usuarios = $this->userModel->select('id, username')->findAll(); // Não selecione o 'email' aqui, pois ele está em auth_identities
+
+        // Agora vamos buscar o 'email' da tabela auth_identities (supondo que o email esteja lá)
+        foreach ($usuarios as &$usuario) {
+            // Busque o email da tabela auth_identities, onde 'user_id' é o mesmo que 'id' do usuário
+            $emailData = $this->authIdentityModel->where('user_id', $usuario->id)->first(); // Acessa id como propriedade de objeto
+
+            // Verifique se encontrou o email
+            if ($emailData) {
+                $usuario->email = $emailData['secret']; // Atribui o 'secret' (email) ao usuário
+            } else {
+                $usuario->email = 'Email não encontrado'; // Se não encontrar, atribui uma mensagem padrão
+            }
+        }
+
+        // Se a consulta não trouxe nenhum usuário, exibir uma mensagem de depuração
+        if (empty($usuarios)) {
+            die("Nenhum usuário encontrado!");
+        }
+
+        return $usuarios;  // Apenas retorna os dados dos usuários
     }
 
-    /**
-     * Processa a atualização da senha.
-     *
-     * @return \CodeIgniter\HTTP\RedirectResponse
-     */
-    public function updatePassword()
+    // Método para adicionar um usuário a um grupo
+    public function adicionarUsuarioGrupo()
     {
-        $validation = service('validation');
-
-        // Regras de validação
-        $validation->setRules([
-            'current_password' => 'required',
-            'new_password'     => 'required|min_length[8]',
-            'confirm_password' => 'required|matches[new_password]'
-        ]);
-
-        if (!$validation->withRequest($this->request)->run()) {
-            log_message('error', 'Validação falhou ao tentar alterar a senha: ' . json_encode($validation->getErrors()));
-            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
-        }
-
-        $currentPassword = $this->request->getPost('current_password');
-        $newPassword     = $this->request->getPost('new_password');
-
-        // Obtém o usuário autenticado
-        $user = auth()->user();
-
-        if (!$user) {
-            log_message('error', 'Usuário autenticado não encontrado.');
-            return redirect()->back()->with('error', 'Erro ao processar a solicitação. Usuário não encontrado.');
-        }
-
-        // Busca o e-mail (secret) e a senha (secret2) do usuário em auth_identities
-        $db = db_connect();
-        $query = $db->table('auth_identities')
-            ->select('secret, secret2')
-            ->where('user_id', $user->id)
-            ->get()
-            ->getRow();
-
-        if (!$query || !$query->secret2 || !$query->secret) {
-            log_message('error', 'Credenciais não encontradas para o e-mail: ' . ($query->secret ?? 'Desconhecido'));
-            return redirect()->back()->with('error', 'Erro ao processar a solicitação. Credenciais não encontradas.');
-        }
-
-        $email = $query->secret; // E-mail do usuário
-        $hashedPassword = $query->secret2; // Senha armazenada
-
-        // Verifica se a senha atual está correta
-        if (!password_verify($currentPassword, $hashedPassword)) {
-            log_message('error', 'Senha incorreta para o e-mail: ' . $email);
-            return redirect()->back()->withInput()->with('error', 'A senha atual está incorreta.');
-        }
-
-        // Atualiza a senha
-        $user->setPassword($newPassword);
-
-        // Atualiza a nova senha na tabela auth_identities
-        $newHashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-        $db->table('auth_identities')
-            ->where('user_id', $user->id)
-            ->update(['secret2' => $newHashedPassword]);
-
-        log_message('info', 'Senha alterada com sucesso para o e-mail: ' . $email);
-
-        return redirect()->to('/sys/home')->with('success', 'Senha alterada com sucesso.');
-    }
-
-    /**
-     * Exibe a página de gerenciamento de usuários.
-     *
-     * @return \CodeIgniter\HTTP\RedirectResponse|string
-     */
-    public function manageUsers()
-    {
-        // Verifica se o usuário é um admin
-        /* if (!auth()->user()->inGroup('admin')) {
-        return redirect()->to('/')->with('error', 'Acesso negado.');
-    } */
-
-        // Busca todos os usuários e grupos
-        $usersArray = auth()->getProvider()->findAll(); // Retorna um array de arrays
-        $data['users'] = array_map(function ($userData) {
-            return new \CodeIgniter\Shield\Entities\User($userData); // Converte cada array em um objeto User
-        }, $usersArray);
-
-        $data['groups'] = $this->groupModel->findAll(); // Retorna uma coleção de objetos Group
-
-        return view('admin/manage_users', $data);
-    }
-
-    /**
-     * Atribui um grupo a um usuário.
-     *
-     * @return \CodeIgniter\HTTP\RedirectResponse
-     */
-    public function assignGroup()
-    {
-        // Verifica se o usuário é um admin
-        if (!auth()->user()->inGroup('admin')) {
-            return redirect()->to('/')->with('error', 'Acesso negado.');
-        }
-
         $userId = $this->request->getPost('user_id');
-        $groupId = $this->request->getPost('group_id');
+        $grupo = $this->request->getPost('grupo');
 
-        // Verifica se o usuário já está no grupo
-        $existing = $this->userGroupModel->where('user_id', $userId)->where('group_id', $groupId)->first();
-        if ($existing) {
-            return redirect()->back()->with('error', 'O usuário já está neste grupo.');
+        if ($userId && $grupo) {
+            if (!$this->userGroupModel->isUserInGroup($userId, $grupo)) {
+                $this->userGroupModel->addUserToGroup($userId, $grupo);
+            }
         }
 
-        // Atribui o grupo ao usuário
-        $this->userGroupModel->insert([
-            'user_id' => $userId,
-            'group_id' => $groupId
-        ]);
-
-        return redirect()->back()->with('success', 'Grupo atribuído com sucesso.');
+        return redirect()->to('/sys/admin/');
     }
 
-    /**
-     * Remove um grupo de um usuário.
-     *
-     * @return \CodeIgniter\HTTP\RedirectResponse
-     */
-    public function removeGroup()
+    // Método para remover um usuário de um grupo
+    public function removerUsuarioGrupo()
     {
-        // Verifica se o usuário é um admin
-        if (!auth()->user()->inGroup('admin')) {
-            return redirect()->to('/')->with('error', 'Acesso negado.');
+        $userId = $this->request->getPost('user_id');
+        $grupo = $this->request->getPost('grupo');
+
+        if ($userId && $grupo) {
+            $this->userGroupModel->removeUserFromGroup($userId, $grupo);
         }
 
+        return redirect()->to('/sys/admin/');
+    }
+
+    // Método para excluir um usuário
+    public function excluirUsuario()
+    {
         $userId = $this->request->getPost('user_id');
-        $groupId = $this->request->getPost('group_id');
 
-        // Remove o grupo do usuário
-        $this->userGroupModel->where('user_id', $userId)->where('group_id', $groupId)->delete();
+        if ($userId) {
+            // Usando o método delete() do UserModel para excluir o usuário
+            $user = $this->userModel->find($userId);
 
-        return redirect()->back()->with('success', 'Grupo removido com sucesso.');
+            if ($user) {
+                $this->userModel->delete($userId);
+                return redirect()->to('/sys/admin/')->with('message', 'Usuário excluído com sucesso!');
+            } else {
+                return redirect()->to('/sys/admin/')->with('error', 'Usuário não encontrado.');
+            }
+        }
+
+        return redirect()->to('/sys/admin/')->with('error', 'ID do usuário não fornecido.');
     }
 }

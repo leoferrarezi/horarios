@@ -5,6 +5,7 @@
 <?php echo view('components/professor/modal-import-prof') ?>
 <?php echo view('components/professor/modal-restricoes-prof') ?>
 
+
 <div class="page-header">
     <h3 class="page-title">GERENCIAR PROFESSORES</h3>
     <nav aria-label="breadcrumb">
@@ -67,9 +68,9 @@
 
                                 <tbody>
 
-                                    <?php if (!empty($professores)): //verifica se a tabela tem dados 
+                                    <?php if (!empty($professores)): //verifica se a tabela tem dados
                                     ?>
-                                        <?php foreach ($professores as $professor): //loop para percorrer todos os professores retornados do bd 
+                                        <?php foreach ($professores as $professor): //loop para percorrer todos os professores retornados do bd
                                         ?>
                                             <tr>
                                                 <td><?php echo esc($professor['nome']); ?></td>

@@ -147,6 +147,10 @@ $routes->group('sys', function ($routes) {
         $routes->post('remove-group', 'AdminController::removeGroup'); // Remover grupo
         $routes->get('change-password', 'AdminController::changePassword'); // Alterar senha
         $routes->post('update-password', 'AdminController::updatePassword'); // Atualizar senha
+
+        // Rota para excluir um usuário
+        $routes->post('excluir-usuario', 'AdminController::excluirUsuario');;
+        // Excluir usuário
     });
 
     // Rotas para alteração da senha do usuário

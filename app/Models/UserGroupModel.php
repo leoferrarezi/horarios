@@ -6,40 +6,47 @@ use CodeIgniter\Model;
 
 class UserGroupModel extends Model
 {
-    protected $table = 'users'; // Nome da tabela
-    protected $primaryKey = 'id'; // Chave primária
-    protected $allowedFields = ['username', 'status', 'status_message', 'active', 'last_active', 'created_at', 'updated_at', 'deleted_at']; // Campos permitidos
+    protected $table = 'auth_groups_users'; // Tabela do Shield
+    protected $allowedFields = ['user_id', 'group', 'created_at']; // Campos permitidos
+    protected $useTimestamps = true; // Gerenciamento automático de timestamps
 
     /**
-     * Retorna todos os usuários.
-     *
-     * @return array Lista de usuários.
+     * Retorna todos os grupos de um usuário.
      */
-    public function findAllUsers()
+    public function getUserGroups($userId)
     {
-        return $this->findAll();
+        return $this->where('user_id', $userId)->findAll();
     }
 
     /**
-     * Retorna um usuário pelo ID.
-     *
-     * @param int $userId ID do usuário.
-     * @return array|null Dados do usuário ou null se não encontrado.
+     * Adiciona um usuário a um grupo.
      */
-    public function findUserById($userId)
+    public function addUserToGroup($userId, $group)
     {
-        return $this->find($userId);
+        $data = [
+            'user_id' => $userId,
+            'group' => $group
+        ];
+
+        return $this->save($data);
     }
 
     /**
-     * Retorna os usuários que pertencem a um grupo específico.
-     *
-     * @param string $group Nome do grupo.
-     * @return array Lista de usuários no grupo.
+     * Remove um usuário de um grupo.
      */
-    public function findUsersByGroup($group)
+    public function removeUserFromGroup($userId, $group)
     {
-        $groupModel = new GroupModel();
-        return $groupModel->where('group', $group)->findAll();
+        if ($this->isUserInGroup($userId, $group)) {
+            return $this->where('user_id', $userId)->where('group', $group)->delete();
+        }
+        return false;
+    }
+
+    /**
+     * Verifica se um usuário pertence a um grupo.
+     */
+    public function isUserInGroup($userId, $group)
+    {
+        return $this->where('user_id', $userId)->where('group', $group)->countAllResults() > 0;
     }
 }

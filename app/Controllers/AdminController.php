@@ -6,6 +6,7 @@ use App\Models\UserGroupModel;
 use App\Models\AuthIdentityModel;
 use CodeIgniter\Controller;
 use CodeIgniter\Shield\Models\UserModel;
+use CodeIgniter\Shield\Entities\User;
 
 class AdminController extends Controller
 {
@@ -20,44 +21,83 @@ class AdminController extends Controller
         $this->authIdentityModel = new AuthIdentityModel();
     }
 
-    // Método index - carrega o container (dashboard) com os usuários
+    // Método para registrar um novo usuário
+    public function registrarUsuario()
+    {
+        // Receber os dados do formulário
+        $data = [
+            'username' => $this->request->getPost('username'),
+            'email'    => $this->request->getPost('email'),
+            'password' => $this->request->getPost('password'),
+        ];
+
+        // Criar entidade do usuário
+        $user = new User($data);
+
+        // Salvar o usuário
+        if (!$this->userModel->save($user)) {
+            return redirect()->back()->withInput()->with('errors', $this->userModel->errors());
+        }
+
+        // Obter o ID do usuário recém-criado
+        $userId = $this->userModel->getInsertID();
+        log_message('info', 'Id do Usuário: ' . $userId);
+
+        // Recuperar o registro do usuário para obter o created_at
+        $userData = $this->userModel->find($userId);
+        $createdAt = $userData->created_at; // Valor de created_at da tabela users
+
+        // Obter o grupo selecionado, assumindo que o nome do grupo vem do formulário
+        $grupo = $this->request->getPost('grupo'); // 'admin' ou 'user'
+
+        if ($grupo) {
+            // Atribuir o grupo ao usuário, passando o created_at
+            if (!$this->userGroupModel->addUserToGroup($userId, $grupo, $createdAt)) {
+                log_message('error', "Erro ao vincular o usuário $userId ao grupo $grupo.");
+            } else {
+                log_message('info', "Usuário $userId vinculado ao grupo $grupo com sucesso.");
+            }
+        } else {
+            log_message(
+                'info',
+                'Grupo não reconhecido'
+            );
+        }
+
+        return redirect()->to('/sys/admin')->with('success', 'Usuário cadastrado com sucesso!');
+    }
+
+    // Método index - carrega o dashboard com os usuários
     public function index()
     {
-        // Chama o método gerenciarUsuarios para obter os dados dos usuários
         $usuarios = $this->gerenciarUsuarios();
-
-        // Passa os dados de usuários para a view do dashboard
         $data['usuarios'] = $usuarios;
-        $data['content'] = view('sys/gerenciar-usuarios', $data); // Caminho correto para a view
+        $data['content'] = view('sys/gerenciar-usuarios', $data);
 
         return view('dashboard', $data);
     }
 
-    // Método que busca os usuários e seus grupos
+    // Método para buscar usuários e seus grupos
     public function gerenciarUsuarios()
     {
-        // Verifique se está fazendo a consulta correta no modelo UserModel
-        $usuarios = $this->userModel->select('id, username')->findAll(); // Não selecione o 'email' aqui, pois ele está em auth_identities
+        // Buscar os usuários com os campos id e username
+        $usuarios = $this->userModel->select('id, username')->findAll();
 
-        // Agora vamos buscar o 'email' da tabela auth_identities (supondo que o email esteja lá)
         foreach ($usuarios as &$usuario) {
-            // Busque o email da tabela auth_identities, onde 'user_id' é o mesmo que 'id' do usuário
-            $emailData = $this->authIdentityModel->where('user_id', $usuario->id)->first(); // Acessa id como propriedade de objeto
+            // Buscar o email do usuário
+            $emailData = $this->authIdentityModel->where('user_id', $usuario->id)->first();
+            $usuario->email = $emailData ? $emailData['secret'] : 'Email não encontrado';
 
-            // Verifique se encontrou o email
-            if ($emailData) {
-                $usuario->email = $emailData['secret']; // Atribui o 'secret' (email) ao usuário
-            } else {
-                $usuario->email = 'Email não encontrado'; // Se não encontrar, atribui uma mensagem padrão
-            }
+            // Buscar os grupos do usuário
+            $grupos = $this->userGroupModel->where('user_id', $usuario->id)->findAll();
+
+            // Armazenar os grupos em um campo 'grupos' no objeto do usuário
+            $usuario->grupos = array_map(function ($grupo) {
+                return $grupo['group']; // Aqui estamos pegando o nome do grupo
+            }, $grupos);
         }
 
-        // Se a consulta não trouxe nenhum usuário, exibir uma mensagem de depuração
-        if (empty($usuarios)) {
-            die("Nenhum usuário encontrado!");
-        }
-
-        return $usuarios;  // Apenas retorna os dados dos usuários
+        return $usuarios;
     }
 
     // Método para adicionar um usuário a um grupo
@@ -67,8 +107,11 @@ class AdminController extends Controller
         $grupo = $this->request->getPost('grupo');
 
         if ($userId && $grupo) {
-            if (!$this->userGroupModel->isUserInGroup($userId, $grupo)) {
-                $this->userGroupModel->addUserToGroup($userId, $grupo);
+            $result = $this->userGroupModel->addUserToGroup($userId, $grupo);
+            if (!$result) {
+                log_message('error', 'Falha ao adicionar usuário ao grupo: ' . $userId . ' - ' . $grupo);
+            } else {
+                log_message('info', 'Usuário adicionado ao grupo com sucesso: ' . $userId . ' - ' . $grupo);
             }
         }
 
@@ -82,7 +125,12 @@ class AdminController extends Controller
         $grupo = $this->request->getPost('grupo');
 
         if ($userId && $grupo) {
-            $this->userGroupModel->removeUserFromGroup($userId, $grupo);
+            $result = $this->userGroupModel->removeUserFromGroup($userId, $grupo);
+            if (!$result) {
+                log_message('error', 'Falha ao remover usuário do grupo: ' . $userId . ' - ' . $grupo);
+            } else {
+                log_message('info', 'Usuário removido do grupo com sucesso: ' . $userId . ' - ' . $grupo);
+            }
         }
 
         return redirect()->to('/sys/admin/');
@@ -93,18 +141,13 @@ class AdminController extends Controller
     {
         $userId = $this->request->getPost('user_id');
 
-        if ($userId) {
-            // Usando o método delete() do UserModel para excluir o usuário
-            $user = $this->userModel->find($userId);
-
-            if ($user) {
-                $this->userModel->delete($userId);
-                return redirect()->to('/sys/admin/')->with('message', 'Usuário excluído com sucesso!');
-            } else {
-                return redirect()->to('/sys/admin/')->with('error', 'Usuário não encontrado.');
-            }
+        if ($userId && $this->userModel->find($userId)) {
+            $this->userModel->delete($userId);
+            log_message('info', 'Usuário excluído com sucesso: ' . $userId);
+            return redirect()->to('/sys/admin/')->with('message', 'Usuário excluído com sucesso!');
         }
 
-        return redirect()->to('/sys/admin/')->with('error', 'ID do usuário não fornecido.');
+        log_message('error', 'Usuário não encontrado ou ID inválido: ' . $userId);
+        return redirect()->to('/sys/admin/')->with('error', 'Usuário não encontrado ou ID inválido.');
     }
 }

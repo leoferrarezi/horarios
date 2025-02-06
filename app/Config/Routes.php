@@ -149,7 +149,8 @@ $routes->group('sys', function ($routes) {
         $routes->post('update-password', 'AdminController::updatePassword'); // Atualizar senha
 
         // Rota para excluir um usuário
-        $routes->post('excluir-usuario', 'AdminController::excluirUsuario');;
+        $routes->post('excluir-usuario', 'AdminController::excluirUsuario');
+        $routes->post('registrar-usuario', 'AdminController::registrarUsuario');
         // Excluir usuário
     });
 

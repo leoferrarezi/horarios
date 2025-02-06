@@ -8,7 +8,7 @@
             </div>
             <div class="modal-body">
                 <!-- Formulário de Registro -->
-                <form action="<?= url_to('register') ?>" method="post">
+                <form action="<?= base_url('sys/admin/registrar-usuario') ?>" method="post">
                     <?= csrf_field() ?>
 
                     <!-- Exibir Mensagens de Erro -->
@@ -47,10 +47,10 @@
 
                     <!-- Grupo -->
                     <div class="mb-3">
-                        <label for="group" class="form-label">Grupo</label>
-                        <select class="form-control" id="group" name="group">
-                            <option value="admin" <?= old('group') == 'admin' ? 'selected' : '' ?>>Administrador</option>
-                            <option value="user" <?= old('group') == 'user' || old('group') == '' ? 'selected' : '' ?>>Usuário</option>
+                        <label for="grupo" class="form-label">Grupo</label>
+                        <select class="form-control" id="grupo" name="grupo">
+                            <option value="admin" <?= old('grupo') == 'admin' ? 'selected' : '' ?>>Administrador</option>
+                            <option value="user" <?= old('grupo') == 'user' || old('grupo') == '' ? 'selected' : '' ?>>Usuário</option>
                         </select>
                     </div>
 
@@ -58,7 +58,6 @@
                         <button type="submit" class="btn btn-primary">Salvar Usuário</button>
                     </div>
 
-                    <p class="text-center"><?= lang('Auth.haveAccount') ?> <a href="<?= url_to('login') ?>"><?= lang('Auth.login') ?></a></p>
                 </form>
             </div>
         </div>

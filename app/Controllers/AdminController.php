@@ -41,7 +41,6 @@ class AdminController extends Controller
 
         // Obter o ID do usuário recém-criado
         $userId = $this->userModel->getInsertID();
-        log_message('info', 'Id do Usuário: ' . $userId);
 
         // Recuperar o registro do usuário para obter o created_at
         $userData = $this->userModel->find($userId);

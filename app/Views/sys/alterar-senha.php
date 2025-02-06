@@ -1,56 +1,59 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<div class="page-header">
+    <h3 class="page-title">ALTERAR SENHA</h3>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="<?= base_url('/sys/home') ?>">Início</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Alterar Senha</li>
+        </ol>
+    </nav>
+</div>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alterar Senha</title>
-    <!-- Inclua seu CSS aqui -->
-    <link rel="stylesheet" href="path/to/your/styles.css"> <!-- Substitua com o caminho correto -->
-</head>
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
 
-<body>
-    <main>
-        <h1>Alterar Senha</h1>
+                <!-- Mensagens de erro -->
+                <?php if (session()->has('errors')): ?>
+                    <div class="alert alert-danger">
+                        <ul>
+                            <?php foreach (session('errors') as $error): ?>
+                                <li> <i class="mdi mdi-alert-circle"></i> <?= esc($error) ?></li>
+                            <?php endforeach ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
 
-        <?php if (session()->has('errors')): ?>
-            <ul>
-                <?php foreach (session('errors') as $error): ?>
-                    <li><?= esc($error) ?></li>
-                <?php endforeach ?>
-            </ul>
-        <?php endif ?>
+                <!-- Formulário para alterar a senha -->
+                <form action="<?= site_url('sys/alterar-senha') ?>" method="post">
+                    <?= csrf_field() ?>
 
-        <!-- Formulário para alterar a senha -->
-        <form action="<?= site_url('sys/alterar-senha') ?>" method="post">
-            <?= csrf_field() ?>
+                    <div class="mb-3">
+                        <label for="current_password" class="form-label">Senha Atual</label>
+                        <input type="password" name="current_password" id="current_password" class="form-control" required>
+                    </div>
 
-            <div>
-                <label for="current_password">Senha Atual</label>
-                <input type="password" name="current_password" id="current_password" required>
+                    <div class="mb-3">
+                        <label for="new_password" class="form-label">Nova Senha</label>
+                        <input type="password" name="new_password" id="new_password" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="confirm_password" class="form-label">Confirmar Nova Senha</label>
+                        <input type="password" name="confirm_password" id="confirm_password" class="form-control" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Alterar Senha</button>
+                </form>
             </div>
+        </div>
+    </div>
+</div>
 
-            <div>
-                <label for="new_password">Nova Senha</label>
-                <input type="password" name="new_password" id="new_password" required>
-            </div>
+<!-- Rodapé -->
+<footer>
+    <p>&copy; 2024 Seu Projeto. Todos os direitos reservados.</p>
+</footer>
 
-            <div>
-                <label for="confirm_password">Confirmar Nova Senha</label>
-                <input type="password" name="confirm_password" id="confirm_password" required>
-            </div>
-
-            <button type="submit">Alterar Senha</button>
-        </form>
-    </main>
-
-    <footer>
-        <!-- Rodapé -->
-        <p>&copy; 2024 Seu Projeto. Todos os direitos reservados.</p>
-    </footer>
-
-    <!-- Inclua seus scripts JS aqui -->
-    <script src="path/to/your/scripts.js"></script> <!-- Substitua com o caminho correto -->
-</body>
-
-</html>
+<!-- Scripts JS -->
+<script src="path/to/your/scripts.js"></script> <!-- Substitua com o caminho correto -->

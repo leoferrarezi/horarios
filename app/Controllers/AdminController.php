@@ -37,7 +37,8 @@ class AdminController extends Controller
         $data['groups'] = $this->groupModel->findAll();
 
         // Carrega a view da página inicial da admin
-        return view('admin/index', $data);
+        $data['content'] = view('sys/gerenciar-usuarios', $data);
+        return view('dashboard', $data);
     }
 
     /**

@@ -37,21 +37,3 @@
         </div>
     </div>
 </div>
-
-<!-- Script para preencher o modal corretamente -->
-<script>
-    $(document).ready(function() {
-        // Ativa os tooltips
-        $('[data-bs-toggle="tooltip"]').tooltip();
-
-        // Passa o ID do usuário e o grupo atual para o modal
-        $('#modal-alterar-grupo').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget); // Botão que acionou o modal
-            var userId = button.data('user-id'); // Pega o ID do usuário no botão
-            var userGroup = button.closest('tr').find('td:nth-child(3)').text().trim(); // Pega o grupo da tabela
-
-            $(this).find('input[name="user_id"]').val(userId);
-            $(this).find('input[name="grupo_atual"]').val(userGroup);
-        });
-    });
-</script>

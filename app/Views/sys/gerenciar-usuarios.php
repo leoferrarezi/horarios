@@ -1,4 +1,5 @@
 <?php echo view('components/gerenciar-usuarios/modal-cad-user.php'); ?>
+<?php echo view('components/gerenciar-usuarios/modal-alterar-grupo.php'); ?>
 
 <div class="page-header">
     <h3 class="page-title">GERENCIAR USUÁRIOS</h3>
@@ -100,8 +101,10 @@
                                                         </span>
 
                                                         <span data-bs-toggle="tooltip" data-placement="top"
-                                                            title="Atribuir permissões ou grupo">
-                                                            <button type="button" class="btn btn-inverse-info btn-icon me-1">
+                                                            title="Alterar grupo">
+                                                            <button type="button" class="btn btn-inverse-info btn-icon me-1"
+                                                                data-bs-toggle="modal" data-bs-target="#modal-alterar-grupo"
+                                                                data-user-id="<?= $usuario->id ?>">
                                                                 <i class="fa fa-users"></i>
                                                             </button>
                                                         </span>
@@ -126,18 +129,24 @@
                         <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar</p>
                         <p class="card-description text-end"><i class="fa fa-key text-warning me-2"></i>Resetar Senha</p>
                         <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i>Excluir</p>
-                        <p class="card-description text-end"><i class="fa fa-users text-info me-2"></i>Atribuir Permissões/Grupo</p>
+                        <p class="card-description text-end"><i class="fa fa-users text-info me-2"></i>Alterar grupo</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- JavaScript para interatividade com os botões (sem modais) -->
     <script>
         $(document).ready(function() {
             // Ativa os tooltips
             $('[data-bs-toggle="tooltip"]').tooltip();
+
+            // Passa o ID do usuário para o modal
+            $('#modal-alterar-grupo').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget);
+                var userId = button.data('user-id');
+                $(this).find('input[name="user_id"]').val(userId);
+            });
         });
     </script>
 </div>

@@ -19,19 +19,12 @@ class UserGroupModel extends Model
     }
 
     /**
-     * Adiciona um usuário a um grupo.
+     * Adiciona um usuário a um grupo (sem necessidade de verificação prévia).
      */
     public function addUserToGroup($userId, $group, $createdAt = null)
     {
-        // Verifique se o usuário e o grupo são válidos
         if (empty($userId) || empty($group)) {
             log_message('error', 'ID do usuário ou grupo inválido.');
-            return false;
-        }
-
-        // Verifique se o usuário já está no grupo
-        if ($this->isUserInGroup($userId, $group)) {
-            log_message('info', 'Usuário já está no grupo: ' . $group);
             return false;
         }
 
@@ -39,42 +32,17 @@ class UserGroupModel extends Model
         $data = [
             'user_id' => $userId,
             'group' => $group,
-            'created_at' => $createdAt ?? date('Y-m-d H:i:s'), // Usar o created_at fornecido ou o atual
+            'created_at' => $createdAt ?? date('Y-m-d H:i:s'),
         ];
 
-        // Tente inserir o registro
+        // Tente inserir o novo grupo
         try {
-            $result = $this->insert($data);
-            if ($result) {
-                log_message('info', 'Usuário adicionado ao grupo com sucesso: ' . $userId . ' - ' . $group);
-                return true;
-            } else {
-                log_message('error', 'Falha ao adicionar usuário ao grupo: ' . $userId . ' - ' . $group);
-                return false;
-            }
+            $this->insert($data);
+            log_message('info', "Usuário $userId adicionado ao grupo $group com sucesso.");
+            return true;
         } catch (\Exception $e) {
-            log_message('error', 'Erro ao adicionar usuário ao grupo: ' . $e->getMessage());
+            log_message('error', "Erro ao adicionar usuário ao grupo: " . $e->getMessage());
             return false;
         }
-    }
-
-
-    /**
-     * Remove um usuário de um grupo.
-     */
-    public function removeUserFromGroup($userId, $group)
-    {
-        if ($this->isUserInGroup($userId, $group)) {
-            return $this->where('user_id', $userId)->where('group', $group)->delete();
-        }
-        return false;
-    }
-
-    /**
-     * Verifica se um usuário pertence a um grupo.
-     */
-    public function isUserInGroup($userId, $group)
-    {
-        return $this->where('user_id', $userId)->where('group', $group)->countAllResults() > 0;
     }
 }

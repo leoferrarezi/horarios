@@ -34,6 +34,7 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
+        'admin'    => \App\Filters\AdminFilter::class, // Filtro para admin
     ];
 
     /**
@@ -73,7 +74,7 @@ class Filters extends BaseFilters
             'csrf', // Cross-Site Request Forgery | exceções caso necessário exemplo: => ['except' => ['api/record/save']]
             // 'invalidchars',
             //ATIVAR A LINHA ABAIXO PARA INICIAR AUTENTICAÇÃO
-            'session' => ['except' => ['login*', 'register*', 'auth/a/*', 'logout']],
+            'session' => ['except' => ['login*', 'auth/a/*', 'logout']],
         ],
         'after' => [
             // 'honeypot',

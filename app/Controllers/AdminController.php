@@ -90,7 +90,7 @@ class AdminController extends Controller
             return redirect()->to('/sys/admin/')->with('error', 'Usuário ou grupo inválido.');
         }
 
-        // Busca o grupo pelo nome
+        // Busca o grupo pelo nome para garantir que ele está disponível no banco
         $grupo = $this->groupModel->getGroupByName($novoGrupo);
 
         if (!$grupo) {
@@ -101,15 +101,23 @@ class AdminController extends Controller
         // Verifica se o usuário já pertence ao grupo
         $userGroup = $this->userGroupModel->where('user_id', $userId)->where('group', $novoGrupo)->first();
 
+        // Se o usuário já pertence ao grupo, nada precisa ser feito
         if ($userGroup) {
             log_message('info', "Usuário $userId já pertence ao grupo '$novoGrupo'. Nenhuma alteração necessária.");
             return redirect()->to('/sys/admin/')->with('info', 'Usuário já pertence ao grupo.');
         }
 
+        // Se o usuário pertence a um grupo que não está mais no banco, não gera erro, só substitui
+        $userCurrentGroup = $this->userGroupModel->where('user_id', $userId)->first();
+
+        if ($userCurrentGroup && !$this->groupModel->getGroupByName($userCurrentGroup['group'])) {
+            log_message('info', "Usuário $userId pertence a um grupo não registrado no banco. Substituindo o grupo.");
+        }
+
         // Remove o usuário de todos os grupos antes de adicionar ao novo grupo
         $this->userGroupModel->where('user_id', $userId)->delete();
 
-        // Adiciona o usuário ao novo grupo (garantindo que created_at seja preenchido corretamente)
+        // Adiciona o usuário ao novo grupo
         $result = $this->userGroupModel->addUserToGroup($userId, $novoGrupo);
 
         if (!$result) {
@@ -120,6 +128,7 @@ class AdminController extends Controller
         log_message('info', "Grupo do usuário $userId alterado para $novoGrupo com sucesso.");
         return redirect()->to('/sys/admin/')->with('success', 'Grupo do usuário alterado com sucesso!');
     }
+
 
 
 

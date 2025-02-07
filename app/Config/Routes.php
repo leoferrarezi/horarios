@@ -135,8 +135,7 @@ $routes->group('sys', function ($routes) {
         $routes->post('deletar', 'Versao::deletar');
     });
 
-    /* $routes->group('admin', ['filter' => 'admin'], function ($routes) { */
-    $routes->group('admin', function ($routes) {
+    $routes->group('admin', ['filter' => 'admin'], function ($routes) {
         $routes->get('/', 'AdminController::index'); // Página inicial da admin
         $routes->post('alterar-grupo', 'AdminController::alterarGrupoUsuario'); // Atribuir
         $routes->post('resetar-senha', 'AdminController::updatePassword'); // Atualizar senha
@@ -144,7 +143,6 @@ $routes->group('sys', function ($routes) {
         // Rota para excluir um usuário
         $routes->post('excluir-usuario', 'AdminController::excluirUsuario');
         $routes->post('registrar-usuario', 'AdminController::registrarUsuario');
-        // Excluir usuário
     });
 
     // Rotas para alteração da senha do usuário

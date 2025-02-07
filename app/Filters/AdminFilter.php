@@ -17,12 +17,19 @@ class AdminFilter implements FilterInterface
             return redirect()->to('/login');
         }
 
+        // Obter o ID do usuário autenticado
+        $userId = Services::auth()->id();
+        log_message('debug', 'ID do usuário autenticado: ' . $userId);
+
         // Verificar se o usuário pertence ao grupo 'admin'
-        if (!Services::auth()->hasGroup('admin')) {
-            log_message('debug', 'Usuário não é do grupo admin');
-            return redirect()->to('/unauthorized');
+        $userGroupModel = new \App\Models\UserGroupModel();
+        $isAdmin = $userGroupModel->where('user_id', $userId)->where('group', 'admin')->countAllResults() > 0;
+
+        if (!$isAdmin) {
+            return redirect()->to('/');
         }
     }
+
 
 
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)

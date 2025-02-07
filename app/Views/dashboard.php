@@ -10,33 +10,38 @@
   <link rel="stylesheet" href="<?php echo base_url("assets/vendors/css/vendor.bundle.base.css"); ?>">
   <link rel="stylesheet" href="<?php echo base_url("assets/vendors/select2/select2.min.css"); ?>">
   <link rel="stylesheet" href="<?php echo base_url("assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css"); ?>">
-  <link rel="stylesheet" href="<?php echo base_url("assets/css/modern-vertical/style.css"); ?>">  
+  <link rel="stylesheet" href="<?php echo base_url("assets/css/modern-vertical/style.css"); ?>">
   <link rel="stylesheet" href="<?php echo base_url("assets/vendors/font-awesome/css/font-awesome.min.css"); ?>">
-  <link rel="stylesheet" href="<?php echo base_url("assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css"); ?>">  
+  <link rel="stylesheet" href="<?php echo base_url("assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css"); ?>">
   <link rel="stylesheet" href="<?php echo base_url("assets/vendors/jquery-toast-plugin/jquery.toast.min.css"); ?>">
-  <link rel="stylesheet" href="<?php echo base_url("assets/css/custom.css"); ?>">  
+  <link rel="stylesheet" href="<?php echo base_url("assets/css/custom.css"); ?>">
 
   <link rel="shortcut icon" href="<?php echo base_url("assets/images/logo-ifro-mini.png"); ?>" />
 
   <script src="<?php echo base_url("assets/vendors/js/vendor.bundle.base.js"); ?>"></script>
   <script src="<?php echo base_url("assets/vendors/jquery-validation/jquery.validate.min.js"); ?>"></script>
   <script src="<?php echo base_url("assets/vendors/jquery-toast-plugin/jquery.toast.min.js"); ?>"></script>
-  
+
   <script src="<?php echo base_url("assets/vendors/select2/select2.min.js"); ?>"></script>
   <script src="<?php echo base_url('assets/vendors/typeahead.js/typeahead.bundle.min.js') ?>"></script>
   <script src="<?php echo base_url('assets/js/typeahead.js') ?>"></script>
-  
+
 
 
   <style>
     /*Estilização para tabelas menores*/
-    .button-trans-success, .button-trans-danger { margin: 0; }
+    .button-trans-success,
+    .button-trans-danger {
+      margin: 0;
+    }
+
     .d-flex .btn-icon {
       margin-right: 0.3rem;
       width: 2rem;
       height: 2rem;
       ;
     }
+
     .table td,
     .table th {
       line-height: 1.2;
@@ -45,9 +50,17 @@
     }
 
     /*Estilização para select2*/
-    .select2-container { z-index: 9999; }
-    .select2-dropdown { z-index: 1050; }
-    .select2-search { z-index: 1060; }
+    .select2-container {
+      z-index: 9999;
+    }
+
+    .select2-dropdown {
+      z-index: 1050;
+    }
+
+    .select2-search {
+      z-index: 1060;
+    }
   </style>
 </head>
 

@@ -84,7 +84,7 @@ class AdminController extends Controller
         $userId = $this->request->getPost('user_id');
         $novoGrupo = $this->request->getPost('novo_grupo');
 
-        log_message('error', "Usuário ID: " . $userId . " Novo Grupo: " . $novoGrupo);
+        log_message('info', "Tentando alterar grupo do usuário ID: $userId para $novoGrupo");
 
         if (!$userId || !$novoGrupo) {
             return redirect()->to('/sys/admin/')->with('error', 'Usuário ou grupo inválido.');
@@ -99,16 +99,18 @@ class AdminController extends Controller
         }
 
         // Verifica se o usuário já pertence ao grupo
-        $userGroup = $this->userGroupModel->where('user_id', $userId)->where('group_id', $grupo['id'])->first();
+        $userGroup = $this->userGroupModel->where('user_id', $userId)->where('group', $novoGrupo)->first();
 
         if ($userGroup) {
-            // Se o usuário já pertence ao grupo, não faz nada
             log_message('info', "Usuário $userId já pertence ao grupo '$novoGrupo'. Nenhuma alteração necessária.");
             return redirect()->to('/sys/admin/')->with('info', 'Usuário já pertence ao grupo.');
         }
 
-        // Se o usuário não pertence ao grupo, adiciona
-        $result = $this->userGroupModel->addUserToGroup($userId, $grupo['id']);
+        // Remove o usuário de todos os grupos antes de adicionar ao novo grupo
+        $this->userGroupModel->where('user_id', $userId)->delete();
+
+        // Adiciona o usuário ao novo grupo (garantindo que created_at seja preenchido corretamente)
+        $result = $this->userGroupModel->addUserToGroup($userId, $novoGrupo);
 
         if (!$result) {
             log_message('error', "Falha ao alterar grupo do usuário: $userId para $novoGrupo");
@@ -118,6 +120,8 @@ class AdminController extends Controller
         log_message('info', "Grupo do usuário $userId alterado para $novoGrupo com sucesso.");
         return redirect()->to('/sys/admin/')->with('success', 'Grupo do usuário alterado com sucesso!');
     }
+
+
 
     // Método para excluir um usuário
     public function excluirUsuario()

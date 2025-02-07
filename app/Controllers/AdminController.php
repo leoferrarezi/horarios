@@ -90,14 +90,6 @@ class AdminController extends Controller
             return redirect()->to('/sys/admin/')->with('error', 'Usuário ou grupo inválido.');
         }
 
-        // Busca o grupo pelo nome para garantir que ele está disponível no banco
-        $grupo = $this->groupModel->getGroupByName($novoGrupo);
-
-        if (!$grupo) {
-            log_message('error', "Grupo '$novoGrupo' não encontrado no banco de dados.");
-            return redirect()->to('/sys/admin/')->with('error', 'Grupo não encontrado.');
-        }
-
         // Verifica se o usuário já pertence ao grupo
         $userGroup = $this->userGroupModel->where('user_id', $userId)->where('group', $novoGrupo)->first();
 

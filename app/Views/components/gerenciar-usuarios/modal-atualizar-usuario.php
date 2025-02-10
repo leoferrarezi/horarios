@@ -33,6 +33,8 @@
                     </div>
 
                     <div class="mb-3">
+                        <!-- Botão de Cancelar -->
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-primary">Salvar Alterações</button>
                     </div>
                 </form>

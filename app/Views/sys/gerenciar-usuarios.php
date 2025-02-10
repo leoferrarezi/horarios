@@ -102,11 +102,11 @@
                                                             </button>
                                                         </span>
 
-                                                        <span data-bs-toggle="tooltip" data-placement="top"
-                                                            title="Alterar grupo">
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Alterar grupo">
                                                             <button type="button" class="btn btn-inverse-info btn-icon me-1"
                                                                 data-bs-toggle="modal" data-bs-target="#modal-alterar-grupo"
-                                                                data-user-id="<?= $usuario->id ?>">
+                                                                data-user-id="<?= $usuario->id ?>"
+                                                                data-grupo-atual="<?= !empty($usuario->grupos) ? esc($usuario->grupos[0]) : 'Nenhum' ?>">
                                                                 <i class="fa fa-users"></i>
                                                             </button>
                                                         </span>
@@ -143,11 +143,15 @@
             // Ativa os tooltips
             $('[data-bs-toggle="tooltip"]').tooltip();
 
-            // Passa o ID do usuário para o modal de alteração de grupo
+            // Passa o ID e o Grupo Atual do usuário para o modal de alteração de grupo
             $('#modal-alterar-grupo').on('show.bs.modal', function(event) {
-                var button = $(event.relatedTarget);
-                var userId = button.data('user-id');
+                var button = $(event.relatedTarget); // Botão que acionou o modal
+                var userId = button.data('user-id'); // Captura o ID do usuário
+                var grupoAtual = button.data('grupo-atual'); // Captura o grupo atual
+
+                // Preenche os campos no modal
                 $(this).find('input[name="user_id"]').val(userId);
+                $(this).find('input[name="grupo_atual"]').val(grupoAtual);
             });
 
             // Passa o ID do usuário para o modal de exclusão
@@ -225,10 +229,4 @@
             });
         });
     </script>
-
-
-
-
-
-
 </div>

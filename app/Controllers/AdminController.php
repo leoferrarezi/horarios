@@ -127,15 +127,34 @@ class AdminController extends Controller
     // Método para excluir um usuário
     public function excluirUsuario()
     {
-        $userId = $this->request->getPost('user_id');
+        $request = service('request');
+        $userId = $request->getPost('user_id');
+        $adminPassword = $request->getPost('admin_password');
 
-        if ($userId && $this->userModel->find($userId)) {
-            $this->userModel->delete($userId);
-            log_message('info', 'Usuário excluído com sucesso: ' . $userId);
-            return redirect()->to('/sys/admin/')->with('message', 'Usuário excluído com sucesso!');
+        // Obtém o usuário logado (admin)
+        $admin = auth()->user();
+
+        if (!$admin) {
+            log_message('error', 'Tentativa de exclusão sem usuário autenticado.');
+            return redirect()->back()->with('error', 'Você precisa estar autenticado para excluir um usuário.');
         }
 
-        log_message('error', 'Usuário não encontrado ou ID inválido: ' . $userId);
-        return redirect()->to('/sys/admin/')->with('error', 'Usuário não encontrado ou ID inválido.');
+        log_message('info', "Usuário autenticado: ID {$admin->id}, Nome: {$admin->username}");
+
+        // Verifica se a senha informada está correta
+        if (!password_verify($adminPassword, $admin->password_hash)) {
+            log_message('error', "Senha incorreta ao excluir usuário. Admin ID: {$admin->id}");
+            return redirect()->back()->with('error', 'Senha incorreta! A exclusão foi cancelada.');
+        }
+
+        // Excluir usuário
+        $userModel = new UserModel();
+        if ($userModel->delete($userId)) {
+            log_message('info', "Usuário ID {$userId} excluído com sucesso pelo Admin ID: {$admin->id}");
+            return redirect()->back()->with('success', 'Usuário excluído com sucesso.');
+        } else {
+            log_message('error', "Erro ao excluir usuário ID {$userId} pelo Admin ID: {$admin->id}");
+            return redirect()->back()->with('error', 'Erro ao excluir usuário.');
+        }
     }
 }

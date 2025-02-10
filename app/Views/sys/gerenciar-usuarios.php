@@ -1,6 +1,8 @@
 <?php echo view('components/gerenciar-usuarios/modal-cad-user.php'); ?>
 <?php echo view('components/gerenciar-usuarios/modal-alterar-grupo.php'); ?>
 <?php echo view('components/gerenciar-usuarios/modal-confirmar-exclusao.php'); ?>
+<?php echo view('components/gerenciar-usuarios/modal-resetar-senha.php'); ?>
+<?php echo view('components/gerenciar-usuarios/modal-atualizar-usuario.php'); ?>
 
 <div class="page-header">
     <h3 class="page-title">GERENCIAR USUÁRIOS</h3>
@@ -77,16 +79,18 @@
                                                 </td>
                                                 <td>
                                                     <div class="d-flex">
-                                                        <span data-bs-toggle="tooltip" data-placement="top"
-                                                            title="Atualizar dados do usuário">
-                                                            <button type="button" class="btn btn-inverse-success btn-icon me-1">
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Atualizar dados do usuário">
+                                                            <button type="button" class="btn btn-inverse-success btn-icon me-1 btn-editar-usuario"
+                                                                data-bs-toggle="modal" data-bs-target="#modal-atualizar-usuario"
+                                                                data-user-id="<?= $usuario->id ?>" data-username="<?= esc($usuario->username) ?>"
+                                                                data-email="<?= esc($usuario->email) ?>">
                                                                 <i class="fa fa-edit"></i>
                                                             </button>
                                                         </span>
 
-                                                        <span data-bs-toggle="tooltip" data-placement="top"
-                                                            title="Resetar senha do usuário">
-                                                            <button type="button" class="btn btn-inverse-warning btn-icon me-1">
+
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Resetar senha do usuário">
+                                                            <button type="button" class="btn btn-inverse-warning btn-icon me-1 btn-reset-senha" data-user-id="<?= $usuario->id ?>" data-bs-toggle="modal" data-bs-target="#modal-resetar-senha">
                                                                 <i class="fa fa-key"></i>
                                                             </button>
                                                         </span>
@@ -98,11 +102,11 @@
                                                             </button>
                                                         </span>
 
-                                                        <span data-bs-toggle="tooltip" data-placement="top"
-                                                            title="Alterar grupo">
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Alterar grupo">
                                                             <button type="button" class="btn btn-inverse-info btn-icon me-1"
                                                                 data-bs-toggle="modal" data-bs-target="#modal-alterar-grupo"
-                                                                data-user-id="<?= $usuario->id ?>">
+                                                                data-user-id="<?= $usuario->id ?>"
+                                                                data-grupo-atual="<?= !empty($usuario->grupos) ? esc($usuario->grupos[0]) : 'Nenhum' ?>">
                                                                 <i class="fa fa-users"></i>
                                                             </button>
                                                         </span>
@@ -139,17 +143,89 @@
             // Ativa os tooltips
             $('[data-bs-toggle="tooltip"]').tooltip();
 
-            // Passa o ID do usuário para o modal de alteração de grupo
+            // Passa o ID e o Grupo Atual do usuário para o modal de alteração de grupo
             $('#modal-alterar-grupo').on('show.bs.modal', function(event) {
-                var button = $(event.relatedTarget);
-                var userId = button.data('user-id');
+                var button = $(event.relatedTarget); // Botão que acionou o modal
+                var userId = button.data('user-id'); // Captura o ID do usuário
+                var grupoAtual = button.data('grupo-atual'); // Captura o grupo atual
+
+                // Preenche os campos no modal
                 $(this).find('input[name="user_id"]').val(userId);
+                $(this).find('input[name="grupo_atual"]').val(grupoAtual);
             });
 
             // Passa o ID do usuário para o modal de exclusão
             $('.btn-excluir-usuario').on('click', function() {
                 var userId = $(this).data('user-id');
                 $('#excluir-user-id').val(userId);
+            });
+
+            // Passa o ID do usuário para o modal de resetar senha
+            $(".btn-reset-senha").click(function() {
+                let userId = $(this).data("user-id");
+
+                // Armazena o ID do usuário no botão de confirmação
+                $("#btn-confirmar-resetar").data("user-id", userId);
+            });
+
+            // Quando o botão de confirmação for clicado
+            $("#btn-confirmar-resetar").click(function() {
+                let userId = $(this).data("user-id");
+
+                // Criar um formulário dinamicamente
+                let form = $('<form>', {
+                    action: "<?= base_url('sys/admin/resetar-senha') ?>",
+                    method: "post"
+                }).append(
+                    $('<input>', {
+                        type: "hidden",
+                        name: "user_id",
+                        value: userId
+                    }),
+                    $('<input>', {
+                        type: "hidden",
+                        name: "<?= csrf_token() ?>",
+                        value: "<?= csrf_hash() ?>"
+                    })
+                );
+
+                // Enviar o formulário
+                $('body').append(form);
+                form.submit();
+            });
+
+            // AJAX para atualizar o usuário
+            $("#updateUserForm").submit(function(e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: "<?= base_url('update-user') ?>",
+                    type: "POST",
+                    data: $(this).serialize(),
+                    dataType: "json",
+                    success: function(response) {
+                        alert(response.message);
+                        if (response.status === "success") {
+                            location.reload();
+                        }
+                    },
+                    error: function() {
+                        alert("Ocorreu um erro ao tentar atualizar os dados.");
+                    }
+                });
+            });
+
+            // Passa o ID, username e email do usuário para o modal de atualização de usuário
+            $('#modal-atualizar-usuario').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget); // Botão que acionou o modal
+                var userId = button.data('user-id');
+                var username = button.data('username');
+                var email = button.data('email');
+
+                // Define os valores no modal
+                $(this).find('input[name="user_id"]').val(userId);
+                $(this).find('input[name="username"]').val(username);
+                $(this).find('input[name="email"]').val(email);
             });
         });
     </script>

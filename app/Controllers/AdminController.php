@@ -7,6 +7,9 @@ use CodeIgniter\Controller;
 use CodeIgniter\Shield\Models\UserModel;  // Importando o modelo de usuário
 use App\Models\GroupModel;
 use CodeIgniter\Shield\Entities\User;
+use CodeIgniter\Shield\Authentication\Passwords;
+use CodeIgniter\Email\Email;
+use Config\Services;
 
 class AdminController extends Controller
 {
@@ -156,5 +159,100 @@ class AdminController extends Controller
             log_message('error', "Erro ao excluir usuário ID {$userId} pelo Admin ID: {$admin->id}");
             return redirect()->back()->with('error', 'Erro ao excluir usuário.');
         }
+    }
+
+    // Método para resetar senha de um usuário
+    public function resetarSenha()
+    {
+        $userId = $this->request->getPost('user_id');
+
+        // Verificar se o ID foi enviado
+        if (!$userId) {
+            return redirect()->back()->with('error', 'ID de usuário não fornecido.');
+        }
+
+        $users = new UserModel(); // Agora o modelo está sendo chamado corretamente
+        $user = $users->find($userId);
+
+        if (!$user) {
+            return redirect()->back()->with('error', 'Usuário não encontrado.');
+        }
+
+        // Gerar uma nova senha segura
+        $novaSenha = bin2hex(random_bytes(4)); // 8 caracteres aleatórios
+
+        // Instanciar o serviço de hashing de senha
+        $passwords = service('passwords');
+        $user->password = $passwords->hash($novaSenha);
+        $users->save($user);
+
+        // Instanciar o serviço de e-mail com a configuração já definida no arquivo Email.php
+        $email = Services::email();  // Puxa as configurações do arquivo Email.php
+
+        // Definir o remetente, destinatário e a mensagem
+        $email->setFrom('no-reply@ifrocalama.com', 'Ifro Calama'); // Você pode usar o endereço e nome configurado em Email.php
+        $email->setTo($user->email);
+        $email->setSubject('Redefinição de Senha');
+        $email->setMessage("Olá, {$user->username}!\n\nSua senha foi redefinida pelo administrador.\n\nNova senha: {$novaSenha}\n");
+
+        // Enviar e-mail
+        if (!$email->send()) {
+            return redirect()->back()->with('error', 'Erro ao enviar o e-mail.');
+        }
+
+        return redirect()->back()->with(
+            'success',
+            "Senha do usuário {$user->username} redefinida com sucesso e enviada ao e-mail."
+        );
+    }
+
+    public function atualizarUsuario()
+    {
+        $request = service('request');
+
+        // Captura os dados do formulário
+        $userId         = $request->getPost('user_id');
+        $username       = $request->getPost('username');
+        $email          = $request->getPost('email');
+        $adminPassword  = $request->getPost('admin_password');
+
+        // Valida se os campos foram preenchidos
+        if (!$userId || !$username || !$email || !$adminPassword) {
+            return redirect()->to('/sys/admin/')
+                ->with('error', 'Todos os campos são obrigatórios.');
+        }
+
+        // Obtém o usuário logado (admin)
+        $admin = auth()->user();
+
+        if (!$admin) {
+            return redirect()->to('/sys/admin/')
+                ->with('error', 'Usuário não autenticado.');
+        }
+
+        // Verifica se a senha do admin está correta
+        if (!password_verify($adminPassword, $admin->password_hash)) {
+            return redirect()->to('/sys/admin/')
+                ->with('error', 'Senha do administrador incorreta.');
+        }
+
+        // Busca o usuário no banco de dados
+        $user = $this->userModel->find($userId);
+        if (!$user) {
+            return redirect()->to('/sys/admin/')
+                ->with('error', 'Usuário não encontrado.');
+        }
+
+        // Atualiza os dados do usuário
+        $user->username = $username;
+        $user->email = $email;
+
+        if (!$this->userModel->save($user)) {
+            return redirect()->to('/sys/admin/')
+                ->with('error', 'Erro ao atualizar usuário.');
+        }
+
+        return redirect()->to('/sys/admin/')
+            ->with('success', 'Usuário atualizado com sucesso!');
     }
 }

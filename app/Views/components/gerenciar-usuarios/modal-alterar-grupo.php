@@ -17,19 +17,21 @@
                     <!-- Grupo Atual -->
                     <div class="mb-3">
                         <label for="grupo_atual" class="form-label">Grupo Atual</label>
-                        <input type="text" class="form-control" id="grupo_atual" name="grupo_atual" readonly>
+                        <input type="text" class="form-control text-muted" id="grupo_atual" name="grupo_atual" readonly>
                     </div>
 
                     <!-- Novo Grupo -->
                     <div class="mb-3">
                         <label for="novo_grupo" class="form-label">Novo Grupo</label>
-                        <select class="form-control" id="novo_grupo" name="novo_grupo">
-                            <option value="admin">Administrador</option>
-                            <option value="user">Usuário</option>
+                        <select class="form-control text-white" id="novo_grupo" name="novo_grupo">
+                            <option value="admin">Administrador (admin)</option>
+                            <option value="user">Usuário (user)</option>
                         </select>
                     </div>
 
                     <div class="mb-3">
+                        <!-- Botão de Cancelar -->
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-primary">Salvar Alterações</button>
                     </div>
                 </form>

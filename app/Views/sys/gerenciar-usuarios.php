@@ -79,8 +79,9 @@
                                                 </td>
                                                 <td>
                                                     <div class="d-flex">
+                                                        <!-- Botão Editar -->
                                                         <span data-bs-toggle="tooltip" data-placement="top" title="Atualizar dados do usuário">
-                                                            <button type="button" class="btn btn-inverse-success btn-icon me-1 btn-editar-usuario"
+                                                            <button type="button" class="btn btn-inverse-success btn-icon me-1 btn-editar-usuario d-flex align-items-center justify-content-center"
                                                                 data-bs-toggle="modal" data-bs-target="#modal-atualizar-usuario"
                                                                 data-user-id="<?= $usuario->id ?>" data-username="<?= esc($usuario->username) ?>"
                                                                 data-email="<?= esc($usuario->email) ?>">
@@ -88,22 +89,25 @@
                                                             </button>
                                                         </span>
 
-
+                                                        <!-- Botão Resetar Senha -->
                                                         <span data-bs-toggle="tooltip" data-placement="top" title="Resetar senha do usuário">
-                                                            <button type="button" class="btn btn-inverse-warning btn-icon me-1 btn-reset-senha" data-user-id="<?= $usuario->id ?>" data-bs-toggle="modal" data-bs-target="#modal-resetar-senha">
+                                                            <button type="button" class="btn btn-inverse-warning btn-icon me-1 btn-reset-senha d-flex align-items-center justify-content-center"
+                                                                data-user-id="<?= $usuario->id ?>" data-bs-toggle="modal" data-bs-target="#modal-resetar-senha">
                                                                 <i class="fa fa-key"></i>
                                                             </button>
                                                         </span>
 
+                                                        <!-- Botão Excluir -->
                                                         <span data-bs-toggle="tooltip" data-placement="top" title="Excluir usuário">
-                                                            <button type="button" class="btn btn-inverse-danger btn-icon me-1 btn-excluir-usuario"
+                                                            <button type="button" class="btn btn-inverse-danger btn-icon me-1 btn-excluir-usuario d-flex align-items-center justify-content-center"
                                                                 data-user-id="<?= $usuario->id ?>" data-bs-toggle="modal" data-bs-target="#modal-confirmar-exclusao">
                                                                 <i class="fa fa-trash"></i>
                                                             </button>
                                                         </span>
 
+                                                        <!-- Botão Alterar Grupo -->
                                                         <span data-bs-toggle="tooltip" data-placement="top" title="Alterar grupo">
-                                                            <button type="button" class="btn btn-inverse-info btn-icon me-1"
+                                                            <button type="button" class="btn btn-inverse-info btn-icon me-1 d-flex align-items-center justify-content-center"
                                                                 data-bs-toggle="modal" data-bs-target="#modal-alterar-grupo"
                                                                 data-user-id="<?= $usuario->id ?>"
                                                                 data-grupo-atual="<?= !empty($usuario->grupos) ? esc($usuario->grupos[0]) : 'Nenhum' ?>">
@@ -140,6 +144,36 @@
 
     <script>
         $(document).ready(function() {
+            // Inicializa a DataTables
+            $('#listagem-usuarios').DataTable({
+                // Define as entradas de quantidade de linhas visíveis na tabela
+                lengthMenu: [
+                    [5, 15, 30, -1],
+                    [5, 15, 30, "Todos"],
+                ],
+
+                // Define as questões de tradução/idioma
+                language: {
+                    search: "Pesquisar:",
+                    url: "<?= base_url('assets/js/traducao-dataTable/pt_br.json') ?>", // Caminho para o arquivo de tradução
+                },
+
+                // Ativa ordenação
+                ordering: true,
+
+                // Define a coluna padrão de ordenação ao carregar a tabela
+                order: [
+                    [0, 'asc'] // Ordena pela primeira coluna (Nome) em ordem ascendente
+                ],
+
+                // Desativa a ordenação na coluna de ações
+                columnDefs: [{
+                        orderable: false,
+                        targets: 3
+                    } // Coluna de ações (índice 3)
+                ]
+            });
+
             // Ativa os tooltips
             $('[data-bs-toggle="tooltip"]').tooltip();
 

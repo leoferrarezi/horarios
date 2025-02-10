@@ -1,5 +1,6 @@
 <?php echo view('components/gerenciar-usuarios/modal-cad-user.php'); ?>
 <?php echo view('components/gerenciar-usuarios/modal-alterar-grupo.php'); ?>
+<?php echo view('components/gerenciar-usuarios/modal-confirmar-exclusao.php'); ?>
 
 <div class="page-header">
     <h3 class="page-title">GERENCIAR USUÁRIOS</h3>
@@ -91,13 +92,10 @@
                                                         </span>
 
                                                         <span data-bs-toggle="tooltip" data-placement="top" title="Excluir usuário">
-                                                            <form action="<?= site_url('/sys/admin/excluir-usuario') ?>" method="post" onsubmit="return confirm('Tem certeza que deseja excluir este usuário?');">
-                                                                <?= csrf_field(); ?>
-                                                                <input type="hidden" name="user_id" value="<?= $usuario->id ?>">
-                                                                <button type="submit" class="btn btn-inverse-danger btn-icon me-1">
-                                                                    <i class="fa fa-trash"></i>
-                                                                </button>
-                                                            </form>
+                                                            <button type="button" class="btn btn-inverse-danger btn-icon me-1 btn-excluir-usuario"
+                                                                data-user-id="<?= $usuario->id ?>" data-bs-toggle="modal" data-bs-target="#modal-confirmar-exclusao">
+                                                                <i class="fa fa-trash"></i>
+                                                            </button>
                                                         </span>
 
                                                         <span data-bs-toggle="tooltip" data-placement="top"
@@ -141,11 +139,17 @@
             // Ativa os tooltips
             $('[data-bs-toggle="tooltip"]').tooltip();
 
-            // Passa o ID do usuário para o modal
+            // Passa o ID do usuário para o modal de alteração de grupo
             $('#modal-alterar-grupo').on('show.bs.modal', function(event) {
                 var button = $(event.relatedTarget);
                 var userId = button.data('user-id');
                 $(this).find('input[name="user_id"]').val(userId);
+            });
+
+            // Passa o ID do usuário para o modal de exclusão
+            $('.btn-excluir-usuario').on('click', function() {
+                var userId = $(this).data('user-id');
+                $('#excluir-user-id').val(userId);
             });
         });
     </script>

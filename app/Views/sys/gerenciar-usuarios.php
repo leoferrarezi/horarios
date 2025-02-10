@@ -2,6 +2,7 @@
 <?php echo view('components/gerenciar-usuarios/modal-alterar-grupo.php'); ?>
 <?php echo view('components/gerenciar-usuarios/modal-confirmar-exclusao.php'); ?>
 <?php echo view('components/gerenciar-usuarios/modal-resetar-senha.php'); ?>
+<?php echo view('components/gerenciar-usuarios/modal-atualizar-usuario.php'); ?>
 
 <div class="page-header">
     <h3 class="page-title">GERENCIAR USUÁRIOS</h3>
@@ -78,12 +79,15 @@
                                                 </td>
                                                 <td>
                                                     <div class="d-flex">
-                                                        <span data-bs-toggle="tooltip" data-placement="top"
-                                                            title="Atualizar dados do usuário">
-                                                            <button type="button" class="btn btn-inverse-success btn-icon me-1">
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Atualizar dados do usuário">
+                                                            <button type="button" class="btn btn-inverse-success btn-icon me-1 btn-editar-usuario"
+                                                                data-bs-toggle="modal" data-bs-target="#modal-atualizar-usuario"
+                                                                data-user-id="<?= $usuario->id ?>" data-username="<?= esc($usuario->username) ?>"
+                                                                data-email="<?= esc($usuario->email) ?>">
                                                                 <i class="fa fa-edit"></i>
                                                             </button>
                                                         </span>
+
 
                                                         <span data-bs-toggle="tooltip" data-placement="top" title="Resetar senha do usuário">
                                                             <button type="button" class="btn btn-inverse-warning btn-icon me-1 btn-reset-senha" data-user-id="<?= $usuario->id ?>" data-bs-toggle="modal" data-bs-target="#modal-resetar-senha">
@@ -156,7 +160,7 @@
             $(".btn-reset-senha").click(function() {
                 let userId = $(this).data("user-id");
 
-                // Armazenar o ID do usuário no botão de confirmação
+                // Armazena o ID do usuário no botão de confirmação
                 $("#btn-confirmar-resetar").data("user-id", userId);
             });
 
@@ -165,17 +169,63 @@
                 let userId = $(this).data("user-id");
 
                 // Criar um formulário dinamicamente
-                let form = $('<form action="<?= base_url('sys/admin/resetar-senha') ?>" method="post">' +
-                    '<input type="hidden" name="user_id" value="' + userId + '">' +
-                    // Adicionando token CSRF
-                    '<input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>">' +
-                    '</form>');
+                let form = $('<form>', {
+                    action: "<?= base_url('sys/admin/resetar-senha') ?>",
+                    method: "post"
+                }).append(
+                    $('<input>', {
+                        type: "hidden",
+                        name: "user_id",
+                        value: userId
+                    }),
+                    $('<input>', {
+                        type: "hidden",
+                        name: "<?= csrf_token() ?>",
+                        value: "<?= csrf_hash() ?>"
+                    })
+                );
 
                 // Enviar o formulário
-                form.appendTo('body').submit();
+                $('body').append(form);
+                form.submit();
+            });
+
+            // AJAX para atualizar o usuário
+            $("#updateUserForm").submit(function(e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: "<?= base_url('update-user') ?>",
+                    type: "POST",
+                    data: $(this).serialize(),
+                    dataType: "json",
+                    success: function(response) {
+                        alert(response.message);
+                        if (response.status === "success") {
+                            location.reload();
+                        }
+                    },
+                    error: function() {
+                        alert("Ocorreu um erro ao tentar atualizar os dados.");
+                    }
+                });
+            });
+
+            // Passa o ID, username e email do usuário para o modal de atualização de usuário
+            $('#modal-atualizar-usuario').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget); // Botão que acionou o modal
+                var userId = button.data('user-id');
+                var username = button.data('username');
+                var email = button.data('email');
+
+                // Define os valores no modal
+                $(this).find('input[name="user_id"]').val(userId);
+                $(this).find('input[name="username"]').val(username);
+                $(this).find('input[name="email"]').val(email);
             });
         });
     </script>
+
 
 
 

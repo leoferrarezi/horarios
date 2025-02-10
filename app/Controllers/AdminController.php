@@ -200,6 +200,59 @@ class AdminController extends Controller
             return redirect()->back()->with('error', 'Erro ao enviar o e-mail.');
         }
 
-        return redirect()->back()->with('success', 'Senha redefinida e enviada ao e-mail do usuário.');
+        return redirect()->back()->with(
+            'success',
+            "Senha do usuário {$user->username} redefinida com sucesso e enviada ao e-mail."
+        );
+    }
+
+    public function atualizarUsuario()
+    {
+        $request = service('request');
+
+        // Captura os dados do formulário
+        $userId         = $request->getPost('user_id');
+        $username       = $request->getPost('username');
+        $email          = $request->getPost('email');
+        $adminPassword  = $request->getPost('admin_password');
+
+        // Valida se os campos foram preenchidos
+        if (!$userId || !$username || !$email || !$adminPassword) {
+            return redirect()->to('/sys/admin/')
+                ->with('error', 'Todos os campos são obrigatórios.');
+        }
+
+        // Obtém o usuário logado (admin)
+        $admin = auth()->user();
+
+        if (!$admin) {
+            return redirect()->to('/sys/admin/')
+                ->with('error', 'Usuário não autenticado.');
+        }
+
+        // Verifica se a senha do admin está correta
+        if (!password_verify($adminPassword, $admin->password_hash)) {
+            return redirect()->to('/sys/admin/')
+                ->with('error', 'Senha do administrador incorreta.');
+        }
+
+        // Busca o usuário no banco de dados
+        $user = $this->userModel->find($userId);
+        if (!$user) {
+            return redirect()->to('/sys/admin/')
+                ->with('error', 'Usuário não encontrado.');
+        }
+
+        // Atualiza os dados do usuário
+        $user->username = $username;
+        $user->email = $email;
+
+        if (!$this->userModel->save($user)) {
+            return redirect()->to('/sys/admin/')
+                ->with('error', 'Erro ao atualizar usuário.');
+        }
+
+        return redirect()->to('/sys/admin/')
+            ->with('success', 'Usuário atualizado com sucesso!');
     }
 }

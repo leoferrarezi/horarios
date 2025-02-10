@@ -1,6 +1,7 @@
 <?php echo view('components/gerenciar-usuarios/modal-cad-user.php'); ?>
 <?php echo view('components/gerenciar-usuarios/modal-alterar-grupo.php'); ?>
 <?php echo view('components/gerenciar-usuarios/modal-confirmar-exclusao.php'); ?>
+<?php echo view('components/gerenciar-usuarios/modal-resetar-senha.php'); ?>
 
 <div class="page-header">
     <h3 class="page-title">GERENCIAR USUÁRIOS</h3>
@@ -84,9 +85,8 @@
                                                             </button>
                                                         </span>
 
-                                                        <span data-bs-toggle="tooltip" data-placement="top"
-                                                            title="Resetar senha do usuário">
-                                                            <button type="button" class="btn btn-inverse-warning btn-icon me-1">
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Resetar senha do usuário">
+                                                            <button type="button" class="btn btn-inverse-warning btn-icon me-1 btn-reset-senha" data-user-id="<?= $usuario->id ?>" data-bs-toggle="modal" data-bs-target="#modal-resetar-senha">
                                                                 <i class="fa fa-key"></i>
                                                             </button>
                                                         </span>
@@ -151,6 +151,34 @@
                 var userId = $(this).data('user-id');
                 $('#excluir-user-id').val(userId);
             });
+
+            // Passa o ID do usuário para o modal de resetar senha
+            $(".btn-reset-senha").click(function() {
+                let userId = $(this).data("user-id");
+
+                // Armazenar o ID do usuário no botão de confirmação
+                $("#btn-confirmar-resetar").data("user-id", userId);
+            });
+
+            // Quando o botão de confirmação for clicado
+            $("#btn-confirmar-resetar").click(function() {
+                let userId = $(this).data("user-id");
+
+                // Criar um formulário dinamicamente
+                let form = $('<form action="<?= base_url('sys/admin/resetar-senha') ?>" method="post">' +
+                    '<input type="hidden" name="user_id" value="' + userId + '">' +
+                    // Adicionando token CSRF
+                    '<input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>">' +
+                    '</form>');
+
+                // Enviar o formulário
+                form.appendTo('body').submit();
+            });
         });
     </script>
+
+
+
+
+
 </div>

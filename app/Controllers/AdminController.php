@@ -33,20 +33,54 @@ class AdminController extends Controller
             'password' => $this->request->getPost('password'),
         ];
 
+        // Verifica se já existe um usuário com o mesmo username
+        $existingUsername = $this->userModel->where('username', $data['username'])->first();
+
+        // Verifica se já existe um usuário com o mesmo e-mail (na tabela identities)
+        $existingEmail = $this->userModel->db->table('auth_identities')
+            ->where('type', 'email_password') // Tipo de identidade (e-mail)
+            ->where('secret', $data['email']) // O e-mail está armazenado na coluna `secret`
+            ->get()
+            ->getRow();
+
+        $errorMessage = '';
+
+        if (
+            $existingUsername && $existingEmail
+        ) {
+            $errorMessage = 'Já existe um usuário com este username e e-mail.';
+        } elseif ($existingUsername) {
+            $errorMessage = 'Já existe um usuário com este username.';
+        } elseif ($existingEmail) {
+            $errorMessage = 'Já existe um usuário com este e-mail.';
+        }
+
+        if ($errorMessage) {
+            return redirect()->back()->withInput()->with('error', $errorMessage);
+        }
+
+        // Cria o usuário
         $user = new User($data);
 
         if (!$this->userModel->save($user)) {
             return redirect()->back()->withInput()->with('errors', $this->userModel->errors());
         }
 
+        // Obtém o ID do usuário recém-criado
         $userId = $this->userModel->getInsertID();
-        $userData = $this->userModel->find($userId);
-        $createdAt = $userData->created_at;
 
+        // Adiciona o e-mail como uma identidade
+        $this->userModel->db->table('auth_identities')->insert([
+            'user_id' => $userId,
+            'type'    => 'email_password', // Tipo de identidade (e-mail)
+            'secret'  => $data['email'],  // E-mail do usuário
+        ]);
+
+        // Adiciona o usuário a um grupo (se fornecido)
         $grupo = $this->request->getPost('grupo');
 
         if ($grupo) {
-            if (!$this->userGroupModel->addUserToGroup($userId, $grupo, $createdAt)) {
+            if (!$this->userGroupModel->addUserToGroup($userId, $grupo)) {
                 log_message('error', "Erro ao vincular o usuário $userId ao grupo $grupo.");
             } else {
                 log_message('info', "Usuário $userId vinculado ao grupo $grupo com sucesso.");

@@ -103,6 +103,21 @@
           </a>
         </li>
 
+        <?php if (auth()->user()->inGroup('admin')): ?>
+          <li class="nav-item nav-category">
+            <span class="nav-link">Gestão de Usuários</span>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="<?php echo base_url('sys/admin'); ?>">
+              <span class="menu-icon">
+                <i class="mdi mdi-account"></i>
+              </span>
+              <span class="menu-title">Usuários do Sistema</span>
+            </a>
+          </li>
+        <?php endif; ?>
+
         <li class="nav-item nav-category">
           <span class="nav-link">Cadastros</span>
         </li>

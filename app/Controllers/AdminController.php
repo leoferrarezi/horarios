@@ -100,6 +100,22 @@ class AdminController extends Controller
         return view('dashboard', $data);
     }
 
+    // Método usuariosInativos - carrega o dashboard com os usuários inativos
+    public function usuariosInativos()
+    {
+        // Use o UserModel do Shield
+        $userModel = new \CodeIgniter\Shield\Models\UserModel();
+
+        // Filtra usuários desativados (com deleted_at preenchido)
+        $data['usuariosDesativados'] = $userModel->onlyDeleted()->findAll();
+
+        // Carrega a view de usuários inativos dentro do layout do dashboard
+        $data['content'] = view('sys/usuarios-inativos', $data);
+
+        // Retorna a view do dashboard com o conteúdo
+        return view('dashboard', $data);
+    }
+
     // Método para buscar usuários e seus grupos
     public function gerenciarUsuarios()
     {
@@ -173,7 +189,10 @@ class AdminController extends Controller
 
         if (!$admin) {
             log_message('error', 'Tentativa de exclusão sem usuário autenticado.');
-            return redirect()->back()->with('error', 'Você precisa estar autenticado para excluir um usuário.');
+            return redirect()->back()->with(
+                'error',
+                'Você precisa estar autenticado para excluir um usuário.'
+            );
         }
 
         log_message('info', "Usuário autenticado: ID {$admin->id}, Nome: {$admin->username}");
@@ -181,7 +200,10 @@ class AdminController extends Controller
         // Verifica se a senha informada está correta
         if (!password_verify($adminPassword, $admin->password_hash)) {
             log_message('error', "Senha incorreta ao excluir usuário. Admin ID: {$admin->id}");
-            return redirect()->back()->with('error', 'Senha incorreta! A exclusão foi cancelada.');
+            return redirect()->back()->with(
+                'error',
+                'Senha incorreta! A exclusão foi cancelada.'
+            );
         }
 
         // Excluir usuário
@@ -191,7 +213,10 @@ class AdminController extends Controller
             return redirect()->back()->with('success', 'Usuário excluído com sucesso.');
         } else {
             log_message('error', "Erro ao excluir usuário ID {$userId} pelo Admin ID: {$admin->id}");
-            return redirect()->back()->with('error', 'Erro ao excluir usuário.');
+            return redirect()->back()->with(
+                'error',
+                'Erro ao excluir usuário.'
+            );
         }
     }
 
@@ -288,5 +313,90 @@ class AdminController extends Controller
 
         return redirect()->to('/sys/admin/')
             ->with('success', 'Usuário atualizado com sucesso!');
+    }
+
+    public function reativarUsuario()
+    {
+        $request = service('request');
+        $userId = $request->getPost('user_id');
+        $adminPassword = $request->getPost('admin_password');
+
+        // Obtém o usuário logado (admin)
+        $admin = auth()->user();
+
+        if (!$admin) {
+            return redirect()->back()->with('error', 'Você precisa estar autenticado para reativar um usuário.');
+        }
+
+        // Verifica se a senha do admin está correta
+        if (!password_verify($adminPassword, $admin->password_hash)) {
+            return redirect()->back()->with('error', 'Senha incorreta! A reativação foi cancelada.');
+        }
+
+        // Busca o usuário no banco de dados (incluindo usuários desativados)
+        $userModel = new UserModel();
+        $user = $userModel->withDeleted()->find($userId);
+
+        if (!$user) {
+            return redirect()->back()->with('error', 'Usuário não encontrado.');
+        }
+
+        // Reativa o usuário (remove o deleted_at e define active como 1)
+        $user->deleted_at = null; // Remove o soft delete
+        $user->active = 1; // Define o usuário como ativo
+
+        // Salva as alterações no banco de dados
+        if ($userModel->save($user)) {
+            // Verifica se o usuário foi atualizado corretamente
+            $userAtualizado = $userModel->withDeleted()->find($userId);
+            if ($userAtualizado->deleted_at === null && $userAtualizado->active == 1) {
+                return redirect()->back()->with('success', 'Usuário reativado com sucesso.');
+            } else {
+                log_message('error', "Erro ao reativar usuário ID {$userId}. Dados não foram atualizados corretamente.");
+                return redirect()->back()->with('error', 'Erro ao reativar usuário. Dados não foram atualizados corretamente.');
+            }
+        } else {
+            log_message('error', "Erro ao salvar usuário ID {$userId} após reativação.");
+            return redirect()->back()->with('error', 'Erro ao reativar usuário.');
+        }
+    }
+
+    public function excluirPermanentemente()
+    {
+        $request = service('request');
+
+        // Captura os dados do formulário
+        $userId = $request->getPost('user_id');
+        $adminPassword = $request->getPost('admin_password');
+
+        // Verifica se o ID do usuário e a senha foram fornecidos
+        if (!$userId || !$adminPassword) {
+            return redirect()->back()->with('error', 'Dados inválidos.');
+        }
+
+        // Obtém o usuário logado (admin)
+        $admin = auth()->user();
+
+        if (!$admin) {
+            return redirect()->back()->with('error', 'Você precisa estar autenticado para excluir um usuário.');
+        }
+
+        // Verifica se a senha do admin está correta
+        if (!password_verify($adminPassword, $admin->password_hash)) {
+            return redirect()->back()->with('error', 'Senha incorreta! A exclusão foi cancelada.');
+        }
+
+        // Busca o usuário no banco de dados
+        $userModel = new \CodeIgniter\Shield\Models\UserModel();
+        $user = $userModel->onlyDeleted()->find($userId);
+
+        if (!$user) {
+            return redirect()->back()->with('error', 'Usuário não encontrado.');
+        }
+
+        // Exclui permanentemente o usuário
+        $userModel->delete($userId, true); // O segundo parâmetro "true" força a exclusão permanente
+
+        return redirect()->back()->with('success', 'Usuário excluído permanentemente com sucesso.');
     }
 }

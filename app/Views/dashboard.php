@@ -111,7 +111,7 @@
           <li class="nav-item">
             <a class="nav-link" href="<?php echo base_url('sys/admin'); ?>">
               <span class="menu-icon">
-                <i class="mdi mdi-account"></i>
+                <i class="mdi mdi-account-cog"></i>
               </span>
               <span class="menu-title">Usuários do Sistema</span>
             </a>

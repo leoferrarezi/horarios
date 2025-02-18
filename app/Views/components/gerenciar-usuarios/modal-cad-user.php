@@ -53,12 +53,12 @@
                             <option value="user" <?= old('grupo') == 'user' || old('grupo') == '' ? 'selected' : '' ?>>Usuário</option>
                         </select>
                     </div>
-
-                    <div class="mb-3">
-                        <button type="submit" class="btn btn-primary">Salvar Usuário</button>
-                    </div>
-
                 </form>
+            </div>
+            <!-- Rodapé do Modal com padding ajustado -->
+            <div class="modal-footer" style="padding-right: 1rem;">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Salvar Usuário</button>
             </div>
         </div>
     </div>

@@ -137,10 +137,14 @@ $routes->group('sys', function ($routes) {
 
     $routes->group('admin', ['filter' => 'admin'], function ($routes) {
         $routes->get('/', 'AdminController::index'); // Página inicial da admin
+        $routes->post('registrar-usuario', 'AdminController::registrarUsuario');
         $routes->post('alterar-grupo', 'AdminController::alterarGrupoUsuario'); // Atribuir
         $routes->post('atualizar-usuario', 'AdminController::atualizarUsuario');
         $routes->post('resetar-senha', 'AdminController::resetarSenha'); // Atualizar senha
         $routes->post('excluir-usuario', 'AdminController::excluirUsuario');
         $routes->post('registrar-usuario', 'AdminController::registrarUsuario');
+        $routes->get('usuarios-inativos', 'AdminController::usuariosInativos');
+        $routes->post('reativar-usuario', 'AdminController::reativarUsuario');
+        $routes->post('excluir-permanentemente', 'AdminController::excluirPermanentemente');
     });
 });

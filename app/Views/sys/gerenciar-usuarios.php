@@ -48,6 +48,12 @@
                             data-bs-target="#modal-cad-user"><i class="fa fa-plus-circle btn-icon-prepend"></i>
                             Adicionar Usuário
                         </button>
+
+                        <!-- Botão para redirecionar para a view de usuários inativos -->
+                        <a href="<?= base_url('/sys/admin/usuarios-inativos') ?>" class="btn btn-secondary btn-icon-text">
+                            <i class="fa fa-moon-o" aria-hidden="true"></i>
+                            Usuários Inativos
+                        </a>
                     </div>
                 </div>
 

@@ -124,10 +124,6 @@
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
-                                    <?php else: ?>
-                                        <tr>
-                                            <td colspan="4">Nenhum usuário cadastrado.</td>
-                                        </tr>
                                     <?php endif; ?>
                                 </tbody>
                             </table>
@@ -162,6 +158,7 @@
                 language: {
                     search: "Pesquisar:",
                     url: "<?= base_url('assets/js/traducao-dataTable/pt_br.json') ?>", // Caminho para o arquivo de tradução
+                    emptyTable: "Nenhum usuário cadastrado.", // Mensagem personalizada para tabela vazia
                 },
 
                 // Ativa ordenação
@@ -174,10 +171,9 @@
 
                 // Desativa a ordenação na coluna de ações
                 columnDefs: [{
-                        orderable: false,
-                        targets: 3
-                    } // Coluna de ações (índice 3)
-                ]
+                    orderable: false,
+                    targets: 3 // Coluna de ações (índice 3)
+                }]
             });
 
             // Ativa os tooltips

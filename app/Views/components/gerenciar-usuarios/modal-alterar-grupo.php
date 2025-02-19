@@ -8,7 +8,7 @@
             </div>
             <div class="modal-body">
                 <!-- Formulário para Alterar Grupo -->
-                <form action="<?= base_url('sys/admin/alterar-grupo') ?>" method="post">
+                <form id="form-alterar-grupo" action="<?= base_url('sys/admin/alterar-grupo') ?>" method="post">
                     <?= csrf_field() ?>
 
                     <!-- ID do Usuário (Oculto) -->

@@ -93,10 +93,6 @@
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
-                                    <?php else: ?>
-                                        <tr>
-                                            <td colspan="5">Nenhum usuário desativado.</td>
-                                        </tr>
                                     <?php endif; ?>
                                 </tbody>
                             </table>
@@ -114,52 +110,53 @@
             </div>
         </div>
     </div>
-
-    <script>
-        $(document).ready(function() {
-            // Inicializa a DataTables
-            $('#listagem-usuarios-desativados').DataTable({
-                // Define as entradas de quantidade de linhas visíveis na tabela
-                lengthMenu: [
-                    [5, 15, 30, -1],
-                    [5, 15, 30, "Todos"],
-                ],
-
-                // Define as questões de tradução/idioma
-                language: {
-                    search: "Pesquisar:",
-                    url: "<?= base_url('assets/js/traducao-dataTable/pt_br.json') ?>", // Caminho para o arquivo de tradução
-                },
-
-                // Ativa ordenação
-                ordering: true,
-
-                // Define a coluna padrão de ordenação ao carregar a tabela
-                order: [
-                    [0, 'asc'] // Ordena pela primeira coluna (Nome) em ordem ascendente
-                ],
-
-                // Desativa a ordenação na coluna de ações
-                columnDefs: [{
-                    orderable: false,
-                    targets: 4 // Coluna de ações (índice 4)
-                }]
-            });
-
-            // Ativa os tooltips
-            $('[data-bs-toggle="tooltip"]').tooltip();
-
-            // Passa o ID do usuário para o modal de reativação
-            $('.btn-reativar-usuario').on('click', function() {
-                var userId = $(this).data('user-id');
-                $('#reativar-user-id').val(userId);
-            });
-
-            // Passa o ID do usuário para o modal de exclusão permanente
-            $('.btn-excluir-permanentemente').on('click', function() {
-                var userId = $(this).data('user-id');
-                $('#excluir-permanentemente-user-id').val(userId);
-            });
-        });
-    </script>
 </div>
+
+<script>
+    $(document).ready(function() {
+        // Inicializa a DataTables
+        $('#listagem-usuarios-desativados').DataTable({
+            // Define as entradas de quantidade de linhas visíveis na tabela
+            lengthMenu: [
+                [5, 15, 30, -1],
+                [5, 15, 30, "Todos"],
+            ],
+
+            // Define as questões de tradução/idioma
+            language: {
+                search: "Pesquisar:",
+                url: "<?= base_url('assets/js/traducao-dataTable/pt_br.json') ?>", // Caminho para o arquivo de tradução
+                emptyTable: "Nenhum usuário desativado encontrado.", // Mensagem personalizada para tabela vazia
+            },
+
+            // Ativa ordenação
+            ordering: true,
+
+            // Define a coluna padrão de ordenação ao carregar a tabela
+            order: [
+                [0, 'asc'] // Ordena pela primeira coluna (Nome) em ordem ascendente
+            ],
+
+            // Desativa a ordenação na coluna de ações
+            columnDefs: [{
+                orderable: false,
+                targets: 4 // Coluna de ações (índice 4)
+            }]
+        });
+
+        // Ativa os tooltips
+        $('[data-bs-toggle="tooltip"]').tooltip();
+
+        // Passa o ID do usuário para o modal de reativação
+        $('.btn-reativar-usuario').on('click', function() {
+            var userId = $(this).data('user-id');
+            $('#reativar-user-id').val(userId);
+        });
+
+        // Passa o ID do usuário para o modal de exclusão permanente
+        $('.btn-excluir-permanentemente').on('click', function() {
+            var userId = $(this).data('user-id');
+            $('#excluir-permanentemente-user-id').val(userId);
+        });
+    });
+</script>

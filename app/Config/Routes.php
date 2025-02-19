@@ -137,7 +137,6 @@ $routes->group('sys', function ($routes) {
 
     $routes->group('admin', ['filter' => 'admin'], function ($routes) {
         $routes->get('/', 'AdminController::index'); // Página inicial da admin
-        $routes->post('registrar-usuario', 'AdminController::registrarUsuario');
         $routes->post('alterar-grupo', 'AdminController::alterarGrupoUsuario'); // Atribuir
         $routes->post('atualizar-usuario', 'AdminController::atualizarUsuario');
         $routes->post('resetar-senha', 'AdminController::resetarSenha'); // Atualizar senha

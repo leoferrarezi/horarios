@@ -69,13 +69,6 @@ class AdminController extends Controller
         // Obtém o ID do usuário recém-criado
         $userId = $this->userModel->getInsertID();
 
-        // Adiciona o e-mail como uma identidade
-        $this->userModel->db->table('auth_identities')->insert([
-            'user_id' => $userId,
-            'type'    => 'email_password', // Tipo de identidade (e-mail)
-            'secret'  => $data['email'],  // E-mail do usuário
-        ]);
-
         // Adiciona o usuário a um grupo (se fornecido)
         $grupo = $this->request->getPost('grupo');
 

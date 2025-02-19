@@ -28,13 +28,12 @@
                             <option value="user">Usuário (user)</option>
                         </select>
                     </div>
-
-                    <div class="mb-3">
-                        <!-- Botão de Cancelar -->
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-                    </div>
                 </form>
+            </div>
+            <!-- Botões movidos para o .modal-footer -->
+            <div class="modal-footer" style="justify-content: flex-start; padding: 1rem;">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary" form="form-alterar-grupo">Salvar Alterações</button>
             </div>
         </div>
     </div>

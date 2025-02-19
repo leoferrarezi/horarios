@@ -107,7 +107,7 @@
                                                         <span data-bs-toggle="tooltip" data-placement="top" title="Desativar usuário">
                                                             <button type="button" class="btn btn-inverse-danger btn-icon me-1 btn-desativar-usuario d-flex align-items-center justify-content-center"
                                                                 data-user-id="<?= $usuario->id ?>" data-bs-toggle="modal" data-bs-target="#modal-confirmar-desativacao">
-                                                                <i class="fa fa-trash"></i>
+                                                                <i class="fa fa-user-times"></i>
                                                             </button>
                                                         </span>
 
@@ -140,7 +140,7 @@
                     <div class="col-12 mt-4">
                         <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar</p>
                         <p class="card-description text-end"><i class="fa fa-key text-warning me-2"></i>Resetar Senha</p>
-                        <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i>Desativar</p>
+                        <p class="card-description text-end"><i class="fa fa-user-times text-danger me-2"></i>Desativar</p>
                         <p class="card-description text-end"><i class="fa fa-users text-info me-2"></i>Alterar grupo</p>
                     </div>
                 </div>

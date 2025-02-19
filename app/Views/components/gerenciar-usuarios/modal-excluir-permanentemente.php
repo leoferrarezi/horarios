@@ -12,7 +12,8 @@
                     <input type="password" name="admin_password" class="form-control" placeholder="Digite sua senha" required>
                     <input type="hidden" name="user_id" id="excluir-permanentemente-user-id">
                 </div>
-                <div class="modal-footer">
+                <!-- Ajuste no .modal-footer -->
+                <div class="modal-footer" style="justify-content: flex-start; padding: 1rem;">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
                 </div>

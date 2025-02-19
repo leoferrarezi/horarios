@@ -43,7 +43,7 @@
                     <div class="col-12 mb-4">
                         <!-- Botão para redirecionar para a view de gerenciar usuários ativos -->
                         <a href="<?= base_url('/sys/admin/') ?>" class="btn btn-secondary btn-icon-text">
-                            <i class="fa fa-users btn-icon-prepend"></i>
+                            <i class="fa fa-eye btn-icon-prepend"></i>
                             Usuários Ativos
                         </a>
                     </div>
@@ -78,7 +78,7 @@
                                                             <button type="button" class="btn btn-inverse-success btn-icon me-1 btn-reativar-usuario d-flex align-items-center justify-content-center"
                                                                 data-bs-toggle="modal" data-bs-target="#modal-reativar-usuario"
                                                                 data-user-id="<?= $usuario->id ?>">
-                                                                <i class="fa fa-undo"></i>
+                                                                <i class="fa fa-user-plus"></i>
                                                             </button>
                                                         </span>
 
@@ -107,7 +107,7 @@
                 <!-- Legendas no final -->
                 <div class="row">
                     <div class="col-12 mt-4">
-                        <p class="card-description text-end"><i class="fa fa-undo text-success me-2"></i>Reativar</p>
+                        <p class="card-description text-end"><i class="fa fa-user-plus text-success me-2"></i>Reativar</p>
                         <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i>Excluir Permanentemente</p>
                     </div>
                 </div>

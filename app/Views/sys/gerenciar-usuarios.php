@@ -1,6 +1,6 @@
 <?php echo view('components/gerenciar-usuarios/modal-cad-user.php'); ?>
 <?php echo view('components/gerenciar-usuarios/modal-alterar-grupo.php'); ?>
-<?php echo view('components/gerenciar-usuarios/modal-confirmar-exclusao.php'); ?>
+<?php echo view('components/gerenciar-usuarios/modal-confirmar-desativacao.php'); ?>
 <?php echo view('components/gerenciar-usuarios/modal-resetar-senha.php'); ?>
 <?php echo view('components/gerenciar-usuarios/modal-atualizar-usuario.php'); ?>
 
@@ -103,10 +103,10 @@
                                                             </button>
                                                         </span>
 
-                                                        <!-- Botão Excluir -->
-                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Excluir usuário">
-                                                            <button type="button" class="btn btn-inverse-danger btn-icon me-1 btn-excluir-usuario d-flex align-items-center justify-content-center"
-                                                                data-user-id="<?= $usuario->id ?>" data-bs-toggle="modal" data-bs-target="#modal-confirmar-exclusao">
+                                                        <!-- Botão Desativar -->
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Desativar usuário">
+                                                            <button type="button" class="btn btn-inverse-danger btn-icon me-1 btn-desativar-usuario d-flex align-items-center justify-content-center"
+                                                                data-user-id="<?= $usuario->id ?>" data-bs-toggle="modal" data-bs-target="#modal-confirmar-desativacao">
                                                                 <i class="fa fa-trash"></i>
                                                             </button>
                                                         </span>
@@ -140,7 +140,7 @@
                     <div class="col-12 mt-4">
                         <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar</p>
                         <p class="card-description text-end"><i class="fa fa-key text-warning me-2"></i>Resetar Senha</p>
-                        <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i>Excluir</p>
+                        <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i>Desativar</p>
                         <p class="card-description text-end"><i class="fa fa-users text-info me-2"></i>Alterar grupo</p>
                     </div>
                 </div>
@@ -194,10 +194,13 @@
                 $(this).find('input[name="grupo_atual"]').val(grupoAtual);
             });
 
-            // Passa o ID do usuário para o modal de exclusão
-            $('.btn-excluir-usuario').on('click', function() {
+            // Passa o ID e o nome do usuário para o modal de desativação
+            $('.btn-desativar-usuario').on('click', function() {
                 var userId = $(this).data('user-id');
-                $('#excluir-user-id').val(userId);
+                var username = $(this).closest('tr').find('td:first').text(); // Captura o nome do usuário
+
+                $('#desativar-user-id').val(userId);
+                $('#nome-usuario-desativacao').text(username); // Exibe o nome no modal
             });
 
             // Passa o ID do usuário para o modal de resetar senha

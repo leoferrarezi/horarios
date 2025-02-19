@@ -140,7 +140,7 @@ $routes->group('sys', function ($routes) {
         $routes->post('alterar-grupo', 'AdminController::alterarGrupoUsuario'); // Atribuir
         $routes->post('atualizar-usuario', 'AdminController::atualizarUsuario');
         $routes->post('resetar-senha', 'AdminController::resetarSenha'); // Atualizar senha
-        $routes->post('excluir-usuario', 'AdminController::excluirUsuario');
+        $routes->post('desativar-usuario', 'AdminController::desativarUsuario');
         $routes->post('registrar-usuario', 'AdminController::registrarUsuario');
         $routes->get('usuarios-inativos', 'AdminController::usuariosInativos');
         $routes->post('reativar-usuario', 'AdminController::reativarUsuario');

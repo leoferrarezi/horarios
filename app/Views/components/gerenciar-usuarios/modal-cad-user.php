@@ -8,18 +8,19 @@
             </div>
             <div class="modal-body">
                 <!-- Formulário de Registro -->
-                <form action="<?= base_url('sys/admin/registrar-usuario') ?>" method="post">
+                <form id="form-cad-user" action="<?= base_url('sys/admin/registrar-usuario') ?>" method="post">
                     <?= csrf_field() ?>
 
                     <!-- Exibir Mensagens de Erro -->
-                    <?php if (session('errors') !== null) : ?>
+                    <?php if (session('errors')): ?>
                         <div class="alert alert-danger" role="alert">
-                            <?php foreach (session('errors') as $error) : ?>
-                                <?= $error ?>
-                                <br>
-                            <?php endforeach ?>
+                            <ul>
+                                <?php foreach (session('errors') as $error): ?>
+                                    <li><?= esc($error) ?></li>
+                                <?php endforeach ?>
+                            </ul>
                         </div>
-                    <?php endif ?>
+                    <?php endif; ?>
 
                     <!-- Nome de Usuário -->
                     <div class="mb-3">
@@ -54,10 +55,11 @@
                         </select>
                     </div>
 
-                    <div class="mb-3">
+                    <!-- Rodapé do Modal com padding ajustado -->
+                    <div class="modal-footer" style="padding-right: 1rem;">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-primary">Salvar Usuário</button>
                     </div>
-
                 </form>
             </div>
         </div>

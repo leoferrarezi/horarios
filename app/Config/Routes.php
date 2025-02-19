@@ -142,5 +142,8 @@ $routes->group('sys', function ($routes) {
         $routes->post('resetar-senha', 'AdminController::resetarSenha'); // Atualizar senha
         $routes->post('excluir-usuario', 'AdminController::excluirUsuario');
         $routes->post('registrar-usuario', 'AdminController::registrarUsuario');
+        $routes->get('usuarios-inativos', 'AdminController::usuariosInativos');
+        $routes->post('reativar-usuario', 'AdminController::reativarUsuario');
+        $routes->post('excluir-permanentemente', 'AdminController::excluirPermanentemente');
     });
 });

@@ -8,7 +8,7 @@
             </div>
             <div class="modal-body">
                 <!-- Formulário para Atualizar Usuário -->
-                <form action="<?= base_url('sys/admin/atualizar-usuario') ?>" method="post">
+                <form id="form-atualizar-usuario" action="<?= base_url('sys/admin/atualizar-usuario') ?>" method="post">
                     <?= csrf_field() ?>
 
                     <!-- ID do Usuário (Oculto) -->
@@ -31,13 +31,12 @@
                         <label for="admin_password" class="form-label">Senha do Administrador</label>
                         <input type="password" class="form-control" id="admin_password" name="admin_password" required>
                     </div>
-
-                    <div class="mb-3">
-                        <!-- Botão de Cancelar -->
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-                    </div>
                 </form>
+            </div>
+            <!-- Botões movidos para o .modal-footer -->
+            <div class="modal-footer" style="justify-content: flex-start; padding: 1rem;">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary" form="form-atualizar-usuario">Salvar Alterações</button>
             </div>
         </div>
     </div>

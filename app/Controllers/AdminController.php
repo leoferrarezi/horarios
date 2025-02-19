@@ -170,8 +170,8 @@ class AdminController extends Controller
 
 
 
-    // Método para excluir um usuário
-    public function excluirUsuario()
+    // Método para desativar um usuário
+    public function desativarUsuario()
     {
         $request = service('request');
         $userId = $request->getPost('user_id');
@@ -181,10 +181,10 @@ class AdminController extends Controller
         $admin = auth()->user();
 
         if (!$admin) {
-            log_message('error', 'Tentativa de exclusão sem usuário autenticado.');
+            log_message('error', 'Tentativa de desativação sem usuário autenticado.');
             return redirect()->back()->with(
                 'error',
-                'Você precisa estar autenticado para excluir um usuário.'
+                'Você precisa estar autenticado para desativar um usuário.'
             );
         }
 
@@ -192,23 +192,23 @@ class AdminController extends Controller
 
         // Verifica se a senha informada está correta
         if (!password_verify($adminPassword, $admin->password_hash)) {
-            log_message('error', "Senha incorreta ao excluir usuário. Admin ID: {$admin->id}");
+            log_message('error', "Senha incorreta ao desativar usuário. Admin ID: {$admin->id}");
             return redirect()->back()->with(
                 'error',
-                'Senha incorreta! A exclusão foi cancelada.'
+                'Senha incorreta! A desativação foi cancelada.'
             );
         }
 
-        // Excluir usuário
+        // Desativa o usuário (soft delete)
         $userModel = new UserModel();
         if ($userModel->delete($userId)) {
-            log_message('info', "Usuário ID {$userId} excluído com sucesso pelo Admin ID: {$admin->id}");
-            return redirect()->back()->with('success', 'Usuário excluído com sucesso.');
+            log_message('info', "Usuário ID {$userId} desativado com sucesso pelo Admin ID: {$admin->id}");
+            return redirect()->back()->with('success', 'Usuário desativado com sucesso.');
         } else {
-            log_message('error', "Erro ao excluir usuário ID {$userId} pelo Admin ID: {$admin->id}");
+            log_message('error', "Erro ao desativar usuário ID {$userId} pelo Admin ID: {$admin->id}");
             return redirect()->back()->with(
                 'error',
-                'Erro ao excluir usuário.'
+                'Erro ao desativar usuário.'
             );
         }
     }
@@ -295,10 +295,37 @@ class AdminController extends Controller
                 ->with('error', 'Usuário não encontrado.');
         }
 
+        // Verifica se já existe um usuário com o mesmo username (exceto o próprio usuário)
+        $existingUsername = $this->userModel
+            ->where('username', $username)
+            ->where('id !=', $userId)
+            ->first();
+
+        // Verifica se já existe um usuário com o mesmo e-mail (exceto o próprio usuário)
+        $existingEmail = $this->userModel->db->table('auth_identities')
+            ->where('type', 'email_password')
+            ->where('secret', $email)
+            ->where('user_id !=', $userId)
+            ->get()
+            ->getRow();
+
+        // Verifica se há conflitos de username ou e-mail
+        if ($existingUsername && $existingEmail) {
+            return redirect()->to('/sys/admin/')
+                ->with('error', 'Já existe um usuário com este username e e-mail.');
+        } elseif ($existingUsername) {
+            return redirect()->to('/sys/admin/')
+                ->with('error', 'Já existe um usuário com este username.');
+        } elseif ($existingEmail) {
+            return redirect()->to('/sys/admin/')
+                ->with('error', 'Já existe um usuário com este e-mail.');
+        }
+
         // Atualiza os dados do usuário
         $user->username = $username;
         $user->email = $email;
 
+        // Tenta salvar as alterações
         if (!$this->userModel->save($user)) {
             return redirect()->to('/sys/admin/')
                 ->with('error', 'Erro ao atualizar usuário.');

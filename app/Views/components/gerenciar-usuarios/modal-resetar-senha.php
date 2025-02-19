@@ -9,7 +9,7 @@
             <div class="modal-body">
                 Tem certeza que deseja resetar a senha deste usuário? Essa ação não pode ser desfeita.
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer" style="justify-content: flex-start; padding: 1rem;">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-warning" id="btn-confirmar-resetar">Confirmar</button>
             </div>

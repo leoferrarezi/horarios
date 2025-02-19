@@ -54,13 +54,12 @@
                             <option value="user" <?= old('grupo') == 'user' || old('grupo') == '' ? 'selected' : '' ?>>Usuário</option>
                         </select>
                     </div>
-
-                    <!-- Rodapé do Modal com padding ajustado -->
-                    <div class="modal-footer" style="padding-right: 1rem;">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Salvar Usuário</button>
-                    </div>
                 </form>
+            </div>
+            <!-- Rodapé do Modal com padding ajustado e alinhamento à esquerda -->
+            <div class="modal-footer" style="justify-content: flex-start; padding: 1rem;">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary" form="form-cad-user">Salvar Usuário</button>
             </div>
         </div>
     </div>

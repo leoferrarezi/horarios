@@ -37,6 +37,9 @@ class UserModel extends BaseModel
         'status_message',
         'active',
         'last_active',
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
     protected $useTimestamps = true;
     protected $afterFind     = ['fetchIdentities'];

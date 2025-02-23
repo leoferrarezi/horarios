@@ -65,7 +65,7 @@ $routes->group('sys', function ($routes) {
         $routes->post('importar', 'MatrizCurricular::importar');
         $routes->post('processarImportacao', 'MatrizCurricular::processarImportacao');
         $routes->post('importarDisciplinas', 'MatrizCurricular::importarDisciplinas');
-        $routes->post('processarImportacaoDisciplinas', 'MatrizCurricular::processarImportacaoDisciplinas');        
+        $routes->post('processarImportacaoDisciplinas', 'MatrizCurricular::processarImportacaoDisciplinas');
     });
 
     $routes->group('horario', function ($routes) {
@@ -98,7 +98,7 @@ $routes->group('sys', function ($routes) {
     });
 
     $routes->group('tempoAula', function ($routes) {
-        
+
         $routes->get('', 'TemposAula::index');
         $routes->get('listar', 'TemposAula::index');
         $routes->get('cadastro', 'TemposAula::cadastro');
@@ -107,7 +107,7 @@ $routes->group('sys', function ($routes) {
         $routes->post('deletar', 'TemposAula::deletar');
     });
 
-    $routes->group('turma', function ($routes) { 
+    $routes->group('turma', function ($routes) {
         $routes->get('', 'Turmas::index');
         $routes->get('listar', 'Turmas::index');
         $routes->get('cadastro', 'Turmas::cadastro');
@@ -118,7 +118,7 @@ $routes->group('sys', function ($routes) {
         $routes->post('processarImportacao', 'Turmas::processarImportacao');
     });
 
-    $routes->group('aulas', function ($routes) { 
+    $routes->group('aulas', function ($routes) {
         $routes->get('', 'Aulas::index');
         $routes->post('salvar', 'Aulas::salvar');
         $routes->post('deletar', 'Aulas::deletar');
@@ -126,7 +126,7 @@ $routes->group('sys', function ($routes) {
     });
 
     $routes->group('versao', function ($routes) {
-        
+
         $routes->get('', 'Versao::index');
         $routes->get('listar', 'Versao::index');
         $routes->get('cadastro', 'Versao::cadastro');
@@ -135,7 +135,15 @@ $routes->group('sys', function ($routes) {
         $routes->post('deletar', 'Versao::deletar');
     });
 
-    // Rotas para alteração da senha do usuário
-    $routes->get('alterar-senha', 'AdminController::changePassword');
-    $routes->post('alterar-senha', 'AdminController::updatePassword');
+    $routes->group('admin', ['filter' => 'admin'], function ($routes) {
+        $routes->get('/', 'AdminController::index'); // Página inicial da admin
+        $routes->post('alterar-grupo', 'AdminController::alterarGrupoUsuario'); // Atribuir
+        $routes->post('atualizar-usuario', 'AdminController::atualizarUsuario');
+        $routes->post('resetar-senha', 'AdminController::resetarSenha'); // Atualizar senha
+        $routes->post('desativar-usuario', 'AdminController::desativarUsuario');
+        $routes->post('registrar-usuario', 'AdminController::registrarUsuario');
+        $routes->get('usuarios-inativos', 'AdminController::usuariosInativos');
+        $routes->post('reativar-usuario', 'AdminController::reativarUsuario');
+        $routes->post('excluir-permanentemente', 'AdminController::excluirPermanentemente');
+    });
 });

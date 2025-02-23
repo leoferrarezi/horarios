@@ -8,7 +8,7 @@ class DropColumnVersionInAulaProfessores extends Migration
 {
     public function up()
     {
-        $this->forge->dropColumn('aula_professor', 'versao_id');        
+        $this->forge->dropColumn('aula_professor', 'versao_id');
     }
 
     public function down()

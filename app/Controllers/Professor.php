@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\ProfessorModel;
+use App\Models\HorariosModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use PhpOffice\PhpSpreadsheet\Reader\Xls;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
@@ -16,10 +17,15 @@ class Professor extends BaseController
     {
         // Cria a instância de um model do professor
         $professorModel = new ProfessorModel();
+        $horariosModel = new HorariosModel();
 
         // Faz a busca por todos os professores cadastrado no banco (tabela professores)
         $data['professores'] = $professorModel->orderBy('nome', 'asc')->findAll();
 
+        // Faz a busca por todos os horarios cadastrados no banco (tabela horarios)
+        $data['horarios'] = $horariosModel->getHorariosAulas();
+        
+        
         // Exibe os professores cadastrados
         $data['content'] = view('sys/lista-professor', $data);
         return view('dashboard', $data);
@@ -48,14 +54,16 @@ class Professor extends BaseController
 
         //coloca todos os dados do formulario no vetor dadosPost
         $dadosPost = $this->request->getPost();
-
-        //Verifica se o SIAPE esta vazio e poe NULL neste caso, pra não ir um SIAPE com valor 0 pro banco
-        if (empty($dadosPost['siape'])) {
-            $dadosPost['siape'] = NULL;
-        }
+        $dadosLimpos['nome'] = esc($dadosPost['nome']);
+        $dadosLimpos['email'] = esc($dadosPost['email']);
+        $dadosLimpos['siape'] = esc($dadosPost['siape'] ?? null);
+        // //Verifica se o SIAPE esta vazio e poe NULL neste caso, pra não ir um SIAPE com valor 0 pro banco
+        // if (empty($dadosPost['siape'])) {
+        //     $dadosPost['siape'] = NULL;
+        // }
 
         //tenta cadastrar o novo professor no banco
-        if ($professor->insert($dadosPost)) {
+        if ($professor->insert($dadosLimpos)) {
             //se deu certo, direciona pra lista de professores
             session()->setFlashdata('sucesso', 'Professor cadastrado com sucesso.');
             return redirect()->to(base_url('/sys/professor')); // Redireciona para a página de listagem
@@ -189,6 +197,6 @@ class Professor extends BaseController
 
     public function salvarRestricoes()
     {
-        /*...*/
+        
     }
 }

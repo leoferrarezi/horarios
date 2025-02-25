@@ -32,12 +32,16 @@ class VersoesModel extends Model
     protected $validationRules      = [
         'id' => 'permit_empty|is_natural_no_zero|max_length[11]',
         'nome' => 'required|is_unique[versoes.nome,id,{id}]|max_length[96]',
+        'semestre' => 'permit_empty|is_natural_no_zero'
     ];
     protected $validationMessages   = [
         'nome' => [
             'required'   => 'O campo nome é obrigatório.',
             'is_unique'  => 'Já existe uma versão com este nome. O nome deve ser único.',
             'max_length' => 'O campo nome não pode exceder 96 caracteres.'
+        ],
+        'semestre' => [
+            'is_natural_no_zero' => 'O semestre precisa ser um número natural',
         ],
     ];
     protected $skipValidation       = false;

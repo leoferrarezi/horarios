@@ -50,7 +50,7 @@
     </div>
     <div class="col-md-8 grid-margin stretch-card">
         <div class="card">
-            <div class="card-body">                
+            <div class="card-body">
                 <h4 class="card-title">Filtros</h4>
                 <div class="row">
                     <div class="col-md-6">
@@ -155,12 +155,14 @@
         </div>
     </div>
 </div>
-
-<div class="row">
-    <div class="col-12 mt-4">
-        <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar &nbsp; &nbsp; &nbsp; &nbsp;
-            <i class="fa fa-trash text-danger me-2"></i>Excluir
-        </p>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 mt-4 d-flex justify-content-end gap-3">
+                <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i> Editar</p>
+                <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i> Excluir</p>
+            </div>
+        </div>
     </div>
 </div>
 

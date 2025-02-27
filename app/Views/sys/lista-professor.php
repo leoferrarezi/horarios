@@ -140,7 +140,7 @@
                 </div>
                 <!-- legendas no canto inferior da tela -->
                 <div class="row">
-                    <div class="col-12 mt-4">
+                    <div class="row-12 mt-4 d-flex justify-content-end gap-3">
                         <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar</p>
                         <p class="card-description text-end"><i class="fa fa-clock-o text-info me-2"></i>Gerenciar
                             Restrições</p>

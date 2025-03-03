@@ -53,7 +53,7 @@
                                         <th>Sigla</th>
                                         <th>Ano</th>
                                         <th>Sem.</th>
-                                        <th>Per.</th>
+                                        <th>Per/Tur</th>
                                         <th>Curso</th>
                                         <th>Aulas Dia</th>
                                         <th>Horário</th>

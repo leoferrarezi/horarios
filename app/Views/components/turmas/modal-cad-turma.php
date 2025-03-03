@@ -35,7 +35,7 @@
                         </div>
                         <div class="col-md-3 col-sm 12">
                             <div class="form-group">
-                                <label for="periodo">Período</label>
+                                <label for="periodo">Período/Turma</label>
                                 <input type="number" min="1" max="12" class="form-control" id="periodo" name="periodo"
                                     value="<?php echo esc(old('periodo')) ?>">
                             </div>

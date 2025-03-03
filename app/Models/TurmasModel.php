@@ -37,7 +37,7 @@ class TurmasModel extends Model
         'semestre' => 'required|regex_match[/^[12]$/]', //verifica se 1 ou 2.
         'periodo' => 'required',
         'curso_id' => 'required|max_length[11]|is_not_unique[cursos.id]',
-        'tempos_diarios' => 'permit_empty|is_natural|max_length[2]',
+        'tempos_diarios' => 'required|is_natural|max_length[2]',
         'horario_id' => 'permit_empty|is_not_unique[horarios.id]|max_length[11]',
         'horario_preferencial_id' => 'permit_empty|is_not_unique[horarios.id]|max_length[11]'
     ];
@@ -68,7 +68,7 @@ class TurmasModel extends Model
             'is_not_unique'  => 'O curso informado não existe no banco de dados.'
         ],
         'tempos_diarios' => [
-            'permit_empty' => 'O campo tempos diários é opcional.',
+            'required' => 'O campo tempos diários é obrigatório.',
             'is_natural'   => 'O campo tempos diários deve conter um número natural.',
             'max_length'   => 'O campo tempos diários não pode exceder 2 caracteres.'
         ],

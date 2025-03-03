@@ -32,7 +32,7 @@ class TemposAulasModel extends Model
     protected $validationRules = [
         'id' => 'permit_empty|is_natural_no_zero|max_length[11]',
         'horario_id' => 'required|is_not_unique[horarios.id]|max_length[11]',
-        'dia_semana' => 'required', //o regex verifica se está entre 0 a 6
+        'dia_semana' => 'required',
         'hora_inicio' => 'required|regex_match[/^(?:[01][0-9]|2[0-3])$/]', //aceita de 00 a 23
         'minuto_inicio' => 'required|regex_match[/^(?:[0-5][0-9])$/]', //aceita entre 00 a 59
         'hora_fim' => 'required|regex_match[/^(?:[01][0-9]|2[0-3])$/]', //aceita de 00 a 23

@@ -179,7 +179,7 @@
                                                             <!-- botão com estilo, ativação do modal, e dados formados para transmitir ao modal -->
                                                             <button
                                                                 type="button"
-                                                                class="justify-content-center align-items-center d-flex btn btn-primary btn-icon me-1"
+                                                                class="justify-content-center align-items-center d-flex btn btn-inverse-primary btn-icon me-1"
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#modal-add-ambientes-gp-<?= $grupo['id']; ?>"
                                                                 data-id="<?php echo esc($grupo['id']); ?>"
@@ -193,7 +193,7 @@
                                                             <!-- botão com estilo, ativação do modal, e dados formados para transmitir ao modal -->
                                                             <button
                                                                 type="button"
-                                                                class="justify-content-center align-items-center d-flex btn btn-warning btn-icon me-1"
+                                                                class="justify-content-center align-items-center d-flex btn btn-inverse-warning btn-icon me-1"
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#modal-list-gp-ambientes-<?= $grupo['id']; ?>"
                                                                 data-id="<?php echo esc($grupo['id']); ?>"
@@ -234,3 +234,15 @@
     </div>
 </div>
 
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="row-12 mt-4 d-flex justify-content-end gap-3">
+                <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar</p>
+                <p class="card-description text-end"><i class="fa fa-plus text-primary me-2"></i>Adicionar ambientes ao grupo</p>
+                <p class="card-description text-end"><i class="fa fa-list text-warning me-2"></i>Listar ambientes do grupo</p>
+                <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i>Excluir</p>
+            </div>
+        </div>
+    </div>
+</div>

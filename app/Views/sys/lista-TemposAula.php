@@ -46,8 +46,8 @@
                                 <!-- Cabeçalho da tabela -->
                                 <thead>
                                     <tr>
-                                        <th>Grade de Horário</th>    
-                                        <th>Dia da semana</th>                                        
+                                        <th>Grade de Horário</th>
+                                        <th>Dia da semana</th>
                                         <th>Início</th>
                                         <th>Fim</th>
                                         <th>Ações</th>
@@ -74,7 +74,7 @@
                                                         6 => 'Sábado'
                                                     ];
                                                     echo esc($diasSemana[$ta['dia_semana']]); ?>
-                                                </td>                                                
+                                                </td>
                                                 <td>
                                                     <?php
                                                     // Formata hora e minuto de início para HH:mm
@@ -130,7 +130,7 @@
                 </div>
                 <!-- legendas no canto inferior da tela -->
                 <div class="row">
-                    <div class="col-12 mt-4">
+                    <div class="col-12 mt-4 d-flex justify-content-end gap-3">
                         <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar</p>
                         <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i>Excluir</p>
                     </div>

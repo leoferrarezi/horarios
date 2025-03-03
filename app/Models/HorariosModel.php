@@ -70,6 +70,26 @@ class HorariosModel extends Model
         return $data;
     }
 
+    public function getHorariosAulas() 
+    {
+         // Conecta ao banco de dados
+         $db = \Config\Database::connect();
+        
+         // Cria o builder para a tabela 'horario'
+         $builder = $this->builder();
+         $builder->orderBy('id');
+         $horarios = $builder->get()->getResultArray();
+ 
+         // Para cada horário, busca os tempos de aula relacionados
+         foreach ($horarios as &$horario) {
+             $builder2 = $db->table('tempos_de_aula');
+             $tempos = $builder2->where('horario_id', $horario['id'])->get()->getResultArray();
+             $horario['tempos_de_aula'] = $tempos;
+         }
+         
+         return $horarios;
+    }
+
     private function verificarReferenciasEmTabelas($id)
     {
         // Conectar ao banco de dados

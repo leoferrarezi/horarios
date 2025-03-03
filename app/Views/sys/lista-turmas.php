@@ -35,7 +35,7 @@
                     <div class="col-12 mb-4">
                         <button type="button" class="btn btn-primary btn-icon-text" data-bs-toggle="modal" data-bs-target="#modal-cad-turmas"><i class="fa fa-plus-circle btn-icon-prepend"></i> Incluir Turma</button>
                         <button class="btn btn-info btn-icon-text" data-bs-toggle="modal"
-                                    data-bs-target="#modal-import-turmas"><i class="fa fa-upload btn-icon-prepend"></i> Importar Turmas do SUAP</button>
+                            data-bs-target="#modal-import-turmas"><i class="fa fa-upload btn-icon-prepend"></i> Importar Turmas do SUAP</button>
                     </div>
                 </div>
 
@@ -139,7 +139,7 @@
                 </div>
                 <!-- legendas no canto inferior da tela -->
                 <div class="row">
-                    <div class="col-12 mt-4">
+                    <div class="col-12 mt-4 d-flex justify-content-end gap-3">
                         <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar</p>
                         <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i>Excluir</p>
                     </div>

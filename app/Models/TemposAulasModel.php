@@ -132,4 +132,51 @@ class TemposAulasModel extends Model
         // Retorna as tabelas onde o ID foi encontrado
         return $referenciasEncontradas;
     }
+    public function getTemposAulas() 
+    {
+
+        // Define os dias da semana
+        $diasSemana = [
+            0 => 'Domingo',
+            1 => 'Segunda-feira',
+            2 => 'Terça-feira',
+            3 => 'Quarta-feira',
+            4 => 'Quinta-feira',
+            5 => 'Sexta-feira',
+            6 => 'Sábado'
+        ];
+
+        // Inicializa o array para armazenar os horários agrupados por dia
+        $horariosPorDia = [];
+        foreach ($diasSemana as $dia) {
+            $horariosPorDia[$dia] = []; // Array vazio para cada dia
+        }
+
+        // Consulta os tempos de aula ordenados por dia da semana e horário de início
+        $builder = $this->table('tempos_de_aula');
+        $builder->orderBy('dia_semana', 'ASC')->orderBy('hora_inicio', 'ASC')->orderBy('minuto_inicio', 'ASC');
+        $tempos = $builder->get()->getResultArray();
+
+        // Agrupa os tempos de aula por dia da semana
+        foreach ($tempos as $tempo) {
+            $diaSemanaNome = $diasSemana[$tempo['dia_semana']] ?? 'Desconhecido';
+            
+            // Formata os horários corretamente
+            $horaInicio = str_pad($tempo['hora_inicio'], 2, '0', STR_PAD_LEFT);
+            $minutoInicio = str_pad($tempo['minuto_inicio'], 2, '0', STR_PAD_LEFT);
+            $horaFim = str_pad($tempo['hora_fim'], 2, '0', STR_PAD_LEFT);
+            $minutoFim = str_pad($tempo['minuto_fim'], 2, '0', STR_PAD_LEFT);
+
+            // Monta o array final
+            $horariosPorDia[$diaSemanaNome][] = [
+                'id' => $tempo['id'],
+                'horario_id' => $tempo['horario_id'],
+                'inicio' => "{$horaInicio}:{$minutoInicio}",
+                'fim' => "{$horaFim}:{$minutoFim}"
+            ];
+        }
+
+        return $horariosPorDia;
+    }
+
 }

@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\ProfessorModel;
 use App\Models\HorariosModel;
+use App\Models\TemposAulasModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use PhpOffice\PhpSpreadsheet\Reader\Xls;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
@@ -193,6 +194,20 @@ class Professor extends BaseController
 
         session()->setFlashdata('sucesso', "{$insertedCount} registros importados com sucesso!");
         return redirect()->to(base_url('/sys/professor'));
+    }
+
+    public function preferencias($professorId) {
+        $professorModel = new ProfessorModel();
+        $temposAulaModel = new TemposAulasModel();
+
+        $data['professor'] = $professorModel->find($professorId);
+        // Faz a busca por todos os horarios cadastrados no banco (tabela horarios)
+        $data['temposAula'] = $temposAulaModel->getTemposAulas();
+
+
+        // Exibe os professores cadastrados
+        $data['content'] = view('sys/preferencias-professor', $data);
+        return view('dashboard', $data);
     }
 
     public function salvarRestricoes()

@@ -68,8 +68,10 @@
   <div class="container-scroller">
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
       <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+        <a href="<?php echo base_url("/sys/home") ?>">
         <img src="<?php echo base_url("assets/images/logo-ifro.png"); ?>" class="sidebar-brand brand-logo" alt="logo" />
         <img src="<?php echo base_url("assets/images/logo-ifro-mini.png"); ?>" class="sidebar-brand brand-logo-mini" alt="logo" />
+        </a>
       </div>
       <ul class="nav">
         <li class="nav-item menu-items">
@@ -379,6 +381,7 @@
   </div>
   <!-- container-scroller -->
 
+  <script src="<?php echo base_url("assets/vendors/chart.js/chart.umd.js"); ?>"></script>
   <script src="<?php echo base_url("assets/vendors/progressbar.js/progressbar.min.js"); ?>"></script>
   <script src="<?php echo base_url("assets/vendors/jvectormap/jquery-jvectormap.min.js"); ?>"></script>
   <script src="<?php echo base_url("assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"); ?>"></script>
@@ -399,6 +402,7 @@
   <script src="<?php echo base_url("assets/js/validacoes/edicao-professor.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/validacoes/cadastro-disciplina.js"); ?>"></script>
   <script src="<?php echo base_url("assets/js/validacoes/cadastro-cursos.js"); ?>"></script>
+  <script src="<?php echo base_url("assets/js/dashboards/dashboards.js"); ?>"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

@@ -45,7 +45,7 @@
     $(document).ready(function() {
         $('.js-example-basic-multiple').select2();
 
-        $('#addAmbientesGrupo-<?= $grupo['id'] ?>').on('submit', function(e) {
+        $(form[id ^= "addAmbientesGrupo-"]).on('submit', function(e) {
             const selectElement = $(this).find('select[name="ambientes[]"]');
 
             const selectedOptions = selectElement.select2('data');

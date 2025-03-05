@@ -19,32 +19,6 @@
 </div>
 
 <div class="row">
-    <!-- Exibe mensagem de sucesso se o flashdata estiver com 'sucesso' -->
-    <?php if (session()->getFlashdata('sucesso')): ?>
-        <div class="row">
-            <div class="alert alert-fill-success" role="alert">
-                <i class="mdi mdi-alert-circle"></i> <?php echo session()->getFlashdata('sucesso'); ?>
-            </div>
-        </div>
-    <?php endif; ?>
-
-    <?php if (session()->getFlashdata('erro')): ?>
-        <div class="row">
-            <div class="alert alert-danger" role="alert">
-                <i class="mdi mdi-alert-circle"></i> <?php echo session()->getFlashdata('erro'); ?>
-            </div>
-        </div>
-    <?php endif; ?>
-
-    <?php if (session()->has('erros')) : ?>
-        <div class="alert alert-danger">
-            <ul>
-                <?php foreach (session('erros') as $erro) : ?>
-                    <li> <i class="mdi mdi-alert-circle"></i><?= esc($erro) ?></li>
-                <?php endforeach ?>
-            </ul>
-        </div>
-    <?php endif; ?>
     <!--------------------------- CADASTRO DE AMBIENTES ---------------------------------->
     <div class="col-md-4 grid-margin stretch-card">
         <div class="card">
@@ -179,7 +153,7 @@
                                                             <!-- botão com estilo, ativação do modal, e dados formados para transmitir ao modal -->
                                                             <button
                                                                 type="button"
-                                                                class="justify-content-center align-items-center d-flex btn btn-inverse-primary btn-icon me-1"
+                                                                class="justify-content-center align-items-center d-flex btn btn-inverse-primary button-trans-primary btn-icon me-1"
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#modal-add-ambientes-gp-<?= $grupo['id']; ?>"
                                                                 data-id="<?php echo esc($grupo['id']); ?>"
@@ -193,7 +167,7 @@
                                                             <!-- botão com estilo, ativação do modal, e dados formados para transmitir ao modal -->
                                                             <button
                                                                 type="button"
-                                                                class="justify-content-center align-items-center d-flex btn btn-inverse-warning btn-icon me-1"
+                                                                class="justify-content-center align-items-center d-flex btn btn-inverse-warning button-trans-warning btn-icon me-1"
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#modal-list-gp-ambientes-<?= $grupo['id']; ?>"
                                                                 data-id="<?php echo esc($grupo['id']); ?>"
@@ -246,3 +220,61 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        <?php if (session()->getFlashdata('sucesso')): ?>
+            $.toast({
+                heading: 'Sucesso',
+                text: '<?php echo session()->getFlashdata('sucesso'); ?>',
+                showHideTransition: 'slide',
+                icon: 'success',
+                loaderBg: '#f96868',
+                position: 'top-center'
+            });
+        <?php endif; ?>
+    });
+</script>
+
+<style>
+    .button-trans-primary {
+        background-color: rgba(0, 136, 204, 0.2);
+        transition: background-color 0.3s;
+    }
+
+    .button-trans-primary:hover {
+        background-color: rgba(0, 136, 204, 1);
+    }
+
+    .button-trans-primary>i {
+        color: #0088cc;
+        /* Azul padrão */
+        transition: color 0.3s;
+    }
+
+    .button-trans-primary:hover>i {
+        color: #ffffff;
+    }
+
+    .button-trans-warning {
+        background-color: rgba(255, 193, 7, 0.2);
+        /* Amarelo translúcido */
+        transition: background-color 0.3s;
+    }
+
+    .button-trans-warning:hover {
+        background-color: rgba(255, 193, 7, 1);
+        /* Amarelo sólido */
+    }
+
+    .button-trans-warning>i {
+        color: #ffc107;
+        /* Amarelo padrão Bootstrap */
+        transition: color 0.3s;
+    }
+
+    .button-trans-warning:hover>i {
+        color: #ffffff;
+        /* Ícone branco no hover */
+    }
+</style>

@@ -1,14 +1,18 @@
 <?php
 
 use CodeIgniter\Router\RouteCollection;
+use App\Controllers\LoginController; // Corrigido aqui
 
 /**
  * @var RouteCollection $routes
  */
 
 // Shield Auth routes
-service('auth')->routes($routes);
-service('auth')->routes($routes, ['except' => ['login', 'register']]);
+service('auth')->routes($routes, ['except' => ['login']]);
+
+// Definindo a rota de login para usar o seu controller personalizado
+$routes->get('login', [LoginController::class, 'loginView'], ['as' => 'login']);
+$routes->post('login', [LoginController::class, 'loginAction']);
 
 $routes->get('/', 'Home::home');
 $routes->get('/sys', 'Home::home');

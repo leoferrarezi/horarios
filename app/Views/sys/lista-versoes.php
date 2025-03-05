@@ -1,6 +1,6 @@
 <!-- incluir os componentes modais antes do restante do documento -->
 <?php echo view('components/versoes/modal-edit-versoes'); ?>
-<?php echo view('components/versoes/modal-cad-versoes'); ?>    
+<?php echo view('components/versoes/modal-cad-versoes'); ?>
 <?php echo view('components/versoes/modal-deletar-versoes') ?>
 
 <div class="page-header">
@@ -42,7 +42,7 @@
                     <div class="col-12">
                         <div class="table-responsive">
                             <table class="table mb-4" id="listagem-versao">
-                                
+
                                 <!-- cabeçalho da tabela -->
                                 <thead>
                                     <tr>
@@ -56,8 +56,10 @@
 
                                 <tbody>
 
-                                    <?php if (!empty($versoes)): //verifica se a tabela tem dados ?>
-                                        <?php foreach ($versoes as $versao): //loop para percorrer todos os professores retornados do bd ?>
+                                    <?php if (!empty($versoes)): //verifica se a tabela tem dados
+                                    ?>
+                                        <?php foreach ($versoes as $versao): //loop para percorrer todos os professores retornados do bd
+                                        ?>
                                             <tr>
                                                 <td><?php echo esc($versao['id']); ?></td>
                                                 <td><?php echo esc($versao['nome']); ?></td>
@@ -69,30 +71,28 @@
                                                         <!-- o elemento <span> é apenas para mostrar o tooltip -->
                                                         <span data-bs-toggle="tooltip" data-placement="top" title="Atualizar dados da versão">
                                                             <!-- botão com estilo, ativação do modal, e dados formados para transmitir ao modal -->
-                                                            <button 
+                                                            <button
                                                                 type="button"
-                                                                class="justify-content-center align-items-center d-flex btn btn-inverse-success button-trans-success btn-icon me-1"                                                                
+                                                                class="justify-content-center align-items-center d-flex btn btn-inverse-success button-trans-success btn-icon me-1"
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#modal-edit-versoes"
                                                                 data-id="<?php echo esc($versao['id']); ?>"
-                                                                data-nome="<?php echo esc($versao['nome']);?>"
-                                                            >
+                                                                data-nome="<?php echo esc($versao['nome']); ?>">
                                                                 <!-- icone do botão -->
                                                                 <i class="fa fa-edit"></i>
                                                             </button>
                                                         </span>
-                                                        
+
                                                         <!-- abaixo são repetidos os códigos acima para replicar os outros 2 botões -->
 
                                                         <span data-bs-toggle="tooltip" data-placement="top" title="Excluir Versão">
-                                                            <button 
+                                                            <button
                                                                 type="button"
                                                                 class="justify-content-center align-items-center d-flex btn btn-inverse-danger button-trans-danger btn-icon me-1"
-                                                                data-bs-toggle="modal" 
+                                                                data-bs-toggle="modal"
                                                                 data-bs-target="#modal-deletar-versoes"
                                                                 data-id="<?php echo esc($versao['id']); ?>"
-                                                                data-nome="<?php echo esc($versao['nome']);?>"
-                                                            >
+                                                                data-nome="<?php echo esc($versao['nome']); ?>">
                                                                 <i class="fa fa-trash"></i>
                                                             </button>
                                                         </span>
@@ -113,7 +113,7 @@
                 </div>
                 <!-- legendas no canto inferior da tela -->
                 <div class="row">
-                    <div class="col-12 mt-4">
+                    <div class="col-12 mt-4 d-flex justify-content-end gap-3">
                         <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar</p>
                         <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i>Excluir</p>
                     </div>
@@ -128,14 +128,14 @@
         const dataTableLangUrl = "<?php echo base_url('assets/js/traducao-dataTable/pt_br.json'); ?>";
 
         //essa linha abaixo é para detectar que o documento foi completamente carregado e executar o código após isso
-        $(document).ready(function(){
+        $(document).ready(function() {
 
             //Verificar se tem curso para então "transformar" a tabela em DataTable
             <?php if (!empty($versoes)): ?>
-                
+
                 //Cria a DataTable
                 $("#listagem-versao").DataTable({
-                    
+
                     //Define as entradas de quantidade de linhas visíveis na tabela
                     aLengthMenu: [
                         [5, 15, 30, -1],
@@ -144,37 +144,41 @@
 
                     //Define as questões de tradução/idioma
                     language: {
-                            search: "Pesquisar:",
-                            url: dataTableLangUrl,
-                        },
+                        search: "Pesquisar:",
+                        url: dataTableLangUrl,
+                    },
 
                     //Ativa ordenação
                     ordering: true,
                     //Diz que a coluna 1 (segunda/nome) deve ser o padrão de ordenação ao carregar a tabela
-                    order: [ [1, 'asc'] ],
+                    order: [
+                        [1, 'asc']
+                    ],
                     //Desativa a ordenação por ações
-                    columns: [null, null, { orderable: false }]
+                    columns: [null, null, {
+                        orderable: false
+                    }]
                 });
 
 
-                $('#modal-edit-versoes').on('show.bs.modal', function (event) {
+                $('#modal-edit-versoes').on('show.bs.modal', function(event) {
                     // Obter o DOM do botão que ativou o modal
-                    var button = $(event.relatedTarget); 
-                    
-                    // Extrair as informações dos atributos data-* 
+                    var button = $(event.relatedTarget);
+
+                    // Extrair as informações dos atributos data-*
                     var id = button.data('id');
                     var nome = button.data('nome');
-                    
+
                     // Formar o modal com os dados preenchidos
                     var modal = $(this);
                     modal.find('#edit-id').val(id);
                     modal.find('#edit-nome').val(nome);
-                    
+
                 });
 
-                $('#modal-deletar-versoes').on('show.bs.modal', function (event) {
+                $('#modal-deletar-versoes').on('show.bs.modal', function(event) {
                     // Button that triggered the modal
-                    var button = $(event.relatedTarget); 
+                    var button = $(event.relatedTarget);
 
                     // Extract info from data-* attributes
                     var nome = button.data('nome');
@@ -187,7 +191,7 @@
 
                 //Ativa os tooltips dos botões
                 $('[data-bs-toggle="tooltip"]').tooltip();
-                
+
             <?php endif; ?>
 
             // Exibe mensagem de sucesso se o flashdata estiver com 'sucesso'
@@ -202,6 +206,4 @@
                 });
             <?php endif; ?>
         });
-
-
     </script>

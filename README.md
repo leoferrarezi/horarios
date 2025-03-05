@@ -29,20 +29,30 @@ php spark migrate --all
 
 # Métodos SHIELD comumente utilizados
 
-* * * * *
+### **Métodos da Classe `Session`**
 
-| **Classe** | **Método** | **Descrição** | **Exemplo de Uso** | **Caminho do Arquivo** |
-| --- | --- | --- | --- | --- |
-| `Session` | `loggedIn()` | Verifica se o usuário está logado. | `if ($auth->loggedIn()) { ... }` | `ThirdParty/Shield/Authentication/Authenticators/Session.php` |
-| `Session` | `user()` | Retorna o usuário autenticado. | `$user = $auth->user();` | `ThirdParty/Shield/Authentication/Authenticators/Session.php` |
-| `Session` | `check()` | Verifica se um usuário existe no banco. | `if ($auth->check($credentials)) { ... }` | `ThirdParty/Shield/Authentication/Authenticators/Session.php` |
-| `Session` | `attempt()` | Realiza o login do usuário. | `if ($auth->attempt($credentials)) { ... }` | `ThirdParty/Shield/Authentication/Authenticators/Session.php` |
-| `Session` | `logout()` | Realiza o logout do usuário. | `$auth->logout();` | `ThirdParty/Shield/Authentication/Authenticators/Session.php` |
-| `Session` | `register()` | Registra um novo usuário. | `if ($auth->register($userData)) { ... }` | `ThirdParty/Shield/Authentication/Authenticators/Session.php` |
-| `User` | `can()` | Verifica se o usuário tem uma permissão. | `if ($auth->user()->can('edit-posts')) { ... }` | `ThirdParty/Shield/Models/UserModel.php` |
-| `User` | `inGroup()` | Verifica se o usuário pertence a um grupo. | `if ($auth->user()->inGroup('admin')) { ... }` | `ThirdParty/Shield/Models/UserModel.php` |
-| `User` | `isActivated()` | Verifica se o usuário está ativo. | `if ($auth->user()->isActivated()) { ... }` | `ThirdParty/Shield/Models/UserModel.php` |
-| `User` | `changePassword()` | Altera a senha do usuário. | `if ($auth->user()->changePassword($newPassword)) { ... }` | `ThirdParty/Shield/Models/UserModel.php` |
-| `Token` | `loggedIn()` | Verifica se o token de API é válido. | `if ($auth->loggedIn()) { ... }` | `ThirdParty/Shield/Authentication/Authenticators/Token.php` |
+| **Método** | **Descrição** | **Exemplo de Uso** | **Caminho do Arquivo** |
+| --- | --- | --- | --- |
+| `loggedIn()` | Verifica se o usuário está logado. | `if ($auth->loggedIn()) { ... }` | `/Shield/Auth/Authenticators/Session.php` |
+| `user()` | Retorna o usuário autenticado. | `$user = $auth->user();` | `/Shield/Auth/Authenticators/Session.php` |
+| `check()` | Verifica se um usuário existe. | `if ($auth->check($credentials)) { ... }` | `/Shield/Auth/Authenticators/Session.php` |
+| `attempt()` | Realiza o login do usuário. | `if ($auth->attempt($credentials)) { ... }` | `/Shield/Auth/Authenticators/Session.php` |
+| `logout()` | Realiza o logout do usuário. | `$auth->logout();` | `/Shield/Auth/Authenticators/Session.php` |
+| `register()` | Registra um novo usuário. | `if ($auth->register($userData)) { ... }` | `/Shield/Auth/Authenticators/Session.php` |
+
+### **Métodos da Classe `User`**
+
+| **Método** | **Descrição** | **Exemplo de Uso** | **Caminho do Arquivo** |
+| --- | --- | --- | --- |
+| `can()` | Verifica permissões do usuário. | `if ($auth->user()->can('edit-posts')) { ... }` | `/Shield/Models/UserModel.php` |
+| `inGroup()` | Verifica se o usuário pertence a um grupo. | `if ($auth->user()->inGroup('admin')) { ... }` | `/Shield/Models/UserModel.php` |
+| `isActivated()` | Verifica se o usuário está ativo. | `if ($auth->user()->isActivated()) { ... }` | `/Shield/Models/UserModel.php` |
+| `changePassword()` | Altera a senha do usuário. | `if ($auth->user()->changePassword($newPassword)) { ... }` | `/Shield/Models/UserModel.php` |
+
+### **Métodos da Classe `Token`**
+
+| **Método** | **Descrição** | **Exemplo de Uso** | **Caminho do Arquivo** |
+| --- | --- | --- | --- |
+| `loggedIn()` | Verifica se o token de API é válido. | `if ($auth->loggedIn()) { ... }` | `/Shield/Auth/Authenticators/Token.php` |
 
 * * * * *

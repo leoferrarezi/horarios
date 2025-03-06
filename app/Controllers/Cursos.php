@@ -22,7 +22,7 @@ class Cursos extends BaseController
         $data['matrizes'] = $matrizCurricularModel->orderBy('nome', 'asc')->findAll();
         $data['cursos'] = $cursoModel->orderBy('nome', 'asc')->getCursosWithMatriz();
         // Exibe os cursos cadastrados
-        $data['content'] = view('sys/lista-cursos', $data);
+        $data['content'] = view('sys/cursos', $data);
         return view('dashboard', $data);
     }
 

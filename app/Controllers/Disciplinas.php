@@ -21,7 +21,7 @@ class Disciplinas extends BaseController
          $data['matrizes'] = $matrizCurricularModel->orderBy('nome', 'asc')->findAll();
          $data['gruposAmbientes'] = $grupoAmbientesModel->orderBy('nome', 'asc')->findAll();
          
-         $data['content'] = view('sys/lista-disciplinas', $data);
+         $data['content'] = view('sys/disciplinas', $data);
          return view('dashboard', $data);
     }
     

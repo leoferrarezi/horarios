@@ -17,7 +17,7 @@ class MatrizCurricular extends BaseController
     {
         $matrizModel = new MatrizCurricularModel();
         $data['matrizes'] = $matrizModel->orderBy('nome', 'asc')->findAll();
-        $data['content'] = view('sys/lista-matriz', $data);
+        $data['content'] = view('sys/matriz', $data);
         return view('dashboard', $data);
     }
 

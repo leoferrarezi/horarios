@@ -28,7 +28,7 @@ class Professor extends BaseController
         
         
         // Exibe os professores cadastrados
-        $data['content'] = view('sys/lista-professor', $data);
+        $data['content'] = view('sys/professor', $data);
         return view('dashboard', $data);
     }
 

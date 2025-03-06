@@ -20,7 +20,7 @@
 
 <div class="row">
     <!--------------------------- CADASTRO DE AMBIENTES ---------------------------------->
-    <div class="col-md-4 grid-margin stretch-card">
+    <div class="col-md-6 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">AMBIENTES</h4>
@@ -99,7 +99,7 @@
     </div>
 
     <!------------------------- GRUPOS DE AMBIENTES ------------------------------------>
-    <div class="col-md-8 grid-margin stretch-card">
+    <div class="col-md-6 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">GRUPO DE AMBIENTES</h4>
@@ -211,6 +211,7 @@
 <div class="card">
     <div class="card-body">
         <div class="row">
+            <div class="col-12 mt-4 d-flex justify-content-end">Legenda</div>
             <div class="row-12 mt-4 d-flex justify-content-end gap-3">
                 <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar &nbsp; &nbsp; </p>
                 <p class="card-description text-end"><i class="fa fa-plus text-primary me-2"></i>Adicionar ambientes ao grupo &nbsp; &nbsp; </p>

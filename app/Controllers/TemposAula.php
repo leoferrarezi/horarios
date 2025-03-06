@@ -16,9 +16,11 @@ class TemposAula extends BaseController
         // Cria a instância de um model do curso
         $tempoAulaModel = new TemposAulasModel();
         $horarioModel = new HorariosModel();
+        
         // Faz a busca por todos os cursos cadastrado no banco (tabela cursos)
         $data['temposAulas'] = $tempoAulaModel->orderBy('horario_id', 'asc')->getTemposAulaWithHorario();
         $data['horarios'] = $horarioModel->orderBy('nome', 'asc')->findAll();
+
         // Exibe os cursos cadastrados
         $data['content'] = view('sys/temposDeAula', $data);
         return view('dashboard', $data);

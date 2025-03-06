@@ -3,9 +3,9 @@
 <?php echo view('components/professor/modal-cad-prof'); ?>
 <?php echo view('components/professor/modal-deletar-prof') ?>
 <?php echo view('components/professor/modal-import-prof') ?>
-<?php // echo view('components/professor/modal-restricoes-prof') ?>
+<?php echo view('components/professor/modal-restricoes-prof') ?>
 
-
+<!-- breadcumbs (mapa de navegação com base no local atual) -->
 <div class="page-header">
     <h3 class="page-title">GERENCIAR PROFESSORES</h3>
     <nav aria-label="breadcrumb">
@@ -16,23 +16,31 @@
     </nav>
 </div>
 
-<div class="row">
-    <div class="col-lg-12 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <!-- mostrar ALERT em caso de erro -->
-                <?php if (session()->has('erros')): ?>
+<!-- mostrar ALERT em caso de erro -->
+<?php if (session()->has('erros')): ?>
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
                     <div class="alert alert-danger">
                         <ul>
                             <?php foreach (session('erros') as $erro): ?>
-                                <li> <i class="mdi mdi-alert-circle"></i><?= $erro ?></li>
+                                <li> <i class="mdi mdi-alert-circle"></i><?= esc($erro) ?></li>
                             <?php endforeach ?>
                         </ul>
                     </div>
-                <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
 
-                <!-- botões da parte de cima -->
-
+<!-- ações e filtros -->
+<div class="row">
+    <div class="col-md-4 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Ações</h4>
                 <div class="row">
                     <div class="col-12 mb-4">
                         <button type="button" class="btn btn-primary btn-icon-text" data-bs-toggle="modal"
@@ -46,16 +54,19 @@
                         </span>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-                <!-- início da tabela -->
-
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive">
                             <table class="table mb-4" id="listagem-professor">
-
-                                <!-- cabeçalho da tabela -->
-
                                 <thead>
                                     <tr>
                                         <th>Nome</th>
@@ -63,9 +74,6 @@
                                         <th>Ações</th>
                                     </tr>
                                 </thead>
-
-                                <!-- corpo da tabela -->
-
                                 <tbody>
 
                                     <?php if (!empty($professores)): //verifica se a tabela tem dados
@@ -135,125 +143,131 @@
                             </table>
                         </div>
                     </div>
-                </div>
-                <!-- legendas no canto inferior da tela -->
-                <div class="row">
-                    <div class="row-12 mt-4 d-flex justify-content-end gap-3">
-                        <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar &nbsp; &nbsp; </p>
-                        <p class="card-description text-end"><i class="fa fa-clock-o text-info me-2"></i>Gerenciar Restrições &nbsp; &nbsp; </p>
-                        <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i>Excluir</p>
-                    </div>
-                </div>
+                </div>                
             </div>
         </div>
     </div>
+</div>
 
-    <!-- daqui pra baixo é javascript -->
-    <script>
-        //Para carregar a tradução dos itens da DataTable
-        const dataTableLangUrl = "<?php echo base_url('assets/js/traducao-dataTable/pt_br.json'); ?>";
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 mt-4 d-flex justify-content-end">Legenda</div>
+            <div class="col-12 mt-4 d-flex justify-content-end gap-3">
+                <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar &nbsp; &nbsp; </p>
+                <p class="card-description text-end"><i class="fa fa-clock-o text-info me-2"></i>Gerenciar Restrições &nbsp; &nbsp; </p>
+                <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i>Excluir</p>
+            </div>
+        </div>
+    </div>
+</div>
 
-        //essa linha abaixo é para detectar que o documento foi completamente carregado e executar o código após isso
-        $(document).ready(function() {
+<!-- daqui pra baixo é javascript -->
+<script>
+    //Para carregar a tradução dos itens da DataTable
+    const dataTableLangUrl = "<?php echo base_url('assets/js/traducao-dataTable/pt_br.json'); ?>";
 
-            //Verificar se tem professores para então "transformar" a tabela em DataTable
-            <?php if (!empty($professores)): ?>
+    //essa linha abaixo é para detectar que o documento foi completamente carregado e executar o código após isso
+    $(document).ready(function() {
 
-                //Cria a DataTable
-                $("#listagem-professor").DataTable({
+        //Verificar se tem professores para então "transformar" a tabela em DataTable
+        <?php if (!empty($professores)): ?>
 
-                    //Define as entradas de quantidade de linhas visíveis na tabela
-                    aLengthMenu: [
-                        [5, 15, 30, -1],
-                        [5, 15, 30, "Todos"],
-                    ],
+            //Cria a DataTable
+            $("#listagem-professor").DataTable({
 
-                    //Define as questões de tradução/idioma
-                    language: {
-                        search: "Pesquisar:",
-                        url: dataTableLangUrl,
-                    },
+                //Define as entradas de quantidade de linhas visíveis na tabela
+                aLengthMenu: [
+                    [5, 15, 30, -1],
+                    [5, 15, 30, "Todos"],
+                ],
 
-                    //Ativa ordenação
-                    ordering: true,
-                    //Diz que a coluna 1 (segunda/nome) deve ser o padrão de ordenação ao carregar a tabela
-                    order: [
-                        [1, 'asc']
-                    ],
-                    //Desativa a ordenação por e-mail e por ações
-                    columns: [null, null, {
-                        orderable: false
-                    }]
-                });
+                //Define as questões de tradução/idioma
+                language: {
+                    search: "Pesquisar:",
+                    url: dataTableLangUrl,
+                },
 
-                //programação do modal de Edição do professor
-                //mais especificamente preenche os campos com os dados atuais
-                //que vêm lá do código HTML do botão de editar
-                $('#modal-edit-prof').on('show.bs.modal', function(event) {
+                //Ativa ordenação
+                ordering: true,
+                //Diz que a coluna 1 (segunda/nome) deve ser o padrão de ordenação ao carregar a tabela
+                order: [
+                    [1, 'asc']
+                ],
+                //Desativa a ordenação por e-mail e por ações
+                columns: [null, null, {
+                    orderable: false
+                }]
+            });
 
-                    // Obter o DOM do botão que ativou o modal
-                    var button = $(event.relatedTarget);
+            //programação do modal de Edição do professor
+            //mais especificamente preenche os campos com os dados atuais
+            //que vêm lá do código HTML do botão de editar
+            $('#modal-edit-prof').on('show.bs.modal', function(event) {
 
-                    // Extrair as informações dos atributos data-*
-                    var nome = button.data('nome');
-                    var email = button.data('email');
-                    var id = button.data('id');
+                // Obter o DOM do botão que ativou o modal
+                var button = $(event.relatedTarget);
 
-                    // Formar o modal com os dados preenchidos
-                    var modal = $(this);
-                    modal.find('#edit-id').val(id);
-                    modal.find('#edit-nome').val(nome);
-                    modal.find('#edit-email').val(email);
-                });
+                // Extrair as informações dos atributos data-*
+                var nome = button.data('nome');
+                var email = button.data('email');
+                var id = button.data('id');
 
-                //programação do modal de Edição do professor
-                //mais especificamente preenche os campos com os dados atuais
-                //que vêm lá do código HTML do botão de editar
-                $('#modal-restricoes-prof').on('show.bs.modal', function(event) {
+                // Formar o modal com os dados preenchidos
+                var modal = $(this);
+                modal.find('#edit-id').val(id);
+                modal.find('#edit-nome').val(nome);
+                modal.find('#edit-email').val(email);
+            });
 
-                    // Obter o DOM do botão que ativou o modal
-                    var button = $(event.relatedTarget);
+            //programação do modal de Edição do professor
+            //mais especificamente preenche os campos com os dados atuais
+            //que vêm lá do código HTML do botão de editar
+            $('#modal-restricoes-prof').on('show.bs.modal', function(event) {
 
-                    // Extrair as informações dos atributos data-*
-                    var id = button.data('id');
-                    var nome = button.data('nome');
+                // Obter o DOM do botão que ativou o modal
+                var button = $(event.relatedTarget);
 
-                    // Formar o modal com os dados preenchidos
-                    var modal = $(this);
-                    modal.find('#id').val(id);
-                    modal.find('#professor-nome').html(nome);
-                });
+                // Extrair as informações dos atributos data-*
+                var id = button.data('id');
+                var nome = button.data('nome');
 
-                //Mesma abordagem do código acima, para o modal de excluir professor
-                $('#modal-deletar-professor').on('show.bs.modal', function(event) {
+                // Formar o modal com os dados preenchidos
+                var modal = $(this);
+                modal.find('#id').val(id);
+                modal.find('#professor-nome').html(nome);
+            });
 
-                    // Button that triggered the modal
-                    var button = $(event.relatedTarget);
+            //Mesma abordagem do código acima, para o modal de excluir professor
+            $('#modal-deletar-professor').on('show.bs.modal', function(event) {
 
-                    // Extract info from data-* attributes
-                    var nome = button.data('nome');
-                    var id = button.data('id');
+                // Button that triggered the modal
+                var button = $(event.relatedTarget);
 
-                    var modal = $(this);
-                    modal.find('#deletar-id').val(id);
-                    modal.find('#deletar-nome').text(nome);
-                });
+                // Extract info from data-* attributes
+                var nome = button.data('nome');
+                var id = button.data('id');
 
-                //Ativa os tooltips dos botões
-                $('[data-bs-toggle="tooltip"]').tooltip();
+                var modal = $(this);
+                modal.find('#deletar-id').val(id);
+                modal.find('#deletar-nome').text(nome);
+            });
 
-            <?php endif; ?>
+            //Ativa os tooltips dos botões
+            $('[data-bs-toggle="tooltip"]').tooltip();
 
-            // Exibe mensagem de sucesso se o flashdata estiver com 'sucesso'
-            <?php if (session()->getFlashdata('sucesso')): ?>
-                $.toast({
-                    heading: 'Sucesso',
-                    text: '<?php echo session()->getFlashdata('sucesso'); ?>',
-                    showHideTransition: 'slide',
-                    icon: 'success',
-                    loaderBg: '#f96868',
-                    position: 'top-center'
-                });
-            <?php endif; ?>
-        });
-    </script>
+        <?php endif; ?>
+
+        // Exibe mensagem de sucesso se o flashdata estiver com 'sucesso'
+        <?php if (session()->getFlashdata('sucesso')): ?>
+            $.toast({
+                heading: 'Sucesso',
+                text: '<?php echo session()->getFlashdata('sucesso'); ?>',
+                showHideTransition: 'slide',
+                icon: 'success',
+                loaderBg: '#f96868',
+                position: 'top-center'
+            });
+        <?php endif; ?>
+    });
+</script>

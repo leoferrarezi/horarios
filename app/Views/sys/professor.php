@@ -37,7 +37,7 @@
 
 <!-- ações e filtros -->
 <div class="row">
-    <div class="col-md-4 grid-margin stretch-card">
+    <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Ações</h4>
@@ -47,6 +47,7 @@
                             data-bs-target="#modal-cad-prof"><i class="fa fa-plus-circle btn-icon-prepend"></i>
                             Incluir Professor
                         </button>
+                        &nbsp; &nbsp;
                         <span data-bs-toggle="tooltip" data-placement="top"
                             title="Importar lista de professores exportada através do SUAP">
                             <button class="btn btn-info btn-icon-text" data-bs-toggle="modal"
@@ -107,16 +108,18 @@
 
                                                         <!-- abaixo são repetidos os códigos acima para replicar os outros 2 botões -->
 
-                                                        <span data-bs-toggle="tooltip" data-placement="top"
-                                                            title="Gerenciar restrições de horário do professor">
-                                                            <a
-                                                                href="<?php echo base_url('/sys/professor/preferencias/') . $professor['id'] ?>"
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Gerenciar restrições de horário do professor">
+                                                            <button
+                                                                type="button"
                                                                 class="justify-content-center align-items-center d-flex btn btn-inverse-info button-trans-info btn-icon me-1"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modal-restricoes-prof"
                                                                 data-id="<?php echo esc($professor['id']); ?>"
                                                                 data-nome="<?php echo esc($professor['nome']); ?>">
                                                                 <i class="fa fa-clock-o"></i>
-                                                            </a>
+                                                            </button>
                                                         </span>
+
                                                         <span data-bs-toggle="tooltip" data-placement="top"
                                                             title="Excluir professor">
                                                             <button

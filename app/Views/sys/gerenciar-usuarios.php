@@ -14,36 +14,33 @@
     </nav>
 </div>
 
-<div class="row">
-    <div class="col-lg-12 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-
-                <!-- Mensagens de erro -->
-                <?php if (session()->has('erros')): ?>
+<!-- mostrar ALERT em caso de erro -->
+<?php if (session()->has('erros')): ?>
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
                     <div class="alert alert-danger">
                         <ul>
                             <?php foreach (session('erros') as $erro): ?>
-                                <li> <i class="mdi mdi-alert-circle"></i><?= $erro ?></li>
+                                <li> <i class="mdi mdi-alert-circle"></i><?= esc($erro) ?></li>
                             <?php endforeach ?>
                         </ul>
                     </div>
-                <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
 
-                <!-- Mensagens de sucesso ou erro -->
-                <?php if (session()->getFlashdata('success')): ?>
-                    <div class="alert alert-success">
-                        <?= session()->getFlashdata('success') ?>
-                    </div>
-                <?php elseif (session()->getFlashdata('error')): ?>
-                    <div class="alert alert-danger">
-                        <?= session()->getFlashdata('error') ?>
-                    </div>
-                <?php endif; ?>
-
-                <!-- Botões de ação -->
+<!-- ações e filtros -->
+<div class="row">
+    <div class="col-md-4 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Ações</h4>
                 <div class="row">
-                    <div class="col-12 mb-4">
+                    <div class="col-12">
                         <button type="button" class="btn btn-primary btn-icon-text" data-bs-toggle="modal"
                             data-bs-target="#modal-cad-user"><i class="fa fa-plus-circle btn-icon-prepend"></i>
                             Adicionar Usuário
@@ -56,216 +53,236 @@
                         </a>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-                <!-- Tabela de Usuários -->
-                <div class="row">
-                    <div class="col-12">
-                        <div class="table-responsive">
-                            <table class="table mb-4" id="listagem-usuarios">
-                                <thead>
+<!-- início da tabela -->
+<div class="row">
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table mb-4" id="listagem-usuarios">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>Grupo</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (!empty($usuarios)): ?>
+                                <?php foreach ($usuarios as $usuario): ?>
                                     <tr>
-                                        <th>Nome</th>
-                                        <th>Email</th>
-                                        <th>Grupo</th>
-                                        <th>Ações</th>
+                                        <td><?= esc($usuario->username) ?></td>
+                                        <td><?= esc($usuario->email) ?></td>
+                                        <td>
+                                            <?php if (!empty($usuario->grupos)): ?>
+                                                <?= esc(implode(', ', $usuario->grupos)) ?>
+                                            <?php else: ?>
+                                                Nenhum grupo atribuído
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex">
+                                                <!-- Botão Editar -->
+                                                <span data-bs-toggle="tooltip" data-placement="top" title="Atualizar dados do usuário">
+                                                    <button type="button" class="btn btn-inverse-success btn-icon me-1 btn-editar-usuario d-flex align-items-center justify-content-center"
+                                                        data-bs-toggle="modal" data-bs-target="#modal-atualizar-usuario"
+                                                        data-user-id="<?= $usuario->id ?>" data-username="<?= esc($usuario->username) ?>"
+                                                        data-email="<?= esc($usuario->email) ?>">
+                                                        <i class="fa fa-edit"></i>
+                                                    </button>
+                                                </span>
+
+                                                <!-- Botão Resetar Senha -->
+                                                <span data-bs-toggle="tooltip" data-placement="top" title="Resetar senha do usuário">
+                                                    <button type="button" class="btn btn-inverse-warning btn-icon me-1 btn-reset-senha d-flex align-items-center justify-content-center"
+                                                        data-user-id="<?= $usuario->id ?>" data-bs-toggle="modal" data-bs-target="#modal-resetar-senha">
+                                                        <i class="fa fa-key"></i>
+                                                    </button>
+                                                </span>
+
+                                                <!-- Botão Desativar -->
+                                                <span data-bs-toggle="tooltip" data-placement="top" title="Desativar usuário">
+                                                    <button type="button" class="btn btn-inverse-danger btn-icon me-1 btn-desativar-usuario d-flex align-items-center justify-content-center"
+                                                        data-user-id="<?= $usuario->id ?>" data-bs-toggle="modal" data-bs-target="#modal-confirmar-desativacao">
+                                                        <i class="fa fa-user-times"></i>
+                                                    </button>
+                                                </span>
+
+                                                <!-- Botão Alterar Grupo -->
+                                                <span data-bs-toggle="tooltip" data-placement="top" title="Alterar grupo">
+                                                    <button type="button" class="btn btn-inverse-info btn-icon me-1 d-flex align-items-center justify-content-center"
+                                                        data-bs-toggle="modal" data-bs-target="#modal-alterar-grupo"
+                                                        data-user-id="<?= $usuario->id ?>"
+                                                        data-grupo-atual="<?= !empty($usuario->grupos) ? esc($usuario->grupos[0]) : 'Nenhum' ?>">
+                                                        <i class="fa fa-users"></i>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    <?php if (!empty($usuarios)): ?>
-                                        <?php foreach ($usuarios as $usuario): ?>
-                                            <tr>
-                                                <td><?= esc($usuario->username) ?></td>
-                                                <td><?= esc($usuario->email) ?></td>
-                                                <td>
-                                                    <?php if (!empty($usuario->grupos)): ?>
-                                                        <?= esc(implode(', ', $usuario->grupos)) ?>
-                                                    <?php else: ?>
-                                                        Nenhum grupo atribuído
-                                                    <?php endif; ?>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex">
-                                                        <!-- Botão Editar -->
-                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Atualizar dados do usuário">
-                                                            <button type="button" class="btn btn-inverse-success btn-icon me-1 btn-editar-usuario d-flex align-items-center justify-content-center"
-                                                                data-bs-toggle="modal" data-bs-target="#modal-atualizar-usuario"
-                                                                data-user-id="<?= $usuario->id ?>" data-username="<?= esc($usuario->username) ?>"
-                                                                data-email="<?= esc($usuario->email) ?>">
-                                                                <i class="fa fa-edit"></i>
-                                                            </button>
-                                                        </span>
-
-                                                        <!-- Botão Resetar Senha -->
-                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Resetar senha do usuário">
-                                                            <button type="button" class="btn btn-inverse-warning btn-icon me-1 btn-reset-senha d-flex align-items-center justify-content-center"
-                                                                data-user-id="<?= $usuario->id ?>" data-bs-toggle="modal" data-bs-target="#modal-resetar-senha">
-                                                                <i class="fa fa-key"></i>
-                                                            </button>
-                                                        </span>
-
-                                                        <!-- Botão Desativar -->
-                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Desativar usuário">
-                                                            <button type="button" class="btn btn-inverse-danger btn-icon me-1 btn-desativar-usuario d-flex align-items-center justify-content-center"
-                                                                data-user-id="<?= $usuario->id ?>" data-bs-toggle="modal" data-bs-target="#modal-confirmar-desativacao">
-                                                                <i class="fa fa-user-times"></i>
-                                                            </button>
-                                                        </span>
-
-                                                        <!-- Botão Alterar Grupo -->
-                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Alterar grupo">
-                                                            <button type="button" class="btn btn-inverse-info btn-icon me-1 d-flex align-items-center justify-content-center"
-                                                                data-bs-toggle="modal" data-bs-target="#modal-alterar-grupo"
-                                                                data-user-id="<?= $usuario->id ?>"
-                                                                data-grupo-atual="<?= !empty($usuario->grupos) ? esc($usuario->grupos[0]) : 'Nenhum' ?>">
-                                                                <i class="fa fa-users"></i>
-                                                            </button>
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    <?php endif; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Legendas no final -->
-                <div class="row">
-                    <div class="col-12 mt-4">
-                        <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar</p>
-                        <p class="card-description text-end"><i class="fa fa-key text-warning me-2"></i>Resetar Senha</p>
-                        <p class="card-description text-end"><i class="fa fa-user-times text-danger me-2"></i>Desativar</p>
-                        <p class="card-description text-end"><i class="fa fa-users text-info me-2"></i>Alterar grupo</p>
-                    </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-        $(document).ready(function() {
-            // Inicializa a DataTables
-            $('#listagem-usuarios').DataTable({
-                // Define as entradas de quantidade de linhas visíveis na tabela
-                lengthMenu: [
-                    [5, 15, 30, -1],
-                    [5, 15, 30, "Todos"],
-                ],
+<!-- Legendas no final -->
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 mt-4 d-flex justify-content-end gap-3">
+                <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar &nbsp; &nbsp; </p>
+                <p class="card-description text-end"><i class="fa fa-key text-warning me-2"></i>Resetar Senha &nbsp; &nbsp; </p>
+                <p class="card-description text-end"><i class="fa fa-user-times text-danger me-2"></i>Desativar &nbsp; &nbsp; </p>
+                <p class="card-description text-end"><i class="fa fa-users text-info me-2"></i>Alterar grupo &nbsp; &nbsp; </p>
+            </div>
+        </div>
+    </div>
+</div>
 
-                // Define as questões de tradução/idioma
-                language: {
-                    search: "Pesquisar:",
-                    url: "<?= base_url('assets/js/traducao-dataTable/pt_br.json') ?>", // Caminho para o arquivo de tradução
-                    emptyTable: "Nenhum usuário cadastrado.", // Mensagem personalizada para tabela vazia
-                },
+<script>
+    $(document).ready(function() {
+        // Inicializa a DataTables
+        $('#listagem-usuarios').DataTable({
+            // Define as entradas de quantidade de linhas visíveis na tabela
+            lengthMenu: [
+                [5, 15, 30, -1],
+                [5, 15, 30, "Todos"],
+            ],
 
-                // Ativa ordenação
-                ordering: true,
+            // Define as questões de tradução/idioma
+            language: {
+                search: "Pesquisar:",
+                url: "<?= base_url('assets/js/traducao-dataTable/pt_br.json') ?>", // Caminho para o arquivo de tradução
+                emptyTable: "Nenhum usuário cadastrado.", // Mensagem personalizada para tabela vazia
+            },
 
-                // Define a coluna padrão de ordenação ao carregar a tabela
-                order: [
-                    [0, 'asc'] // Ordena pela primeira coluna (Nome) em ordem ascendente
-                ],
+            // Ativa ordenação
+            ordering: true,
 
-                // Desativa a ordenação na coluna de ações
-                columnDefs: [{
-                    orderable: false,
-                    targets: 3 // Coluna de ações (índice 3)
-                }]
-            });
+            // Define a coluna padrão de ordenação ao carregar a tabela
+            order: [
+                [0, 'asc'] // Ordena pela primeira coluna (Nome) em ordem ascendente
+            ],
 
-            // Ativa os tooltips
-            $('[data-bs-toggle="tooltip"]').tooltip();
+            // Desativa a ordenação na coluna de ações
+            columnDefs: [{
+                orderable: false,
+                targets: 3 // Coluna de ações (índice 3)
+            }]
+        });
 
-            // Passa o ID e o Grupo Atual do usuário para o modal de alteração de grupo
-            $('#modal-alterar-grupo').on('show.bs.modal', function(event) {
-                var button = $(event.relatedTarget); // Botão que acionou o modal
-                var userId = button.data('user-id'); // Captura o ID do usuário
-                var grupoAtual = button.data('grupo-atual'); // Captura o grupo atual
+        // Ativa os tooltips
+        $('[data-bs-toggle="tooltip"]').tooltip();
 
-                // Preenche os campos no modal
-                $(this).find('input[name="user_id"]').val(userId);
-                $(this).find('input[name="grupo_atual"]').val(grupoAtual);
-            });
+        // Passa o ID e o Grupo Atual do usuário para o modal de alteração de grupo
+        $('#modal-alterar-grupo').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget); // Botão que acionou o modal
+            var userId = button.data('user-id'); // Captura o ID do usuário
+            var grupoAtual = button.data('grupo-atual'); // Captura o grupo atual
 
-            // Passa o ID e o nome do usuário para o modal de desativação
-            $('.btn-desativar-usuario').on('click', function() {
-                var userId = $(this).data('user-id');
-                var username = $(this).closest('tr').find('td:first').text(); // Captura o nome do usuário
+            // Preenche os campos no modal
+            $(this).find('input[name="user_id"]').val(userId);
+            $(this).find('input[name="grupo_atual"]').val(grupoAtual);
+        });
 
-                $('#desativar-user-id').val(userId);
-                $('#nome-usuario-desativacao').text(username); // Exibe o nome no modal
-            });
+        // Passa o ID e o nome do usuário para o modal de desativação
+        $('.btn-desativar-usuario').on('click', function() {
+            var userId = $(this).data('user-id');
+            var username = $(this).closest('tr').find('td:first').text(); // Captura o nome do usuário
 
-            // Passa o ID do usuário para o modal de resetar senha
-            $(".btn-reset-senha").click(function() {
-                let userId = $(this).data("user-id");
+            $('#desativar-user-id').val(userId);
+            $('#nome-usuario-desativacao').text(username); // Exibe o nome no modal
+        });
 
-                // Armazena o ID do usuário no botão de confirmação
-                $("#btn-confirmar-resetar").data("user-id", userId);
-            });
+        // Passa o ID do usuário para o modal de resetar senha
+        $(".btn-reset-senha").click(function() {
+            let userId = $(this).data("user-id");
 
-            // Quando o botão de confirmação for clicado
-            $("#btn-confirmar-resetar").click(function() {
-                let userId = $(this).data("user-id");
+            // Armazena o ID do usuário no botão de confirmação
+            $("#btn-confirmar-resetar").data("user-id", userId);
+        });
 
-                // Criar um formulário dinamicamente
-                let form = $('<form>', {
-                    action: "<?= base_url('sys/admin/resetar-senha') ?>",
-                    method: "post"
-                }).append(
-                    $('<input>', {
-                        type: "hidden",
-                        name: "user_id",
-                        value: userId
-                    }),
-                    $('<input>', {
-                        type: "hidden",
-                        name: "<?= csrf_token() ?>",
-                        value: "<?= csrf_hash() ?>"
-                    })
-                );
+        // Quando o botão de confirmação for clicado
+        $("#btn-confirmar-resetar").click(function() {
+            let userId = $(this).data("user-id");
 
-                // Enviar o formulário
-                $('body').append(form);
-                form.submit();
-            });
+            // Criar um formulário dinamicamente
+            let form = $('<form>', {
+                action: "<?= base_url('sys/admin/resetar-senha') ?>",
+                method: "post"
+            }).append(
+                $('<input>', {
+                    type: "hidden",
+                    name: "user_id",
+                    value: userId
+                }),
+                $('<input>', {
+                    type: "hidden",
+                    name: "<?= csrf_token() ?>",
+                    value: "<?= csrf_hash() ?>"
+                })
+            );
 
-            // AJAX para atualizar o usuário
-            $("#updateUserForm").submit(function(e) {
-                e.preventDefault();
+            // Enviar o formulário
+            $('body').append(form);
+            form.submit();
+        });
 
-                $.ajax({
-                    url: "<?= base_url('update-user') ?>",
-                    type: "POST",
-                    data: $(this).serialize(),
-                    dataType: "json",
-                    success: function(response) {
-                        alert(response.message);
-                        if (response.status === "success") {
-                            location.reload();
-                        }
-                    },
-                    error: function() {
-                        alert("Ocorreu um erro ao tentar atualizar os dados.");
+        // AJAX para atualizar o usuário
+        $("#updateUserForm").submit(function(e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: "<?= base_url('update-user') ?>",
+                type: "POST",
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function(response) {
+                    alert(response.message);
+                    if (response.status === "success") {
+                        location.reload();
                     }
-                });
-            });
-
-            // Passa o ID, username e email do usuário para o modal de atualização de usuário
-            $('#modal-atualizar-usuario').on('show.bs.modal', function(event) {
-                var button = $(event.relatedTarget); // Botão que acionou o modal
-                var userId = button.data('user-id');
-                var username = button.data('username');
-                var email = button.data('email');
-
-                // Define os valores no modal
-                $(this).find('input[name="user_id"]').val(userId);
-                $(this).find('input[name="username"]').val(username);
-                $(this).find('input[name="email"]').val(email);
+                },
+                error: function() {
+                    alert("Ocorreu um erro ao tentar atualizar os dados.");
+                }
             });
         });
-    </script>
-</div>
+
+        // Passa o ID, username e email do usuário para o modal de atualização de usuário
+        $('#modal-atualizar-usuario').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget); // Botão que acionou o modal
+            var userId = button.data('user-id');
+            var username = button.data('username');
+            var email = button.data('email');
+
+            // Define os valores no modal
+            $(this).find('input[name="user_id"]').val(userId);
+            $(this).find('input[name="username"]').val(username);
+            $(this).find('input[name="email"]').val(email);
+        });
+
+        // Exibe mensagem de sucesso se o flashdata estiver com 'sucesso'
+        <?php if (session()->getFlashdata('success')): ?>
+            $.toast({
+                heading: 'Sucesso',
+                text: '<?php echo session()->getFlashdata('success'); ?>',
+                showHideTransition: 'slide',
+                icon: 'success',
+                loaderBg: '#f96868',
+                position: 'top-center'
+            });
+        <?php endif; ?>
+    });
+</script>

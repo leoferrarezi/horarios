@@ -11,43 +11,54 @@
     </nav>
 </div>
 
-<div class="row">
-    <div class="col-lg-12 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-
-                <!-- Mensagens de erro -->
-                <?php if (session()->has('erros')): ?>
+<!-- mostrar ALERT em caso de erro -->
+<?php if (session()->has('erros')): ?>
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
                     <div class="alert alert-danger">
                         <ul>
                             <?php foreach (session('erros') as $erro): ?>
-                                <li> <i class="mdi mdi-alert-circle"></i><?= $erro ?></li>
+                                <li> <i class="mdi mdi-alert-circle"></i><?= esc($erro) ?></li>
                             <?php endforeach ?>
                         </ul>
                     </div>
-                <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
 
-                <!-- Mensagens de sucesso ou erro -->
-                <?php if (session()->getFlashdata('success')): ?>
-                    <div class="alert alert-success">
-                        <?= session()->getFlashdata('success') ?>
-                    </div>
-                <?php elseif (session()->getFlashdata('error')): ?>
-                    <div class="alert alert-danger">
-                        <?= session()->getFlashdata('error') ?>
-                    </div>
-                <?php endif; ?>
-
-                <!-- Botões de ação -->
+<!-- ações e filtros -->
+<div class="row">
+    <div class="col-md-4 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Ações</h4>
                 <div class="row">
-                    <div class="col-12 mb-4">
-                        <!-- Botão para redirecionar para a view de gerenciar usuários ativos -->
-                        <a href="<?= base_url('/sys/admin/') ?>" class="btn btn-secondary btn-icon-text">
-                            <i class="fa fa-eye btn-icon-prepend"></i>
-                            Usuários Ativos
-                        </a>
+                    <div class="col-12">
+                        <!-- Botões de ação -->
+                        <div class="row">
+                            <div class="col-12 mb-4">
+                                <!-- Botão para redirecionar para a view de gerenciar usuários ativos -->
+                                <a href="<?= base_url('/sys/admin/') ?>" class="btn btn-secondary btn-icon-text">
+                                    <i class="fa fa-eye btn-icon-prepend"></i>
+                                    Usuários Ativos
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">                
 
                 <!-- Tabela de Usuários Desativados -->
                 <div class="row">
@@ -99,14 +110,18 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-                <!-- Legendas no final -->
-                <div class="row">
-                    <div class="col-12 mt-4">
-                        <p class="card-description text-end"><i class="fa fa-user-plus text-success me-2"></i>Reativar</p>
-                        <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i>Excluir Permanentemente</p>
-                    </div>
-                </div>
+<!-- Legendas no final -->
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 mt-4 d-flex justify-content-end gap-3">
+                <p class="card-description text-end"><i class="fa fa-user-plus text-success me-2"></i>Reativar &nbsp; &nbsp; </p>
+                <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i>Excluir Permanentemente &nbsp; &nbsp; </p>
             </div>
         </div>
     </div>
@@ -158,5 +173,17 @@
             var userId = $(this).data('user-id');
             $('#excluir-permanentemente-user-id').val(userId);
         });
+
+        // Exibe mensagem de sucesso se o flashdata estiver com 'sucesso'
+        <?php if (session()->getFlashdata('success')): ?>
+            $.toast({
+                heading: 'Sucesso',
+                text: '<?php echo session()->getFlashdata('success'); ?>',
+                showHideTransition: 'slide',
+                icon: 'success',
+                loaderBg: '#f96868',
+                position: 'top-center'
+            });
+        <?php endif; ?>
     });
 </script>

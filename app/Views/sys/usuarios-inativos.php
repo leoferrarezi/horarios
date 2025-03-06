@@ -115,13 +115,13 @@
     </div>
 </div>
 
-<!-- Legendas no final -->
-<div class="card">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-12 mt-4 d-flex justify-content-end gap-3">
-                <p class="card-description text-end"><i class="fa fa-user-plus text-success me-2"></i>Reativar &nbsp; &nbsp; </p>
-                <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i>Excluir Permanentemente &nbsp; &nbsp; </p>
+                <!-- Legendas no final -->
+                <div class="row">
+                    <div class="col-12 mt-4 d-flex justify-content-end gap-3">
+                        <p class="card-description text-end"><i class="fa fa-user-plus text-success me-2"></i>Reativar</p>
+                        <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i>Excluir Permanentemente</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

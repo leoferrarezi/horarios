@@ -3,7 +3,7 @@
 <?php echo view('components/professor/modal-cad-prof'); ?>
 <?php echo view('components/professor/modal-deletar-prof') ?>
 <?php echo view('components/professor/modal-import-prof') ?>
-<?php echo view('components/professor/modal-restricoes-prof') ?>
+<?php // echo view('components/professor/modal-restricoes-prof') ?>
 
 
 <div class="page-header">
@@ -101,15 +101,13 @@
 
                                                         <span data-bs-toggle="tooltip" data-placement="top"
                                                             title="Gerenciar restrições de horário do professor">
-                                                            <button
-                                                                type="button"
+                                                            <a
+                                                                href="<?php echo base_url('/sys/professor/preferencias/') . $professor['id'] ?>"
                                                                 class="justify-content-center align-items-center d-flex btn btn-inverse-info button-trans-info btn-icon me-1"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#modal-restricoes-prof"
                                                                 data-id="<?php echo esc($professor['id']); ?>"
                                                                 data-nome="<?php echo esc($professor['nome']); ?>">
                                                                 <i class="fa fa-clock-o"></i>
-                                                            </button>
+                                                            </a>
                                                         </span>
                                                         <span data-bs-toggle="tooltip" data-placement="top"
                                                             title="Excluir professor">

@@ -1,14 +1,18 @@
 <?php
 
 use CodeIgniter\Router\RouteCollection;
+use App\Controllers\LoginController; // Corrigido aqui
 
 /**
  * @var RouteCollection $routes
  */
 
 // Shield Auth routes
-service('auth')->routes($routes);
-service('auth')->routes($routes, ['except' => ['login', 'register']]);
+service('auth')->routes($routes, ['except' => ['login']]);
+
+// Definindo a rota de login para usar o seu controller personalizado
+$routes->get('login', [LoginController::class, 'loginView'], ['as' => 'login']);
+$routes->post('login', [LoginController::class, 'loginAction']);
 
 $routes->get('/', 'Home::home');
 $routes->get('/sys', 'Home::home');
@@ -50,7 +54,7 @@ $routes->group('sys', function ($routes) {
         $routes->post('deletar', 'Professor::deletar');
         $routes->post('importar', 'Professor::importar');
         $routes->post('processarImportacao', 'Professor::processarImportacao');
-
+        $routes->get('preferencias/(:num)', 'Professor::preferencias/$1');
         $routes->get('(:num)', 'Professor::professorPorId/$1');
         //Rota área de trabalho
         $routes->get('horarios', 'Professor::horarios');

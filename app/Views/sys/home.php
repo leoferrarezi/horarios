@@ -1,81 +1,129 @@
-<div class="row"></div>
-<div class="col-md-12 grid-margin stretch-card">
-    <div class="card">
-        <div class="card-body">
-            <h4 class="card-title"><?php echo $title; ?></h4>
-            <p class="card-description">
-                <!-- CAIXAS DE ALERTA -->
-            <div class="col-md-12 grid-margin stretch-card d-flex justify-content-between">
+<div class="row">
+    <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
                 <div class="row">
-                    <?php
-                    $alerts = [
-                        ['count' => '3 (três)', 'text' => 'Confirmados', 'desc' => 'Pedidos de Susbstituição de Professor', 'icon' => 'mdi-arrow-top-right', 'color' => 'success'],
-                        ['count' => '2 (duas)', 'text' => 'Mensagens de Coordenação', 'desc' => 'Respondidas', 'icon' => 'mdi-arrow-top-right', 'color' => 'success'],
-                        ['count' => '12 (doze)', 'text' => 'Disciplinas', 'desc' => 'Sem docentes associados', 'icon' => 'mdi-arrow-bottom-left', 'color' => 'danger'],
-                        ['count' => '2 (duas)', 'text' => 'Salas', 'desc' => 'Disponíveis para reserva', 'icon' => 'mdi-arrow-top-right', 'color' => 'success']
-                    ];
-                    foreach ($alerts as $alert): ?>
-                        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-9">
-                                            <div class="d-flex align-items-center align-self-start">
-                                                <h3 class="mb-0"><?php echo $alert['count']; ?></h3>
-                                                <p class="text-<?php echo $alert['color']; ?> ms-2 mb-0 font-weight-medium">
-                                                    <?php echo $alert['text']; ?>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="col-3">
-                                            <div class="icon icon-box-<?php echo $alert['color']; ?>">
-                                                <span class="mdi <?php echo $alert['icon']; ?> icon-item"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h6 class="text-muted font-weight-normal"><?php echo $alert['desc']; ?></h6>
-                                </div>
-                            </div>
+                    <div class="col-9">
+                        <div class="d-flex align-items-center align-self-start">
+                            <h3 class="mb-0">3 (três)</h3>
+                            <p class="text-danger ms-2 mb-0 font-weight-medium">
+                                Aulas
+                            </p>
                         </div>
-                    <?php endforeach; ?>
+                    </div>
+                    <div class="col-3">
+                        <div class="icon icon-box-danger">
+                            <span class="mdi mdi-arrow-bottom-left icon-item"></span>
+                        </div>
+                    </div>
                 </div>
+                <h6 class="text-muted font-weight-normal">Aulas sem horários</h6>
             </div>
-            <!-- FIM DAS CAIXAS DE ALERTA -->
-
-            <!-- NOTIFICAÇÕES -->
-            <div class="col-12 grid-margin">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">NOTIFICAÇÕES</h4>
-                        <?php
-                        $notifications = [
-                            ['text' => 'Notificação de solicitações da Coordenação.', 'color' => 'primary', 'shadow' => 'blue', 'link' => '#coordination'],
-                            ['text' => 'Notificação de confirmação do Coordenador.', 'color' => 'success', 'shadow' => 'green', 'link' => '#confirmation'],
-                            ['text' => 'Notificação de confirmação das Pedagogas.', 'color' => 'info', 'shadow' => 'rgb(164 105 191)', 'link' => '#pedagogas'],
-                            ['text' => 'Há Conflito de Horários.', 'color' => 'warning', 'shadow' => 'rgb(221 131 29)', 'link' => '#conflict'],
-                            ['text' => '12 (doze) Disciplinas sem professor associado.', 'color' => 'danger', 'shadow' => 'rgb(200 30 30)', 'link' => '#disciplines']
-                        ];
-                        foreach ($notifications as $notification):
-                            $words = explode(' ', $notification['text']);
-                            $last_word = array_pop($words);
-                            $text_without_last_word = implode(' ', $words);
-                            ?>
-                            <div class="alert alert-fill-<?php echo $notification['color']; ?> mb-3"
-                                style="box-shadow: 5px 5px 5px <?php echo $notification['shadow']; ?>;" role="alert">
-                                <i class="mdi mdi-alert-circle"></i> <?php echo $text_without_last_word; ?> <a
-                                    href="<?php echo $notification['link']; ?>"
-                                    style="color: white;"><?php echo $last_word; ?></a>
-                            </div>
-                        <?php endforeach; ?>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-9">
+                        <div class="d-flex align-items-center align-self-start">
+                            <h3 class="mb-0">4 (quatro)</h3>
+                            <p class="text-danger ms-2 mb-0 font-weight-medium">
+                                Disciplinas
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="icon icon-box-danger">
+                            <span class="mdi mdi-arrow-bottom-left icon-item"></span>
+                        </div>
+                    </div>
+                </div>
+                <h6 class="text-muted font-weight-normal">Sem aulas associadas</h6>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-9">
+                        <div class="d-flex align-items-center align-self-start">
+                            <h3 class="mb-0">3 (três)</h3>
+                            <p class="text-success ms-2 mb-0 font-weight-medium">
+                                Confirmados
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="icon icon-box-success">
+                            <span class="mdi mdi-arrow-top-right icon-item"></span>
+                        </div>
+                    </div>
+                </div>
+                <h6 class="text-muted font-weight-normal">Pedidos de substituição de professor</h6>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-9">
+                        <div class="d-flex align-items-center align-self-start">
+                            <h3 class="mb-0">1 (um)</h3>
+                            <p class="text-danger ms-2 mb-0 font-weight-medium">
+                                Mensagens
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="icon icon-box-danger">
+                            <span class="mdi mdi-arrow-bottom-left icon-item"></span>
+                        </div>
+                    </div>
+                </div>
+                <h6 class="text-muted font-weight-normal">Mensagens não respondidas</h6>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">OCUPAÇÕES DAS SALAS</h4>
+                <div class="position-relative">
+                    <div class="daoughnutchart-wrapper">
+                        <canvas id="disponibilidade-salas" data-disp="3" data-reserv="5" data-indisp="6" class="transaction-chart"></canvas>
+                    </div>
+                    <div class="custom-value">55 <span>Total</span>
                     </div>
                 </div>
             </div>
-            <!-- FIM DAS NOTIFICAÇÕES -->
-
-            <!-- QUADRO DE HORÁRIOS -->
+        </div>
+    </div>
+    <div class="col-md-6 grid-margin stretch-card">
+        <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Quadro de Aulas</h4>
-                <p class="card-description">Aulas agendadas para a data de hoje</p>
+                <h4 class="card-title">DISPONIBILIDADE DE PROFESSORES</h4>
+                <div class="position-relative">
+                    <div class="daoughnutchart-wrapper">
+                        <canvas id="disponibilidade-professores" data-disp="3" data-indisp="6" class="transaction-chart"></canvas>
+                    </div>
+                    <div class="custom-value">250 <span>Total</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">QUADRO DE AULAS</h4>
+ <!--               <p class="card-description">Aulas agendadas para a data de hoje</p> -->
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive">
@@ -91,6 +139,8 @@
                                         <th>Sala</th>
                                         <th>Início</th>
                                         <th>Fim</th>
+                                        <th>Status</th>
+                                        <th>Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -105,7 +155,7 @@
                                         <td>07:30</td>
                                         <td>08:25</td>
                                         <td>
-                                            <label class="badge badge-success">Em progresso.</label>
+                                            <label class="badge badge-success">Em andamento</label>
                                         </td>
                                         <td>
                                             <button class="btn btn-outline-primary">Visualizar</button>
@@ -174,81 +224,6 @@
                                         <td>19:45</td>
                                         <td>
                                             <label class="badge badge-info">Prevista</label>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-outline-primary">Visualizar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>6</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                            <label class="badge badge-info">Prevista</label>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-outline-primary">Visualizar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>7</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                            <label class="badge badge-info">Prevista</label>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-outline-primary">Visualizar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>8</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                            <label class="badge badge-info">Prevista</label>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-outline-primary">Visualizar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>9</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                            <label class="badge badge-info">Prevista</label>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-outline-primary">Visualizar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>10</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                            <label class="badge badge-danger">Pending</label>
                                         </td>
                                         <td>
                                             <button class="btn btn-outline-primary">Visualizar</button>

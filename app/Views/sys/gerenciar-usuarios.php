@@ -126,10 +126,76 @@
                                             </div>
                                         </td>
                                     </tr>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
+                                </thead>
+                                <tbody>
+                                    <?php if (!empty($usuarios)): ?>
+                                        <?php foreach ($usuarios as $usuario): ?>
+                                            <tr>
+                                                <td><?= esc($usuario->username) ?></td>
+                                                <td><?= esc($usuario->email) ?></td>
+                                                <td>
+                                                    <?php if (!empty($usuario->grupos)): ?>
+                                                        <?= esc(implode(', ', $usuario->grupos)) ?>
+                                                    <?php else: ?>
+                                                        Nenhum grupo atribuído
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex">
+                                                        <!-- Botão Editar -->
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Atualizar dados do usuário">
+                                                            <button type="button" class="btn btn-inverse-success btn-icon me-1 btn-editar-usuario d-flex align-items-center justify-content-center"
+                                                                data-bs-toggle="modal" data-bs-target="#modal-atualizar-usuario"
+                                                                data-user-id="<?= $usuario->id ?>" data-username="<?= esc($usuario->username) ?>"
+                                                                data-email="<?= esc($usuario->email) ?>">
+                                                                <i class="fa fa-edit"></i>
+                                                            </button>
+                                                        </span>
+
+                                                        <!-- Botão Resetar Senha -->
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Resetar senha do usuário">
+                                                            <button type="button" class="btn btn-inverse-warning btn-icon me-1 btn-reset-senha d-flex align-items-center justify-content-center"
+                                                                data-user-id="<?= $usuario->id ?>" data-bs-toggle="modal" data-bs-target="#modal-resetar-senha">
+                                                                <i class="fa fa-key"></i>
+                                                            </button>
+                                                        </span>
+
+                                                        <!-- Botão Desativar -->
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Desativar usuário">
+                                                            <button type="button" class="btn btn-inverse-danger btn-icon me-1 btn-desativar-usuario d-flex align-items-center justify-content-center"
+                                                                data-user-id="<?= $usuario->id ?>" data-bs-toggle="modal" data-bs-target="#modal-confirmar-desativacao">
+                                                                <i class="fa fa-user-times"></i>
+                                                            </button>
+                                                        </span>
+
+                                                        <!-- Botão Alterar Grupo -->
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Alterar grupo">
+                                                            <button type="button" class="btn btn-inverse-info btn-icon me-1 d-flex align-items-center justify-content-center"
+                                                                data-bs-toggle="modal" data-bs-target="#modal-alterar-grupo"
+                                                                data-user-id="<?= $usuario->id ?>"
+                                                                data-grupo-atual="<?= !empty($usuario->grupos) ? esc($usuario->grupos[0]) : 'Nenhum' ?>">
+                                                                <i class="fa fa-users"></i>
+                                                            </button>
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Legendas no final -->
+                <div class="row">
+                    <div class="col-12 mt-4 d-flex justify-content-end gap-3">
+                        <p class="card-description m-0"><i class="fa fa-edit text-success me-2"></i>Editar</p>
+                        <p class="card-description m-0"><i class="fa fa-key text-warning me-2"></i>Resetar Senha</p>
+                        <p class="card-description m-0"><i class="fa fa-user-times text-danger me-2"></i>Desativar</p>
+                        <p class="card-description m-0"><i class="fa fa-users text-info me-2"></i>Alterar grupo</p>
+                    </div>
                 </div>
             </div>
         </div>

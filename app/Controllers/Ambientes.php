@@ -25,7 +25,7 @@ class Ambientes extends BaseController
             // recupera os ambientes associados ao grupo específico
             $grupo['ambientes'] = $ambienteGrupoModel
                 ->where('grupo_de_ambiente_id', $grupo['id'])
-                ->join('ambientes', 'ambientes.id = ambiente_grupo.ambiente_id') // Certifique-se de que a relação está correta
+                ->join('ambientes', 'ambientes.id = ambiente_grupo.ambiente_id')
                 ->findAll();
         }
 

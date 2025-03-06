@@ -5,7 +5,7 @@
     <h3 class="page-title">GERENCIAR USUÁRIOS DESATIVADOS</h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="<?= base_url('/sys/home') ?>">Início</a></li>
+            <li class="breadcrumb-item"><a href="<?php echo base_url('/sys/home') ?>">Início</a></li>
             <li class="breadcrumb-item active" aria-current="page">Lista de Usuários Desativados</li>
         </ol>
     </nav>
@@ -20,8 +20,8 @@
                     <div class="alert alert-danger">
                         <ul>
                             <?php foreach (session('erros') as $erro): ?>
-                                <li> <i class="mdi mdi-alert-circle"></i><?= esc($erro) ?></li>
-                            <?php endforeach ?>
+                                <li> <i class="mdi mdi-alert-circle"></i><?php echo esc($erro) ?></li>
+                            <?php endforeach; ?>
                         </ul>
                     </div>
                 </div>
@@ -42,7 +42,7 @@
                         <div class="row">
                             <div class="col-12 mb-4">
                                 <!-- Botão para redirecionar para a view de gerenciar usuários ativos -->
-                                <a href="<?= base_url('/sys/admin/') ?>" class="btn btn-secondary btn-icon-text">
+                                <a href="<?php echo base_url('/sys/admin/') ?>" class="btn btn-secondary btn-icon-text">
                                     <i class="fa fa-eye btn-icon-prepend"></i>
                                     Usuários Ativos
                                 </a>
@@ -58,7 +58,7 @@
 <div class="row">
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
-            <div class="card-body">                
+            <div class="card-body">
 
                 <!-- Tabela de Usuários Desativados -->
                 <div class="row">
@@ -78,17 +78,17 @@
                                     <?php if (!empty($usuariosDesativados)): ?>
                                         <?php foreach ($usuariosDesativados as $usuario): ?>
                                             <tr>
-                                                <td><?= esc($usuario->username) ?></td>
-                                                <td><?= $usuario->last_active ? esc(date('d/m/Y H:i', strtotime($usuario->last_active))) : 'Nunca' ?></td>
-                                                <td><?= esc(date('d/m/Y H:i', strtotime($usuario->created_at))) ?></td>
-                                                <td><?= esc(date('d/m/Y H:i', strtotime($usuario->deleted_at))) ?></td>
+                                                <td><?php echo esc($usuario->username) ?></td>
+                                                <td><?php echo $usuario->last_active ? esc(date('d/m/Y H:i', strtotime($usuario->last_active))) : 'Nunca' ?></td>
+                                                <td><?php echo esc(date('d/m/Y H:i', strtotime($usuario->created_at))) ?></td>
+                                                <td><?php echo esc(date('d/m/Y H:i', strtotime($usuario->deleted_at))) ?></td>
                                                 <td>
                                                     <div class="d-flex">
                                                         <!-- Botão Reativar -->
                                                         <span data-bs-toggle="tooltip" data-placement="top" title="Reativar usuário">
                                                             <button type="button" class="btn btn-inverse-success btn-icon me-1 btn-reativar-usuario d-flex align-items-center justify-content-center"
                                                                 data-bs-toggle="modal" data-bs-target="#modal-reativar-usuario"
-                                                                data-user-id="<?= $usuario->id ?>">
+                                                                data-user-id="<?php echo $usuario->id ?>">
                                                                 <i class="fa fa-user-plus"></i>
                                                             </button>
                                                         </span>
@@ -96,7 +96,7 @@
                                                         <!-- Botão Excluir Permanentemente -->
                                                         <span data-bs-toggle="tooltip" data-placement="top" title="Excluir permanentemente">
                                                             <button type="button" class="btn btn-inverse-danger btn-icon me-1 btn-excluir-permanentemente d-flex align-items-center justify-content-center"
-                                                                data-user-id="<?= $usuario->id ?>" data-bs-toggle="modal" data-bs-target="#modal-excluir-permanentemente">
+                                                                data-user-id="<?php echo $usuario->id ?>" data-bs-toggle="modal" data-bs-target="#modal-excluir-permanentemente">
                                                                 <i class="fa fa-trash"></i>
                                                             </button>
                                                         </span>
@@ -115,15 +115,11 @@
     </div>
 </div>
 
-                <!-- Legendas no final -->
-                <div class="row">
-                    <div class="col-12 mt-4 d-flex justify-content-end gap-3">
-                        <p class="card-description text-end"><i class="fa fa-user-plus text-success me-2"></i>Reativar</p>
-                        <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i>Excluir Permanentemente</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- Legendas no final -->
+<div class="row">
+    <div class="col-12 mt-4 d-flex justify-content-end gap-3">
+        <p class="card-description text-end"><i class="fa fa-user-plus text-success me-2"></i>Reativar &nbsp; &nbsp; </p>
+        <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i>Excluir Permanentemente</p>
     </div>
 </div>
 
@@ -140,7 +136,7 @@
             // Define as questões de tradução/idioma
             language: {
                 search: "Pesquisar:",
-                url: "<?= base_url('assets/js/traducao-dataTable/pt_br.json') ?>", // Caminho para o arquivo de tradução
+                url: "<?php echo base_url('assets/js/traducao-dataTable/pt_br.json') ?>", // Caminho para o arquivo de tradução
                 emptyTable: "Nenhum usuário desativado encontrado.", // Mensagem personalizada para tabela vazia
             },
 

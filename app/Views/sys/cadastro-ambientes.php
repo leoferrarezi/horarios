@@ -212,9 +212,9 @@
     <div class="card-body">
         <div class="row">
             <div class="row-12 mt-4 d-flex justify-content-end gap-3">
-                <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar</p>
-                <p class="card-description text-end"><i class="fa fa-plus text-primary me-2"></i>Adicionar ambientes ao grupo</p>
-                <p class="card-description text-end"><i class="fa fa-list text-warning me-2"></i>Listar ambientes do grupo</p>
+                <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar &nbsp; &nbsp; </p>
+                <p class="card-description text-end"><i class="fa fa-plus text-primary me-2"></i>Adicionar ambientes ao grupo &nbsp; &nbsp; </p>
+                <p class="card-description text-end"><i class="fa fa-list text-warning me-2"></i>Listar ambientes do grupo &nbsp; &nbsp; </p>
                 <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i>Excluir</p>
             </div>
         </div>

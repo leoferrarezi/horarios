@@ -8,7 +8,7 @@
     <h3 class="page-title">GERENCIAR USUÁRIOS</h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="<?= base_url('/sys/home') ?>">Início</a></li>
+            <li class="breadcrumb-item"><a href="<?php echo base_url('/sys/home'); ?>">Início</a></li>
             <li class="breadcrumb-item active" aria-current="page">Lista de Usuários</li>
         </ol>
     </nav>
@@ -23,8 +23,8 @@
                     <div class="alert alert-danger">
                         <ul>
                             <?php foreach (session('erros') as $erro): ?>
-                                <li> <i class="mdi mdi-alert-circle"></i><?= esc($erro) ?></li>
-                            <?php endforeach ?>
+                                <li> <i class="mdi mdi-alert-circle"></i><?php echo esc($erro); ?></li>
+                            <?php endforeach; ?>
                         </ul>
                     </div>
                 </div>
@@ -47,7 +47,7 @@
                         </button>
 
                         <!-- Botão para redirecionar para a view de usuários inativos -->
-                        <a href="<?= base_url('/sys/admin/usuarios-inativos') ?>" class="btn btn-secondary btn-icon-text">
+                        <a href="<?php echo base_url('/sys/admin/usuarios-inativos') ?>" class="btn btn-secondary btn-icon-text">
                             <i class="fa fa-moon-o" aria-hidden="true"></i>
                             Usuários Inativos
                         </a>
@@ -77,11 +77,11 @@
                             <?php if (!empty($usuarios)): ?>
                                 <?php foreach ($usuarios as $usuario): ?>
                                     <tr>
-                                        <td><?= esc($usuario->username) ?></td>
-                                        <td><?= esc($usuario->email) ?></td>
+                                        <td><?php echo esc($usuario->username); ?></td>
+                                        <td><?php echo esc($usuario->email); ?></td>
                                         <td>
                                             <?php if (!empty($usuario->grupos)): ?>
-                                                <?= esc(implode(', ', $usuario->grupos)) ?>
+                                                <?php echo esc(implode(', ', $usuario->grupos)); ?>
                                             <?php else: ?>
                                                 Nenhum grupo atribuído
                                             <?php endif; ?>
@@ -92,8 +92,8 @@
                                                 <span data-bs-toggle="tooltip" data-placement="top" title="Atualizar dados do usuário">
                                                     <button type="button" class="btn btn-inverse-success btn-icon me-1 btn-editar-usuario d-flex align-items-center justify-content-center"
                                                         data-bs-toggle="modal" data-bs-target="#modal-atualizar-usuario"
-                                                        data-user-id="<?= $usuario->id ?>" data-username="<?= esc($usuario->username) ?>"
-                                                        data-email="<?= esc($usuario->email) ?>">
+                                                        data-user-id="<?php echo $usuario->id; ?>" data-username="<?php echo esc($usuario->username); ?>"
+                                                        data-email="<?php echo esc($usuario->email); ?>">
                                                         <i class="fa fa-edit"></i>
                                                     </button>
                                                 </span>
@@ -101,7 +101,7 @@
                                                 <!-- Botão Resetar Senha -->
                                                 <span data-bs-toggle="tooltip" data-placement="top" title="Resetar senha do usuário">
                                                     <button type="button" class="btn btn-inverse-warning btn-icon me-1 btn-reset-senha d-flex align-items-center justify-content-center"
-                                                        data-user-id="<?= $usuario->id ?>" data-bs-toggle="modal" data-bs-target="#modal-resetar-senha">
+                                                        data-user-id="<?php echo $usuario->id; ?>" data-bs-toggle="modal" data-bs-target="#modal-resetar-senha">
                                                         <i class="fa fa-key"></i>
                                                     </button>
                                                 </span>
@@ -109,7 +109,7 @@
                                                 <!-- Botão Desativar -->
                                                 <span data-bs-toggle="tooltip" data-placement="top" title="Desativar usuário">
                                                     <button type="button" class="btn btn-inverse-danger btn-icon me-1 btn-desativar-usuario d-flex align-items-center justify-content-center"
-                                                        data-user-id="<?= $usuario->id ?>" data-bs-toggle="modal" data-bs-target="#modal-confirmar-desativacao">
+                                                        data-user-id="<?php echo $usuario->id; ?>" data-bs-toggle="modal" data-bs-target="#modal-confirmar-desativacao">
                                                         <i class="fa fa-user-times"></i>
                                                     </button>
                                                 </span>
@@ -118,84 +118,18 @@
                                                 <span data-bs-toggle="tooltip" data-placement="top" title="Alterar grupo">
                                                     <button type="button" class="btn btn-inverse-info btn-icon me-1 d-flex align-items-center justify-content-center"
                                                         data-bs-toggle="modal" data-bs-target="#modal-alterar-grupo"
-                                                        data-user-id="<?= $usuario->id ?>"
-                                                        data-grupo-atual="<?= !empty($usuario->grupos) ? esc($usuario->grupos[0]) : 'Nenhum' ?>">
+                                                        data-user-id="<?php echo $usuario->id; ?>"
+                                                        data-grupo-atual="<?php echo !empty($usuario->grupos) ? esc($usuario->grupos[0]) : 'Nenhum'; ?>">
                                                         <i class="fa fa-users"></i>
                                                     </button>
                                                 </span>
                                             </div>
                                         </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    <?php if (!empty($usuarios)): ?>
-                                        <?php foreach ($usuarios as $usuario): ?>
-                                            <tr>
-                                                <td><?= esc($usuario->username) ?></td>
-                                                <td><?= esc($usuario->email) ?></td>
-                                                <td>
-                                                    <?php if (!empty($usuario->grupos)): ?>
-                                                        <?= esc(implode(', ', $usuario->grupos)) ?>
-                                                    <?php else: ?>
-                                                        Nenhum grupo atribuído
-                                                    <?php endif; ?>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex">
-                                                        <!-- Botão Editar -->
-                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Atualizar dados do usuário">
-                                                            <button type="button" class="btn btn-inverse-success btn-icon me-1 btn-editar-usuario d-flex align-items-center justify-content-center"
-                                                                data-bs-toggle="modal" data-bs-target="#modal-atualizar-usuario"
-                                                                data-user-id="<?= $usuario->id ?>" data-username="<?= esc($usuario->username) ?>"
-                                                                data-email="<?= esc($usuario->email) ?>">
-                                                                <i class="fa fa-edit"></i>
-                                                            </button>
-                                                        </span>
-
-                                                        <!-- Botão Resetar Senha -->
-                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Resetar senha do usuário">
-                                                            <button type="button" class="btn btn-inverse-warning btn-icon me-1 btn-reset-senha d-flex align-items-center justify-content-center"
-                                                                data-user-id="<?= $usuario->id ?>" data-bs-toggle="modal" data-bs-target="#modal-resetar-senha">
-                                                                <i class="fa fa-key"></i>
-                                                            </button>
-                                                        </span>
-
-                                                        <!-- Botão Desativar -->
-                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Desativar usuário">
-                                                            <button type="button" class="btn btn-inverse-danger btn-icon me-1 btn-desativar-usuario d-flex align-items-center justify-content-center"
-                                                                data-user-id="<?= $usuario->id ?>" data-bs-toggle="modal" data-bs-target="#modal-confirmar-desativacao">
-                                                                <i class="fa fa-user-times"></i>
-                                                            </button>
-                                                        </span>
-
-                                                        <!-- Botão Alterar Grupo -->
-                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Alterar grupo">
-                                                            <button type="button" class="btn btn-inverse-info btn-icon me-1 d-flex align-items-center justify-content-center"
-                                                                data-bs-toggle="modal" data-bs-target="#modal-alterar-grupo"
-                                                                data-user-id="<?= $usuario->id ?>"
-                                                                data-grupo-atual="<?= !empty($usuario->grupos) ? esc($usuario->grupos[0]) : 'Nenhum' ?>">
-                                                                <i class="fa fa-users"></i>
-                                                            </button>
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    <?php endif; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Legendas no final -->
-                <div class="row">
-                    <div class="col-12 mt-4 d-flex justify-content-end gap-3">
-                        <p class="card-description m-0"><i class="fa fa-edit text-success me-2"></i>Editar</p>
-                        <p class="card-description m-0"><i class="fa fa-key text-warning me-2"></i>Resetar Senha</p>
-                        <p class="card-description m-0"><i class="fa fa-user-times text-danger me-2"></i>Desativar</p>
-                        <p class="card-description m-0"><i class="fa fa-users text-info me-2"></i>Alterar grupo</p>
-                    </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>                                
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -210,7 +144,7 @@
                 <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar &nbsp; &nbsp; </p>
                 <p class="card-description text-end"><i class="fa fa-key text-warning me-2"></i>Resetar Senha &nbsp; &nbsp; </p>
                 <p class="card-description text-end"><i class="fa fa-user-times text-danger me-2"></i>Desativar &nbsp; &nbsp; </p>
-                <p class="card-description text-end"><i class="fa fa-users text-info me-2"></i>Alterar grupo &nbsp; &nbsp; </p>
+                <p class="card-description text-end"><i class="fa fa-users text-info me-2"></i>Alterar grupo</p>
             </div>
         </div>
     </div>
@@ -219,6 +153,7 @@
 <script>
     $(document).ready(function() {
         // Inicializa a DataTables
+        
         $('#listagem-usuarios').DataTable({
             // Define as entradas de quantidade de linhas visíveis na tabela
             lengthMenu: [
@@ -229,7 +164,7 @@
             // Define as questões de tradução/idioma
             language: {
                 search: "Pesquisar:",
-                url: "<?= base_url('assets/js/traducao-dataTable/pt_br.json') ?>", // Caminho para o arquivo de tradução
+                url: "<?php echo base_url('assets/js/traducao-dataTable/pt_br.json'); ?>", // Caminho para o arquivo de tradução
                 emptyTable: "Nenhum usuário cadastrado.", // Mensagem personalizada para tabela vazia
             },
 
@@ -285,7 +220,7 @@
 
             // Criar um formulário dinamicamente
             let form = $('<form>', {
-                action: "<?= base_url('sys/admin/resetar-senha') ?>",
+                action: "<?php echo base_url('sys/admin/resetar-senha'); ?>",
                 method: "post"
             }).append(
                 $('<input>', {
@@ -295,8 +230,8 @@
                 }),
                 $('<input>', {
                     type: "hidden",
-                    name: "<?= csrf_token() ?>",
-                    value: "<?= csrf_hash() ?>"
+                    name: "<?php echo csrf_token(); ?>",
+                    value: "<?php echo csrf_hash(); ?>"
                 })
             );
 
@@ -310,7 +245,7 @@
             e.preventDefault();
 
             $.ajax({
-                url: "<?= base_url('update-user') ?>",
+                url: "<?php echo base_url('update-user'); ?>",
                 type: "POST",
                 data: $(this).serialize(),
                 dataType: "json",
@@ -340,7 +275,7 @@
         });
 
         // Exibe mensagem de sucesso se o flashdata estiver com 'sucesso'
-        <?php if (session()->getFlashdata('success')): ?>
+        <?php if (session()->getFlashdata('success')) : ?>
             $.toast({
                 heading: 'Sucesso',
                 text: '<?php echo session()->getFlashdata('success'); ?>',
@@ -351,4 +286,5 @@
             });
         <?php endif; ?>
     });
+
 </script>

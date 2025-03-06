@@ -88,7 +88,7 @@ class AdminController extends Controller
     {
         $usuarios = $this->gerenciarUsuarios();
         $data['usuarios'] = $usuarios;
-        $data['content'] = view('sys/gerenciar-usuarios', $data);
+        $data['content'] = view('sys/usuarios', $data);
 
         return view('dashboard', $data);
     }
@@ -103,7 +103,7 @@ class AdminController extends Controller
         $data['usuariosDesativados'] = $userModel->onlyDeleted()->findAll();
 
         // Carrega a view de usuários inativos dentro do layout do dashboard
-        $data['content'] = view('sys/usuarios-inativos', $data);
+        $data['content'] = view('sys/usuariosInativos', $data);
 
         // Retorna a view do dashboard com o conteúdo
         return view('dashboard', $data);

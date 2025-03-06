@@ -13,37 +13,67 @@
     </nav>
 </div>
 
-<div class="row">
-    <div class="col-lg-12 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <!-- mostrar ALERT em caso de erro -->
-                <?php if (session()->has('erros')) : ?>
+<?php if (session()->has('erros')): ?>
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
                     <div class="alert alert-danger">
                         <ul>
-                            <?php foreach (session('erros') as $erro) : ?>
-                                <li> <i class="mdi mdi-alert-circle"></i><?= $erro ?></li>
+                            <?php foreach (session('erros') as $erro): ?>
+                                <li> <i class="mdi mdi-alert-circle"></i><?= esc($erro) ?></li>
                             <?php endforeach ?>
                         </ul>
                     </div>
-                <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
 
-                <!-- botões da parte de cima -->
-
+<div class="row">
+    <div class="col-md-4 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Ações</h4>
                 <div class="row">
                     <div class="col-12 mb-4">
                         <button type="button" class="btn btn-primary btn-icon-text" data-bs-toggle="modal" data-bs-target="#modal-cad-tempoAula"><i class="fa fa-plus-circle btn-icon-prepend"></i> Incluir Tempo de Aula</button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Filtros</h4>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="filtroHorario">Grade de Horário:</label>
+                            <select class="form-select filtro" id="filtroHorario">
+                                <option value="">-</option>
+                                <?php foreach ($horarios as $horario): ?>
+                                    <option value="<?php echo esc($horario['nome']) ?>"><?php echo esc($horario['nome']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-                <!-- início da tabela -->
-
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive">
                             <table class="table mb-4" id="listagem-tempoAula">
-
-                                <!-- Cabeçalho da tabela -->
                                 <thead>
                                     <tr>
                                         <th>Grade de Horário</th>
@@ -53,13 +83,9 @@
                                         <th>Ações</th>
                                     </tr>
                                 </thead>
-
-                                <!-- Corpo da tabela -->
                                 <tbody>
-                                    <?php if (!empty($temposAulas)): // Verifica se há dados 
-                                    ?>
-                                        <?php foreach ($temposAulas as $ta): // Loop para percorrer os dados 
-                                        ?>
+                                    <?php if (!empty($temposAulas)): // Verifica se há dados ?>
+                                        <?php foreach ($temposAulas as $ta): // Loop para percorrer os dados ?>
                                             <tr>
                                                 <td><?php echo esc($ta['nome_horario']); ?></td>
                                                 <td><?php
@@ -127,112 +153,123 @@
                             </table>
                         </div>
                     </div>
-                </div>
-                <!-- legendas no canto inferior da tela -->
-                <div class="row">
-                    <div class="col-12 mt-4 d-flex justify-content-end gap-3">
-                        <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar</p>
-                        <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i>Excluir</p>
-                    </div>
-                </div>
+                </div>                
             </div>
         </div>
     </div>
+</div>
 
-    <!-- daqui pra baixo é javascript -->
-    <script>
-        //Para carregar a tradução dos itens da DataTable
-        const dataTableLangUrl = "<?php echo base_url('assets/js/traducao-dataTable/pt_br.json'); ?>";
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 mt-4 d-flex justify-content-end">Legenda</div>
+            <div class="col-12 mt-4 d-flex justify-content-end gap-3">
+                <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar &nbsp; &nbsp; </p>
+                <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i>Excluir</p>
+            </div>
+        </div>
+    </div>
+</div>
 
-        //essa linha abaixo é para detectar que o documento foi completamente carregado e executar o código após isso
-        $(document).ready(function() {
+<!-- daqui pra baixo é javascript -->
+<script>
+    //Para carregar a tradução dos itens da DataTable
+    const dataTableLangUrl = "<?php echo base_url('assets/js/traducao-dataTable/pt_br.json'); ?>";
 
-            //Verificar se tem curso para então "transformar" a tabela em DataTable
-            <?php if (!empty($temposAulas)): ?>
+    //essa linha abaixo é para detectar que o documento foi completamente carregado e executar o código após isso
+    $(document).ready(function() {
 
-                //Cria a DataTable
-                $("#listagem-tempoAula").DataTable({
+        //Verificar se tem curso para então "transformar" a tabela em DataTable
+        <?php if (!empty($temposAulas)): ?>
 
-                    //Define as entradas de quantidade de linhas visíveis na tabela
-                    aLengthMenu: [
-                        [5, 15, 30, -1],
-                        [5, 15, 30, "Todos"],
-                    ],
+            //Cria a DataTable
+            var table = $("#listagem-tempoAula").DataTable({
 
-                    //Define as questões de tradução/idioma
-                    language: {
-                        search: "Pesquisar:",
-                        url: dataTableLangUrl,
-                    },
+                //Define as entradas de quantidade de linhas visíveis na tabela
+                aLengthMenu: [
+                    [-1, 10, 25, 50],
+                    ["Todos", 10, 25, 50],
+                ],
 
-                    //Ativa ordenação
-                    ordering: true,
-                    //Diz que a coluna 1 (segunda/nome) deve ser o padrão de ordenação ao carregar a tabela
-                    order: [
-                        [2, 'asc']
-                    ],
-                    //Desativa a ordenação por ações
-                    columns: [null, null, null, null, {
-                        orderable: false
-                    }]
-                });
+                //Define as questões de tradução/idioma
+                language: {
+                    search: "Pesquisar:",
+                    url: dataTableLangUrl,
+                },
+
+                //Ativa ordenação
+                ordering: true,
+                //Diz que a coluna 1 (segunda/nome) deve ser o padrão de ordenação ao carregar a tabela
+                order: [
+                    [2, 'asc']
+                ],
+                //Desativa a ordenação por ações
+                columns: [null, null, null, null, {
+                    orderable: false
+                }]
+            });
 
 
-                $('#modal-edit-tempoAula').on('show.bs.modal', function(event) {
-                    // Obter o DOM do botão que ativou o modal
-                    var button = $(event.relatedTarget);
+            $('#modal-edit-tempoAula').on('show.bs.modal', function(event) {
+                // Obter o DOM do botão que ativou o modal
+                var button = $(event.relatedTarget);
 
-                    var id = button.data('id');
-                    var diaSemana = button.data('diasemana');
-                    var horario = button.data('horario');
-                    var horaInicio = button.data('hora-inicio'); // Hora de início
-                    var minutoInicio = button.data('minuto-inicio'); // Minuto de início
-                    var horaFim = button.data('hora-fim'); // Hora de fim
-                    var minutoFim = button.data('minuto-fim'); // Minuto de fim
+                var id = button.data('id');
+                var diaSemana = button.data('diasemana');
+                var horario = button.data('horario');
+                var horaInicio = button.data('hora-inicio'); // Hora de início
+                var minutoInicio = button.data('minuto-inicio'); // Minuto de início
+                var horaFim = button.data('hora-fim'); // Hora de fim
+                var minutoFim = button.data('minuto-fim'); // Minuto de fim
 
-                    // Formar o modal com os dados preenchidos
-                    var modal = $(this);
-                    modal.find('#edit-id').val(id);
-                    modal.find('#edit-horario_id').val(horario);
-                    modal.find('#edit-dia_semana').val(diaSemana);
-                    // Formatar hora e minuto de início para o formato HH:MM
-                    var tempoInicio = ('00' + horaInicio).slice(-2) + ':' + ('00' + minutoInicio).slice(-2);
-                    modal.find('#edit-tempo_inicio').val(tempoInicio);
+                // Formar o modal com os dados preenchidos
+                var modal = $(this);
+                modal.find('#edit-id').val(id);
+                modal.find('#edit-horario_id').val(horario);
+                modal.find('#edit-dia_semana').val(diaSemana);
+                // Formatar hora e minuto de início para o formato HH:MM
+                var tempoInicio = ('00' + horaInicio).slice(-2) + ':' + ('00' + minutoInicio).slice(-2);
+                modal.find('#edit-tempo_inicio').val(tempoInicio);
 
-                    // Se quiser preencher também o campo de horário de fim, basta seguir a mesma lógica
-                    var tempoFim = ('00' + horaFim).slice(-2) + ':' + ('00' + minutoFim).slice(-2);
-                    modal.find('#edit-tempo_fim').val(tempoFim);
+                // Se quiser preencher também o campo de horário de fim, basta seguir a mesma lógica
+                var tempoFim = ('00' + horaFim).slice(-2) + ':' + ('00' + minutoFim).slice(-2);
+                modal.find('#edit-tempo_fim').val(tempoFim);
 
-                });
+            });
 
-                $('#modal-deletar-tempoAula').on('show.bs.modal', function(event) {
-                    // Button that triggered the modal
-                    var button = $(event.relatedTarget);
+            $('#modal-deletar-tempoAula').on('show.bs.modal', function(event) {
+                // Button that triggered the modal
+                var button = $(event.relatedTarget);
 
-                    // Extract info from data-* attributes
-                    var nome = button.data('nome');
-                    var id = button.data('id');
+                // Extract info from data-* attributes
+                var nome = button.data('nome');
+                var id = button.data('id');
 
-                    var modal = $(this);
-                    modal.find('#deletar-id').val(id);
-                    modal.find('#deletar-nome').text(nome);
-                });
+                var modal = $(this);
+                modal.find('#deletar-id').val(id);
+                modal.find('#deletar-nome').text(nome);
+            });
 
-                //Ativa os tooltips dos botões
-                $('[data-bs-toggle="tooltip"]').tooltip();
+            //Ativa os tooltips dos botões
+            $('[data-bs-toggle="tooltip"]').tooltip();
 
-            <?php endif; ?>
+            $('.filtro').on('change', function() {
+                table.columns(0).search($("#filtroHorario").val());
+                table.draw();
+            });
 
-            // Exibe mensagem de sucesso se o flashdata estiver com 'sucesso'
-            <?php if (session()->getFlashdata('sucesso')): ?>
-                $.toast({
-                    heading: 'Sucesso',
-                    text: '<?php echo session()->getFlashdata('sucesso'); ?>',
-                    showHideTransition: 'slide',
-                    icon: 'success',
-                    loaderBg: '#f96868',
-                    position: 'top-center'
-                });
-            <?php endif; ?>
-        });
-    </script>
+        <?php endif; ?>
+
+        // Exibe mensagem de sucesso se o flashdata estiver com 'sucesso'
+        <?php if (session()->getFlashdata('sucesso')): ?>
+            $.toast({
+                heading: 'Sucesso',
+                text: '<?php echo session()->getFlashdata('sucesso'); ?>',
+                showHideTransition: 'slide',
+                icon: 'success',
+                loaderBg: '#f96868',
+                position: 'top-center'
+            });
+        <?php endif; ?>
+    });
+</script>

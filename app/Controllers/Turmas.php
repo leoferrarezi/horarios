@@ -24,7 +24,7 @@ class Turmas extends BaseController
         $data['horarios'] = $horarios->orderBy('nome', 'asc')->findAll();
         $data['cursos'] = $cursos->orderBy('nome', 'asc')->findAll();
 
-        $data['content'] = view('sys/lista-turmas', $data);
+        $data['content'] = view('sys/turmas', $data);
         return view('dashboard', $data);
     }
 

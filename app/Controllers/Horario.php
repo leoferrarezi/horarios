@@ -13,7 +13,7 @@ class Horario extends BaseController
     {
         $horarioModel = new HorariosModel();
         $data['horarios'] = $horarioModel->orderBy('nome', 'asc')->findAll();
-        $data['content'] = view('sys/lista-horarios', $data);
+        $data['content'] = view('sys/horarios', $data);
         return view('dashboard', $data);
     }
 

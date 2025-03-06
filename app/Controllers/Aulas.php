@@ -31,7 +31,7 @@ class Aulas extends BaseController
 
 		$data['consulta'] = $aulaModel->getAulasComTurmaDisciplinaEProfessores();
 
-		$data['content'] = view('sys/lista-aulas', $data);
+		$data['content'] = view('sys/aulas', $data);
 		return view('dashboard', $data);
 	}
 

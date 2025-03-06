@@ -20,7 +20,7 @@
 
 <div class="row">
     <!--------------------------- CADASTRO DE AMBIENTES ---------------------------------->
-    <div class="col-md-4 grid-margin stretch-card">
+    <div class="col-md-6 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">AMBIENTES</h4>
@@ -34,14 +34,14 @@
 
                 <div class="row">
                     <div class="col-12 mb-4">
-                        <button type="button" class="btn btn-primary btn-icon-text" data-bs-toggle="modal" data-bs-target="#modal-cad-ambiente"><i class="fa fa-plus-circle btn-icon-prepend"></i>Cadastrar Ambientes</button>
+                        <button type="button" class="btn btn-primary btn-icon-text" data-bs-toggle="modal" data-bs-target="#modal-cad-ambiente"><i class="fa fa-plus-circle btn-icon-prepend"></i>Cadastrar Ambiente</button>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive">
-                            <table class="table mb-4 custom-table">
+                            <table class="table mb-4 custom-table" id="ambientes">
                                 <thead>
                                     <tr>
                                         <th>Nome</th>
@@ -99,9 +99,10 @@
     </div>
 
     <!------------------------- GRUPOS DE AMBIENTES ------------------------------------>
-    <div class="col-md-8 grid-margin stretch-card">
+    <div class="col-md-6 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
+
                 <h4 class="card-title">GRUPO DE AMBIENTES</h4>
                 <?php if (!empty($erros)): ?>
                     <?php foreach ($erros as $campo => $erro): ?>
@@ -121,7 +122,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive">
-                            <table class="table mb-4 custom-table">
+                            <table class="table mb-4 custom-table" id="grupo_ambientes">
                                 <thead>
                                     <tr>
                                         <th>Nome</th>
@@ -211,10 +212,11 @@
 <div class="card">
     <div class="card-body">
         <div class="row">
+            <div class="col-12 mt-4 d-flex justify-content-end">Legenda</div>
             <div class="row-12 mt-4 d-flex justify-content-end gap-3">
-                <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar</p>
-                <p class="card-description text-end"><i class="fa fa-plus text-primary me-2"></i>Adicionar ambientes ao grupo</p>
-                <p class="card-description text-end"><i class="fa fa-list text-warning me-2"></i>Listar ambientes do grupo</p>
+                <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar &nbsp; &nbsp; </p>
+                <p class="card-description text-end"><i class="fa fa-plus text-primary me-2"></i>Adicionar ambientes ao grupo &nbsp; &nbsp; </p>
+                <p class="card-description text-end"><i class="fa fa-list text-warning me-2"></i>Listar ambientes do grupo &nbsp; &nbsp; </p>
                 <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i>Excluir</p>
             </div>
         </div>
@@ -222,7 +224,65 @@
 </div>
 
 <script>
+    const dataTableLangUrl = "<?php echo base_url('assets/js/traducao-dataTable/pt_br.json'); ?>";
+
     $(document).ready(function() {
+
+        <?php if (!empty($ambientes)): ?>
+            $("#ambientes").DataTable({
+
+                //Define as entradas de quantidade de linhas visíveis na tabela
+                aLengthMenu: [
+                    [-1, 10, 25, 50, -1],
+                    ["Todos", 10, 25, 50],
+                ],
+
+                language: {
+                    search: "Pesquisar:",
+                    url: dataTableLangUrl
+                },
+
+                ordering: true,
+
+                order: [
+                    [0, 'asc']
+                ],
+
+                columns: [null, {
+                    orderable: false
+                }]
+            });
+        <?php endif; ?>
+
+        
+        <?php if (!empty($grupos)): ?>
+
+            $("#grupo_ambientes").DataTable({
+
+                //Define as entradas de quantidade de linhas visíveis na tabela
+                aLengthMenu: [
+                    [-1, 10, 25, 50, -1],
+                    ["Todos", 10, 25, 50],
+                ],
+
+                language: {
+                    search: "Pesquisar:",
+                    url: dataTableLangUrl
+                },
+
+                ordering: true,
+
+                order: [
+                    [0, 'asc']
+                ],
+
+                columns: [null, {
+                    orderable: false
+                }]
+            });
+        <?php endif; ?>
+
+
         <?php if (session()->getFlashdata('sucesso')): ?>
             $.toast({
                 heading: 'Sucesso',
@@ -235,46 +295,3 @@
         <?php endif; ?>
     });
 </script>
-
-<style>
-    .button-trans-primary {
-        background-color: rgba(0, 136, 204, 0.2);
-        transition: background-color 0.3s;
-    }
-
-    .button-trans-primary:hover {
-        background-color: rgba(0, 136, 204, 1);
-    }
-
-    .button-trans-primary>i {
-        color: #0088cc;
-        /* Azul padrão */
-        transition: color 0.3s;
-    }
-
-    .button-trans-primary:hover>i {
-        color: #ffffff;
-    }
-
-    .button-trans-warning {
-        background-color: rgba(255, 193, 7, 0.2);
-        /* Amarelo translúcido */
-        transition: background-color 0.3s;
-    }
-
-    .button-trans-warning:hover {
-        background-color: rgba(255, 193, 7, 1);
-        /* Amarelo sólido */
-    }
-
-    .button-trans-warning>i {
-        color: #ffc107;
-        /* Amarelo padrão Bootstrap */
-        transition: color 0.3s;
-    }
-
-    .button-trans-warning:hover>i {
-        color: #ffffff;
-        /* Ícone branco no hover */
-    }
-</style>

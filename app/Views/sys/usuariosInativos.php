@@ -86,7 +86,7 @@
                                                     <div class="d-flex">
                                                         <!-- Botão Reativar -->
                                                         <span data-bs-toggle="tooltip" data-placement="top" title="Reativar usuário">
-                                                            <button type="button" class="btn btn-inverse-success btn-icon me-1 btn-reativar-usuario d-flex align-items-center justify-content-center"
+                                                            <button type="button" class="btn button-trans-success btn-icon me-1 btn-reativar-usuario d-flex align-items-center justify-content-center"
                                                                 data-bs-toggle="modal" data-bs-target="#modal-reativar-usuario"
                                                                 data-user-id="<?php echo $usuario->id ?>">
                                                                 <i class="fa fa-user-plus"></i>
@@ -95,7 +95,7 @@
 
                                                         <!-- Botão Excluir Permanentemente -->
                                                         <span data-bs-toggle="tooltip" data-placement="top" title="Excluir permanentemente">
-                                                            <button type="button" class="btn btn-inverse-danger btn-icon me-1 btn-excluir-permanentemente d-flex align-items-center justify-content-center"
+                                                            <button type="button" class="btn button-trans-danger btn-icon me-1 btn-excluir-permanentemente d-flex align-items-center justify-content-center"
                                                                 data-user-id="<?php echo $usuario->id ?>" data-bs-toggle="modal" data-bs-target="#modal-excluir-permanentemente">
                                                                 <i class="fa fa-trash"></i>
                                                             </button>

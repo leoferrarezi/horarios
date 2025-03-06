@@ -187,8 +187,8 @@
 
                 //Define as entradas de quantidade de linhas visíveis na tabela
                 aLengthMenu: [
-                    [5, 15, 30, -1],
-                    [5, 15, 30, "Todos"],
+                    [-1, 10, 25, 50],
+                    ["Todos", 10, 25, 50],
                 ],
 
                 //Define as questões de tradução/idioma

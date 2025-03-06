@@ -179,8 +179,8 @@
             var table = $("#listagem-aulas").DataTable({
 
                 aLengthMenu: [
-                    [-1, 5, 15, 30],
-                    ["Todos", 5, 15, 30],
+                    [25, 50, 100, -1],
+                    [25, 50, 100, "Todos"],
                 ],
 
                 language: {

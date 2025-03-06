@@ -48,7 +48,27 @@
                 </div>
             </div>
         </div>
-    </div>    
+    </div>
+    <div class="col-md-8 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Filtros</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="curso">Curso:</label>
+                            <select class="form-select filtro" id="filtroCurso">
+                                <option value="">-</option>
+                                <?php foreach ($cursos as $curso): ?>
+                                    <option value="<?php echo esc($curso['nome']) ?>"><?php echo esc($curso['nome']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -179,16 +199,15 @@
     //essa linha abaixo é para detectar que o documento foi completamente carregado e executar o código após isso
     $(document).ready(function() {
 
-
         <?php if (!empty($turmas)): ?>
 
             //Cria a DataTable
-            $("#listagem-turmas").DataTable({
+            var table = $("#listagem-turmas").DataTable({
 
                 //Define as entradas de quantidade de linhas visíveis na tabela
                 aLengthMenu: [
-                    [5, 15, 30, -1],
-                    [5, 15, 30, "Todos"],
+                    [10, 25, 50, -1],
+                    [10, 25, 50, "Todos"],
                 ],
 
                 //Define as questões de tradução/idioma
@@ -257,6 +276,11 @@
                 var modal = $(this);
                 modal.find('#deletar-id').val(id);
                 modal.find('#deletar-nome').text(nome);
+            });
+
+            $('.filtro').on('change', function() {
+                table.columns(5).search($("#filtroCurso").val());
+                table.draw();
             });
 
             //Ativa os tooltips dos botões

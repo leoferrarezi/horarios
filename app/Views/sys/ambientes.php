@@ -233,8 +233,8 @@
 
                 //Define as entradas de quantidade de linhas visíveis na tabela
                 aLengthMenu: [
-                    [10, 20, 30, -1],
-                    [10, 20, 30, "Todos"],
+                    [-1, 10, 25, 50, -1],
+                    ["Todos", 10, 25, 50],
                 ],
 
                 language: {
@@ -261,8 +261,8 @@
 
                 //Define as entradas de quantidade de linhas visíveis na tabela
                 aLengthMenu: [
-                    [10, 20, 30, -1],
-                    [10, 20, 30, "Todos"],
+                    [-1, 10, 25, 50, -1],
+                    ["Todos", 10, 25, 50],
                 ],
 
                 language: {

@@ -34,14 +34,14 @@
 
                 <div class="row">
                     <div class="col-12 mb-4">
-                        <button type="button" class="btn btn-primary btn-icon-text" data-bs-toggle="modal" data-bs-target="#modal-cad-ambiente"><i class="fa fa-plus-circle btn-icon-prepend"></i>Cadastrar Ambientes</button>
+                        <button type="button" class="btn btn-primary btn-icon-text" data-bs-toggle="modal" data-bs-target="#modal-cad-ambiente"><i class="fa fa-plus-circle btn-icon-prepend"></i>Cadastrar Ambiente</button>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive">
-                            <table class="table mb-4 custom-table">
+                            <table class="table mb-4 custom-table" id="ambientes">
                                 <thead>
                                     <tr>
                                         <th>Nome</th>
@@ -102,6 +102,7 @@
     <div class="col-md-6 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
+
                 <h4 class="card-title">GRUPO DE AMBIENTES</h4>
                 <?php if (!empty($erros)): ?>
                     <?php foreach ($erros as $campo => $erro): ?>
@@ -121,7 +122,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive">
-                            <table class="table mb-4 custom-table">
+                            <table class="table mb-4 custom-table" id="grupo_ambientes">
                                 <thead>
                                     <tr>
                                         <th>Nome</th>
@@ -223,7 +224,65 @@
 </div>
 
 <script>
+    const dataTableLangUrl = "<?php echo base_url('assets/js/traducao-dataTable/pt_br.json'); ?>";
+
     $(document).ready(function() {
+
+        <?php if (!empty($ambientes)): ?>
+            $("#ambientes").DataTable({
+
+                //Define as entradas de quantidade de linhas visíveis na tabela
+                aLengthMenu: [
+                    [10, 20, 30, -1],
+                    [10, 20, 30, "Todos"],
+                ],
+
+                language: {
+                    search: "Pesquisar:",
+                    url: dataTableLangUrl
+                },
+
+                ordering: true,
+
+                order: [
+                    [0, 'asc']
+                ],
+
+                columns: [null, {
+                    orderable: false
+                }]
+            });
+        <?php endif; ?>
+
+        
+        <?php if (!empty($grupos)): ?>
+
+            $("#grupo_ambientes").DataTable({
+
+                //Define as entradas de quantidade de linhas visíveis na tabela
+                aLengthMenu: [
+                    [10, 20, 30, -1],
+                    [10, 20, 30, "Todos"],
+                ],
+
+                language: {
+                    search: "Pesquisar:",
+                    url: dataTableLangUrl
+                },
+
+                ordering: true,
+
+                order: [
+                    [0, 'asc']
+                ],
+
+                columns: [null, {
+                    orderable: false
+                }]
+            });
+        <?php endif; ?>
+
+
         <?php if (session()->getFlashdata('sucesso')): ?>
             $.toast({
                 heading: 'Sucesso',

@@ -216,46 +216,56 @@ class AdminController extends Controller
     // Método para resetar senha de um usuário
     public function resetarSenha()
     {
-        $userId = $this->request->getPost('user_id');
+        try {
+            $userId = $this->request->getPost('user_id');
 
-        // Verificar se o ID foi enviado
-        if (!$userId) {
-            return redirect()->back()->with('error', 'ID de usuário não fornecido.');
+            // Verificar se o ID foi enviado
+            if (!$userId) {
+                return redirect()->back()->with('error', 'ID de usuário não fornecido.');
+            }
+
+            $users = new UserModel();
+            $user = $users->find($userId);
+
+            if (!$user) {
+                return redirect()->back()->with('error', 'Usuário não encontrado.');
+            }
+
+            // Gerar uma nova senha segura
+            $novaSenha = bin2hex(random_bytes(4)); // 8 caracteres aleatórios
+
+            // Instanciar o serviço de hashing de senha
+            $passwords = service('passwords');
+            $user->password = $passwords->hash($novaSenha);
+            $users->save($user);
+
+            // Instanciar o serviço de e-mail com a configuração já definida no arquivo Email.php
+            $email = \Config\Services::email();
+
+            // Definir o remetente, destinatário e a mensagem
+            $email->setFrom('notifica@ifrocalama.com', 'Ifro Calama');
+            $email->setTo($user->email);
+            $email->setSubject('Redefinição de Senha');
+            $email->setMessage("Olá, {$user->username}!\n\nSua senha foi redefinida pelo administrador.\n\nNova senha: {$novaSenha}\n");
+
+            // Enviar e-mail
+            if (!$email->send()) {
+                // Registra o erro no log com detalhes
+                log_message('error', 'Erro ao enviar e-mail: ' . $email->printDebugger(['headers']));
+                // Retorna uma mensagem genérica para o usuário
+                return redirect()->back()->with('error', 'Erro ao enviar o e-mail. Por favor, tente novamente mais tarde.');
+            }
+
+            return redirect()->back()->with(
+                'success',
+                "Senha do usuário {$user->username} redefinida com sucesso e enviada ao e-mail."
+            );
+        } catch (\Exception $e) {
+            // Registra a exceção no log
+            log_message('error', 'Erro inesperado ao resetar senha: ' . $e->getMessage());
+            // Retorna uma mensagem genérica para o usuário
+            return redirect()->back()->with('error', 'Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.');
         }
-
-        $users = new UserModel(); // Agora o modelo está sendo chamado corretamente
-        $user = $users->find($userId);
-
-        if (!$user) {
-            return redirect()->back()->with('error', 'Usuário não encontrado.');
-        }
-
-        // Gerar uma nova senha segura
-        $novaSenha = bin2hex(random_bytes(4)); // 8 caracteres aleatórios
-
-        // Instanciar o serviço de hashing de senha
-        $passwords = service('passwords');
-        $user->password = $passwords->hash($novaSenha);
-        $users->save($user);
-
-        // Instanciar o serviço de e-mail com a configuração já definida no arquivo Email.php
-        $email = Services::email();  // Puxa as configurações do arquivo Email.php
-
-        // Definir o remetente, destinatário e a mensagem
-        $email->setFrom('no-reply@ifrocalama.com', 'Ifro Calama'); // Você pode usar o endereço e nome configurado em Email.php
-        $email->setTo($user->email);
-        $email->setSubject('Redefinição de Senha');
-        $email->setMessage("Olá, {$user->username}!\n\nSua senha foi redefinida pelo administrador.\n\nNova senha: {$novaSenha}\n");
-
-        // Enviar e-mail
-        if (!$email->send()) {
-            return redirect()->back()->with('error', 'Erro ao enviar o e-mail.');
-        }
-
-        return redirect()->back()->with(
-            'success',
-            "Senha do usuário {$user->username} redefinida com sucesso e enviada ao e-mail."
-        );
     }
 
     public function atualizarUsuario()

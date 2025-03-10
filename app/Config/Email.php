@@ -6,14 +6,9 @@ use CodeIgniter\Config\BaseConfig;
 
 class Email extends BaseConfig
 {
-    public string $fromEmail  = 'no-reply@ifrocalama.com';  // Substitua com o seu email de envio
-    public string $fromName   = 'Ifro Calama';              // Substitua com o nome do remetente
+    public string $fromEmail  = 'notifica@ifrocalama.com';  // E-mail de remetente
+    public string $fromName   = 'Ifro Calama';              // Nome do remetente
     public string $recipients = '';                       // Deixe vazio ou coloque destinatário por padrão
-
-    /**
-     * The "user agent"
-     */
-    public string $userAgent = 'CodeIgniter';
 
     /**
      * O protocolo para envio de e-mail (mail, sendmail, smtp)
@@ -28,22 +23,22 @@ class Email extends BaseConfig
     /**
      * SMTP Server Hostname
      */
-    public string $SMTPHost = 'sandbox.smtp.mailtrap.io';  // O servidor SMTP do Mailtrap
+    public string $SMTPHost = 'mail.smtp2go.com';  // Servidor SMTP do SMTP2Go
 
     /**
      * SMTP Username
      */
-    public string $SMTPUser = '3ea968167e2f6a';  // Seu usuário do Mailtrap
+    public string $SMTPUser = 'notifica@ifrocalama.com';  // Seu e-mail de autenticação
 
     /**
      * SMTP Password
      */
-    public string $SMTPPass = '54c3936b073518';  // Sua senha do Mailtrap
+    public string $SMTPPass;  // Senha de autenticação (será carregada do .env)
 
     /**
      * SMTP Port
      */
-    public int $SMTPPort = 2525;  // A porta SMTP do Mailtrap
+    public int $SMTPPort = 8025;  // Porta SMTP (você pode usar 2525, 8025, 587, 80 ou 25)
 
     /**
      * SMTP Timeout (em segundos)
@@ -59,7 +54,7 @@ class Email extends BaseConfig
      * SMTP Encryption.
      * Defina como 'tls' para a comunicação segura.
      */
-    public string $SMTPCrypto = 'tls';
+    public string $SMTPCrypto = 'tls';  // Use 'tls' para criptografia
 
     /**
      * Habilitar o Word Wrap
@@ -74,7 +69,7 @@ class Email extends BaseConfig
     /**
      * Tipo de e-mail, pode ser 'text' ou 'html'
      */
-    public string $mailType = 'text';
+    public string $mailType = 'html';  // Use 'html' para e-mails com formatação
 
     /**
      * Conjunto de caracteres (UTF-8, iso-8859-1, etc.)
@@ -115,4 +110,15 @@ class Email extends BaseConfig
      * Ativar mensagens de notificação do servidor
      */
     public bool $DSN = false;
+
+    /**
+     * Construtor para carregar a senha do SMTP do .env
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Carrega a senha do SMTP do arquivo .env
+        $this->SMTPPass = env('SMTP_PASSWORD', ''); // O segundo parâmetro é um valor padrão caso a variável não exista
+    }
 }

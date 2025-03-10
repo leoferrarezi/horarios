@@ -24,10 +24,9 @@ class Versao extends BaseController
         //coloca todos os dados do formulario no vetor dadosPost
         $dadosPost = $this->request->getPost();
         $dadosLimpos['nome'] = strip_tags($dadosPost['nome']);
-
+        $dadosLimpos['semestre'] = strip_tags($dadosPost['semestre']);
         
-        if ($versao->insert($dadosLimpos)) {
-            
+        if ($versao->insert($dadosLimpos)) {            
             session()->setFlashdata('sucesso', 'Versão cadastrado com sucesso.');
             return redirect()->to(base_url('/sys/versao'));
         } else {
@@ -41,6 +40,7 @@ class Versao extends BaseController
 
         $dadosLimpos['id'] = strip_tags($dadosPost['id']);        
         $dadosLimpos['nome'] = strip_tags($dadosPost['nome']);
+        $dadosLimpos['semestre'] = strip_tags($dadosPost['semestre']);
 
         $versao = new VersoesModel();
         if($versao->save($dadosLimpos)){

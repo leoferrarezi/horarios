@@ -13,7 +13,7 @@ class VersoesModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['nome'];
+    protected $allowedFields    = ['nome','semestre'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -32,7 +32,7 @@ class VersoesModel extends Model
     protected $validationRules      = [
         'id' => 'permit_empty|is_natural_no_zero|max_length[11]',
         'nome' => 'required|is_unique[versoes.nome,id,{id}]|max_length[96]',
-        'semestre' => 'permit_empty|is_natural_no_zero'
+        'semestre' => 'is_natural_no_zero'
     ];
     protected $validationMessages   = [
         'nome' => [
@@ -41,7 +41,7 @@ class VersoesModel extends Model
             'max_length' => 'O campo nome não pode exceder 96 caracteres.'
         ],
         'semestre' => [
-            'is_natural_no_zero' => 'O semestre precisa ser um número natural',
+            'is_natural_no_zero' => 'O semestre precisa ser o número 1 ou 2',
         ],
     ];
     protected $skipValidation       = false;
@@ -83,8 +83,8 @@ class VersoesModel extends Model
 
         // Tabelas e colunas de chave estrangeira a serem verificadas
         $tabelas = [
-            'aula_horario' => 'versao_id',
-            'aula_professor' => 'versao_id',
+            //'aula_horario' => 'versao_id',
+            //'aula_professor' => 'versao_id',
             'aulas' => 'versao_id',
         ];
 

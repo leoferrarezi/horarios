@@ -69,8 +69,8 @@
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
       <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
         <a href="<?php echo base_url("/sys/home") ?>">
-        <img src="<?php echo base_url("assets/images/logo-ifro.png"); ?>" class="sidebar-brand brand-logo" alt="logo" />
-        <img src="<?php echo base_url("assets/images/logo-ifro-mini.png"); ?>" class="sidebar-brand brand-logo-mini" alt="logo" />
+          <img src="<?php echo base_url("assets/images/logo-ifro.png"); ?>" class="sidebar-brand brand-logo" alt="logo" />
+          <img src="<?php echo base_url("assets/images/logo-ifro-mini.png"); ?>" class="sidebar-brand brand-logo-mini" alt="logo" />
         </a>
       </div>
       <ul class="nav">
@@ -97,13 +97,13 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="">
+          <a class="nav-link" href="<?php echo base_url('sys/tabela-geral-horarios'); ?>">
             <span class="menu-icon">
               <i class="mdi mdi-clock-time-eight"></i>
             </span>
             <span class="menu-title">Horários de Aula</span>
           </a>
-        </li>        
+        </li>
 
         <li class="nav-item nav-category">
           <span class="nav-link">Cadastros</span>

@@ -32,26 +32,45 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($professores as $index => $professor): ?>
-                                <tr>
-                                    <td>
-                                        <div class="form-check" <?php echo (in_array(esc($professor['nome']), $professoresExistentes)) ? " data-bs-toggle='tooltip' data-placement='top' title='Este professor já está cadastrado' " : ""; ?>>
-                                            <label class="form-check-label">
-                                                <input 
-                                                    type="checkbox"
-                                                    name="selecionados[]"
-                                                    value="<?= htmlspecialchars(json_encode($professor), ENT_QUOTES, 'UTF-8') ?>"
-                                                    class="form-check-input"
-                                                    <?php echo (in_array(esc($professor['nome']), $professoresExistentes)) ? " disabled " : ""; ?>
-                                                >
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td><?= esc($professor['nome']) ?></td>
-                                    <td><?= esc($professor['email']) ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
+                        <?php foreach ($professores as $index => $professor): ?>
+                            <?php
+                                $nome = esc($professor['nome']);
+                                $email = $professor['email'];
+                                $matricula = trim($professor['matricula'] ?? ''); // Removido da lógica de validação
+                                
+                                $emailValido = (strpos($email, '@ifro.edu.br') !== false);
+                                $jaCadastrado = in_array($nome, $professoresExistentes);
+                                $marcado = ($emailValido && !$jaCadastrado);
+
+                                $tooltip = '';
+                                if ($jaCadastrado) {
+                                    $tooltip = "Este professor já está cadastrado";
+                                } else {
+                                    if (!$emailValido) {
+                                        $tooltip = "E-mail institucional inválido";
+                                    }
+                                }
+                            ?>
+                            <tr>
+                                <td>
+                                    <div class="form-check"
+                                        <?= !empty($tooltip) ? " data-bs-toggle='tooltip' data-placement='top' title='{$tooltip}'" : "" ?>>
+                                        <label class="form-check-label">
+                                            <input 
+                                                type="checkbox"
+                                                name="selecionados[]"
+                                                value="<?= htmlspecialchars(json_encode($professor), ENT_QUOTES, 'UTF-8') ?>"
+                                                class="form-check-input"
+                                                <?= $jaCadastrado ? "disabled" : ($marcado ? "checked" : "") ?>
+                                            >
+                                        </label>
+                                    </div>
+                                </td>
+                                <td><?= esc($professor['nome']) ?></td>
+                                <td><?= esc($professor['email']) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
                     </table>
                 </div>
                 <button type="submit" class="btn btn-success mt-3">Importar Selecionados</button>

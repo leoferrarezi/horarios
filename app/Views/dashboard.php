@@ -26,42 +26,6 @@
 	<script src="<?php echo base_url('assets/vendors/typeahead.js/typeahead.bundle.min.js') ?>"></script>
 	<script src="<?php echo base_url('assets/js/typeahead.js') ?>"></script>
 
-
-
-	<style>
-		/*Estilização para tabelas menores*/
-		.button-trans-success,
-		.button-trans-danger {
-			margin: 0;
-		}
-
-		.d-flex .btn-icon {
-			margin-right: 0.3rem;
-			width: 2rem;
-			height: 2rem;
-			;
-		}
-
-		.table td,
-		.table th {
-			line-height: 1.2;
-			height: auto;
-			padding: 0.3rem 0.5rem;
-		}
-
-		/*Estilização para select2*/
-		.select2-container {
-			z-index: 9999;
-		}
-
-		.select2-dropdown {
-			z-index: 1050;
-		}
-
-		.select2-search {
-			z-index: 1060;
-		}
-	</style>
 </head>
 
 <body>

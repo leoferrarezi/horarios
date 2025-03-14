@@ -126,3 +126,8 @@
 .select2-search {
   z-index: 1060;
 }
+
+.select2-container--default .select2-results__option[aria-selected=true] {
+  background-color: #495057 !important;
+  /*Fundo da seleção de opções do select2*/
+}

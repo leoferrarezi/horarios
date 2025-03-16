@@ -18,14 +18,15 @@ class Professor extends BaseController
     {
         // Cria a instância de um model do professor
         $professorModel = new ProfessorModel();
-        $horariosModel = new HorariosModel();
+        
+        $temposAulaModel = new TemposAulasModel();
 
         // Faz a busca por todos os professores cadastrado no banco (tabela professores)
         $data['professores'] = $professorModel->orderBy('nome', 'asc')->findAll();
 
         // Faz a busca por todos os horarios cadastrados no banco (tabela horarios)
-        $data['horarios'] = $horariosModel->getHorariosAulas();
         
+        $data['temposAula'] = $temposAulaModel->getTemposAulas();
         
         // Exibe os professores cadastrados
         $data['content'] = view('sys/professor', $data);

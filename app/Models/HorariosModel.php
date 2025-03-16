@@ -5,7 +5,7 @@ namespace App\Models;
 use CodeIgniter\Model;
 use CodeIgniter\Exceptions\ReferenciaException;
 
-class HorariosModel extends Model
+class HorariosModel extends BaseModel
 {
     protected $table            = 'horarios';
     protected $primaryKey       = 'id';
@@ -45,13 +45,13 @@ class HorariosModel extends Model
     // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert   = [];
-    protected $afterInsert    = [];
+    protected $afterInsert    = ['logInsert'];
     protected $beforeUpdate   = [];
-    protected $afterUpdate    = [];
+    protected $afterUpdate    = ['logUpdate'];
     protected $beforeFind     = [];
     protected $afterFind      = [];
     protected $beforeDelete   = ['verificarReferencias'];
-    protected $afterDelete    = [];
+    protected $afterDelete    = ['logDelete'];
 
     public function verificarReferencias(array $data)
     {
@@ -119,5 +119,22 @@ class HorariosModel extends Model
 
         // Retorna as tabelas onde o ID foi encontrado
         return $referenciasEncontradas;
+    }
+    protected function logInsert(array $data)
+    {
+        $this->registrarLog('Inserção', 'Nova grade de horário adicionado', $data['id'] ?? null);
+        return $data;
+    }
+
+    protected function logUpdate(array $data)
+    {
+        $this->registrarLog('Edição', 'Grade de horário atualizado', $data['id'][0] ?? null);
+        return $data;
+    }
+
+    protected function logDelete(array $data)
+    {
+        $this->registrarLog('Exclusão', 'Grade de horário removido', $data['id'][0] ?? null);
+        return $data;
     }
 }

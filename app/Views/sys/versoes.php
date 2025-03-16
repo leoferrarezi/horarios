@@ -72,7 +72,15 @@
                                                 <td><?php echo esc($versao['semestre']); ?></td>
                                                 <td>
                                                     <div class="d-flex">
-                                                        <!-- o elemento <span> é apenas para mostrar o tooltip -->
+
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Ativar versão">
+                                                            <button
+                                                                type="button"
+                                                                class="justify-content-center align-items-center d-flex btn btn-inverse-info button-trans-info btn-icon me-1">
+                                                                <i class="fa fa-check-square-o"></i>
+                                                            </button>
+                                                        </span>
+                                                        
                                                         <span data-bs-toggle="tooltip" data-placement="top" title="Atualizar dados da versão">
                                                             <!-- botão com estilo, ativação do modal, e dados formados para transmitir ao modal -->
                                                             <button
@@ -81,7 +89,8 @@
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#modal-edit-versoes"
                                                                 data-id="<?php echo esc($versao['id']); ?>"
-                                                                data-nome="<?php echo esc($versao['nome']); ?>">
+                                                                data-nome="<?php echo esc($versao['nome']); ?>"
+                                                                data-semestre="<?php echo esc($versao['semestre']); ?>">
                                                                 <!-- icone do botão -->
                                                                 <i class="fa fa-edit"></i>
                                                             </button>
@@ -123,6 +132,7 @@
         <div class="row">
             <div class="col-12 mt-4 d-flex justify-content-end">Legenda</div>
             <div class="col-12 mt-4 d-flex justify-content-end gap-3">
+                <p class="card-description text-end"><i class="fa fa-check-square-o text-info me-2"></i>Ativar &nbsp; &nbsp; </p>
                 <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar &nbsp; &nbsp; </p>
                 <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i>Excluir</p>
             </div>
@@ -176,11 +186,13 @@
                 // Extrair as informações dos atributos data-*
                 var id = button.data('id');
                 var nome = button.data('nome');
+                var semestre = button.data('semestre');
 
                 // Formar o modal com os dados preenchidos
                 var modal = $(this);
                 modal.find('#edit-id').val(id);
                 modal.find('#edit-nome').val(nome);
+                modal.find('input[name="semestre"][value="' + semestre + '"]').prop('checked', true);
 
             });
 

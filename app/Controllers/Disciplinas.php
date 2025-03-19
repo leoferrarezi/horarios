@@ -13,18 +13,18 @@ class Disciplinas extends BaseController
 {
     public function index()
     {
-        
-         $disciplinaModel = new DisciplinasModel();
-         $matrizCurricularModel = new MatrizCurricularModel();
-         $grupoAmbientesModel = new GruposAmbientesModel();
-         $data['disciplinas'] = $disciplinaModel->orderBy('nome', 'asc')->getDisciplinaWithMatrizAndGrupo();
-         $data['matrizes'] = $matrizCurricularModel->orderBy('nome', 'asc')->findAll();
-         $data['gruposAmbientes'] = $grupoAmbientesModel->orderBy('nome', 'asc')->findAll();
-         
-         $data['content'] = view('sys/disciplinas', $data);
-         return view('dashboard', $data);
+
+        $disciplinaModel = new DisciplinasModel();
+        $matrizCurricularModel = new MatrizCurricularModel();
+        $grupoAmbientesModel = new GruposAmbientesModel();
+        $data['disciplinas'] = $disciplinaModel->orderBy('nome', 'asc')->getDisciplinaWithMatrizAndGrupo();
+        $data['matrizes'] = $matrizCurricularModel->orderBy('nome', 'asc')->findAll();
+        $data['gruposAmbientes'] = $grupoAmbientesModel->orderBy('nome', 'asc')->findAll();
+
+        $data['content'] = view('sys/disciplinas', $data);
+        return view('dashboard', $data);
     }
-    
+
     public function salvar()
     {
         $disciplinaModel = new DisciplinasModel();
@@ -44,7 +44,7 @@ class Disciplinas extends BaseController
         //tenta cadastrar o nova disciplina no banco
         if ($disciplinaModel->insert($dadosLimpos)) {
             //se deu certo, direciona pra lista de disciplinas
-            session()->setFlashdata('sucesso', 'Disciplina cadastrada com sucesso.');
+            session()->setFlashdata('sucesso', 'Disciplina cadastrada com sucesso!');
             return redirect()->to(base_url('/sys/disciplina')); // Redireciona para a página de listagem
         } else {
             $data['erros'] = $disciplinaModel->errors(); //o(s) erro(s)
@@ -52,7 +52,8 @@ class Disciplinas extends BaseController
         }
     }
 
-    public function atualizar(){
+    public function atualizar()
+    {
         $dadosPost = $this->request->getPost();
 
         $dadosLimpos['id'] = strip_tags($dadosPost['id']);
@@ -66,23 +67,24 @@ class Disciplinas extends BaseController
         $dadosLimpos['grupo_de_ambientes_id'] = $dadosPost['grupo_de_ambientes_id'] ?? null;
 
         $disciplinaModel = new DisciplinasModel();
-        if($disciplinaModel->save($dadosLimpos)){
-            session()->setFlashdata('sucesso', 'Disciplina atualizada com sucesso.');
+        if ($disciplinaModel->save($dadosLimpos)) {
+            session()->setFlashdata('sucesso', 'Dados da Disciplina atualizados com sucesso!');
             return redirect()->to(base_url('/sys/disciplina')); // Redireciona para a página de listagem
         } else {
             $data['erros'] = $disciplinaModel->errors(); //o(s) erro(s)
             return redirect()->to(base_url('/sys/disciplina'))->with('erros', $data['erros']); //retora com os erros
         }
     }
-    public function deletar(){
-        
+    public function deletar()
+    {
+
         $dadosPost = $this->request->getPost();
         $id = strip_tags($dadosPost['id']);
 
         $disciplinaModel = new DisciplinasModel();
         try {
             if ($disciplinaModel->delete($id)) {
-                session()->setFlashdata('sucesso', 'Disciplina excluída com sucesso.');
+                session()->setFlashdata('sucesso', 'Disciplina removida com sucesso!');
                 return redirect()->to(base_url('/sys/disciplina'));
             } else {
                 return redirect()->to(base_url('/sys/disciplina'))->with('erro', 'Falha ao deletar disciplina');

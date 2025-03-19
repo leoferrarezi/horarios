@@ -157,7 +157,7 @@
                             </table>
                         </div>
                     </div>
-                </div>                
+                </div>
             </div>
         </div>
     </div>
@@ -284,6 +284,18 @@
                 loaderBg: '#f96868',
                 position: 'top-center'
             });
+        <?php endif; ?>
+        <?php if (session()->has('erros')): ?>
+            <?php foreach (session('erros') as $erro): ?>
+                $.toast({
+                    heading: 'Erro',
+                    text: '<?= esc($erro); ?>',
+                    showHideTransition: 'fade',
+                    icon: 'error',
+                    loaderBg: '#dc3545',
+                    position: 'top-center'
+                });
+            <?php endforeach; ?>
         <?php endif; ?>
     });
 </script>

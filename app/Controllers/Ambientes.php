@@ -30,7 +30,7 @@ class Ambientes extends BaseController
         }
 
         $data['content'] = view('sys/ambientes', $data);
-        
+
         return view('dashboard', [
             'ambientes' => $data['ambientes'],
             'grupos' => $data['grupos'],
@@ -55,8 +55,8 @@ class Ambientes extends BaseController
             session()->setFlashdata('sucesso', 'Ambiente cadastrado com sucesso.');
             return redirect()->to(base_url('sys/cadastro-ambientes'));
         } else {
-            $data['erros'] = $ambiente->errors();
-            return redirect()->to(base_url('sys/cadastro-ambientes'))->with('erros', $data['erros'])->withInput();
+            session()->setFlashdata('erro', 'Erro ao cadastrar o ambiente.');
+            return redirect()->to(base_url('sys/cadastro-ambientes'));
         }
     }
 

@@ -254,7 +254,7 @@
             });
         <?php endif; ?>
 
-        
+
         <?php if (!empty($grupos)): ?>
 
             $("#grupo_ambientes").DataTable({
@@ -289,6 +289,17 @@
                 text: '<?php echo session()->getFlashdata('sucesso'); ?>',
                 showHideTransition: 'slide',
                 icon: 'success',
+                loaderBg: '#f96868',
+                position: 'top-center'
+            });
+        <?php endif; ?>
+
+        <?php if (session()->getFlashdata('erro')): ?>
+            $.toast({
+                heading: 'Erro',
+                text: '<?php echo session()->getFlashdata('erro'); ?>',
+                showHideTransition: 'slide',
+                icon: 'error',
                 loaderBg: '#f96868',
                 position: 'top-center'
             });

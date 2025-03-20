@@ -285,15 +285,18 @@
                 position: 'top-center'
             });
         <?php endif; ?>
-        <?php if (session()->has('erros')): ?>
+
+        // Exibe mensagem de erro se o flashdata estiver com 'erro'
+        <?php if (session()->getFlashdata('erros')): ?>
             <?php foreach (session('erros') as $erro): ?>
                 $.toast({
                     heading: 'Erro',
-                    text: '<?= esc($erro); ?>',
+                    text: '<?= esc(session()->getFlashdata('erro'), 'js'); ?>',
                     showHideTransition: 'fade',
                     icon: 'error',
                     loaderBg: '#dc3545',
-                    position: 'top-center'
+                    position: 'top-center',
+                    hideAfter: 5000
                 });
             <?php endforeach; ?>
         <?php endif; ?>

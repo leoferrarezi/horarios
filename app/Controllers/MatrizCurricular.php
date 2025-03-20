@@ -32,7 +32,7 @@ class MatrizCurricular extends BaseController
 
         if ($matrizModel->insert($dadosLimpos)) {
 
-            session()->setFlashdata('sucesso', 'Matriz cadastrado com sucesso.');
+            session()->setFlashdata('sucesso', 'Matriz Curricular cadastrada com sucesso!');
             return redirect()->to(base_url('/sys/matriz'));
         } else {
             $data['erros'] = $matrizModel->errors(); //o(s) erro(s)
@@ -50,7 +50,7 @@ class MatrizCurricular extends BaseController
 
         $matrizModel = new MatrizCurricularModel();
         if ($matrizModel->save($dadosLimpos)) {
-            session()->setFlashdata('sucesso', 'Matriz atualizado com sucesso.');
+            session()->setFlashdata('sucesso', 'Dados da Matriz Curricular atualizados com sucesso!');
             return redirect()->to(base_url('/sys/matriz')); // Redireciona para a página de listagem
         } else {
             $data['erros'] = $matrizModel->errors(); //o(s) erro(s)
@@ -65,15 +65,19 @@ class MatrizCurricular extends BaseController
         $id = strip_tags($dadosPost['id']);
 
         $matrizModel = new MatrizCurricularModel();
+
         try {
+            $matrizModel->verificarReferencias(['id' => $id]);
 
             if ($matrizModel->delete($id)) {
-                session()->setFlashdata('sucesso', 'Matriz excluído com sucesso.');
+                session()->setFlashdata('sucesso', 'Matriz Curricular removida com sucesso!');
                 return redirect()->to(base_url('/sys/matriz'));
             } else {
+                session()->setFlashdata('erro', 'Erro inesperado ao remover Matriz');
                 return redirect()->to(base_url('/sys/matriz'))->with('erro', 'Falha ao deletar matriz');
             }
         } catch (ReferenciaException $e) {
+            session()->setFlashdata('erro', $e->getMessage());
             return redirect()->to(base_url('/sys/matriz'))->with('erros', ['erro' => $e->getMessage()]);
         }
     }

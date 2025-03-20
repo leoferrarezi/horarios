@@ -35,7 +35,7 @@ class MatrizCurricularModel extends Model
     ];
     protected $validationMessages   = [
         "nome" => [
-            "required" => "O campo nome é obrigatório",
+            "required" => "Informe o nome da Matriz Curricular",
             "max_length" => "O tamanho máximo é 128 caracteres"
         ]
     ];

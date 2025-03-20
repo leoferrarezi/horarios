@@ -52,7 +52,7 @@ class DisciplinasModel extends Model
         "matriz_id" => [
             "required" => "Informe a Matriz Curricular",
             "is_not_unique" => "A Matriz Curricular deve estar cadastrada",
-            "max_length" => "O tamanho máximo é 11 dígitos",
+            "max_length" => "O tamanho máximo de Matriz Curricular é 11 dígitos",
         ],
         "ch" => [
             "required" => "Informe a Carga Horária da disciplina",
@@ -62,7 +62,7 @@ class DisciplinasModel extends Model
         "max_tempos_diarios" => [
             "required" => "Informe o Tempo Máximo Diário",
             "is_natural" => "Tempo Máximo Diário deve ser um número",
-            "max_length" => "O tamanho máximo é 2 dígitos",
+            "max_length" => "O tamanho máximo de Tempo é 2 dígitos",
         ],
         "periodo" => [
             "required" => "Informe o Período da Disciplina",
@@ -71,7 +71,7 @@ class DisciplinasModel extends Model
         ],
         "abreviatura" => [
             "required" => "Informe a Abreviatura da Disciplina",
-            "max_length" => "O tamanho máximo é 32 caracteres",
+            "max_length" => "O tamanho máximo de Abreviatura é 32 caracteres",
         ],
         "grupo_de_ambientes_id" => [
             "required" => "Selecione o Grupo de Ambiente da Disciplina",

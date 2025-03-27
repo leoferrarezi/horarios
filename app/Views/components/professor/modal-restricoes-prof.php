@@ -1,9 +1,6 @@
-<?php
-$diasSemana = [0 => 'Domingo', 1 => 'Segunda-feira', 2 => 'Terça-feira', 3 => 'Quarta-feira', 4 => 'Quinta-feira', 5 => 'Sexta-feira', 6 => 'Sábado'];
-?>
-
 <form id="cadastroHorarios" class="forms-sample" method="post"
-    action='<?php echo base_url('sys/professor/horario/salvarRestricoes'); ?>'>
+    action='<?php echo base_url('sys/professor/salvarRestricoes'); ?>'>
+    <?php echo csrf_field() ?>
 
     <div class="modal fade" id="modal-restricoes-prof" tabindex="-1" aria-labelledby="ModalLabel" style="display: none;"
         aria-hidden="true">
@@ -19,9 +16,10 @@ $diasSemana = [0 => 'Domingo', 1 => 'Segunda-feira', 2 => 'Terça-feira', 3 => '
                     </button>
                 </div>
 
-                
+
 
                 <div class="modal-body">
+                    <input type="hidden" name="professorID" id="professorID">
                     <?php $first = true; ?>
                     <!-- Navegação das Abas -->
                     <ul class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
@@ -80,29 +78,29 @@ $diasSemana = [0 => 'Domingo', 1 => 'Segunda-feira', 2 => 'Terça-feira', 3 => '
                                                             </td>
                                                             <td class="d-flex justify-content-center">
                                                                 <input type="radio" class="btn-check"
-                                                                    name="preferencia-<?= strtolower($dia) ?>"
-                                                                    id="preferencia_<?= strtolower($dia) ?>_none"
+                                                                    name="preferencia-<?= strtolower($dia) . "_" . $horario['id'] ?>"
+                                                                    id="preferencia_<?= strtolower($dia) . "_" . $horario['id'] ?>_none"
                                                                     autocomplete="off" value="0" checked>
                                                                 <label class="btn btn-sm btn-outline-secondary"
-                                                                    for="preferencia_<?= strtolower($dia) ?>_none">
+                                                                    for="preferencia_<?= strtolower($dia) . "_" . $horario['id'] ?>_none">
                                                                     <i class="fa fa-minus"></i>
                                                                 </label>
 
                                                                 <input type="radio" class="btn-check"
-                                                                    name="preferencia-<?= strtolower($dia) ?>"
-                                                                    id="preferencia_<?= strtolower($dia) ?>_pref"
+                                                                    name="preferencia-<?= strtolower($dia) . "_" . $horario['id'] ?>"
+                                                                    id="preferencia_<?= strtolower($dia) . "_" . $horario['id'] ?>_pref"
                                                                     autocomplete="off" value="1">
                                                                 <label class="btn btn-sm btn-outline-success"
-                                                                    for="preferencia_<?= strtolower($dia) ?>_pref">
+                                                                    for="preferencia_<?= strtolower($dia) . "_" . $horario['id'] ?>_pref">
                                                                     <i class="fa fa-check"></i>
                                                                 </label>
 
                                                                 <input type="radio" class="btn-check"
-                                                                    name="preferencia-<?= strtolower($dia) ?>"
-                                                                    id="preferencia_<?= strtolower($dia) ?>_rest"
+                                                                    name="preferencia-<?= strtolower($dia) . "_" . $horario['id'] ?>"
+                                                                    id="preferencia_<?= strtolower($dia) . "_" . $horario['id'] ?>_rest"
                                                                     autocomplete="off" value="2">
                                                                 <label class="btn btn-sm btn-outline-danger"
-                                                                    for="preferencia_<?= strtolower($dia) ?>_rest">
+                                                                    for="preferencia_<?= strtolower($dia) . "_" . $horario['id'] ?>_rest">
                                                                     <i class="fa fa-times"></i>
                                                                 </label>
                                                             </td>
@@ -134,4 +132,3 @@ $diasSemana = [0 => 'Domingo', 1 => 'Segunda-feira', 2 => 'Terça-feira', 3 => '
         </div>
     </div>
 </form>
-                                                 -->

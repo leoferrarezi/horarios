@@ -31,7 +31,6 @@ class MatrizCurricular extends BaseController
 
 
         if ($matrizModel->insert($dadosLimpos)) {
-
             session()->setFlashdata('sucesso', 'Matriz Curricular cadastrada com sucesso!');
             return redirect()->to(base_url('/sys/matriz'));
         } else {
@@ -78,7 +77,7 @@ class MatrizCurricular extends BaseController
             }
         } catch (ReferenciaException $e) {
             session()->setFlashdata('erro', $e->getMessage());
-            return redirect()->to(base_url('/sys/matriz'))->with('erros', ['erro' => $e->getMessage()]);
+            return redirect()->to(base_url('/sys/matriz'));
         }
     }
 

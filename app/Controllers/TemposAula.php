@@ -16,7 +16,7 @@ class TemposAula extends BaseController
         // Cria a instância de um model do curso
         $tempoAulaModel = new TemposAulasModel();
         $horarioModel = new HorariosModel();
-        
+
         // Faz a busca por todos os cursos cadastrado no banco (tabela cursos)
         $data['temposAulas'] = $tempoAulaModel->orderBy('horario_id', 'asc')->getTemposAulaWithHorario();
         $data['horarios'] = $horarioModel->orderBy('nome', 'asc')->findAll();
@@ -52,11 +52,10 @@ class TemposAula extends BaseController
         $deuErro = false;
 
         //Iterar por todos os possíveis dias da semana
-        for($i = 0 ; $i < 7 ; $i++) {
-            if(isset($dadosPost["$i"])) {
+        for ($i = 0; $i < 7; $i++) {
+            if (isset($dadosPost["$i"])) {
                 $dadosLimpos['dia_semana'] = $i;
-                if($tempoAulaModel->insert($dadosLimpos) == false)
-                {
+                if ($tempoAulaModel->insert($dadosLimpos) == false) {
                     $deuErro = true;
                     break;
                 }
@@ -65,7 +64,7 @@ class TemposAula extends BaseController
 
         if (!$deuErro) {
             //se deu certo, direciona pra lista de cursos
-            session()->setFlashdata('sucesso', 'Tempo de aula cadastrado com sucesso.');
+            session()->setFlashdata('sucesso', 'Tempo de aula cadastrado com sucesso!');
             return redirect()->to(base_url('/sys/tempoAula')); // Redireciona para a página de listagem
         } else {
             $data['erros'] = $tempoAulaModel->errors(); //o(s) erro(s)
@@ -97,7 +96,7 @@ class TemposAula extends BaseController
 
         $tempoAulaModel = new TemposAulasModel();
         if ($tempoAulaModel->save($dadosLimpos)) {
-            session()->setFlashdata('sucesso', 'Tempo de Aula atualizado com sucesso.');
+            session()->setFlashdata('sucesso', 'Dados do Tempo de Aula atualizados com sucesso!');
             return redirect()->to(base_url('/sys/tempoAula')); // Redireciona para a página de listagem
         } else {
             $data['erros'] = $tempoAulaModel->errors(); //o(s) erro(s)
@@ -113,7 +112,7 @@ class TemposAula extends BaseController
         $tempoAulaModel = new TemposAulasModel();
         try {
             if ($tempoAulaModel->delete($id)) {
-                session()->setFlashdata('sucesso', 'Tempo de Aula excluído com sucesso.');
+                session()->setFlashdata('sucesso', 'Tempo de Aula removido com sucesso!');
                 return redirect()->to(base_url('/sys/tempoAula'));
             } else {
                 return redirect()->to(base_url('/sys/tempoAula'))->with('erro', 'Falha ao deletar Tempo de Aula');

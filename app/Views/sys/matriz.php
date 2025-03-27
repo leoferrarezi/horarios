@@ -236,18 +236,33 @@
         <?php endif; ?>
 
         // Exibe mensagem de erro se o flashdata estiver com 'erro'
-        <?php if (session()->getFlashdata('erros')): ?>
+        <?php if (session()->has('erros')): ?>
             <?php foreach (session('erros') as $erro): ?>
                 $.toast({
                     heading: 'Erro',
-                    text: '<?= esc(session()->getFlashdata('erro'), 'js'); ?>',
+                    text: '<?= esc($erro); ?>',
                     showHideTransition: 'fade',
                     icon: 'error',
                     loaderBg: '#dc3545',
-                    position: 'top-center',
-                    hideAfter: 5000
+                    position: 'top-center'
                 });
             <?php endforeach; ?>
         <?php endif; ?>
     });
 </script>
+
+<!-- Exibe mensagem de Exceção -->
+<?php if (session()->getFlashdata('erro')): ?>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            $.toast({
+                heading: 'Erro',
+                text: "<?= esc(session()->getFlashdata('erro'), 'js'); ?>",
+                showHideTransition: 'fade',
+                icon: 'error',
+                loaderBg: '#dc3545',
+                position: 'top-center'
+            });
+        });
+    </script>
+<?php endif; ?>

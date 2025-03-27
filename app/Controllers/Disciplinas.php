@@ -83,6 +83,8 @@ class Disciplinas extends BaseController
 
         $disciplinaModel = new DisciplinasModel();
         try {
+            $disciplinaModel->verificarReferencias(['id' => $id]);
+
             if ($disciplinaModel->delete($id)) {
                 session()->setFlashdata('sucesso', 'Disciplina removida com sucesso!');
                 return redirect()->to(base_url('/sys/disciplina'));
@@ -90,6 +92,7 @@ class Disciplinas extends BaseController
                 return redirect()->to(base_url('/sys/disciplina'))->with('erro', 'Falha ao deletar disciplina');
             }
         } catch (ReferenciaException $e) {
+            session()->setFlashdata('erros', $e->getMessage());
             return redirect()->to(base_url('/sys/disciplina'))->with('erros', ['erro' => $e->getMessage()]);
         }
     }

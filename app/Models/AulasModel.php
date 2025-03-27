@@ -39,14 +39,14 @@ class AulasModel extends Model
     protected $validationMessages   = [
 
         "disciplina_id" => [
-            "required" => "O campo disciplina é obrigatório",
-            "is_not_unique" => "A disciplina deve estar cadastrada",
-            "max_length" => "O tamanho máximo são 11 digitos",
+            "required" => "Informe a disciplina",
+            "is_not_unique" => "A disciplina informada deve estar cadastrada",
+            "max_length" => "O tamanho máximo de Disciplina é 11 caracteres",
         ],
         "turma_id" => [
-            "required" => "O campo turma é obrigatório",
-            "is_not_unique" => "A turma deve estar cadastrada",
-            "max_length" => "O tamanho máximo são 11 digitos",
+            "required" => "Informe a Turma",
+            "is_not_unique" => "A Turma informada deve estar cadastrada",
+            "max_length" => "O tamanho máximo de Turma é 11 caracteres",
         ],
         "versao_id" => [
             "is_not_unique" => "A versão precisa ser registrada",
@@ -77,8 +77,8 @@ class AulasModel extends Model
         // Se o ID for referenciado em outras tabelas, lança a exceção
         if (!empty($referencias)) {
             // Passa o nome das tabelas onde o ID foi encontrado para a exceção
-            throw new ReferenciaException("Está aula não pode ser excluída, porque está em uso. <br>
-                    Para excluir está aula, primeiro remova as associações em {$referencias} que estão utilizando está aula'.");
+            throw new ReferenciaException("Esta aula não pode ser excluída, porque está em uso. <br>
+                    Para excluir esta aula, primeiro remova as associações em {$referencias} que estão utilizando esta aula'.");
         }
 
         // Se não houver referências, retorna os dados para permitir a exclusão
@@ -115,9 +115,9 @@ class AulasModel extends Model
     }
 
     public function getAulasComTurmaDisciplinaEProfessores()
-    {        
+    {
         return $this->select(
-                "aulas.*, 
+            "aulas.*, 
                 turma.sigla as turma_sigla,
                 turma.id as turma_id,
                 disciplina.nome as disciplina_nome,
@@ -126,12 +126,12 @@ class AulasModel extends Model
                 curso.id as curso_id,
                 GROUP_CONCAT(professores.nome) as professores_nome,
                 GROUP_CONCAT(professores.id) as professores_id"
-            )
+        )
             ->join("disciplinas as disciplina", "aulas.disciplina_id = disciplina.id")
             ->join("turmas as turma", "aulas.turma_id = turma.id")
             ->join("cursos as curso", "turma.curso_id = curso.id")
-            ->join("aula_professor as ap", "aulas.id = ap.aula_id",'left') // Relaciona aula com os professores
-            ->join("professores as professores", "ap.professor_id = professores.id",'left') // Relaciona a aula_professor com os professores
+            ->join("aula_professor as ap", "aulas.id = ap.aula_id", 'left') // Relaciona aula com os professores
+            ->join("professores as professores", "ap.professor_id = professores.id", 'left') // Relaciona a aula_professor com os professores
             ->groupBy("aulas.id") // Agrupa por ID da aula
             ->findAll();
     }

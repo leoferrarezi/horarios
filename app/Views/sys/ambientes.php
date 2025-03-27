@@ -1,7 +1,6 @@
 <?php echo view('components/ambientes/modal-cad-ambientes'); ?>
 <?php echo view('components/ambientes/modal-edit-ambientes'); ?>
 <?php echo view('components/ambientes/modal-deletar-ambientes'); ?>
-
 <?php echo view('components/grupo-ambientes/modal-cad-gp-ambientes'); ?>
 <?php echo view('components/grupo-ambientes/modal-deletar-gp-ambientes'); ?>
 <?php echo view('components/grupo-ambientes/modal-edit-gp-ambientes'); ?>

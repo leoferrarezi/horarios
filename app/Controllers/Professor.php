@@ -102,6 +102,8 @@ class Professor extends BaseController
 
         $professorModel = new ProfessorModel();
         try {
+            $professorModel->verificarReferencias(['id' => $id]);
+
             if ($professorModel->delete($id)) {
                 session()->setFlashdata('sucesso', 'Professor removido com sucesso!');
                 return redirect()->to(base_url('/sys/professor'));
@@ -109,6 +111,7 @@ class Professor extends BaseController
                 return redirect()->to(base_url('/sys/professor'))->with('erro', 'Falha ao deletar professor');
             }
         } catch (ReferenciaException $e) {
+            session()->setFlashdata('erro', $e->getMessage());
             return redirect()->to(base_url('/sys/professor'))->with('erros', ['erro' => $e->getMessage()]);
         }
     }

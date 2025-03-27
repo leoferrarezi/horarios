@@ -13,38 +13,20 @@
     </nav>
 </div>
 
-<?php if (session()->has('erros')): ?>
-    <div class="row">
-        <div class="col-lg-12 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <div class="alert alert-danger">
-                        <ul>
-                            <?php foreach (session('erros') as $erro): ?>
-                                <li> <i class="mdi mdi-alert-circle"></i><?= esc($erro) ?></li>
-                            <?php endforeach ?>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-<?php endif; ?>
-
 <div class="row">
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Ações</h4>
                 <div class="row">
-                <div class="col-12 mb-4">
+                    <div class="col-12 mb-4">
                         <button type="button" class="btn btn-primary btn-icon-text" data-bs-toggle="modal" data-bs-target="#modal-cad-horario">
                             <i class="fa fa-plus-circle btn-icon-prepend"></i> Incluir Grade de Horário</button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>    
+    </div>
 </div>
 
 <div class="row">
@@ -218,5 +200,35 @@
                 position: 'top-center'
             });
         <?php endif; ?>
+
+        // Exibe mensagem de erro se o flashdata estiver com 'erro'
+        <?php if (session()->has('erros')): ?>
+            <?php foreach (session('erros') as $erro): ?>
+                $.toast({
+                    heading: 'Erro',
+                    text: '<?= esc($erro); ?>',
+                    showHideTransition: 'fade',
+                    icon: 'error',
+                    loaderBg: '#dc3545',
+                    position: 'top-center'
+                });
+            <?php endforeach; ?>
+        <?php endif; ?>
     });
 </script>
+
+<!-- Exibe mensagem de Exceção -->
+<?php if (session()->getFlashdata('erro')): ?>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            $.toast({
+                heading: 'Erro',
+                text: "<?= esc(session()->getFlashdata('erro'), 'js'); ?>",
+                showHideTransition: 'fade',
+                icon: 'error',
+                loaderBg: '#dc3545',
+                position: 'top-center'
+            });
+        });
+    </script>
+<?php endif; ?>

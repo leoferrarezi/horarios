@@ -42,40 +42,40 @@ class DisciplinasModel extends Model
     ];
     protected $validationMessages   = [
         "nome" => [
-            "required" => "Informe o nome da Disciplina",
-            "max_length" => "O nome da Disciplina deve ter no máximo 128 caracteres",
+            "required" => "Informe o nome da Disciplina.",
+            "max_length" => "O nome da Disciplina deve ter no máximo 128 caracteres.",
         ],
         "codigo" => [
-            "required" => "Informe o Código da Disciplina",
-            "is_unique" => "O Código informado já está cadastrado",
+            "required" => "Informe o Código da Disciplina.",
+            "is_unique" => "O Código informado já está cadastrado.",
         ],
         "matriz_id" => [
-            "required" => "Informe a Matriz Curricular",
-            "is_not_unique" => "A Matriz Curricular deve estar cadastrada",
-            "max_length" => "O tamanho máximo de Matriz Curricular é 11 dígitos",
+            "required" => "Informe a Matriz Curricular.",
+            "is_not_unique" => "A Matriz Curricular deve estar cadastrada.",
+            "max_length" => "O tamanho máximo de Matriz Curricular é 11 dígitos.",
         ],
         "ch" => [
-            "required" => "Informe a Carga Horária da disciplina",
-            "integer" => "Carga Horária deve ser um número inteiro",
-            "max_length" => "O tamanho máximo da Carga Horária é 4 dígitos",
+            "required" => "Informe a Carga Horária da disciplina.",
+            "integer" => "Carga Horária deve ser um número inteiro.",
+            "max_length" => "O tamanho máximo da Carga Horária é 4 dígitos.",
         ],
         "max_tempos_diarios" => [
-            "required" => "Informe o Tempo Máximo Diário",
-            "is_natural" => "Tempo Máximo Diário deve ser um número",
-            "max_length" => "O tamanho máximo de Tempo é 2 dígitos",
+            "required" => "Informe o Tempo Máximo Diário.",
+            "is_natural" => "Tempo Máximo Diário deve ser um número.",
+            "max_length" => "O tamanho máximo de Tempo é 2 dígitos.",
         ],
         "periodo" => [
-            "required" => "Informe o Período da Disciplina",
-            "integer" => "Período deve ser um número inteiro",
-            "max_length" => "O tamanho máximo de Período é 2 dígitos",
+            "required" => "Informe o Período da Disciplina.",
+            "integer" => "Período deve ser um número inteiro.",
+            "max_length" => "O tamanho máximo de Período é 2 dígitos.",
         ],
         "abreviatura" => [
-            "required" => "Informe a Abreviatura da Disciplina",
-            "max_length" => "O tamanho máximo de Abreviatura é 32 caracteres",
+            "required" => "Informe a Abreviatura da Disciplina.",
+            "max_length" => "O tamanho máximo de Abreviatura é 32 caracteres.",
         ],
         "grupo_de_ambientes_id" => [
-            "required" => "Selecione o Grupo de Ambiente da Disciplina",
-            "is_not_unique" => "O Grupo de Ambiente deve estar cadastrado",
+            "required" => "Selecione o Grupo de Ambiente da Disciplina.",
+            "is_not_unique" => "O Grupo de Ambiente deve estar cadastrado.",
         ]
     ];
     protected $skipValidation       = false;
@@ -114,8 +114,8 @@ class DisciplinasModel extends Model
         // Se o ID for referenciado em outras tabelas, lança a exceção
         if (!empty($referencias)) {
             // Passa o nome das tabelas onde o ID foi encontrado para a exceção
-            throw new ReferenciaException("Está disciplina não pode ser excluída, porque está em uso. <br>
-                    Para excluir está disciplina, primeiro remova as associações em {$referencias} que estão utilizando está disciplina'.");
+            throw new ReferenciaException("Esta disciplina não pode ser excluída, porque está em uso. <br>
+                    Para excluir esta disciplina, primeiro remova as associações em {$referencias} que estão utilizando esta disciplina'.");
         }
 
         // Se não houver referências, retorna os dados para permitir a exclusão

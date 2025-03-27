@@ -13,24 +13,6 @@
     </nav>
 </div>
 
-<?php if (session()->has('erros')): ?>
-    <div class="row">
-        <div class="col-lg-12 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <div class="alert alert-danger">
-                        <ul>
-                            <?php foreach (session('erros') as $erro): ?>
-                                <li> <i class="mdi mdi-alert-circle"></i><?= esc($erro) ?></li>
-                            <?php endforeach ?>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-<?php endif; ?>
-
 <div class="row">
     <div class="col-md-6 grid-margin stretch-card">
         <div class="card">
@@ -84,8 +66,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php if (!empty($temposAulas)): // Verifica se há dados ?>
-                                        <?php foreach ($temposAulas as $ta): // Loop para percorrer os dados ?>
+                                    <?php if (!empty($temposAulas)): // Verifica se há dados 
+                                    ?>
+                                        <?php foreach ($temposAulas as $ta): // Loop para percorrer os dados 
+                                        ?>
                                             <tr>
                                                 <td><?php echo esc($ta['nome_horario']); ?></td>
                                                 <td><?php
@@ -153,7 +137,7 @@
                             </table>
                         </div>
                     </div>
-                </div>                
+                </div>
             </div>
         </div>
     </div>
@@ -271,5 +255,35 @@
                 position: 'top-center'
             });
         <?php endif; ?>
+
+        // Exibe mensagem de erro se o flashdata estiver com 'erro'
+        <?php if (session()->has('erros')): ?>
+            <?php foreach (session('erros') as $erro): ?>
+                $.toast({
+                    heading: 'Erro',
+                    text: '<?= esc($erro); ?>',
+                    showHideTransition: 'fade',
+                    icon: 'error',
+                    loaderBg: '#dc3545',
+                    position: 'top-center'
+                });
+            <?php endforeach; ?>
+        <?php endif; ?>
     });
 </script>
+
+<!-- Exibe mensagem de Exceção -->
+<?php if (session()->getFlashdata('erro')): ?>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            $.toast({
+                heading: 'Erro',
+                text: "<?= esc(session()->getFlashdata('erro'), 'js'); ?>",
+                showHideTransition: 'fade',
+                icon: 'error',
+                loaderBg: '#dc3545',
+                position: 'top-center'
+            });
+        });
+    </script>
+<?php endif; ?>

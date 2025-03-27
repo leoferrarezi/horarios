@@ -36,14 +36,14 @@ class CursosModel extends Model
     ];
     protected $validationMessages   = [
         "nome" => [
-            "required" => "O campo nome é obrigatório",
-            "is_unique" => "O Curso já cadastrado",
-            "max_length" => "O tamanho máximo são 128 caracteres",
+            "required" => "Informe o nome do Curso.",
+            "is_unique" => "O Curso informado já está cadastrado.",
+            "max_length" => "O nome do Curso deve ter no máximo 128 caracteres.",
         ],
         "matriz_id" => [
-            "required" => "O campo matriz é obrigatório",
-            "is_not_unique" => "A matriz deve estar cadastrada",
-            "max_length" => "O tamanho máximo são 11 dígitos",
+            "required" => "Informe a Matriz Curricular.",
+            "is_not_unique" => "A Matriz Curricular informada deve estar cadastrada.",
+            "max_length" => "A Matriz Curricular deve ter no máximo 11 caracteres.",
         ]
     ];
     protected $skipValidation       = false;
@@ -60,10 +60,11 @@ class CursosModel extends Model
     protected $beforeDelete   = ['verificarReferencias'];
     protected $afterDelete    = [];
 
-    public function getCursosWithMatriz() {
+    public function getCursosWithMatriz()
+    {
         return $this->select('cursos.*, matriz.nome as nome_matriz')
-                    ->join('matrizes as matriz', 'matriz.id = cursos.matriz_id') // Relacionamento com a tabela users
-                    ->findAll(); // Retorna todos os registros
+            ->join('matrizes as matriz', 'matriz.id = cursos.matriz_id') // Relacionamento com a tabela users
+            ->findAll(); // Retorna todos os registros
     }
 
     public function getCursosNome()

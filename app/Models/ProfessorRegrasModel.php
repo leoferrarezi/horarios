@@ -38,7 +38,7 @@ class ProfessorRegrasModel extends Model
         "professor_id" => [
             "required" => "O campo professor é obrigatório",
             "is_not_unique" => "O professor deve estar cadastrado",
-            "max_length" => "O tamanho máximo é 11 dígito",
+            "max_length" => "O tamanho máximo é 11 dígitos",
         ],
         "tempo_de_aula_id" => [
             "required" => "O campo Tempo de Aula é obrigatório",
@@ -48,7 +48,7 @@ class ProfessorRegrasModel extends Model
         "tipo" => [
             "required" => "O campo tipo deve ser obrigatório",
             "is_natural" => "O campo deve ser um número",
-            "max_length" => "O tamanho máximo é um dígito",
+            "max_length" => "O tamanho máximo é 1 dígito",
         ],
     ];
     protected $skipValidation       = false;

@@ -13,25 +13,6 @@
     </nav>
 </div>
 
-<!-- mostrar ALERT em caso de erro -->
-<?php if (session()->has('erros')): ?>
-    <div class="row">
-        <div class="col-lg-12 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <div class="alert alert-danger">
-                        <ul>
-                            <?php foreach (session('erros') as $erro): ?>
-                                <li> <i class="mdi mdi-alert-circle"></i><?= esc($erro) ?></li>
-                            <?php endforeach ?>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-<?php endif; ?>
-
 <!-- ações e filtros -->
 <div class="row">
     <div class="col-md-6 grid-margin stretch-card">
@@ -157,7 +138,7 @@
                             </table>
                         </div>
                     </div>
-                </div>                
+                </div>
             </div>
         </div>
     </div>
@@ -285,5 +266,35 @@
                 position: 'top-center'
             });
         <?php endif; ?>
+
+        // Exibe mensagem de erro se o flashdata estiver com 'erro'
+        <?php if (session()->has('erros')): ?>
+            <?php foreach (session('erros') as $erro): ?>
+                $.toast({
+                    heading: 'Erro',
+                    text: '<?= esc($erro); ?>',
+                    showHideTransition: 'fade',
+                    icon: 'error',
+                    loaderBg: '#dc3545',
+                    position: 'top-center'
+                });
+            <?php endforeach; ?>
+        <?php endif; ?>
     });
 </script>
+
+<!-- Exibe mensagem de Exceção -->
+<?php if (session()->getFlashdata('erro')): ?>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            $.toast({
+                heading: 'Erro',
+                text: "<?= esc(session()->getFlashdata('erro'), 'js'); ?>",
+                showHideTransition: 'fade',
+                icon: 'error',
+                loaderBg: '#dc3545',
+                position: 'top-center'
+            });
+        });
+    </script>
+<?php endif; ?>

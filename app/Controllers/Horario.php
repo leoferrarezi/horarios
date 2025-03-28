@@ -25,47 +25,51 @@ class Horario extends BaseController
         $dadosPost = $this->request->getPost();
         $dadosLimpos['nome'] = strip_tags($dadosPost['nome']);
 
-        
+
         if ($horarioModel->insert($dadosLimpos)) {
-            
-            session()->setFlashdata('sucesso', 'Horário cadastrado com sucesso.');
+
+            session()->setFlashdata('sucesso', 'Horário cadastrado com sucesso!');
             return redirect()->to(base_url('/sys/horario'));
         } else {
             $data['erros'] = $horarioModel->errors(); //o(s) erro(s)
             return redirect()->to(base_url('/sys/horario'))->with('erros', $data['erros'])->withInput(); //retora com os erros e os inputs
         }
     }
-    public function atualizar(){
+    public function atualizar()
+    {
 
         $dadosPost = $this->request->getPost();
 
-        $dadosLimpos['id'] = strip_tags($dadosPost['id']);        
+        $dadosLimpos['id'] = strip_tags($dadosPost['id']);
         $dadosLimpos['nome'] = strip_tags($dadosPost['nome']);
 
         $horarioModel = new HorariosModel();
-        if($horarioModel->save($dadosLimpos)){
-            session()->setFlashdata('sucesso', 'Horário atualizado com sucesso.');
+        if ($horarioModel->save($dadosLimpos)) {
+            session()->setFlashdata('sucesso', 'Dados do Horário atualizados com sucesso!');
             return redirect()->to(base_url('/sys/horario')); // Redireciona para a página de listagem
         } else {
             $data['erros'] = $horarioModel->errors(); //o(s) erro(s)
             return redirect()->to(base_url('/sys/horario'))->with('erros', $data['erros']); //retora com os erros
         }
-
     }
-    public function deletar(){
-        
+    public function deletar()
+    {
+
         $dadosPost = $this->request->getPost();
         $id = strip_tags($dadosPost['id']);
 
         $horarioModel = new HorariosModel();
         try {
+            $horarioModel->verificarReferencias(['id' => $id]);
+
             if ($horarioModel->delete($id)) {
-                session()->setFlashdata('sucesso', 'Horário excluído com sucesso.');
+                session()->setFlashdata('sucesso', 'Horário removido com sucesso!');
                 return redirect()->to(base_url('/sys/horario'));
             } else {
                 return redirect()->to(base_url('/sys/horario'))->with('erro', 'Falha ao deletar horário');
             }
         } catch (ReferenciaException $e) {
+            session()->setFlashdata('erro', $e->getMessage());
             return redirect()->to(base_url('/sys/horario'))->with('erros', ['erro' => $e->getMessage()]);
         }
     }

@@ -67,7 +67,7 @@
 						</span>
 						<span class="menu-title">Versões de Horários</span>
 					</a>
-				</li>				
+				</li>
 
 				<li class="nav-item nav-category">
 					<span class="nav-link">Cadastros</span>
@@ -193,14 +193,14 @@
 					<button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
 						<span class="mdi mdi-menu"></span>
 					</button>
-					
+
 					<ul class="navbar-nav navbar-nav-right">
 
-					<li class="nav-item">
-						<a class="nav-link count-indicator" id="indicadorVersao" href="<?php echo base_url('sys/versao'); ?>">
-							<i class="mdi mdi-multicast"></i> Versão ativa: <span class="badge badge-primary">2021/2</span>
-						</a>
-					</li>
+						<li class="nav-item">
+							<a class="nav-link count-indicator" id="indicadorVersao" href="<?php echo base_url('sys/versao'); ?>">
+								<i class="mdi mdi-multicast"></i> Versão ativa: <span class="badge badge-primary">2021/2</span>
+							</a>
+						</li>
 						<!--
             <li class="nav-item dropdown border-left">
               <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">

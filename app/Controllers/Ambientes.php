@@ -30,7 +30,7 @@ class Ambientes extends BaseController
         }
 
         $data['content'] = view('sys/ambientes', $data);
-        
+
         return view('dashboard', [
             'ambientes' => $data['ambientes'],
             'grupos' => $data['grupos'],
@@ -41,18 +41,10 @@ class Ambientes extends BaseController
     public function salvarAmbiente()
     {
         $ambiente = new AmbientesModel();
-
-        $data['ambientes'] = $ambiente->findAll();
-
         $dadosPost = $this->request->getPost();
 
-        if ($ambiente->where('nome', $dadosPost['nome'])->first()) {
-            session()->setFlashdata('erro', 'Nome do ambiente já cadastrado');
-            return redirect()->to(base_url('sys/cadastro-ambientes'))->withInput();
-        }
-
         if ($ambiente->insert($dadosPost)) {
-            session()->setFlashdata('sucesso', 'Ambiente cadastrado com sucesso.');
+            session()->setFlashdata('sucesso', 'Ambiente cadastrado com sucesso!');
             return redirect()->to(base_url('sys/cadastro-ambientes'));
         } else {
             $data['erros'] = $ambiente->errors();
@@ -72,7 +64,7 @@ class Ambientes extends BaseController
 
 
         if ($ambiente->update($idAmbiente, ['nome' => $novoNome])) {
-            session()->setFlashdata('sucesso', 'Nome do ambiente atualizado com sucesso.');
+            session()->setFlashdata('sucesso', 'Nome do ambiente atualizado com sucesso!');
         } else {
             session()->setFlashdata('erro', 'Erro ao atualizar o nome do ambiente.');
         }
@@ -98,7 +90,7 @@ class Ambientes extends BaseController
         }
 
         if ($ambienteModel->delete($ambienteId)) {
-            session()->setFlashdata('sucesso', 'Ambiente excluído com sucesso.');
+            session()->setFlashdata('sucesso', 'Ambiente removido com sucesso!');
         } else {
             session()->setFlashdata('erro', 'Erro ao excluir o ambiente.');
         }
@@ -114,7 +106,7 @@ class Ambientes extends BaseController
         $dadosLimpos['nome'] = strip_tags($dadosPost['nome']);
 
         if ($grupoAmbientesModel->insert($dadosLimpos)) {
-            session()->setFlashdata('sucesso', 'Grupo de Ambiente cadastrado com sucesso');
+            session()->setFlashdata('sucesso', 'Grupo de Ambiente cadastrado com sucesso!');
             return redirect()->to(base_url('/sys/cadastro-ambientes'));
         } else {
             $data['erros'] = $grupoAmbientesModel->errors();
@@ -132,7 +124,7 @@ class Ambientes extends BaseController
         $gruposModel = new GruposAmbientesModel();
 
         if ($gruposModel->update($idGrupo, ['nome' => $novoNome])) {
-            session()->setFlashdata('sucesso', 'Nome do grupo atualizado com sucesso.');
+            session()->setFlashdata('sucesso', 'Nome do Grupo de Ambientes atualizado com sucesso!');
         } else {
             session()->setFlashdata('erro', 'Erro ao atualizar o nome do grupo.');
         }
@@ -158,7 +150,7 @@ class Ambientes extends BaseController
         }
 
         if ($gruposAmbientesModel->delete($grupoId)) {
-            session()->setFlashdata('sucesso', 'Grupo de ambientes excluído com sucesso.');
+            session()->setFlashdata('sucesso', 'Grupo de ambientes removido com sucesso!');
         } else {
             session()->setFlashdata('erro', 'Erro ao excluir o grupo de ambientes.');
         }
@@ -180,7 +172,7 @@ class Ambientes extends BaseController
         }
 
         if (empty($ambientes)) {
-            session()->setFlashdata('erro', 'Nenhum ambiente foi selecionado para adicionar ao grupo.');
+            session()->setFlashdata('erro', 'Nenhum Ambiente foi selecionado para adicionar ao grupo!');
             return redirect()->to(base_url('/sys/cadastro-ambientes'));
         }
 
@@ -190,7 +182,7 @@ class Ambientes extends BaseController
                 ->where('ambiente_id', $ambienteId)
                 ->first()
             ) {
-                session()->setFlashdata('erro', "O ambiente já está no grupo.");
+                session()->setFlashdata('erro', "O(s) Ambiente(s) selecionados já está(ão) no grupo!");
                 return redirect()->to(base_url('/sys/cadastro-ambientes'))->withInput();
             }
             $ambienteGrupoModel->insert([
@@ -198,7 +190,7 @@ class Ambientes extends BaseController
                 'ambiente_id' => $ambienteId,
             ]);
         }
-        session()->setFlashdata('sucesso', 'Ambientes adicionados ao grupo com sucesso.');
+        session()->setFlashdata('sucesso', 'Ambiente(s) adicionado(s) ao grupo com sucesso!');
         return redirect()->to(base_url('/sys/cadastro-ambientes'));
     }
 
@@ -220,7 +212,7 @@ class Ambientes extends BaseController
         }
 
         if ($ambienteGrupoModel->delete($relacao['id'])) {
-            session()->setFlashdata('sucesso', 'Ambiente removido do grupo com sucesso.');
+            session()->setFlashdata('sucesso', 'Ambiente removido do grupo com sucesso!');
         } else {
             session()->setFlashdata('erro', 'Falha ao remover o ambiente do grupo.');
         }

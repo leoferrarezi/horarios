@@ -35,9 +35,9 @@ class AmbientesModel extends Model
     ];
     protected $validationMessages   = [
         "nome" => [
-            "required" => "O campo nome é obrigatório",
-            "is_unique" => "O nome deve ser único",
-            "max_length" => "O tamanho máximo e 128 caracteres",
+            "required" => "Informe o nome do Ambiente.",
+            "is_unique" => "Este ambiente já está cadastrado.",
+            "max_length" => "O tamanho do Ambiente deve ser de no máximo 128 caracteres.",
         ]
     ];
     protected $skipValidation       = false;

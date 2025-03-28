@@ -35,8 +35,8 @@ class HorariosModel extends BaseModel
     ];
     protected $validationMessages   = [
         "nome" => [
-            "required" => "O campo nome é obrigatório",
-            "is_unique" => "Hórario já cadastrado",
+            "required" => "Informe o nome da Grade de Horário.",
+            "is_unique" => "A Grade de Horário informada já está cadastrada.",
         ]
     ];
     protected $skipValidation       = false;
@@ -70,24 +70,24 @@ class HorariosModel extends BaseModel
         return $data;
     }
 
-    public function getHorariosAulas() 
+    public function getHorariosAulas()
     {
-         // Conecta ao banco de dados
-         $db = \Config\Database::connect();
-        
-         // Cria o builder para a tabela 'horario'
-         $builder = $this->builder();
-         $builder->orderBy('id');
-         $horarios = $builder->get()->getResultArray();
- 
-         // Para cada horário, busca os tempos de aula relacionados
-         foreach ($horarios as &$horario) {
-             $builder2 = $db->table('tempos_de_aula');
-             $tempos = $builder2->where('horario_id', $horario['id'])->get()->getResultArray();
-             $horario['tempos_de_aula'] = $tempos;
-         }
-         
-         return $horarios;
+        // Conecta ao banco de dados
+        $db = \Config\Database::connect();
+
+        // Cria o builder para a tabela 'horario'
+        $builder = $this->builder();
+        $builder->orderBy('id');
+        $horarios = $builder->get()->getResultArray();
+
+        // Para cada horário, busca os tempos de aula relacionados
+        foreach ($horarios as &$horario) {
+            $builder2 = $db->table('tempos_de_aula');
+            $tempos = $builder2->where('horario_id', $horario['id'])->get()->getResultArray();
+            $horario['tempos_de_aula'] = $tempos;
+        }
+
+        return $horarios;
     }
 
     private function verificarReferenciasEmTabelas($id)
@@ -100,7 +100,7 @@ class HorariosModel extends BaseModel
             'tempos_de_aula' => 'horario_id',
             'turmas' => 'horario_id',
             'turmas' => 'horario_preferencial_id',
-            
+
         ];
 
         $referenciasEncontradas = [];

@@ -29,10 +29,9 @@ class MatrizCurricular extends BaseController
         $dadosPost = $this->request->getPost();
         $dadosLimpos['nome'] = strip_tags($dadosPost['nome']);
 
-        
+
         if ($matrizModel->insert($dadosLimpos)) {
-            
-            session()->setFlashdata('sucesso', 'Matriz cadastrado com sucesso.');
+            session()->setFlashdata('sucesso', 'Matriz Curricular cadastrada com sucesso!');
             return redirect()->to(base_url('/sys/matriz'));
         } else {
             $data['erros'] = $matrizModel->errors(); //o(s) erro(s)
@@ -40,44 +39,50 @@ class MatrizCurricular extends BaseController
         }
     }
 
-    public function atualizar(){
+    public function atualizar()
+    {
 
         $dadosPost = $this->request->getPost();
 
-        $dadosLimpos['id'] = strip_tags($dadosPost['id']);        
+        $dadosLimpos['id'] = strip_tags($dadosPost['id']);
         $dadosLimpos['nome'] = strip_tags($dadosPost['nome']);
 
         $matrizModel = new MatrizCurricularModel();
-        if($matrizModel->save($dadosLimpos)){
-            session()->setFlashdata('sucesso', 'Matriz atualizado com sucesso.');
+        if ($matrizModel->save($dadosLimpos)) {
+            session()->setFlashdata('sucesso', 'Dados da Matriz Curricular atualizados com sucesso!');
             return redirect()->to(base_url('/sys/matriz')); // Redireciona para a página de listagem
         } else {
             $data['erros'] = $matrizModel->errors(); //o(s) erro(s)
             return redirect()->to(base_url('/sys/matriz'))->with('erros', $data['erros']); //retora com os erros
         }
-
     }
 
-    public function deletar(){
-        
+    public function deletar()
+    {
+
         $dadosPost = $this->request->getPost();
         $id = strip_tags($dadosPost['id']);
 
         $matrizModel = new MatrizCurricularModel();
+
         try {
-            
+            $matrizModel->verificarReferencias(['id' => $id]);
+
             if ($matrizModel->delete($id)) {
-                session()->setFlashdata('sucesso', 'Matriz excluído com sucesso.');
+                session()->setFlashdata('sucesso', 'Matriz Curricular removida com sucesso!');
                 return redirect()->to(base_url('/sys/matriz'));
             } else {
+                session()->setFlashdata('erro', 'Erro inesperado ao remover Matriz');
                 return redirect()->to(base_url('/sys/matriz'))->with('erro', 'Falha ao deletar matriz');
             }
         } catch (ReferenciaException $e) {
-            return redirect()->to(base_url('/sys/matriz'))->with('erros', ['erro' => $e->getMessage()]);
+            session()->setFlashdata('erro', $e->getMessage());
+            return redirect()->to(base_url('/sys/matriz'));
         }
     }
 
-    public function importar() {
+    public function importar()
+    {
 
         $file = $this->request->getFile('arquivo');
 
@@ -107,9 +112,8 @@ class MatrizCurricular extends BaseController
         $matrizModel = new MatrizCurricularModel();
         $data['matrizesExistentes'] = [];
 
-        foreach($matrizModel->getMatrizesNome() as $k)
-        {
-            array_push($data['matrizesExistentes'],$k['nome']);
+        foreach ($matrizModel->getMatrizesNome() as $k) {
+            array_push($data['matrizesExistentes'], $k['nome']);
         }
 
         // Lê os dados da planilha
@@ -124,21 +128,19 @@ class MatrizCurricular extends BaseController
 
             $jaTem = false;
 
-            foreach($dataRows as $k => $v)
-            {
-                foreach($v as $k2 => $v2)
-                {                    
-                    if(strcasecmp($rowData[1], $v2) == 0) {
+            foreach ($dataRows as $k => $v) {
+                foreach ($v as $k2 => $v2) {
+                    if (strcasecmp($rowData[1], $v2) == 0) {
                         $jaTem = true;
-                    }                    
+                    }
                 }
             }
-            
-            if(!$jaTem) {
+
+            if (!$jaTem) {
                 $dataRows[] = [
                     'nome' => $rowData[1] ?? null
                 ];
-            }            
+            }
         }
 
         // Remove cabeçalho
@@ -150,7 +152,8 @@ class MatrizCurricular extends BaseController
         return view('dashboard', $data);
     }
 
-    public function processarImportacao() {
+    public function processarImportacao()
+    {
 
         $selecionados = $this->request->getPost('selecionados');
 
@@ -175,7 +178,8 @@ class MatrizCurricular extends BaseController
         return redirect()->to(base_url('/sys/matriz'));
     }
 
-    public function importarDisciplinas() {
+    public function importarDisciplinas()
+    {
 
         $file = $this->request->getFile('arquivo');
 
@@ -212,11 +216,11 @@ class MatrizCurricular extends BaseController
         $primeiraLinha = true;
         foreach ($sheet->getRowIterator() as $row) {
 
-            if($primeiraLinha) {
+            if ($primeiraLinha) {
                 $primeiraLinha = false;
                 continue;
             }
-                
+
             $cellIterator = $row->getCellIterator();
             $cellIterator->setIterateOnlyExistingCells(false);
 
@@ -228,7 +232,7 @@ class MatrizCurricular extends BaseController
             $nome = (isset($rowData[3])) ? explode(" - ", $rowData[3]) : null;
             $nome = (is_array($nome)) ? $nome[1] : null;
 
-            $periodo = (isset($rowData[1])) ? $rowData[1] : null;            
+            $periodo = (isset($rowData[1])) ? $rowData[1] : null;
             $periodo = ($periodo != null && $periodo == "-") ? 0 : $periodo;
 
             $ch = (isset($rowData[9])) ? explode("CH Aula: ", $rowData[9]) : null;
@@ -257,7 +261,8 @@ class MatrizCurricular extends BaseController
         return view('dashboard', $data);
     }
 
-    public function processarImportacaoDisciplinas() {
+    public function processarImportacaoDisciplinas()
+    {
 
         $selecionados = $this->request->getPost('selecionados');
 
@@ -273,7 +278,7 @@ class MatrizCurricular extends BaseController
             $registro = json_decode($registroJson, true);
 
             if (!empty($registro['nome'])) {
-                if(!$disciplinaModel->insert($registro)) {
+                if (!$disciplinaModel->insert($registro)) {
                     print_r($registro);
                     print_r($disciplinaModel->errors());
                     die();

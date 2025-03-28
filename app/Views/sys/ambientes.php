@@ -1,7 +1,6 @@
 <?php echo view('components/ambientes/modal-cad-ambientes'); ?>
 <?php echo view('components/ambientes/modal-edit-ambientes'); ?>
 <?php echo view('components/ambientes/modal-deletar-ambientes'); ?>
-
 <?php echo view('components/grupo-ambientes/modal-cad-gp-ambientes'); ?>
 <?php echo view('components/grupo-ambientes/modal-deletar-gp-ambientes'); ?>
 <?php echo view('components/grupo-ambientes/modal-edit-gp-ambientes'); ?>
@@ -254,7 +253,7 @@
             });
         <?php endif; ?>
 
-        
+
         <?php if (!empty($grupos)): ?>
 
             $("#grupo_ambientes").DataTable({
@@ -289,6 +288,17 @@
                 text: '<?php echo session()->getFlashdata('sucesso'); ?>',
                 showHideTransition: 'slide',
                 icon: 'success',
+                loaderBg: '#f96868',
+                position: 'top-center'
+            });
+        <?php endif; ?>
+
+        <?php if (session()->getFlashdata('erro')): ?>
+            $.toast({
+                heading: 'Erro',
+                text: '<?php echo session()->getFlashdata('erro'); ?>',
+                showHideTransition: 'slide',
+                icon: 'error',
                 loaderBg: '#f96868',
                 position: 'top-center'
             });

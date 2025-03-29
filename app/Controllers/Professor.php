@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\ProfessorModel;
+use App\Models\ProfessorRegrasModel;
 use App\Models\HorariosModel;
 use App\Models\TemposAulasModel;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -216,6 +217,55 @@ class Professor extends BaseController
         $data['content'] = view('sys/preferencias-professor', $data);
         return view('dashboard', $data);
     }
+  
+    public function salvarRestricoes()
+    {
+        $dadosPost = $this->request->getPost();
+        $professorID = $dadosPost['professorID'] ?? null;
 
-    public function salvarRestricoes() {}
+        if (!$professorID) {
+            session()->setFlashdata('erro', "ID do professor é obrigatório");
+            return redirect()->to(base_url('/sys/professor'));
+        }
+
+        $professorRegrasModel = new ProfessorRegrasModel();
+
+        foreach ($dadosPost as $key => $value) {
+            if ($key === 'professorID') {
+                continue;
+            }
+
+            if (preg_match('/_(\d+)$/', $key, $matches)) {
+                $tempoDeAulaID = (int)$matches[1];
+
+                // Verifica se já existe um registro para esse professor e tempo de aula
+                $registroExistente = $professorRegrasModel->where([
+                    'professor_id' => $professorID,
+                    'tempo_de_aula_id' => $tempoDeAulaID
+                ])->first();
+
+                if ($registroExistente) {
+                    // Atualiza se já existir
+                    $professorRegrasModel->update($registroExistente['id'], [
+                        'tipo' => $value
+                    ]);
+                } else {
+                    // Insere novo registro se não existir
+                    $professorRegrasModel->insert([
+                        'professor_id' => $professorID,
+                        'tempo_de_aula_id' => $tempoDeAulaID,
+                        'tipo' => $value
+                    ]);
+                }
+            }
+        }
+
+        session()->setFlashdata('sucesso', "Restrições do professor salvas com sucesso!");
+        return redirect()->to(base_url('/sys/professor'));
+    }
+    public function buscarRestricoes($professorID) {
+        $temposAulaModel = new TemposAulasModel();
+        $data = $temposAulaModel->getTemposAulas($professorID);
+        return $this->response->setJSON($data);
+    }
 }

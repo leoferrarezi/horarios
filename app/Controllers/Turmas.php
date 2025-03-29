@@ -88,6 +88,8 @@ class Turmas extends BaseController
 
         $turmas = new TurmasModel();
         try {
+            $turmas->verificaReferencia(['id' => $id]);
+
             if ($turmas->delete($id)) {
                 session()->setFlashdata('sucesso', 'Turma excluída com sucesso.');
                 return redirect()->to(base_url('/sys/turma'));
@@ -95,11 +97,13 @@ class Turmas extends BaseController
                 return redirect()->to(base_url('/sys/turma'))->with('erro', 'Falha ao deletar disciplina');
             }
         } catch (ReferenciaException $e) {
-            return redirect()->to(base_url('/sys/turma'))->with('erros', ['erro' => $e->getMessage()]);
+            session()->setFlashdata('erro', $e->getMessage());
+            return redirect()->to(base_url('/sys/turma'));
         }
     }
 
-    public function importar() {
+    public function importar()
+    {
 
         $file = $this->request->getFile('arquivo');
 
@@ -133,7 +137,7 @@ class Turmas extends BaseController
         $primeiraLinha = true;
         foreach ($sheet->getRowIterator() as $row) {
 
-            if($primeiraLinha) {
+            if ($primeiraLinha) {
                 $primeiraLinha = false;
                 continue;
             }
@@ -159,7 +163,7 @@ class Turmas extends BaseController
                 'semestre' => $rowData[4] ?? null,
                 'curso' => $curso,
                 'periodo' => $periodo
-            ];            
+            ];
         }
 
         // Exibe os dados lidos na view
@@ -169,7 +173,8 @@ class Turmas extends BaseController
     }
 
 
-    public function processarImportacao() {
+    public function processarImportacao()
+    {
 
         $selecionados = $this->request->getPost('selecionados');
 
@@ -199,5 +204,4 @@ class Turmas extends BaseController
         session()->setFlashdata('sucesso', "{$insertedCount} registros importados com sucesso!");
         return redirect()->to(base_url('/sys/turma'));
     }
-
 }

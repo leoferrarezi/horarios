@@ -14,21 +14,21 @@ use CodeIgniter\Exceptions\ReferenciaException;
 
 class Professor extends BaseController
 {
-    
+
     public function index()
     {
         // Cria a instância de um model do professor
         $professorModel = new ProfessorModel();
-        
+
         $temposAulaModel = new TemposAulasModel();
 
         // Faz a busca por todos os professores cadastrado no banco (tabela professores)
         $data['professores'] = $professorModel->orderBy('nome', 'asc')->findAll();
 
         // Faz a busca por todos os horarios cadastrados no banco (tabela horarios)
-        
+
         $data['temposAula'] = $temposAulaModel->getTemposAulas();
-        
+
         // Exibe os professores cadastrados
         $data['content'] = view('sys/professor', $data);
         return view('dashboard', $data);
@@ -68,7 +68,7 @@ class Professor extends BaseController
         //tenta cadastrar o novo professor no banco
         if ($professor->insert($dadosLimpos)) {
             //se deu certo, direciona pra lista de professores
-            session()->setFlashdata('sucesso', 'Professor cadastrado com sucesso.');
+            session()->setFlashdata('sucesso', 'Professor cadastrado com sucesso!');
             return redirect()->to(base_url('/sys/professor')); // Redireciona para a página de listagem
         } else {
             $data['erros'] = $professor->errors(); //o(s) erro(s)
@@ -76,44 +76,49 @@ class Professor extends BaseController
         }
     }
 
-    public function atualizar(){
+    public function atualizar()
+    {
 
         $dadosPost = $this->request->getPost();
 
-        $dadosLimpos['id'] = strip_tags($dadosPost['id']);        
+        $dadosLimpos['id'] = strip_tags($dadosPost['id']);
         $dadosLimpos['nome'] = strip_tags($dadosPost['nome']);
         $dadosLimpos['email'] = strip_tags($dadosPost['email']);
 
         $professorModel = new ProfessorModel();
-        if($professorModel->save($dadosLimpos)){
-            session()->setFlashdata('sucesso', 'Professor atualizado com sucesso.');
+        if ($professorModel->save($dadosLimpos)) {
+            session()->setFlashdata('sucesso', 'Dados do professor atualizados com sucesso.');
             return redirect()->to(base_url('/sys/professor')); // Redireciona para a página de listagem
         } else {
             $data['erros'] = $professorModel->errors(); //o(s) erro(s)
             return redirect()->to(base_url('/sys/professor'))->with('erros', $data['erros']); //retora com os erros
         }
-
     }
 
-    public function deletar() {
-        
+    public function deletar()
+    {
+
         $dadosPost = $this->request->getPost();
         $id = strip_tags($dadosPost['id']);
 
         $professorModel = new ProfessorModel();
         try {
+            $professorModel->verificarReferencias(['id' => $id]);
+
             if ($professorModel->delete($id)) {
-                session()->setFlashdata('sucesso', 'Professor excluído com sucesso.');
+                session()->setFlashdata('sucesso', 'Professor removido com sucesso!');
                 return redirect()->to(base_url('/sys/professor'));
             } else {
                 return redirect()->to(base_url('/sys/professor'))->with('erro', 'Falha ao deletar professor');
             }
         } catch (ReferenciaException $e) {
+            session()->setFlashdata('erro', $e->getMessage());
             return redirect()->to(base_url('/sys/professor'))->with('erros', ['erro' => $e->getMessage()]);
         }
     }
 
-    public function importar() {
+    public function importar()
+    {
 
         $file = $this->request->getFile('arquivo');
 
@@ -143,9 +148,8 @@ class Professor extends BaseController
         $professorModel = new ProfessorModel();
         $data['professoresExistentes'] = [];
 
-        foreach($professorModel->getProfessoresNome() as $k)
-        {
-            array_push($data['professoresExistentes'],$k['nome']);
+        foreach ($professorModel->getProfessoresNome() as $k) {
+            array_push($data['professoresExistentes'], $k['nome']);
         }
 
         // Lê os dados da planilha e captura Nome e E-mail
@@ -173,7 +177,8 @@ class Professor extends BaseController
         return view('dashboard', $data);
     }
 
-    public function processarImportacao() {
+    public function processarImportacao()
+    {
 
         $selecionados = $this->request->getPost('selecionados');
 
@@ -198,7 +203,8 @@ class Professor extends BaseController
         return redirect()->to(base_url('/sys/professor'));
     }
 
-    public function preferencias($professorId) {
+    public function preferencias($professorId)
+    {
         $professorModel = new ProfessorModel();
         $temposAulaModel = new TemposAulasModel();
 

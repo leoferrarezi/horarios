@@ -55,7 +55,7 @@ class Aulas extends BaseController
 
 		//Criar e testar uma FLAG pra informar se foi sucesso mesmo.
 		//Importante efetuar o rollback de tudo que der errado pra não deixar dados-fantasma no banco
-		session()->setFlashdata('sucesso', 'Aula(s) cadastrada(s) com sucesso.');
+		session()->setFlashdata('sucesso', 'Aula(s) cadastrada(s) com sucesso!');
 		return redirect()->to(base_url('/sys/aulas'));
 		/*
 			$data['erros'] = $aula->errors(); //o(s) erro(s)
@@ -79,10 +79,10 @@ class Aulas extends BaseController
 			$aula_prof->insert($prof_insert);
 		}
 
-		$update = ["id" => $id , "disciplina_id" => $dadosPost['disciplina'] , "turma_id" => $dadosPost['turma'] , "versao_id" => 1];
+		$update = ["id" => $id, "disciplina_id" => $dadosPost['disciplina'], "turma_id" => $dadosPost['turma'], "versao_id" => 1];
 
 		if ($aula->save($update)) {
-			session()->setFlashdata('sucesso', 'Aula atualizada com sucesso.');
+			session()->setFlashdata('sucesso', 'Dados da Aula atualizados com sucesso!');
 			return redirect()->to(base_url('/sys/aulas'));
 		} else {
 			$data['erros'] = $aula->errors(); //o(s) erro(s)
@@ -102,7 +102,7 @@ class Aulas extends BaseController
 		$aula_prof = new AulaProfessorModel();
 		$aula_prof->where('aula_id', $id)->delete();
 		$aula->delete($id);
-		session()->setFlashdata('sucesso', 'Aula excluída com sucesso.');
+		session()->setFlashdata('sucesso', 'Aula Removida com sucesso!');
 		return redirect()->to(base_url('/sys/aulas'));
 
 		//} catch (ReferenciaException $e) {

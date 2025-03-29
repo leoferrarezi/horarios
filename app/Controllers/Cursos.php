@@ -39,50 +39,56 @@ class Cursos extends BaseController
         //tenta cadastrar o novo professor no banco
         if ($cursoModel->insert($dadosLimpos)) {
             //se deu certo, direciona pra lista de cursos
-            session()->setFlashdata('sucesso', 'Curso cadastrado com sucesso.');
+            session()->setFlashdata('sucesso', 'Curso cadastrado com sucesso!');
             return redirect()->to(base_url('/sys/curso')); // Redireciona para a página de listagem
         } else {
             $data['erros'] = $cursoModel->errors(); //o(s) erro(s)
             return redirect()->to(base_url('/sys/curso'))->with('erros', $data['erros'])->withInput(); //retora com os erros e os inputs
         }
     }
-    public function atualizar(){
+    public function atualizar()
+    {
 
         $dadosPost = $this->request->getPost();
 
-        $dadosLimpos['id'] = strip_tags($dadosPost['id']);        
+        $dadosLimpos['id'] = strip_tags($dadosPost['id']);
         $dadosLimpos['nome'] = strip_tags($dadosPost['nome']);
         $dadosLimpos['matriz_id'] = strip_tags($dadosPost['matriz_id']);
 
         $cursoModel = new CursosModel();
-        if($cursoModel->save($dadosLimpos)){
-            session()->setFlashdata('sucesso', 'Curso atualizado com sucesso.');
+        if ($cursoModel->save($dadosLimpos)) {
+            session()->setFlashdata('sucesso', 'Dados do curso atualizados com sucesso!');
             return redirect()->to(base_url('/sys/curso')); // Redireciona para a página de listagem
         } else {
             $data['erros'] = $cursoModel->errors(); //o(s) erro(s)
             return redirect()->to(base_url('/sys/curso'))->with('erros', $data['erros']); //retora com os erros
         }
-
     }
-    public function deletar(){
-        
+    public function deletar()
+    {
+
         $dadosPost = $this->request->getPost();
         $id = strip_tags($dadosPost['id']);
 
         $cursoModel = new CursosModel();
         try {
+
+            $cursoModel->verificarReferencias(['id' => $id]);
+
             if ($cursoModel->delete($id)) {
-                session()->setFlashdata('sucesso', 'Curso excluído com sucesso.');
+                session()->setFlashdata('sucesso', 'Curso removido com sucesso!');
                 return redirect()->to(base_url('/sys/curso'));
             } else {
                 return redirect()->to(base_url('/sys/curso'))->with('erro', 'Falha ao deletar curso');
             }
         } catch (ReferenciaException $e) {
+            session()->setFlashdata('erro', $e->getMessage());
             return redirect()->to(base_url('/sys/curso'))->with('erros', ['erro' => $e->getMessage()]);
         }
     }
 
-    public function importar() {
+    public function importar()
+    {
 
         $file = $this->request->getFile('arquivo');
 
@@ -114,16 +120,15 @@ class Cursos extends BaseController
 
         $matrizModel = new MatrizCurricularModel();
 
-        foreach($cursosModel->getCursosNome() as $k)
-        {
-            array_push($data['cursosExistentes'],$k['nome']);
+        foreach ($cursosModel->getCursosNome() as $k) {
+            array_push($data['cursosExistentes'], $k['nome']);
         }
 
         // Lê os dados da planilha
         $primeiraLinha = true;
         foreach ($sheet->getRowIterator() as $row) {
 
-            if($primeiraLinha) {
+            if ($primeiraLinha) {
                 $primeiraLinha = false;
                 continue;
             }
@@ -138,31 +143,29 @@ class Cursos extends BaseController
 
             $jaTem = false;
 
-            foreach($dataRows as $k => $v)
-            {
-                foreach($v as $k2 => $v2)
-                {                    
-                    if(strcasecmp($rowData[1], $v2) == 0) {
+            foreach ($dataRows as $k => $v) {
+                foreach ($v as $k2 => $v2) {
+                    if (strcasecmp($rowData[1], $v2) == 0) {
                         $jaTem = true;
-                    }                    
+                    }
                 }
             }
-            
-            if(!$jaTem) {
+
+            if (!$jaTem) {
                 $matriz = (isset($rowData[33])) ? explode(" - ", $rowData[33]) : null;
-                $matriz = (is_array($matriz)) ? $matriz[count($matriz)-2] : null;
+                $matriz = (is_array($matriz)) ? $matriz[count($matriz) - 2] : null;
                 $matriz = substr($matriz, 0, -7);
 
                 $existe = 0;
-                if($matrizModel->checkMatrizExists($matriz) > 0)
-                    $existe = 1;                    
+                if ($matrizModel->checkMatrizExists($matriz) > 0)
+                    $existe = 1;
 
                 $dataRows[] = [
                     'nome' => $rowData[1] ?? null,
                     'matriz' => $matriz ?? null,
                     'matrizExiste' => $existe,
                 ];
-            }            
+            }
         }
 
         // Remove cabeçalho
@@ -174,7 +177,8 @@ class Cursos extends BaseController
         return view('dashboard', $data);
     }
 
-    public function processarImportacao() {
+    public function processarImportacao()
+    {
 
         $selecionados = $this->request->getPost('selecionados');
 

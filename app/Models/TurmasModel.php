@@ -44,43 +44,43 @@ class TurmasModel extends Model
 
     protected $validationMessages   = [
         'codigo' => [
-            'required'    => 'O campo código é obrigatório.',
-            'max_length'  => 'O campo código não pode exceder 32 caracteres.'
+            'required'    => 'Informe o Código da Turma.',
+            'max_length'  => 'O Código da Turma deve ter no máximo 32 caracteres.'
         ],
         'sigla' => [
-            'required'    => 'O campo sigla é obrigatório.',
-            'max_length'  => 'O campo sigla não pode exceder 32 caracteres.'
+            'required'    => 'Informe a Sigla da Turma.',
+            'max_length'  => 'A Sigla da Turma deve ter no máximo 32 caracteres.'
         ],
         'ano' => [
-            'required'    => 'O campo ano é obrigatório.',
-            'regex_match' => 'O campo ano deve ser um valor válido, começando com "20" e seguido por dois dígitos (ex: 2000 a 2099).'
+            'required'    => 'Informe o Ano da Turma',
+            'regex_match' => 'O Ano da Turma deve ser um ano válido, começando com "20" e seguido por dois dígitos (ex: 2000 - 2099).'
         ],
         'semestre' => [
-            'required'    => 'O campo semestre é obrigatório.',
-            'regex_match' => 'O campo semestre deve ser "1" ou "2".'
+            'required'    => 'Informe o Semestre da Turma.',
+            'regex_match' => 'O Semestre da Turma deve ser 1 ou 2.'
         ],
         'periodo' => [
-            'required'    => 'O campo período é obrigatório.'
+            'required'    => 'Informe o Período da Turma.'
         ],
         'curso_id' => [
-            'required'       => 'O campo curso é obrigatório.',
-            'max_length'     => 'O campo curso não pode exceder 11 caracteres.',
-            'is_not_unique'  => 'O curso informado não existe no banco de dados.'
+            'required'       => 'Informe o Curso da Turma.',
+            'max_length'     => 'O Curso deve ter no máximo 11 caracteres.',
+            'is_not_unique'  => 'O Curso informado não está cadastrado.'
         ],
         'tempos_diarios' => [
-            'required' => 'O campo tempos diários é obrigatório.',
-            'is_natural'   => 'O campo tempos diários deve conter um número natural.',
+            'required'     => 'Informe os Tempos de Aula Diários da turma.',
+            'is_natural'   => 'O campo tempos diários deve ser um número.',
             'max_length'   => 'O campo tempos diários não pode exceder 2 caracteres.'
         ],
         'horario_id' => [
-            'permit_empty'  => 'O campo horário é opcional.',
-            'is_not_unique' => 'O horário informado não existe no banco de dados.',
-            'max_length'    => 'O campo horário não pode exceder 11 caracteres.'
+            'permit_empty'  => 'O campo Horário é opcional.',
+            'is_not_unique' => 'O Horário informado não está cadastrado.',
+            'max_length'    => 'Horário deve ter no máximo 11 caracteres.'
         ],
         'horario_preferencial_id' => [
-            'permit_empty'  => 'O campo horário preferencial é opcional.',
-            'is_not_unique' => 'O horário preferencial informado não existe no banco de dados.',
-            'max_length'    => 'O campo horário preferencial não pode exceder 11 caracteres.'
+            'permit_empty'  => 'O campo Horário Preferencial é opcional.',
+            'is_not_unique' => 'O Horário Preferencial informado não está cadastrado.',
+            'max_length'    => 'Horário Preferencial deve ter no máximo 11 caracteres.'
         ],
     ];
 
@@ -116,8 +116,8 @@ class TurmasModel extends Model
         // Se o ID for referenciado em outras tabelas, lança a exceção
         if (!empty($referencias)) {
             // Passa o nome das tabelas onde o ID foi encontrado para a exceção
-            throw new ReferenciaException("Está turma não pode ser excluída, porque está em uso. <br>
-                    Para excluir está turma, primeiro remova as associações em {$referencias} que estão utilizando está turma'.");
+            throw new ReferenciaException("Esta turma não pode ser excluída, porque está em uso. <br>
+                    Para excluir esta turma, primeiro remova as associações em {$referencias} que estão utilizando esta turma'.");
         }
 
         // Se não houver referências, retorna os dados para permitir a exclusão

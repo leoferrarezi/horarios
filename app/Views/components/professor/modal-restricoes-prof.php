@@ -24,15 +24,15 @@
                     <!-- Navegação das Abas -->
                     <ul class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                         <?php foreach ($temposAula as $dia => $tempos): ?>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link <?= $first ? 'active' : '' ?>" id="nav-<?= strtolower($dia) ?>-tab"
-                                data-bs-toggle="tab" data-bs-target="#nav-<?= strtolower($dia) ?>" role="tab"
-                                aria-controls="nav-<?= strtolower($dia) ?>"
-                                aria-selected="<?= $first ? 'true' : 'false' ?>" href="#">
-                                <?= $dia ?>
-                            </a>
-                        </li>
-                        <?php $first = false; ?>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link <?= $first ? 'active' : '' ?>" id="nav-<?= strtolower($dia) ?>-tab"
+                                    data-bs-toggle="tab" data-bs-target="#nav-<?= strtolower($dia) ?>" role="tab"
+                                    aria-controls="nav-<?= strtolower($dia) ?>"
+                                    aria-selected="<?= $first ? 'true' : 'false' ?>" href="#">
+                                    <?= $dia ?>
+                                </a>
+                            </li>
+                            <?php $first = false; ?>
                         <?php endforeach; ?>
                     </ul>
 
@@ -118,11 +118,9 @@
                                 </table>
                             </div>
                         </div>
-                        <?php $first = false; ?>
+                            <?php $first = false; ?>
                         <?php endforeach; ?>
                     </div>
-
-
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary me-2">Salvar</button>

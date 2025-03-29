@@ -40,31 +40,32 @@ class TemposAulasModel extends Model
     ];
     protected $validationMessages   = [
         "horario_id" => [
-            "required" => "O campo hórario é obrigatório",
-            "is_not_unique" => "O hórario deve estar cadastrado",
-            "max_length" => "O tamanho máximo é 11 dígitos",
+            "required" => "Informe o Horário.",
+            "is_not_unique" => "O Horário deve estar cadastrado.",
+            "max_length" => "O Horário deve ter no máximo 11 caracteres.",
         ],
         'dia_semana' => [
-            'required'    => 'O campo dia da semana é obrigatório.',
-            'regex_match' => 'O campo dia da semana deve ser um número entre 0 e 6.'
+            'required'    => 'Informe o Dia da Semana.',
+            'regex_match' => 'Dia da Semana deve ser um número entre 0 e 6.'
         ],
         'hora_inicio' => [
-            'required'    => 'O campo hora de início é obrigatório.',
-            'regex_match' => 'O campo hora de início deve estar entre 00 e 23.'
+            'required'    => 'Informe a Hora início.',
+            'regex_match' => 'Hora ínicio deve estar entre 00 e 23.',
         ],
         'minuto_inicio' => [
-            'required'    => 'O campo minuto de início é obrigatório.',
-            'regex_match' => 'O campo minuto de início deve estar entre 00 e 59.'
+            'required'    => 'Informe o Minuto início.',
+            'regex_match' => 'Minuto início deve estar entre 00 e 59.'
         ],
         'hora_fim' => [
-            'required'    => 'O campo hora de término é obrigatório.',
-            'regex_match' => 'O campo hora de término deve estar entre 00 e 23.'
+            'required'    => 'Informe a Hora Fim.',
+            'regex_match' => 'Hora Fim deve estar entre 00 e 23.'
         ],
         'minuto_fim' => [
-            'required'    => 'O campo minuto de término é obrigatório.',
-            'regex_match' => 'O campo minuto de término deve estar entre 00 e 59.'
+            'required'    => 'Informe o Minuto Fim.',
+            'regex_match' => 'Minuto Fim deve estar entre 00 e 59.'
         ],
     ];
+
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 
@@ -79,11 +80,12 @@ class TemposAulasModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    public function getTemposAulaWithHorario() {
+    public function getTemposAulaWithHorario()
+    {
         return $this->select('tempos_de_aula.*, horario.nome as nome_horario')
-                    ->join('horarios as horario', 'horario.id = tempos_de_aula.horario_id') // Relacionamento com a tabela users
-                    ->orderBy('dia_semana,hora_inicio,minuto_inicio')
-                    ->findAll(); // Retorna todos os registros
+            ->join('horarios as horario', 'horario.id = tempos_de_aula.horario_id') // Relacionamento com a tabela users
+            ->orderBy('dia_semana,hora_inicio,minuto_inicio')
+            ->findAll(); // Retorna todos os registros
     }
 
     public function verificarReferencias(array $data)
@@ -112,7 +114,7 @@ class TemposAulasModel extends Model
         $tabelas = [
             'aula_horario' => 'tempo_de_aula_id',
             'professor_regras' => 'tempo_de_aula_id',
-            
+
         ];
 
         $referenciasEncontradas = [];
@@ -132,6 +134,7 @@ class TemposAulasModel extends Model
         // Retorna as tabelas onde o ID foi encontrado
         return $referenciasEncontradas;
     }
+  
     public function getTemposAulas($professorID = null)
     {
         $builder = $this->table('tempos_de_aula');
@@ -167,36 +170,31 @@ class TemposAulasModel extends Model
             $diaSemanaNome = $diasSemana[$tempo['dia_semana']] ?? 'Desconhecido';
             $periodo = $tempo['periodo'];
 
-            $tipo = null;
-            if ($professorID) {
-                $regra = $professorRegrasModel->where([
-                    'professor_id' => $professorID,
-                    'tempo_de_aula_id' => $tempo['id']
-                ])->first();
-                $tipo = $regra['tipo'] ?? -1;
-            }
-
-            $horarioFormatado = [
-                'id' => $tempo['id'],
-                'inicio' => $tempo['inicio'],
-                'fim' => $tempo['fim'],
-                'tipo' => $tipo
-            ];
-
-            if (!isset($horariosPorDia[$diaSemanaNome][$periodo])) {
-                $horariosPorDia[$diaSemanaNome][$periodo] = [];
-            }
-
-            if (!in_array($horarioFormatado, $horariosPorDia[$diaSemanaNome][$periodo])) {
-                $horariosPorDia[$diaSemanaNome][$periodo][] = $horarioFormatado;
-            }
+        $tipo = null;
+        if ($professorID) {
+            $regra = $professorRegrasModel->where([
+                'professor_id' => $professorID,
+                'tempo_de_aula_id' => $tempo['id']
+            ])->first();
+            $tipo = $regra['tipo'] ?? -1;
         }
+
+        $horarioFormatado = [
+            'id' => $tempo['id'],
+            'inicio' => $tempo['inicio'],
+            'fim' => $tempo['fim'],
+            'tipo' => $tipo
+        ];
+
+        if (!isset($horariosPorDia[$diaSemanaNome][$periodo])) {
+            $horariosPorDia[$diaSemanaNome][$periodo] = [];
+        }
+
+        if (!in_array($horarioFormatado, $horariosPorDia[$diaSemanaNome][$periodo])) {
+            $horariosPorDia[$diaSemanaNome][$periodo][] = $horarioFormatado;
+            }
+        }    
 
         return $horariosPorDia;
     }
-
-
-    
-
-
 }

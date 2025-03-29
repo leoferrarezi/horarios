@@ -42,40 +42,40 @@ class DisciplinasModel extends Model
     ];
     protected $validationMessages   = [
         "nome" => [
-            "required" => "O campo nome é obrigatório",
-            "max_length" => "O tamanho máximo e 128 dígitos",
+            "required" => "Informe o nome da Disciplina.",
+            "max_length" => "O nome da Disciplina deve ter no máximo 128 caracteres.",
         ],
         "codigo" => [
-            "required" => "O campo o código é obrigatório",
-            "is_unique" => "O código da disciplina já cadastrado",
+            "required" => "Informe o Código da Disciplina.",
+            "is_unique" => "O Código informado já está cadastrado.",
         ],
         "matriz_id" => [
-            "required" => "O campo matriz é obrigatório",
-            "is_not_unique" => "A matriz deve estar cadastrada",
-            "max_length" => "O tamanho máximo é 11 dígitos",
+            "required" => "Informe a Matriz Curricular.",
+            "is_not_unique" => "A Matriz Curricular deve estar cadastrada.",
+            "max_length" => "O tamanho máximo de Matriz Curricular é 11 dígitos.",
         ],
         "ch" => [
-            "required" => "O campo ch é obrigatório",
-            "integer" => "O campo deve ser um número inteiro",
-            "max_length" => "O tamanho máximo é 4 dígitos",
-        ], 
+            "required" => "Informe a Carga Horária da disciplina.",
+            "integer" => "Carga Horária deve ser um número inteiro.",
+            "max_length" => "O tamanho máximo da Carga Horária é 4 dígitos.",
+        ],
         "max_tempos_diarios" => [
-            "required" => "O campo Tempo Máximo Diario é obrigatório",
-            "is_natural" => "O campo deve ser um número",
-            "max_length" => "O tamanho máximo é 2 dígitos",
+            "required" => "Informe o Tempo Máximo Diário.",
+            "is_natural" => "Tempo Máximo Diário deve ser um número.",
+            "max_length" => "O tamanho máximo de Tempo é 2 dígitos.",
         ],
         "periodo" => [
-            "required" => "O campo período é obrigatório",
-            "integer" => "O campo deve ser um número inteiro",
-            "max_length" => "O tamanho máximo é 2 dígitos",
+            "required" => "Informe o Período da Disciplina.",
+            "integer" => "Período deve ser um número inteiro.",
+            "max_length" => "O tamanho máximo de Período é 2 dígitos.",
         ],
         "abreviatura" => [
-            "required" => "O campo abreviatura é obrigatório",
-            "max_length" => "O tamanho máximo é 32 caracteres",
+            "required" => "Informe a Abreviatura da Disciplina.",
+            "max_length" => "O tamanho máximo de Abreviatura é 32 caracteres.",
         ],
         "grupo_de_ambientes_id" => [
-            "required" => "O campo Grupo de Ambiente é obrigatório",
-            "is_not_unique" => "O Grupo de Ambiente deve estar cadastrado",
+            "required" => "Selecione o Grupo de Ambiente da Disciplina.",
+            "is_not_unique" => "O Grupo de Ambiente deve estar cadastrado.",
         ]
     ];
     protected $skipValidation       = false;
@@ -92,14 +92,16 @@ class DisciplinasModel extends Model
     protected $beforeDelete   = ['verificarReferencias'];
     protected $afterDelete    = [];
 
-    public function getDisciplinaWithMatrizAndGrupo() {
+    public function getDisciplinaWithMatrizAndGrupo()
+    {
         return $this->select('disciplinas.*, matriz.nome as nome_matriz, ga.nome as grupo_de_ambiente')
-                    ->join('matrizes as matriz', 'matriz.id = disciplinas.matriz_id')
-                    ->join('grupos_de_ambientes as ga', 'ga.id = disciplinas.grupo_de_ambientes_id','left')
-                    ->findAll();
+            ->join('matrizes as matriz', 'matriz.id = disciplinas.matriz_id')
+            ->join('grupos_de_ambientes as ga', 'ga.id = disciplinas.grupo_de_ambientes_id', 'left')
+            ->findAll();
     }
 
-    public function deleteAllDisciplinasFromMatriz($matriz) {
+    public function deleteAllDisciplinasFromMatriz($matriz)
+    {
         $this->where('matriz_id', $matriz)->delete();
     }
 
@@ -112,8 +114,8 @@ class DisciplinasModel extends Model
         // Se o ID for referenciado em outras tabelas, lança a exceção
         if (!empty($referencias)) {
             // Passa o nome das tabelas onde o ID foi encontrado para a exceção
-            throw new ReferenciaException("Está disciplina não pode ser excluída, porque está em uso. <br>
-                    Para excluir está disciplina, primeiro remova as associações em {$referencias} que estão utilizando está disciplina'.");
+            throw new ReferenciaException("Esta disciplina não pode ser excluída, porque está em uso. <br>
+                    Para excluir esta disciplina, primeiro remova as associações em {$referencias} que estão utilizando esta disciplina'.");
         }
 
         // Se não houver referências, retorna os dados para permitir a exclusão

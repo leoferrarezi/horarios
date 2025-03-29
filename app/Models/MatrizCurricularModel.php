@@ -35,8 +35,8 @@ class MatrizCurricularModel extends Model
     ];
     protected $validationMessages   = [
         "nome" => [
-            "required" => "O campo nome é obrigatório",
-            "max_length" => "O tamanho máximo é 128 caracteres"
+            "required" => "Informe o nome da Matriz Curricular.",
+            "max_length" => "O tamanho máximo é 128 caracteres."
         ]
     ];
     protected $skipValidation       = false;
@@ -63,8 +63,8 @@ class MatrizCurricularModel extends Model
         // Se o ID for referenciado em outras tabelas, lança a exceção
         if (!empty($referencias)) {
             // Passa o nome das tabelas onde o ID foi encontrado para a exceção
-            throw new ReferenciaException("Está matriz não pode ser excluída, porque está em uso. <br>
-                    Para excluir está matriz, primeiro remova as associações em {$referencias} que estão utilizando está matriz'.");
+            throw new ReferenciaException("Esta matriz não pode ser excluída, porque está em uso. <br>
+                    Para excluir esta matriz, primeiro remova as associações em {$referencias} que estão utilizando esta matriz'.");
         }
 
         // Se não houver referências, retorna os dados para permitir a exclusão

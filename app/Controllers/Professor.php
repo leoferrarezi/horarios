@@ -217,7 +217,7 @@ class Professor extends BaseController
         $data['content'] = view('sys/preferencias-professor', $data);
         return view('dashboard', $data);
     }
-
+  
     public function salvarRestricoes()
     {
         $dadosPost = $this->request->getPost();

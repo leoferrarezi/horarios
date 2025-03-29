@@ -40,6 +40,7 @@
                     <div class="tab-content" id="nav-tabContent">
                         <?php $first = true; ?>
                         <?php foreach ($temposAula as $dia => $tempos): ?>
+
                         <div class="tab-pane fade <?= $first ? 'show active' : '' ?>" id="nav-<?= strtolower($dia) ?>"
                             role="tabpanel" aria-labelledby="nav-<?= strtolower($dia) ?>-tab">
                             <h1 class="text-center">Horários de <?= $dia ?></h1>
@@ -118,6 +119,7 @@
                                 </table>
                             </div>
                         </div>
+
                             <?php $first = false; ?>
                         <?php endforeach; ?>
                     </div>

@@ -150,6 +150,7 @@ class TemposAulasModel extends Model
                 ->orderBy('hora_inicio', 'ASC')
                 ->orderBy('minuto_inicio', 'ASC');
 
+
         $tempos = $builder->get()->getResultArray();
 
         $diasSemana = [
@@ -165,6 +166,7 @@ class TemposAulasModel extends Model
         $horariosPorDia = [];
 
         $professorRegrasModel = new \App\Models\ProfessorRegrasModel();
+
 
         foreach ($tempos as $tempo) {
             $diaSemanaNome = $diasSemana[$tempo['dia_semana']] ?? 'Desconhecido';

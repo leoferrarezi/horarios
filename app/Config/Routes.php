@@ -54,7 +54,9 @@ $routes->group('sys', function ($routes) {
         $routes->post('deletar', 'Professor::deletar');
         $routes->post('importar', 'Professor::importar');
         $routes->post('processarImportacao', 'Professor::processarImportacao');
-        $routes->get('preferencias/(:num)', 'Professor::preferencias/$1');
+        // $routes->get('preferencias/(:num)', 'Professor::preferencias/$1');
+        $routes->post('salvarRestricoes', 'Professor::salvarRestricoes');
+        $routes->get('restricoes/(:num)', 'Professor::buscarRestricoes/$1');
         $routes->get('(:num)', 'Professor::professorPorId/$1');
         //Rota área de trabalho
         $routes->get('horarios', 'Professor::horarios');

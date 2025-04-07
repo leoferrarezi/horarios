@@ -177,17 +177,19 @@
                                                         <th colspan="7" class="text-center bg-primary text-white">MANHÃ</th>
                                                     </tr>
                                                     <tr>
-                                                        <th>Horário</th>
-                                                        <th>Segunda-Feira</th>
-                                                        <th>Terça-Feira</th>
-                                                        <th>Quarta-Feira</th>
-                                                        <th>Quinta-Feira</th>
-                                                        <th>Sexta-Feira</th>
-                                                        <th>Sábado</th>
+                                                    <tr style="height: 90px;">
+                                                        <th class="col-1">Horário</th>
+                                                        <th class="col-1">Segunda-Feira</th>
+                                                        <th class="col-1">Terça-Feira</th>
+                                                        <th class="col-1">Quarta-Feira</th>
+                                                        <th class="col-1">Quinta-Feira</th>
+                                                        <th class="col-1">Sexta-Feira</th>
+                                                        <th class="col-1">Sábado</th>
+                                                    </tr>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
+                                                    <tr style="height: 90px;">
                                                         <td class="coluna-fixa">07:30 - 08:20</td>
                                                         <td class="horario-vazio" data-dia="Segunda" data-horario="07:30 - 08:20"></td>
                                                         <td class="horario-vazio" data-dia="Terça" data-horario="07:30 - 08:20"></td>
@@ -196,7 +198,7 @@
                                                         <td class="horario-vazio" data-dia="Sexta" data-horario="07:30 - 08:20"></td>
                                                         <td class="sabado-fixo">REPOSIÇÃO</td>
                                                     </tr>
-                                                    <tr>
+                                                    <tr style="height: 90px;">
                                                         <td class="coluna-fixa">08:20 - 09:10</td>
                                                         <td class="horario-vazio" data-dia="Segunda" data-horario="08:20 - 09:10"></td>
                                                         <td class="horario-vazio" data-dia="Terça" data-horario="08:20 - 09:10"></td>
@@ -205,7 +207,7 @@
                                                         <td class="horario-vazio" data-dia="Sexta" data-horario="08:20 - 09:10"></td>
                                                         <td class="sabado-fixo">REPOSIÇÃO</td>
                                                     </tr>
-                                                    <tr>
+                                                    <tr style="height: 90px;">
                                                         <td class="coluna-fixa">09:10 - 10:00</td>
                                                         <td class="horario-vazio" data-dia="Segunda" data-horario="09:10 - 10:00"></td>
                                                         <td class="horario-vazio" data-dia="Terça" data-horario="09:10 - 10:00"></td>
@@ -214,7 +216,7 @@
                                                         <td class="horario-vazio" data-dia="Sexta" data-horario="09:10 - 10:00"></td>
                                                         <td class="sabado-fixo">REPOSIÇÃO</td>
                                                     </tr>
-                                                    <tr>
+                                                    <tr style="height: 90px;">
                                                         <td class="coluna-fixa">10:15 - 11:05</td>
                                                         <td class="horario-vazio" data-dia="Segunda" data-horario="10:15 - 11:05"></td>
                                                         <td class="horario-vazio" data-dia="Terça" data-horario="10:15 - 11:05"></td>
@@ -223,7 +225,7 @@
                                                         <td class="horario-vazio" data-dia="Sexta" data-horario="10:15 - 11:05"></td>
                                                         <td class="sabado-fixo">REPOSIÇÃO</td>
                                                     </tr>
-                                                    <tr>
+                                                    <tr style="height: 90px;">
                                                         <td class="coluna-fixa">11:05 - 11:55</td>
                                                         <td class="horario-vazio" data-dia="Segunda" data-horario="11:05 - 11:55"></td>
                                                         <td class="horario-vazio" data-dia="Terça" data-horario="11:05 - 11:55"></td>
@@ -232,7 +234,7 @@
                                                         <td class="horario-vazio" data-dia="Sexta" data-horario="11:05 - 11:55"></td>
                                                         <td class="sabado-fixo">REPOSIÇÃO</td>
                                                     </tr>
-                                                    <tr>
+                                                    <tr style="height: 90px;">
                                                         <td class="coluna-fixa">11:55 - 12:45</td>
                                                         <td class="horario-vazio" data-dia="Segunda" data-horario="11:55 - 12:45"></td>
                                                         <td class="horario-vazio" data-dia="Terça" data-horario="11:55 - 12:45"></td>
@@ -248,18 +250,18 @@
                                                     <tr>
                                                         <th colspan="7" class="text-center bg-primary text-white">TARDE</th>
                                                     </tr>
-                                                    <tr>
-                                                        <th>Horário</th>
-                                                        <th>Segunda-Feira</th>
-                                                        <th>Terça-Feira</th>
-                                                        <th>Quarta-Feira</th>
-                                                        <th>Quinta-Feira</th>
-                                                        <th>Sexta-Feira</th>
-                                                        <th>Sábado</th>
+                                                    <tr style="height: 90px;">
+                                                        <th class="col-1">Horário</th>
+                                                        <th class="col-1">Segunda-Feira</th>
+                                                        <th class="col-1">Terça-Feira</th>
+                                                        <th class="col-1">Quarta-Feira</th>
+                                                        <th class="col-1">Quinta-Feira</th>
+                                                        <th class="col-1">Sexta-Feira</th>
+                                                        <th class="col-1">Sábado</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
+                                                    <tr style="height: 90px;">
                                                         <td class="coluna-fixa">13:30 - 14:20</td>
                                                         <td class="horario-vazio" data-dia="Segunda" data-horario="13:30 - 14:20"></td>
                                                         <td class="horario-vazio" data-dia="Terça" data-horario="13:30 - 14:20"></td>
@@ -268,7 +270,7 @@
                                                         <td class="horario-vazio" data-dia="Sexta" data-horario="13:30 - 14:20"></td>
                                                         <td class="sabado-fixo">REPOSIÇÃO</td>
                                                     </tr>
-                                                    <tr>
+                                                    <tr style="height: 90px;">
                                                         <td class="coluna-fixa">14:20 - 15:10</td>
                                                         <td class="horario-vazio" data-dia="Segunda" data-horario="14:20 - 15:10"></td>
                                                         <td class="horario-vazio" data-dia="Terça" data-horario="14:20 - 15:10"></td>
@@ -277,7 +279,7 @@
                                                         <td class="horario-vazio" data-dia="Sexta" data-horario="14:20 - 15:10"></td>
                                                         <td class="sabado-fixo">REPOSIÇÃO</td>
                                                     </tr>
-                                                    <tr>
+                                                    <tr style="height: 90px;">
                                                         <td class="coluna-fixa">15:10 - 16:00</td>
                                                         <td class="horario-vazio" data-dia="Segunda" data-horario="15:10 - 16:00"></td>
                                                         <td class="horario-vazio" data-dia="Terça" data-horario="15:10 - 16:00"></td>
@@ -286,7 +288,7 @@
                                                         <td class="horario-vazio" data-dia="Sexta" data-horario="15:10 - 16:00"></td>
                                                         <td class="sabado-fixo">REPOSIÇÃO</td>
                                                     </tr>
-                                                    <tr>
+                                                    <tr style="height: 90px;">
                                                         <td class="coluna-fixa">16:15 - 17:05</td>
                                                         <td class="horario-vazio" data-dia="Segunda" data-horario="16:15 - 17:05"></td>
                                                         <td class="horario-vazio" data-dia="Terça" data-horario="16:15 - 17:05"></td>
@@ -295,7 +297,7 @@
                                                         <td class="horario-vazio" data-dia="Sexta" data-horario="16:15 - 17:05"></td>
                                                         <td class="sabado-fixo">REPOSIÇÃO</td>
                                                     </tr>
-                                                    <tr>
+                                                    <tr style="height: 90px;">
                                                         <td class="coluna-fixa">17:05 - 17:55</td>
                                                         <td class="horario-vazio" data-dia="Segunda" data-horario="17:05 - 17:55"></td>
                                                         <td class="horario-vazio" data-dia="Terça" data-horario="17:05 - 17:55"></td>
@@ -304,7 +306,7 @@
                                                         <td class="horario-vazio" data-dia="Sexta" data-horario="17:05 - 17:55"></td>
                                                         <td class="sabado-fixo">REPOSIÇÃO</td>
                                                     </tr>
-                                                    <tr>
+                                                    <tr style="height: 90px;">
                                                         <td class="coluna-fixa">17:55 - 18:45</td>
                                                         <td class="horario-vazio" data-dia="Segunda" data-horario="17:55 - 18:45"></td>
                                                         <td class="horario-vazio" data-dia="Terça" data-horario="17:55 - 18:45"></td>
@@ -318,21 +320,21 @@
                                             <table id="tabela-horarios-noite" class="table table-bordered text-center mb-4">
                                                 <thead>
                                                     <tr>
-                                                        <th colspan="7" class="text-center bg-primary text-white">NOITE</th>
+                                                        <th colspan=" 7" class="text-center bg-primary text-white">NOITE</th>
                                                     </tr>
-                                                    <tr>
-                                                        <th>Horário</th>
-                                                        <th>Segunda-Feira</th>
-                                                        <th>Terça-Feira</th>
-                                                        <th>Quarta-Feira</th>
-                                                        <th>Quinta-Feira</th>
-                                                        <th>Sexta-Feira</th>
-                                                        <th>Sábado</th>
+                                                    <tr style="height: 90px;">
+                                                        <th class="col-1">Horário</th>
+                                                        <th class="col-1">Segunda-Feira</th>
+                                                        <th class="col-1">Terça-Feira</th>
+                                                        <th class="col-1">Quarta-Feira</th>
+                                                        <th class="col-1">Quinta-Feira</th>
+                                                        <th class="col-1">Sexta-Feira</th>
+                                                        <th class="col-1">Sábado</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td class="coluna-fixa">19:00 - 19:50</td>
+                                                    <tr style="height: 90px;">
+                                                        <td class=" coluna-fixa">19:00 - 19:50</td>
                                                         <td class="horario-vazio" data-dia="Segunda" data-horario="19:00 - 19:50"></td>
                                                         <td class="horario-vazio" data-dia="Terça" data-horario="19:00 - 19:50"></td>
                                                         <td class="horario-vazio" data-dia="Quarta" data-horario="19:00 - 19:50"></td>
@@ -340,8 +342,8 @@
                                                         <td class="horario-vazio" data-dia="Sexta" data-horario="19:00 - 19:50"></td>
                                                         <td class="sabado-fixo">REPOSIÇÃO</td>
                                                     </tr>
-                                                    <tr>
-                                                        <td class="coluna-fixa">19:50 - 20:40</td>
+                                                    <tr style="height: 90px;">
+                                                        <td class=" coluna-fixa">19:50 - 20:40</td>
                                                         <td class="horario-vazio" data-dia="Segunda" data-horario="19:50 - 20:40"></td>
                                                         <td class="horario-vazio" data-dia="Terça" data-horario="19:50 - 20:40"></td>
                                                         <td class="horario-vazio" data-dia="Quarta" data-horario="19:50 - 20:40"></td>
@@ -349,7 +351,7 @@
                                                         <td class="horario-vazio" data-dia="Sexta" data-horario="19:50 - 20:40"></td>
                                                         <td class="sabado-fixo">REPOSIÇÃO</td>
                                                     </tr>
-                                                    <tr>
+                                                    <tr style="height: 90px;">
                                                         <td class="coluna-fixa">20:50 - 21:40</td>
                                                         <td class="horario-vazio" data-dia="Segunda" data-horario="20:50 - 21:40"></td>
                                                         <td class="horario-vazio" data-dia="Terça" data-horario="20:50 - 21:40"></td>
@@ -358,7 +360,7 @@
                                                         <td class="horario-vazio" data-dia="Sexta" data-horario="20:50 - 21:40"></td>
                                                         <td class="sabado-fixo">REPOSIÇÃO</td>
                                                     </tr>
-                                                    <tr>
+                                                    <tr style="height: 90px;">
                                                         <td class="coluna-fixa">21:40 - 22:30</td>
                                                         <td class="horario-vazio" data-dia="Segunda" data-horario="21:40 - 22:30"></td>
                                                         <td class="horario-vazio" data-dia="Terça" data-horario="21:40 - 22:30"></td>
@@ -463,34 +465,38 @@
         // Configura o evento dragstart para as disciplinas pendentes
         function configurarDragStart(disciplina) {
             disciplina.addEventListener('dragstart', function(e) {
-                // Cria um elemento fantasma personalizado
+                // Cria um elemento fantasma com classes do Bootstrap
                 const ghost = document.createElement('div');
-                ghost.className = 'drag-ghost';
+                ghost.className = 'card shadow-sm border-primary';
+                ghost.style.width = '180px';
+                ghost.style.pointerEvents = 'none';
+                ghost.style.position = 'absolute';
+                ghost.style.left = '-9999px';
 
                 // Obtém os dados da disciplina
                 const disciplinaNome = disciplina.dataset.disciplina;
                 const professorNome = disciplina.dataset.professor;
+                const quantidade = disciplina.querySelector('td:nth-child(4)').textContent;
 
                 ghost.innerHTML = `
-                    <div>${disciplinaNome}</div>
-                    <div>Prof: ${professorNome}</div>
-                `;
+            <div class="card-body p-2">
+                <h6 class="card-title text-primary mb-1">${disciplinaNome}</h6>
+                <p class="card-text text-muted mb-1 small">
+                    <i class="mdi mdi-account me-1"></i> ${professorNome}
+                </p>
+                <p class="card-text text-muted small mb-0">
+                    <i class="mdi mdi-clock-outline me-1"></i> 1 aula
+                </p>
+            </div>
+        `;
 
-                // Adiciona ao documento
-                ghost.style.position = 'absolute';
-                ghost.style.left = '-9999px';
                 document.body.appendChild(ghost);
-
-                // Define o elemento fantasma para o drag
-                e.dataTransfer.setDragImage(ghost, 0, 0);
-
-                // Define os dados para transferência
+                e.dataTransfer.setDragImage(ghost, 90, 20);
                 e.dataTransfer.setData('text/plain', JSON.stringify({
                     disciplina: disciplinaNome,
                     professor: professorNome
                 }));
 
-                // Remove o fantasma depois de um tempo
                 setTimeout(() => document.body.removeChild(ghost), 0);
             });
         }
@@ -514,13 +520,30 @@
 
                 // Atribui a nova disciplina ao horário
                 horarioSelecionado.innerHTML = `
-                    <div><span data-label="disciplina">${disciplinaSelecionada}</span></div>
-                    <div>Professor(a): <span data-label="professor">${professorSelecionado}</span></div>
-                    <div><span data-label="ambiente">${ambienteSelecionado}</span></div>
-                `;
+<div class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
+    <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
+        <h6 class="card-title mb-0 fs-6 text-primary text-truncate">
+            <i class="mdi mdi-book-outline me-1"></i>
+            ${disciplinaSelecionada}
+        </h6>
+
+        <div class="d-flex align-items-center mb-0 py-0">
+            <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
+            <small class="text-secondary text-truncate">${professorSelecionado}</small>
+        </div>
+
+        <div class="d-flex align-items-center">
+            <i class="mdi mdi-door fs-6 text-muted me-1"></i>
+            <small class="text-secondary">${ambienteSelecionado}</small>
+        </div>
+    </div>
+</div>
+`;
+
                 horarioSelecionado.dataset.disciplina = disciplinaSelecionada;
                 horarioSelecionado.dataset.professor = professorSelecionado;
                 horarioSelecionado.dataset.ambiente = ambienteSelecionado;
+                horarioSelecionado.classList.add('horario-preenchido', 'p-0');
 
                 // Adiciona a classe para identificar que o horário está preenchido
                 horarioSelecionado.classList.add('horario-preenchido');

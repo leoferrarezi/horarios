@@ -19,7 +19,15 @@
   <!-- End layout styles -->
   <!--<link rel="shortcut icon" href="<?php echo base_url("assets/images/favicon.png"); ?>" />-->
 
-  <script src='https://www.google.com/recaptcha/api.js?hl=pt-BR'></script>
+  <style>
+    .rc-anchor-light {
+      background: #000 !important;
+      color: #FFF !important;
+    }
+  </style>
+
+  <script src='https://www.google.com/recaptcha/api.js?hl=pt-BR'></script>  
+
 </head>
 
 <body>
@@ -56,14 +64,18 @@
                   <label for="floatingPasswordInput"><?= lang('Auth.password') ?></label>
                 </div>
 
-                <!-- Remember Me e Captcha -->
-                <div class="d-flex flex-column flex-md-row align-items-center justify-content-between mb-3">
+                <!-- Remember Me -->
+                <div class="form-floating mb-3" style="padding-left: 10px;">
                   <div class="form-check mb-3 mb-md-0">
                     <input type="checkbox" name="remember" class="form-check-input" id="rememberMe" <?php if (old('remember')): ?> checked<?php endif ?>>
                     <label class="form-check-label" for="rememberMe">
                       <?= lang('Auth.rememberMe') ?>
                     </label>
                   </div>
+                </div>
+
+                <!-- Captcha -->
+                <div class="form-floating mb-3">
                   <div class="captcha-container">
                     <div class="g-recaptcha" data-sitekey="6LcEEXEqAAAAAMJ-gOE6cJbtVJwCHKd8raNKw29X" data-action="LOGIN"></div>
                   </div>
@@ -177,6 +189,9 @@
     });
   </script>
   <!-- endinject -->
+
+  
+
 </body>
 
 </html>

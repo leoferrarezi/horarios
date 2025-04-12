@@ -2,6 +2,7 @@
 <?php echo view('components/versoes/modal-edit-versoes'); ?>
 <?php echo view('components/versoes/modal-cad-versoes'); ?>
 <?php echo view('components/versoes/modal-deletar-versoes') ?>
+<?php echo view('components/versoes/modal-copiar-versao') ?>
 
 <div class="page-header">
     <h3 class="page-title">GERENCIAR VERSÕES</h3>
@@ -80,6 +81,20 @@
                                                                 <i class="fa fa-check-square-o"></i>
                                                             </button>
                                                         </span>
+
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Criar cópia da versão">
+                                                            <button
+                                                                type="button"
+                                                                class="justify-content-center align-items-center d-flex btn btn-inverse-primary button-trans-primary btn-icon me-1"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modal-copiar-versao"
+                                                                data-copia-id="<?php echo esc($versao['id']); ?>"
+                                                                data-copia-nome="<?php echo esc($versao['nome']); ?>"
+                                                                data-copia-semestre="<?php echo esc($versao['semestre']); ?>">
+                                                                <!-- icone do botão -->
+                                                                <i class="fa fa-copy"></i>
+                                                            </button>
+                                                        </span>
                                                         
                                                         <span data-bs-toggle="tooltip" data-placement="top" title="Atualizar dados da versão">
                                                             <!-- botão com estilo, ativação do modal, e dados formados para transmitir ao modal -->
@@ -133,6 +148,7 @@
             <div class="col-12 mt-4 d-flex justify-content-end">Legenda</div>
             <div class="col-12 mt-4 d-flex justify-content-end gap-3">
                 <p class="card-description text-end"><i class="fa fa-check-square-o text-info me-2"></i>Ativar &nbsp; &nbsp; </p>
+                <p class="card-description text-end"><i class="fa fa-copy text-primary me-2"></i>Criar Cópia &nbsp; &nbsp; </p>
                 <p class="card-description text-end"><i class="fa fa-edit text-success me-2"></i>Editar &nbsp; &nbsp; </p>
                 <p class="card-description text-end"><i class="fa fa-trash text-danger me-2"></i>Excluir</p>
             </div>
@@ -193,6 +209,23 @@
                 modal.find('#edit-id').val(id);
                 modal.find('#edit-nome').val(nome);
                 modal.find('input[name="semestre"][value="' + semestre + '"]').prop('checked', true);
+
+            });
+
+            $('#modal-copiar-versao').on('show.bs.modal', function(event) {
+                // Obter o DOM do botão que ativou o modal
+                var button = $(event.relatedTarget);
+
+                // Extrair as informações dos atributos data-*
+                var id = button.data('copia-id');
+                var nome = button.data('copia-nome');
+                var semestre = button.data('copia-semestre');
+
+                // Formar o modal com os dados preenchidos
+                var modal = $(this);
+                modal.find('#duplicar-id').val(id);
+                modal.find('#copia-nome').val("Cópia de " + nome);
+                modal.find('input[name="copia-semestre"][value="' + semestre + '"]').prop('checked', true);
 
             });
 

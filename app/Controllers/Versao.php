@@ -13,8 +13,8 @@ class Versao extends BaseController
     {
         $versao = new VersoesModel();
         $data['versoes'] = $versao->orderBy('nome', 'asc')->findAll();
-        $data['content'] = view('sys/versoes', $data);
-        return view('dashboard', $data);
+        $this->content_data['content'] = view('sys/versoes', $data);
+        return view('dashboard', $this->content_data);
     }
 
     public function salvar()

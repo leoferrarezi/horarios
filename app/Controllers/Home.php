@@ -11,15 +11,17 @@ class Home extends BaseController
 
     public function home(): string
     {
-        $pageContent['title'] = "BEM - VINDO (A).";
-        $data['content'] = view('sys/home', $pageContent);
-        return view('dashboard', $data);
+        //Conteúdo da página interna
+        $this->content_data['content'] = view('sys/home');
+
+        //Conteúdo da estrutura externa
+        return view('dashboard', $this->content_data);
     }
 
     public function emConstrucao(): string
     {
         $pageContent['title'] = "Página em Construção";
-        $data['content'] = view('sys/em-construcao', $pageContent);
-        return view('dashboard', $data);
+        $this->content_data['content'] = view('sys/em-construcao', $pageContent);
+        return view('dashboard', $this->content_data);
     }
 }

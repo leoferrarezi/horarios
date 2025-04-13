@@ -9,6 +9,8 @@ use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
+use App\Models\VersoesModel;
+
 /**
  * Class BaseController
  *
@@ -43,6 +45,8 @@ abstract class BaseController extends Controller
      */
     // protected $session;
 
+    protected $content_data;
+
     /**
      * @return void
      */
@@ -54,5 +58,14 @@ abstract class BaseController extends Controller
         // Preload any models, libraries, etc, here.
 
         // E.g.: $this->session = \Config\Services::session();
+
+        //Pegar o nome da versao atual para todas as paginas
+        $versaoModel = new VersoesModel();   
+        $versao = $versaoModel->getVersaoByUser(auth()->id());
+        if(empty($versao)) {
+            $versao = $versaoModel->getLastVersion();
+        }
+        $versao = $versaoModel->find($versao);
+        $this->content_data['versao_nome'] = $versao['nome'];
     }
 }

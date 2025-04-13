@@ -11,7 +11,7 @@ use CodeIgniter\Shield\Authentication\Passwords;
 use CodeIgniter\Email\Email;
 use Config\Services;
 
-class AdminController extends Controller
+class AdminController extends BaseController
 {
     protected $groupModel;
     protected $userGroupModel;
@@ -22,6 +22,19 @@ class AdminController extends Controller
         $this->groupModel = new GroupModel();  // Carregando o modelo de grupos
         $this->userGroupModel = new UserGroupModel();  // Carregando o modelo de associação de usuários a grupos
         $this->userModel = new UserModel();  // Carregando o modelo de usuários do CodeIgniter Shield
+    }
+
+    // Método index - carrega o dashboard com os usuários
+    public function index()
+    {
+        $usuarios = $this->gerenciarUsuarios();
+        $data['usuarios'] = $usuarios;        
+
+        //Conteúdo da página internet
+        $this->content_data['content'] = view('sys/usuarios', $data);
+
+        //Conteúdo da estrutura externa
+        return view('dashboard', $this->content_data);
     }
 
     // Método para registrar um novo usuário
@@ -81,17 +94,7 @@ class AdminController extends Controller
         }
 
         return redirect()->to('/sys/admin')->with('success', 'Usuário cadastrado com sucesso!');
-    }
-
-    // Método index - carrega o dashboard com os usuários
-    public function index()
-    {
-        $usuarios = $this->gerenciarUsuarios();
-        $data['usuarios'] = $usuarios;
-        $data['content'] = view('sys/usuarios', $data);
-
-        return view('dashboard', $data);
-    }
+    }    
 
     // Método usuariosInativos - carrega o dashboard com os usuários inativos
     public function usuariosInativos()
@@ -102,11 +105,11 @@ class AdminController extends Controller
         // Filtra usuários desativados (com deleted_at preenchido)
         $data['usuariosDesativados'] = $userModel->onlyDeleted()->findAll();
 
-        // Carrega a view de usuários inativos dentro do layout do dashboard
-        $data['content'] = view('sys/usuariosInativos', $data);
+        //Conteúdo da página internet
+        $this->content_data['content'] = view('sys/usuariosInativos', $data);
 
-        // Retorna a view do dashboard com o conteúdo
-        return view('dashboard', $data);
+        //Conteúdo da estrutura externa
+        return view('dashboard', $this->content_data);
     }
 
     // Método para buscar usuários e seus grupos

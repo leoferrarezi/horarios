@@ -22,8 +22,8 @@ class TemposAula extends BaseController
         $data['horarios'] = $horarioModel->orderBy('nome', 'asc')->findAll();
 
         // Exibe os cursos cadastrados
-        $data['content'] = view('sys/temposDeAula', $data);
-        return view('dashboard', $data);
+        $this->content_data['content'] = view('sys/temposDeAula', $data);
+        return view('dashboard', $this->content_data);
     }
 
     public function salvar()

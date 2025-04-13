@@ -17,8 +17,8 @@ class MatrizCurricular extends BaseController
     {
         $matrizModel = new MatrizCurricularModel();
         $data['matrizes'] = $matrizModel->orderBy('nome', 'asc')->findAll();
-        $data['content'] = view('sys/matriz', $data);
-        return view('dashboard', $data);
+        $this->content_data['content'] = view('sys/matriz', $data);
+        return view('dashboard', $this->content_data);
     }
 
     public function salvar()
@@ -148,8 +148,8 @@ class MatrizCurricular extends BaseController
 
         // Exibe os dados lidos na view
         $data['matrizes'] = $dataRows;
-        $data['content'] = view('sys/importar-matriz-form', $data);
-        return view('dashboard', $data);
+        $this->content_data['content'] = view('sys/importar-matriz-form', $data);
+        return view('dashboard', $this->content_data);
     }
 
     public function processarImportacao()
@@ -257,8 +257,8 @@ class MatrizCurricular extends BaseController
 
         // Exibe os dados lidos na view
         $data['disciplinas'] = $dataRows;
-        $data['content'] = view('sys/importar-disciplinas-form', $data);
-        return view('dashboard', $data);
+        $this->content_data['content'] = view('sys/importar-disciplinas-form', $data);
+        return view('dashboard', $this->content_data);
     }
 
     public function processarImportacaoDisciplinas()

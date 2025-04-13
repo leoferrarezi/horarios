@@ -22,8 +22,8 @@ class Cursos extends BaseController
         $data['matrizes'] = $matrizCurricularModel->orderBy('nome', 'asc')->findAll();
         $data['cursos'] = $cursoModel->orderBy('nome', 'asc')->getCursosWithMatriz();
         // Exibe os cursos cadastrados
-        $data['content'] = view('sys/cursos', $data);
-        return view('dashboard', $data);
+        $this->content_data['content'] = view('sys/cursos', $data);
+        return view('dashboard', $this->content_data);
     }
 
     public function salvar()
@@ -173,8 +173,8 @@ class Cursos extends BaseController
 
         // Exibe os dados lidos na view
         $data['cursos'] = $dataRows;
-        $data['content'] = view('sys/importar-curso-form', $data);
-        return view('dashboard', $data);
+        $this->content_data['content'] = view('sys/importar-curso-form', $data);
+        return view('dashboard', $this->content_data);
     }
 
     public function processarImportacao()

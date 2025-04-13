@@ -31,8 +31,8 @@ class Aulas extends BaseController
 
 		$data['consulta'] = $aulaModel->getAulasComTurmaDisciplinaEProfessores();
 
-		$data['content'] = view('sys/aulas', $data);
-		return view('dashboard', $data);
+		$this->content_data['content'] = view('sys/aulas', $data);
+        return view('dashboard', $this->content_data);
 	}
 
 	//TODO - SISTEMA DE VERSÕES NAS INSERÇÕES

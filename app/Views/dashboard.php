@@ -198,7 +198,7 @@
 
 						<li class="nav-item">
 							<a class="nav-link count-indicator" id="indicadorVersao" href="<?php echo base_url('sys/versao'); ?>">
-								<i class="mdi mdi-multicast"></i> Versão ativa: <span class="badge badge-primary">2021/2</span>
+								<i class="mdi mdi-multicast"></i> Versão ativa: <span class="badge badge-primary"> <?php echo $versao_nome; ?> </span>
 							</a>
 						</li>
 						<!--

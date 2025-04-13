@@ -78,9 +78,6 @@ class VersoesModel extends Model
 
     private function verificarReferenciasEmTabelas($id)
     {
-        // Conectar ao banco de dados
-        $db = \Config\Database::connect();
-
         // Tabelas e colunas de chave estrangeira a serem verificadas
         $tabelas = [
             //'aula_horario' => 'versao_id',
@@ -92,7 +89,7 @@ class VersoesModel extends Model
 
         // Verificar se o ID é referenciado
         foreach ($tabelas as $tabela => $fk_coluna) {
-            $builder = $db->table($tabela);
+            $builder = $this->db->table($tabela);
             $builder->where($fk_coluna, $id);
             $query = $builder->get();
 
@@ -104,5 +101,29 @@ class VersoesModel extends Model
 
         // Retorna as tabelas onde o ID foi encontrado
         return $referenciasEncontradas;
+    }
+
+    public function getVersaoByUser($user)
+    {
+        $builder = $this->db->table('users');
+        $builder->select('versao_em_uso');
+        $builder->where('id', $user);
+        return $builder->get()->getRowArray()['versao_em_uso'];
+    }
+
+    public function setVersaoByUser($user,$versao)
+    {
+        $builder = $this->db->table('users');
+        $builder->set('versao_em_uso', $versao);
+        $builder->where('id', $user);  
+        $builder->update();
+    }
+
+    public function getLastVersion()
+    {
+        $builder = $this->db->table('versoes');
+        $builder->select('id');
+        $builder->orderBy('id', 'DESC');
+        return $builder->get()->getRowArray()['id'];
     }
 }

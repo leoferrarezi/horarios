@@ -30,15 +30,15 @@ class Professor extends BaseController
         $data['temposAula'] = $temposAulaModel->getTemposAulas();
 
         // Exibe os professores cadastrados
-        $data['content'] = view('sys/professor', $data);
-        return view('dashboard', $data);
+        $this->content_data['content'] = view('sys/professor', $data);
+        return view('dashboard', $this->content_data);
     }
 
     public function cadastro(): string
     {
         // Exibe o formulário de cadastro
-        $data['content'] = view('sys/cadastro-professor');
-        return view('dashboard', $data);
+        $this->content_data['content'] = view('sys/cadastro-professor');
+        return view('dashboard', $this->content_data);
     }
 
     public function professorPorId($id)
@@ -173,8 +173,8 @@ class Professor extends BaseController
 
         // Exibe os dados lidos na view
         $data['professores'] = $dataRows;
-        $data['content'] = view('sys/importar-professor-form', $data);
-        return view('dashboard', $data);
+        $this->content_data['content'] = view('sys/importar-professor-form', $data);
+        return view('dashboard', $this->content_data);
     }
 
     public function processarImportacao()
@@ -214,8 +214,8 @@ class Professor extends BaseController
 
 
         // Exibe os professores cadastrados
-        $data['content'] = view('sys/preferencias-professor', $data);
-        return view('dashboard', $data);
+        $this->content_data['content'] = view('sys/preferencias-professor', $data);
+        return view('dashboard', $this->content_data);
     }
   
     public function salvarRestricoes()

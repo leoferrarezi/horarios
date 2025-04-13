@@ -9,7 +9,7 @@ class TabelaGeral extends BaseController
 {
     public function index()
     {
-        $data['content'] = view('sys/tabela-geral-horarios.php');
-        return view('dashboard', $data);
+        $this->content_data['content'] = view('sys/tabela-geral-horarios.php');
+        return view('dashboard', $this->content_data);
     }
 }

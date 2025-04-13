@@ -24,8 +24,8 @@ class Turmas extends BaseController
         $data['horarios'] = $horarios->orderBy('nome', 'asc')->findAll();
         $data['cursos'] = $cursos->orderBy('nome', 'asc')->findAll();
 
-        $data['content'] = view('sys/turmas', $data);
-        return view('dashboard', $data);
+        $this->content_data['content'] = view('sys/turmas', $data);
+        return view('dashboard', $this->content_data);
     }
 
     public function salvar()
@@ -168,8 +168,8 @@ class Turmas extends BaseController
 
         // Exibe os dados lidos na view
         $data['turmas'] = $dataRows;
-        $data['content'] = view('sys/importar-turmas-form', $data);
-        return view('dashboard', $data);
+        $this->content_data['content'] = view('sys/importar-turmas-form', $data);
+        return view('dashboard', $this->content_data);
     }
 
 

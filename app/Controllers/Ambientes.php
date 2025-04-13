@@ -29,12 +29,12 @@ class Ambientes extends BaseController
                 ->findAll();
         }
 
-        $data['content'] = view('sys/ambientes', $data);
+        $this->content_data['content'] = view('sys/ambientes', $data);
 
         return view('dashboard', [
             'ambientes' => $data['ambientes'],
             'grupos' => $data['grupos'],
-            'content' => view('sys/ambientes', $data)
+            'content' => view('sys/ambientes', $this->content_data)
         ]);
     }
 

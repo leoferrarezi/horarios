@@ -10,6 +10,7 @@ use App\Models\CursosModel;
 use App\Models\DisciplinasModel;
 use App\Models\ProfessorModel;
 use App\Models\MatrizCurricularModel;
+use App\Models\VersoesModel;
 
 class Aulas extends BaseController
 {
@@ -35,16 +36,16 @@ class Aulas extends BaseController
         return view('dashboard', $this->content_data);
 	}
 
-	//TODO - SISTEMA DE VERSÕES NAS INSERÇÕES
 	public function salvar()
 	{
 		$dadosPost = $this->request->getPost();
 
 		$aula = new AulasModel();
 		$aula_prof = new AulaProfessorModel();
+		$versaoModel = new VersoesModel();
 
 		foreach ($dadosPost['turmas'] as $k => $v) {
-			$insert = ["disciplina_id" => $dadosPost['disciplina'], "turma_id" => $v, "versao_id" => 1];
+			$insert = ["disciplina_id" => $dadosPost['disciplina'], "turma_id" => $v, "versao_id" => $versaoModel->getVersaoByUser(auth()->id())];
 			if ($id_aula = $aula->insert($insert)) {
 				foreach ($dadosPost['professores'] as $k2 => $v2) {
 					$prof_insert = ["professor_id" => $v2, "aula_id" => $id_aula];
@@ -70,6 +71,7 @@ class Aulas extends BaseController
 		$id = strip_tags($dadosPost['id']);
 
 		$aula = new AulasModel();
+		$versaoModel = new VersoesModel();
 
 		$aula_prof = new AulaProfessorModel();
 		$aula_prof->where('aula_id', $id)->delete();
@@ -79,7 +81,7 @@ class Aulas extends BaseController
 			$aula_prof->insert($prof_insert);
 		}
 
-		$update = ["id" => $id, "disciplina_id" => $dadosPost['disciplina'], "turma_id" => $dadosPost['turma'], "versao_id" => 1];
+		$update = ["id" => $id, "disciplina_id" => $dadosPost['disciplina'], "turma_id" => $dadosPost['turma'], "versao_id" => $versaoModel->getVersaoByUser(auth()->id())];
 
 		if ($aula->save($update)) {
 			session()->setFlashdata('sucesso', 'Dados da Aula atualizados com sucesso!');

@@ -116,7 +116,7 @@ class VersoesModel extends Model
         $builder = $this->db->table('users');
         $builder->set('versao_em_uso', $versao);
         $builder->where('id', $user);  
-        $builder->update();
+        return $builder->update();
     }
 
     public function getLastVersion()

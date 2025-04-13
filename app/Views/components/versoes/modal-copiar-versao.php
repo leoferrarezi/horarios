@@ -25,12 +25,12 @@
                         <div class="form-check">
                             <div class="form-check">
                                 <label class="form-check-label text-light" for="semRadio1">
-                                    <input class="form-check-input form-check-primary" type="radio" name="copia-semestre" id="semRadio1" value="1" <?php echo (old('copia-semestre') == '1') ? 'checked' : '' ?>> 
+                                    <input class="form-check-input form-check-primary" type="radio" name="semestre" id="semRadio1" value="1" <?php echo (old('copia-semestre') == '1') ? 'checked' : '' ?>> 
                                 1 </label>
                             </div>
                             <div class="form-check">
                                 <label class="form-check-label text-light" for="semRadio2">
-                                    <input class="form-check-input form-check-primary" type="radio" name="copia-semestre" id="semRadio2" value="2" <?php echo (old('copia-semestre') == '2') ? 'checked' : '' ?>> 
+                                    <input class="form-check-input form-check-primary" type="radio" name="semestre" id="semRadio2" value="2" <?php echo (old('copia-semestre') == '2') ? 'checked' : '' ?>> 
                                 2 </label>
                             </div>
                         </div>

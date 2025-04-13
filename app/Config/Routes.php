@@ -139,6 +139,8 @@ $routes->group('sys', function ($routes) {
         $routes->post('salvar', 'Versao::salvar');
         $routes->post('atualizar', 'Versao::atualizar');
         $routes->post('deletar', 'Versao::deletar');
+        $routes->post('ativar', 'Versao::ativar');
+        $routes->post('duplicar', 'Versao::duplicar');
     });
 
     $routes->group('admin', ['filter' => 'admin'], function ($routes) {

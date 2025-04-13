@@ -132,6 +132,7 @@ class AulasModel extends Model
             ->join("cursos as curso", "turma.curso_id = curso.id")
             ->join("aula_professor as ap", "aulas.id = ap.aula_id", 'left') // Relaciona aula com os professores
             ->join("professores as professores", "ap.professor_id = professores.id", 'left') // Relaciona a aula_professor com os professores
+            ->where("aulas.versao_id", (new VersoesModel())->getVersaoByUser(auth()->id())) // Filtra pela versão ativa
             ->groupBy("aulas.id") // Agrupa por ID da aula
             ->findAll();
     }

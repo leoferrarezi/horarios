@@ -60,12 +60,15 @@ abstract class BaseController extends Controller
         // E.g.: $this->session = \Config\Services::session();
 
         //Pegar o nome da versao atual para todas as paginas
-        $versaoModel = new VersoesModel();   
-        $versao = $versaoModel->getVersaoByUser(auth()->id());
-        if(empty($versao)) {
-            $versao = $versaoModel->getLastVersion();
+        if (auth()->loggedIn()) {
+            $versaoModel = new VersoesModel();
+            $versao = $versaoModel->getVersaoByUser(auth()->id());
+            if (empty($versao)) {
+                $versao = $versaoModel->getLastVersion();
+                $versaoModel->setVersaoByUser(auth()->id(), $versao);
+            }
+            $versao = $versaoModel->find($versao);
+            $this->content_data['versao_nome'] = $versao['nome'];
         }
-        $versao = $versaoModel->find($versao);
-        $this->content_data['versao_nome'] = $versao['nome'];
     }
 }

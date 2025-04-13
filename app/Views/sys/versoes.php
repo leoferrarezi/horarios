@@ -3,6 +3,7 @@
 <?php echo view('components/versoes/modal-cad-versoes'); ?>
 <?php echo view('components/versoes/modal-deletar-versoes') ?>
 <?php echo view('components/versoes/modal-copiar-versao') ?>
+<?php echo view('components/versoes/modal-ativar-versao') ?>
 
 <div class="page-header">
     <h3 class="page-title">GERENCIAR VERSÕES</h3>
@@ -74,10 +75,14 @@
                                                 <td>
                                                     <div class="d-flex">
 
-                                                        <span data-bs-toggle="tooltip" data-placement="top" title="Ativar versão">
-                                                            <button
+                                                        <span data-bs-toggle="tooltip" data-placement="top" title="<?php echo ($versao_nome == $versao['nome']) ? "Versão já em uso" : "Ativar versão"; ?>">
+                                                            <button <?php echo ($versao_nome == $versao['nome']) ? "disabled" : ""; ?>
                                                                 type="button"
-                                                                class="justify-content-center align-items-center d-flex btn btn-inverse-info button-trans-info btn-icon me-1">
+                                                                class="justify-content-center align-items-center d-flex btn btn-inverse-info button-trans-info btn-icon me-1"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modal-ativar-versao"
+                                                                data-ativar-id="<?php echo esc($versao['id']); ?>"
+                                                                data-ativar-nome="<?php echo esc($versao['nome']); ?>">
                                                                 <i class="fa fa-check-square-o"></i>
                                                             </button>
                                                         </span>
@@ -225,7 +230,7 @@
                 var modal = $(this);
                 modal.find('#duplicar-id').val(id);
                 modal.find('#copia-nome').val("Cópia de " + nome);
-                modal.find('input[name="copia-semestre"][value="' + semestre + '"]').prop('checked', true);
+                modal.find('input[name="semestre"][value="' + semestre + '"]').prop('checked', true);
 
             });
 
@@ -240,6 +245,19 @@
                 var modal = $(this);
                 modal.find('#deletar-id').val(id);
                 modal.find('#deletar-nome').text(nome);
+            });
+
+            $('#modal-ativar-versao').on('show.bs.modal', function(event) {
+                // Button that triggered the modal
+                var button = $(event.relatedTarget);
+
+                // Extract info from data-* attributes
+                var nome = button.data('ativar-nome');
+                var id = button.data('ativar-id');
+
+                var modal = $(this);
+                modal.find('#ativar-id').val(id);
+                modal.find('#ativar-nome').text(nome);
             });
 
             //Ativa os tooltips dos botões

@@ -136,4 +136,17 @@ class AulasModel extends Model
             ->groupBy("aulas.id") // Agrupa por ID da aula
             ->findAll();
     }
+
+    public function checkAulaByVersao($versao)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->where('versao_id', $versao);
+        $query = $builder->get();
+
+        if ($query->getNumRows() > 0) {
+            return true; // A versão existe na tabela
+        } else {
+            return false; // A versão não existe na tabela
+        }
+    }
 }

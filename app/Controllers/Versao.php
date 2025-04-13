@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\VersoesModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\Exceptions\ReferenciaException;
+use App\Models\AulasModel;
 
 class Versao extends BaseController
 {
@@ -60,8 +61,15 @@ class Versao extends BaseController
     {
         $dadosPost = $this->request->getPost();
         $id = strip_tags($dadosPost['id']);
+        
+        $aulaModel = new AulasModel();
+
+        if($aulaModel->checkAulaByVersao($id)) {
+            return redirect()->to(base_url('/sys/versao'))->with('erros', ['erro' => 'Não é possível excluir a versão, pois existem aulas vinculadas a ela.']);
+        }
 
         $versaoModel = new VersoesModel();
+
         try {
             if ($versaoModel->delete($id)) {
                 

@@ -10,6 +10,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
 use App\Models\VersoesModel;
+use Config\Services;
 
 /**
  * Class BaseController
@@ -68,14 +69,23 @@ abstract class BaseController extends Controller
                 $versaoModel->setVersaoByUser(auth()->id(), $versao);
             }
 
-            if($versao > 0)
-            {
+            if ($versao > 0) {
                 $versao = $versaoModel->find($versao);
                 $this->content_data['versao_nome'] = $versao['nome'];
-            }
-            else
-            {
+            } else {
                 $this->content_data['versao_nome'] = 'Sem versão';
+
+                if($this->request->getUri() != site_url('/sys/versao') && 
+                    $this->request->getUri() != site_url('/sys/versao/salvar') && 
+                    $this->request->getUri() != site_url('/logout')  )
+                {
+                    session()->setFlashdata('erros', ['erro' => 'Nenhuma versão selecionada. Por favor, selecione uma versão para continuar. Se necessário, faça a inclusão de uma versão.']);
+                    $response = Services::response();
+                    $response
+                        ->redirect(site_url('/sys/versao'))
+                        ->send();
+                    exit;
+                }                
             }
         }
     }

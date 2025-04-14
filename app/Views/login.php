@@ -26,7 +26,7 @@
     }
   </style>
 
-  <script src='https://www.google.com/recaptcha/api.js?hl=pt-BR'></script>  
+  <script src='https://www.google.com/recaptcha/api.js?hl=pt-BR'></script>
 
 </head>
 
@@ -76,9 +76,7 @@
 
                 <!-- Captcha -->
                 <div class="form-floating mb-3">
-                  <div class="captcha-container">
-                    <div class="g-recaptcha" data-sitekey="6LcEEXEqAAAAAMJ-gOE6cJbtVJwCHKd8raNKw29X" data-action="LOGIN"></div>
-                  </div>
+                  <div class="g-recaptcha" data-sitekey="6LcEEXEqAAAAAMJ-gOE6cJbtVJwCHKd8raNKw29X" data-action="LOGIN" data-theme="dark"></div>
                 </div>
 
                 <!-- Botão de login -->
@@ -111,8 +109,8 @@
 
                         <p class="fade-in" style="font-size: 13px;">Prof. Leandro Ferrarezi Valiante</p>
                         <p class="fade-in" style="font-size: 13px;">Prof. Paulo Sérgio Tomé</p>
-                        <p class="fade-in" style="font-size: 13px;">Prof. Willians de Paula Pereira</p> 
-                        
+                        <p class="fade-in" style="font-size: 13px;">Prof. Willians de Paula Pereira</p>
+
                         <br>
 
                         <p class="fade-in" style="font-size: 13px;">Gustavo Lage dos Santos</p>
@@ -123,14 +121,14 @@
                         <p class="fade-in" style="font-size: 13px;">Poliana Carvalho Lima</p>
                         <p class="fade-in" style="font-size: 13px;">Sanmara Letícia Nunes de Souza</p>
                         <p class="fade-in" style="font-size: 13px;">Vitória Oliveira de Lima</p>
-                        <p class="fade-in" style="font-size: 13px;">Wagner José Nascimento Relvas</p>                        
-                        
+                        <p class="fade-in" style="font-size: 13px;">Wagner José Nascimento Relvas</p>
+
                         <br>
-                        
+
                         <p class="fade-in" style="font-size: 13px; color: gray; text-decoration: line-through">Fernanda Coelho Nunes</p>
                         <p class="fade-in" style="font-size: 13px; color: gray; text-decoration: line-through">Maria Luiza Botelho Guimarães</p>
                         <p class="fade-in" style="font-size: 13px; color: gray; text-decoration: line-through">Paloma Carvalho Lima</p>
-                        
+
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
@@ -200,7 +198,7 @@
   </script>
   <!-- endinject -->
 
-  
+
 
 </body>
 

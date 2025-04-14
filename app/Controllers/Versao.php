@@ -110,21 +110,23 @@ class Versao extends BaseController
 
     public function duplicar()
     {
-        $versao = new VersoesModel();
+        $versaoModel = new VersoesModel();
 
         //coloca todos os dados do formulario no vetor dadosPost
         $dadosPost = $this->request->getPost();
+        $versaoOld = strip_tags($dadosPost['id']);
         $dadosLimpos['nome'] = strip_tags($dadosPost['nome']);
         $dadosLimpos['semestre'] = strip_tags($dadosPost['semestre']);
 
-        if ($versao->insert($dadosLimpos)) {
+        if ($versaoModel->insert($dadosLimpos)) {
             session()->setFlashdata('sucesso', 'Cópia da versão criada com sucesso.');
 
             //TODO: rotina pra clonar no BD todos os dados que tem relação com versão
+            $versaoModel->copyAllData($versaoOld);
 
             return redirect()->to(base_url('/sys/versao'));
         } else {
-            $data['erros'] = $versao->errors(); //o(s) erro(s)
+            $data['erros'] = $versaoModel->errors(); //o(s) erro(s)
             return redirect()->to(base_url('/sys/versao'))->with('erros', $data['erros'])->withInput(); //retora com os erros e os inputs
         }
     }

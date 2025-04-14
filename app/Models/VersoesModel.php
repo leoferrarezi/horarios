@@ -4,6 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 use CodeIgniter\Exceptions\ReferenciaException;
+use CodeIgniter\Database\RawSql;
 
 class VersoesModel extends Model
 {
@@ -124,6 +125,25 @@ class VersoesModel extends Model
         $builder = $this->db->table('versoes');
         $builder->select('id');
         $builder->orderBy('id', 'DESC');
+
+        if($builder->countAllResults() == 0) {
+            return 0;
+        }
+
         return $builder->get()->getRowArray()['id'];
+    }
+
+    public function copyAllData($versaoOld)
+    {         
+        $builder = $this->db->table('versoes');
+        $builder->select('id');
+        $builder->orderBy('id', 'DESC');
+        $versaoNew = $builder->get()->getRowArray()['id'];
+
+        $builder = $this->db->table('aulas');
+        $query = "SELECT disciplina_id, turma_id, $versaoNew FROM aulas WHERE versao_id = $versaoOld";
+        $sql = $builder->ignore(true)->setQueryAsData(new RawSql($query), null, "disciplina_id, turma_id, versao_id")->insertBatch();
+
+
     }
 }

@@ -249,8 +249,8 @@
 
 
     <!-- Tabela de Horários (Manhã, Tarde, Noite) - Lado direito (9 colunas) -->
-    <div class="col-lg-9 grid-margin stretch-card">
-        <div class="card">
+    <div class="col-lg-9">
+        <div class="card position-fixed" id="cards-container" style="max-width: 60%; max-height: 80%; overflow-y: auto; overflow-x: hidden;">
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">

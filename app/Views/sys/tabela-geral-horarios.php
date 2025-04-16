@@ -1,4 +1,18 @@
-<!-- incluir os componentes modais antes do restante do documento -->
+<style>
+    #cards-container::-webkit-scrollbar {
+        width: 5px;
+        background-color: #000;
+    }
+
+    #cards-container::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 5px rgba(6, 6, 6, 0.3);
+    }
+
+    #cards-container::-webkit-scrollbar-thumb {
+        background-color: #333;
+        outline: 1px solid slategrey;
+    }
+</style>
 
 
 <!-- Modal -->
@@ -60,27 +74,16 @@
     </div>
 </div>
 
-<div class="page-header">
-    <h3 class="page-title">TABELA GERAL DE HORÁRIOS</h3>
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="<?= base_url('/sys/home') ?>">Início</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Tabela Geral de Horários</li>
-        </ol>
-    </nav>
-</div>
-
 <!-- Filtro -->
 <div class="row">
-    <div class="col-md-12 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Filtros</h4>
+    <div class="col-md-3">
+        <div class="card position-fixed" id="cards-container" style="max-width: 20%; max-height: 80%; overflow-y: auto; overflow-x: hidden;">
+            <div class="card-body overflow">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-12">
                         <div class="form-group">
-                            <label for="curso">Curso</label>
-                            <select class="js-example-basic-multiple" multiple="multiple" style="width:100%" id="curso">
+                            <label for="curso">Curso:</label>
+                            <select class="js-example-basic-single" style="width:100%" id="curso">
                                 <option value="ADS">Análise e Desenvolvimento de Sistemas</option>
                                 <option value="ECA">Engenharia de Controle e Automação</option>
                                 <option value="FIS">Licenciatura em Física</option>
@@ -88,11 +91,12 @@
                             </select>
                         </div>
                     </div>
-
-                    <div class="col-md-2">
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
                         <div class="form-group">
-                            <label for="turma">Turma</label>
-                            <select class="js-example-basic-multiple" multiple="multiple" style="width:100%" id="turma">
+                            <label for="turma">Turma:</label>
+                            <select class="js-example-basic-single" style="width:100%" id="turma">
                                 <option value="1">1º período </option>
                                 <option value="2">2º período </option>
                                 <option value="3">3º período </option>
@@ -101,106 +105,138 @@
                             </select>
                         </div>
                     </div>
-
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label for="professor">Professor</label>
-                            <select class="js-example-basic-single" style="width:100%" id="professor">
-                                <option value="0">-</option>
-                                <option value="1">Professor Artur</option>
-                                <option value="2">Professora Berenice</option>
-                                <option value="3">Professor Carlos</option>
-                                <option value="4">Professor Daniel</option>
-                                <option value="5">Professora Elaine</option>
-                                <option value="6">Professor Francisca</option>
-                                <option value="7">Professor Glória</option>
-                                <option value="8">Professor Hugo</option>
-                                <option value="9">Professor Ilda</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label for="ambiente">Ambiente</label>
-                            <select class="js-example-basic-single" style="width:100%" id="ambiente">
-                                <option value="0">-</option>
-                                <option value="1">Sala 101</option>
-                                <option value="2">Sala 102</option>
-                                <option value="3">Sala 103</option>
-                                <option value="4">Sala 104</option>
-                                <option value="5">Laboratório 1</option>
-                                <option value="6">Quadra A</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3 d-flex align-items-end">
-                        <button type="submit" class="btn btn-primary me-2">
-                            <i class="mdi mdi-filter me-1"></i>Filtrar
-                        </button>
-                        <button type="submit" class="btn btn-light">
-                            <i class="mdi mdi-filter-remove me-1"></i>Limpar
-                        </button>
-                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Container principal com as duas tabelas lado a lado -->
-<div class="row">
-    <!-- Tabela de Disciplinas Pendentes - Lado esquerdo (4 colunas) -->
-    <div class="col-lg-3 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Disciplinas Pendentes</h4>
+                <h6 class="card-title text-center"> Aulas Pendentes (80)</h6>
                 <div class="row">
                     <div class="col-12">
-                        <div class="table-responsive">
-                            <table id="disciplinas-pendentes" class="table mb-4">
-                                <thead>
-                                    <tr>
-                                        <th>Id</th>
-                                        <th>Disciplina</th>
-                                        <th>Professor</th>
-                                        <th>Tempos</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr draggable="true" data-disciplina="Matemática" data-professor="Artur" data-ambiente="Sala 101">
-                                        <td>1</td>
-                                        <td>Matemática</td>
-                                        <td>Artur</td>
-                                        <td class="text-center">2</td>
-                                    </tr>
-                                    <tr draggable="true" data-disciplina="Filosofia" data-professor="Berenice" data-ambiente="Sala 102">
-                                        <td>2</td>
-                                        <td>Filosofia</td>
-                                        <td>Berenice</td>
-                                        <td class="text-center">4</td>
-                                    </tr>
-                                    <tr draggable="true" data-disciplina="Português" data-professor="Carlos" data-ambiente="Sala 103">
-                                        <td>3</td>
-                                        <td>Português</td>
-                                        <td>Carlos</td>
-                                        <td class="text-center">3</td>
-                                    </tr>
-                                    <tr draggable="true" data-disciplina="História" data-professor="Daniel" data-ambiente="Sala 104">
-                                        <td>4</td>
-                                        <td>História</td>
-                                        <td>Daniel</td>
-                                        <td class="text-center">2</td>
-                                    </tr>
-                                    <tr draggable="true" data-disciplina="Geografia" data-professor="Elaine" data-ambiente="Laboratório 1">
-                                        <td>5</td>
-                                        <td>Geografia</td>
-                                        <td>Elaine</td>
-                                        <td class="text-center">3</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+
+                        <div draggable="true" data-disciplina="Matemática" data-professor="Jackson" data-aulas="4 aulas" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
+                            <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
+                                <h6 class="text-primary">
+                                    <i class="mdi mdi-book-outline me-1"></i> Matemática
+                                </h6>
+                                <div class="d-flex align-items-center mb-0 py-0">
+                                    <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
+                                    <small class="text-secondary">Jackson</small>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="mdi mdi-door fs-6 text-muted me-1"></i>
+                                    <small class="text-secondary">4 aulas</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div draggable="true" data-disciplina="Organização de Computadores" data-professor="Brenda" data-aulas="2 aulas" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
+                            <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
+                                <h6 class="text-primary">
+                                    <i class="mdi mdi-book-outline me-1"></i> Algoritimos e Linguagens de Programação
+                                </h6>
+                                <div class="d-flex align-items-center mb-0 py-0">
+                                    <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
+                                    <small class="text-secondary">Leandro</small>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="mdi mdi-door fs-6 text-muted me-1"></i>
+                                    <small class="text-secondary">4 aulas</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div draggable="true" data-disciplina="Organização de Computadores" data-professor="Brenda" data-aulas="2 aulas" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
+                            <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
+                                <h6 class="text-primary">
+                                    <i class="mdi mdi-book-outline me-1"></i> Análise e Projetos de Sistemas
+                                </h6>
+                                <div class="d-flex align-items-center mb-0 py-0">
+                                    <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
+                                    <small class="text-secondary">Elisângela</small>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="mdi mdi-door fs-6 text-muted me-1"></i>
+                                    <small class="text-secondary">4 aulas</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div draggable="true" data-disciplina="Organização de Computadores" data-professor="Brenda" data-aulas="2 aulas" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
+                            <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
+                                <h6 class="text-primary">
+                                    <i class="mdi mdi-book-outline me-1"></i> Comunicação e Expressão
+                                </h6>
+                                <div class="d-flex align-items-center mb-0 py-0">
+                                    <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
+                                    <small class="text-secondary">Iza</small>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="mdi mdi-door fs-6 text-muted me-1"></i>
+                                    <small class="text-secondary">2 aulas</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div draggable="true" data-disciplina="Organização de Computadores" data-professor="Brenda" data-aulas="2 aulas" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
+                            <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
+                                <h6 class="text-primary">
+                                    <i class="mdi mdi-book-outline me-1"></i> Organização de Computadores
+                                </h6>
+                                <div class="d-flex align-items-center mb-0 py-0">
+                                    <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
+                                    <small class="text-secondary">Brenda</small>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="mdi mdi-door fs-6 text-muted me-1"></i>
+                                    <small class="text-secondary">2 aulas</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div draggable="true" data-disciplina="Algoritmos Avançados" data-professor="Leandro" data-aulas="2 aulas" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
+                            <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
+                                <h6 class="text-primary">
+                                    <i class="mdi mdi-book-outline me-1"></i> Algoritmos Avançados
+                                </h6>
+                                <div class="d-flex align-items-center mb-0 py-0">
+                                    <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
+                                    <small class="text-secondary">Leandro</small>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="mdi mdi-door fs-6 text-muted me-1"></i>
+                                    <small class="text-secondary">2 aulas</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div draggable="true" data-disciplina="Análise Orientada a Objetos" data-professor="Elisangela" data-aulas="4 aulas" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
+                            <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
+                                <h6 class="text-primary">
+                                    <i class="mdi mdi-book-outline me-1"></i> Análise Orientada a Objetos
+                                </h6>
+                                <div class="d-flex align-items-center mb-0 py-0">
+                                    <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
+                                    <small class="text-secondary">Elisangela</small>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="mdi mdi-door fs-6 text-muted me-1"></i>
+                                    <small class="text-secondary">4 aulas</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div draggable="true" data-disciplina="Banco de Dados: Modelagem e Projetos" data-professor="Fernando" data-aulas="4 aulas" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
+                            <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
+                                <h6 class="text-primary">
+                                    <i class="mdi mdi-book-outline me-1"></i> Banco de Dados: Modelagem e Projetos
+                                </h6>
+                                <div class="d-flex align-items-center mb-0 py-0">
+                                    <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
+                                    <small class="text-secondary">Fernando</small>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="mdi mdi-door fs-6 text-muted me-1"></i>
+                                    <small class="text-secondary">4 aulas</small>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -208,16 +244,20 @@
         </div>
     </div>
 
-    <!-- Tabela de Horários (Manhã, Tarde, Noite) - Lado direito (8 colunas) -->
+
+
+
+
+    <!-- Tabela de Horários (Manhã, Tarde, Noite) - Lado direito (9 colunas) -->
     <div class="col-lg-9 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <div id="alert-horarios-vazios" class="alert alert-fill-warning" style="display: none;">
+                        <!--<div id="alert-horarios-vazios" class="alert alert-fill-warning" style="display: none;">
                             <i class="mdi mdi-alert-circle"></i>
                             Há <span id="contador-horarios-vazios">0</span> aulas sem horário atribuído.
-                        </div>
+                        </div>-->
                         <div class="table-responsive">
                             <table id="tabela-horarios-manha" class="table table-bordered text-center mb-4">
                                 <!-- MANHÃ -->
@@ -427,6 +467,7 @@
 </div>
 
 
+
 <!-- Referente select2 do filtro -->
 <script>
     (function($) {
@@ -438,8 +479,7 @@
             $(".js-example-basic-multiple").select2();
         }
     })(jQuery);
-</script>
-<script>
+
     document.addEventListener('DOMContentLoaded', function() {
         const alertHorariosVazios = document.getElementById('alert-horarios-vazios');
         const contadorHorariosVazios = document.getElementById('contador-horarios-vazios');
@@ -546,7 +586,7 @@
 
                 horarioSelecionado.dataset.disciplina = disciplinaSelecionada;
                 horarioSelecionado.dataset.professor = professorSelecionado;
-                horarioSelecionado.dataset.ambiente = ambienteSelecionado;
+                //horarioSelecionado.dataset.ambiente = ambienteSelecionado;
                 horarioSelecionado.classList.add('horario-preenchido', 'p-0');
 
                 // Adiciona a classe para identificar que o horário está preenchido
@@ -627,7 +667,7 @@
                 horarioSelecionado.innerHTML = '';
                 delete horarioSelecionado.dataset.disciplina;
                 delete horarioSelecionado.dataset.professor;
-                delete horarioSelecionado.dataset.ambiente;
+                //delete horarioSelecionado.dataset.ambiente;
 
                 // Remove a classe de horário preenchido
                 horarioSelecionado.classList.remove('horario-preenchido');
@@ -644,8 +684,8 @@
         function moverDisciplinaParaPendentes(horario) {
             const disciplinaExistente = {
                 disciplina: horario.dataset.disciplina,
-                professor: horario.dataset.professor,
-                ambiente: horario.dataset.ambiente
+                professor: horario.dataset.professor
+                //ambiente: horario.dataset.ambiente
             };
 
             // Verifica se a disciplina já existe na tabela de pendentes

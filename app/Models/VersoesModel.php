@@ -142,7 +142,11 @@ class VersoesModel extends Model
 
         $builder = $this->db->table('aulas');
         $query = "SELECT disciplina_id, turma_id, $versaoNew FROM aulas WHERE versao_id = $versaoOld";
-        $sql = $builder->ignore(true)->setQueryAsData(new RawSql($query), null, "disciplina_id, turma_id, versao_id")->insertBatch();
+        $builder->ignore(true)->setQueryAsData(new RawSql($query), null, "disciplina_id, turma_id, versao_id")->insertBatch();
+
+        $builder = $this->db->table('aula_horario');
+        $query = "SELECT aula_id, tempo_de_aula_id, $versaoNew FROM aula_horario WHERE versao_id = $versaoOld";
+        $builder->ignore(true)->setQueryAsData(new RawSql($query), null, "aula_id, tempo_de_aula_id, versao_id")->insertBatch();
 
 
     }

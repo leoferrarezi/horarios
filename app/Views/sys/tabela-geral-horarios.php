@@ -17,6 +17,35 @@
         border-radius: 10px;
         /* Arredondamento do thumb */
     }
+
+    .horario-vazio .card {
+        max-width: 100% !important;
+        margin: 0 !important;
+        height: 100%;
+    }
+
+    .horario-vazio .card-body {
+        padding: 0.25rem !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+    }
+
+    .horario-vazio h6 {
+        font-size: 0.75rem !important;
+        margin-bottom: 0.1rem !important;
+    }
+
+    .horario-vazio small {
+        font-size: 0.65rem !important;
+    }
+
+    /* Mantenha as regras existentes */
+    .card-body.overflow-y-auto::-webkit-scrollbar {
+        width: 5px;
+        background-color: #000;
+    }
 </style>
 
 
@@ -120,11 +149,11 @@
 
             <!-- Seção de Aulas Pendentes -->
             <div class="card left-column-section">
-                <div class="card-body overflow-y-auto" style="height: calc(50vh - 1rem);">
+                <div class="card-body overflow-y-auto" style="height: calc(60vh - 1rem);">
                     <h6 class="card-title text-center"> Aulas Pendentes (80)</h6>
                     <div class="row">
                         <div class="col-12">
-                            <div draggable="true" data-disciplina="Matemática" data-professor="Jackson" data-aulas="4 aulas" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
+                            <div draggable="true" data-disciplina="Matemática" data-professor="Jackson" data-aulas="4" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
                                 <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
                                     <h6 class="text-primary">
                                         <i class="mdi mdi-book-outline me-1"></i> Matemática
@@ -140,7 +169,7 @@
                                 </div>
                             </div>
 
-                            <div draggable="true" data-disciplina="Organização de Computadores" data-professor="Brenda" data-aulas="2 aulas" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
+                            <div draggable="true" data-disciplina="Algoritimos e Linguagens de Programação" data-professor="Leandro" data-aulas="4" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
                                 <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
                                     <h6 class="text-primary">
                                         <i class="mdi mdi-book-outline me-1"></i> Algoritimos e Linguagens de Programação
@@ -156,7 +185,7 @@
                                 </div>
                             </div>
 
-                            <div draggable="true" data-disciplina="Organização de Computadores" data-professor="Brenda" data-aulas="2 aulas" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
+                            <div draggable="true" data-disciplina="Análise e Projetos de Sistemas" data-professor="Elisângela" data-aulas="4" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
                                 <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
                                     <h6 class="text-primary">
                                         <i class="mdi mdi-book-outline me-1"></i> Análise e Projetos de Sistemas
@@ -172,7 +201,7 @@
                                 </div>
                             </div>
 
-                            <div draggable="true" data-disciplina="Organização de Computadores" data-professor="Brenda" data-aulas="2 aulas" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
+                            <div draggable="true" data-disciplina="Comunicação e Expressão" data-professor="Iza" data-aulas="2" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
                                 <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
                                     <h6 class="text-primary">
                                         <i class="mdi mdi-book-outline me-1"></i> Comunicação e Expressão
@@ -188,7 +217,7 @@
                                 </div>
                             </div>
 
-                            <div draggable="true" data-disciplina="Organização de Computadores" data-professor="Brenda" data-aulas="2 aulas" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
+                            <div draggable="true" data-disciplina="Organização de Computadores" data-professor="Brenda" data-aulas="2" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
                                 <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
                                     <h6 class="text-primary">
                                         <i class="mdi mdi-book-outline me-1"></i> Organização de Computadores
@@ -204,7 +233,7 @@
                                 </div>
                             </div>
 
-                            <div draggable="true" data-disciplina="Algoritmos Avançados" data-professor="Leandro" data-aulas="2 aulas" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
+                            <div draggable="true" data-disciplina="Algoritmos Avançados" data-professor="Leandro" data-aulas="2" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
                                 <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
                                     <h6 class="text-primary">
                                         <i class="mdi mdi-book-outline me-1"></i> Algoritmos Avançados
@@ -220,7 +249,7 @@
                                 </div>
                             </div>
 
-                            <div draggable="true" data-disciplina="Análise Orientada a Objetos" data-professor="Elisangela" data-aulas="4 aulas" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
+                            <div draggable="true" data-disciplina="Análise Orientada a Objetos" data-professor="Elisangela" data-aulas="4" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
                                 <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
                                     <h6 class="text-primary">
                                         <i class="mdi mdi-book-outline me-1"></i> Análise Orientada a Objetos
@@ -236,7 +265,7 @@
                                 </div>
                             </div>
 
-                            <div draggable="true" data-disciplina="Banco de Dados: Modelagem e Projetos" data-professor="Fernando" data-aulas="4 aulas" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
+                            <div draggable="true" data-disciplina="Banco de Dados: Modelagem e Projetos" data-professor="Fernando" data-aulas="4" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
                                 <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
                                     <h6 class="text-primary">
                                         <i class="mdi mdi-book-outline me-1"></i> Banco de Dados: Modelagem e Projetos
@@ -257,13 +286,9 @@
             </div>
         </div>
 
-
-
-
-
         <!-- Tabela de Horários (Manhã, Tarde, Noite) - Lado direito (9 colunas) -->
         <div class="col-lg-9">
-            <div class="card" style="height: 70vh;">
+            <div class="card" style="height: 80vh;">
                 <div class="card-body overflow-y-auto overflow-x-hidden">
                     <div class="row">
                         <div class="col-12">
@@ -510,6 +535,7 @@
             let horarioSelecionado = null;
             let disciplinaSelecionada = null;
             let professorSelecionado = null;
+            let cardSelecionado = null;
 
             // Atualiza o contador de horários vazios
             function atualizarContadorHorariosVazios() {
@@ -520,6 +546,15 @@
                 }
                 if (alertHorariosVazios) {
                     alertHorariosVazios.style.display = totalHorariosVazios > 0 ? 'block' : 'none';
+                }
+            }
+
+            // Atualiza o contador de disciplinas pendentes
+            function atualizarContadorPendentes() {
+                const cardsPendentes = document.querySelectorAll('.card[draggable="true"]');
+                const contadorPendentes = document.querySelector('.card-title.text-center');
+                if (contadorPendentes) {
+                    contadorPendentes.textContent = `Aulas Pendentes (${cardsPendentes.length})`;
                 }
             }
 
@@ -536,35 +571,41 @@
                     const disciplinaNome = cardDisciplina.dataset.disciplina;
                     const professorNome = cardDisciplina.dataset.professor;
                     const aulas = cardDisciplina.dataset.aulas;
+                    const numAulas = parseInt(aulas) || 1;
 
                     ghost.innerHTML = `
-                <div class="card-body p-2">
-                    <h6 class="card-title text-primary mb-1">${disciplinaNome}</h6>
-                    <p class="card-text text-muted mb-1 small">
-                        <i class="mdi mdi-account me-1"></i>
-                        <small class="text-secondary text-truncate">${professorNome}</small>
-                    </p>
-                    <p class="card-text text-muted small mb-0">
-                        <i class="mdi mdi-clock-outline me-1"></i> ${aulas}
-                    </p>
-                </div>
-            `;
+                    <div class="card-body p-2">
+                        <h6 class="card-title text-primary mb-1">${disciplinaNome}</h6>
+                        <p class="card-text text-muted mb-1 small">
+                            <i class="mdi mdi-account me-1"></i>
+                            <small class="text-secondary text-truncate">${professorNome}</small>
+                        </p>
+                        <p class="card-text text-muted small mb-0">
+                            <i class="mdi mdi-clock-outline me-1"></i> ${aulas}
+                        </p>
+                    </div>
+                `;
 
                     document.body.appendChild(ghost);
                     e.dataTransfer.setDragImage(ghost, 90, 20);
                     e.dataTransfer.setData('text/plain', JSON.stringify({
                         disciplina: disciplinaNome,
-                        professor: professorNome
+                        professor: professorNome,
+                        aulas: numAulas
                     }));
+
+                    // Guarda a referência ao card
+                    e.dataTransfer.setData('cardElement', cardDisciplina.dataset.disciplina + '|' + cardDisciplina.dataset.professor);
 
                     setTimeout(() => document.body.removeChild(ghost), 0);
                 });
             }
 
             // Função para abrir o modal de seleção de ambiente
-            function abrirModalAmbiente(disciplina, professor) {
+            function abrirModalAmbiente(disciplina, professor, cardElement, numAulas) {
                 disciplinaSelecionada = disciplina;
                 professorSelecionado = professor;
+                cardSelecionado = cardElement;
                 modalSelecionarAmbiente.show();
             }
 
@@ -574,6 +615,7 @@
                 e.stopPropagation();
 
                 const ambienteSelecionado = selectAmbiente.value;
+                const numAulas = cardSelecionado ? parseInt(cardSelecionado.dataset.aulas) || 1 : 1;
 
                 if (horarioSelecionado) {
                     // Se o horário já contém uma disciplina, move-a de volta para a lista de pendentes
@@ -581,34 +623,73 @@
                         moverDisciplinaParaPendentes(horarioSelecionado);
                     }
 
-                    // Atribui a nova disciplina ao horário
-                    horarioSelecionado.innerHTML = `
-                <div class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
-                    <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
-                        <h6 class="card-title mb-0 fs-6 text-primary text-truncate">
-                            <i class="mdi mdi-book-outline me-1"></i>
-                            ${disciplinaSelecionada}
-                        </h6>
-                        <div class="d-flex align-items-center mb-0 py-0">
-                            <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
-                            <small class="text-secondary text-truncate">${professorSelecionado}</small>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <i class="mdi mdi-door fs-6 text-muted me-1"></i>
-                            <small class="text-secondary">${ambienteSelecionado}</small>
-                        </div>
-                    </div>
-                </div>
-            `;
+                    // Encontra a linha atual e todas as células da mesma linha
+                    const linhaAtual = horarioSelecionado.parentNode;
+                    const celulasLinha = Array.from(linhaAtual.cells);
+                    const indiceColuna = celulasLinha.indexOf(horarioSelecionado);
 
-                    horarioSelecionado.dataset.disciplina = disciplinaSelecionada;
-                    horarioSelecionado.dataset.professor = professorSelecionado;
-                    horarioSelecionado.dataset.ambiente = ambienteSelecionado;
-                    horarioSelecionado.classList.add('horario-preenchido', 'p-0');
+                    // Encontra todas as linhas da tabela
+                    const todasLinhas = Array.from(document.querySelectorAll('#tabela-horarios-manha tbody tr'));
+                    const indiceLinha = todasLinhas.indexOf(linhaAtual);
+
+                    // Preenche os horários necessários
+                    let aulasRestantes = numAulas;
+                    let linha = indiceLinha;
+                    let coluna = indiceColuna;
+
+                    while (aulasRestantes > 0 && linha < todasLinhas.length) {
+                        const celulaAtual = todasLinhas[linha].cells[coluna];
+
+                        // Verifica se a célula está vazia e não é coluna fixa ou sábado
+                        if (celulaAtual.classList.contains('horario-vazio') &&
+                            !celulaAtual.classList.contains('coluna-fixa') &&
+                            !celulaAtual.classList.contains('sabado-fixo')) {
+
+                            celulaAtual.innerHTML = `
+                            <div class="card border-1 shadow-sm bg-gradient" style="cursor: pointer; height: 100%;">
+                                <div class="card-body p-1 d-flex flex-column justify-content-center align-items-center text-center">
+                                    <h6 class="card-title mb-0 fs-6 text-primary text-truncate" style="font-size: 0.75rem !important;">
+                                        <i class="mdi mdi-book-outline me-1"></i>
+                                        ${disciplinaSelecionada}
+                                    </h6>
+                                    <div class="d-flex align-items-center mb-0 py-0">
+                                        <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
+                                        <small class="text-secondary text-truncate" style="font-size: 0.65rem !important;">${professorSelecionado}</small>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <i class="mdi mdi-door fs-6 text-muted me-1"></i>
+                                        <small class="text-secondary" style="font-size: 0.65rem !important;">${ambienteSelecionado}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+
+                            celulaAtual.dataset.disciplina = disciplinaSelecionada;
+                            celulaAtual.dataset.professor = professorSelecionado;
+                            celulaAtual.dataset.ambiente = ambienteSelecionado;
+                            celulaAtual.classList.add('horario-preenchido', 'p-0');
+
+                            aulasRestantes--;
+                        }
+
+                        // Move para a próxima célula (mesma coluna, próxima linha)
+                        linha++;
+
+                        // Se chegou ao final da tabela, volta para o início e próxima coluna
+                        if (linha >= todasLinhas.length) {
+                            linha = 0;
+                            coluna = (coluna + 1) % 7; // 7 colunas na tabela
+                            if (coluna === 0) coluna = 1; // Pula a coluna de horários
+                        }
+                    }
+
+                    // Remove o card da lista de pendentes
+                    if (cardSelecionado && cardSelecionado.parentNode) {
+                        cardSelecionado.parentNode.removeChild(cardSelecionado);
+                        atualizarContadorPendentes();
+                    }
 
                     atualizarContadorHorariosVazios();
-
-                    // Fecha ambos os modais de forma garantida
                     modalSelecionarAmbiente.hide();
                     modalAtribuirDisciplina.hide();
                 }
@@ -622,11 +703,11 @@
                 if (horarioSelecionado && horarioSelecionado.dataset.disciplina) {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                <td>${horarioSelecionado.dataset.disciplina}</td>
-                <td>${horarioSelecionado.dataset.professor}</td>
-                <td>1</td>
-                <td><button class="btn btn-danger btn-sm btn-remover">Remover</button></td>
-            `;
+                    <td>${horarioSelecionado.dataset.disciplina}</td>
+                    <td>${horarioSelecionado.dataset.professor}</td>
+                    <td>1</td>
+                    <td><button class="btn btn-danger btn-sm btn-remover">Remover</button></td>
+                `;
                     tabelaDisciplinasModal.appendChild(row);
 
                     // Adiciona evento de clique diretamente
@@ -638,8 +719,8 @@
                 // Mensagem de substituição
                 const mensagemRow = document.createElement('tr');
                 mensagemRow.innerHTML = `
-            <td colspan="4" class="text-center text-warning">Atenção: Ao atribuir uma nova disciplina, a atual será substituída.</td>
-        `;
+                <td colspan="4" class="text-center text-warning">Atenção: Ao atribuir uma nova disciplina, a atual será substituída.</td>
+            `;
                 tabelaDisciplinasModal.appendChild(mensagemRow);
 
                 // Carrega as disciplinas pendentes
@@ -647,27 +728,27 @@
                 disciplinasPendentes.forEach(card => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                <td>${card.dataset.disciplina}</td>
-                <td>${card.dataset.professor}</td>
-                <td>${card.dataset.aulas}</td>
-                <td><button class="btn btn-primary btn-sm btn-atribuir">Atribuir</button></td>
-            `;
+                    <td>${card.dataset.disciplina}</td>
+                    <td>${card.dataset.professor}</td>
+                    <td>${card.dataset.aulas}</td>
+                    <td><button class="btn btn-primary btn-sm btn-atribuir">Atribuir</button></td>
+                `;
                     tabelaDisciplinasModal.appendChild(row);
 
                     // Adiciona evento de clique diretamente
                     row.querySelector('.btn-atribuir').addEventListener('click', function() {
-                        atribuirDisciplina(card.dataset.disciplina, card.dataset.professor);
+                        atribuirDisciplina(card.dataset.disciplina, card.dataset.professor, card);
                     });
                 });
             }
 
             // Função para atribuir disciplina ao horário selecionado
-            function atribuirDisciplina(disciplina, professor) {
+            function atribuirDisciplina(disciplina, professor, cardElement) {
                 if (horarioSelecionado) {
                     modalAtribuirDisciplina.hide();
                     // Pequeno delay para garantir que o modal feche antes de abrir o próximo
                     setTimeout(() => {
-                        abrirModalAmbiente(disciplina, professor);
+                        abrirModalAmbiente(disciplina, professor, cardElement);
                     }, 300);
                 }
             }
@@ -705,25 +786,26 @@
                 novoCard.style.cursor = 'pointer';
 
                 novoCard.innerHTML = `
-            <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
-                <h6 class="text-primary">
-                    <i class="mdi mdi-book-outline me-1"></i> ${disciplinaExistente.disciplina}
-                </h6>
-                <div class="d-flex align-items-center mb-0 py-0">
-                    <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
-                    <small class="text-secondary">${disciplinaExistente.professor}</small>
+                <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
+                    <h6 class="text-primary">
+                        <i class="mdi mdi-book-outline me-1"></i> ${disciplinaExistente.disciplina}
+                    </h6>
+                    <div class="d-flex align-items-center mb-0 py-0">
+                        <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
+                        <small class="text-secondary">${disciplinaExistente.professor}</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="mdi mdi-door fs-6 text-muted me-1"></i>
+                        <small class="text-secondary">1 aula</small>
+                    </div>
                 </div>
-                <div class="d-flex align-items-center">
-                    <i class="mdi mdi-door fs-6 text-muted me-1"></i>
-                    <small class="text-secondary">1 aula</small>
-                </div>
-            </div>
-        `;
+            `;
 
                 const containerCards = document.querySelector('.card-body .row .col-12');
                 if (containerCards) {
                     containerCards.appendChild(novoCard);
                     configurarDragStart(novoCard);
+                    atualizarContadorPendentes();
                 }
             }
 
@@ -753,19 +835,35 @@
                     e.preventDefault();
                     this.classList.remove('drag-over');
                     const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+
+                    // Encontra o card correspondente na lista de pendentes
+                    const cardIdentifier = e.dataTransfer.getData('cardElement');
+                    const cards = document.querySelectorAll('.card[draggable="true"]');
+                    let cardToRemove = null;
+
+                    cards.forEach(card => {
+                        const cardId = card.dataset.disciplina + '|' + card.dataset.professor;
+                        if (cardId === cardIdentifier) {
+                            cardToRemove = card;
+                        }
+                    });
+
                     horarioSelecionado = horario;
-                    abrirModalAmbiente(data.disciplina, data.professor);
+                    abrirModalAmbiente(data.disciplina, data.professor, cardToRemove, data.aulas);
                 });
             });
 
             // Configura o drag-and-drop para os cards de disciplinas pendentes
             const cardsDisciplinas = document.querySelectorAll('.card[draggable="true"]');
             cardsDisciplinas.forEach(card => {
+                // Adiciona um identificador único para cada card
+                card.dataset.cardId = card.dataset.disciplina + '|' + card.dataset.professor;
                 configurarDragStart(card);
             });
 
-            // Atualiza o contador de horários vazios ao carregar a página
+            // Atualiza os contadores ao carregar a página
             atualizarContadorHorariosVazios();
+            atualizarContadorPendentes();
 
             // Remove as funções globais e usa escopo local
             window.atribuirDisciplina = atribuirDisciplina;

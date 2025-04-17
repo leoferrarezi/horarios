@@ -119,7 +119,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="form-group">
+                            <div class="form-group" style="margin-bottom: 10px;">
                                 <label for="curso">Curso:</label>
                                 <select class="js-example-basic-single" style="width:100%" id="curso">
                                     <option value="ADS">Análise e Desenvolvimento de Sistemas</option>
@@ -132,7 +132,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="form-group">
+                            <div class="form-group" style="margin-bottom: 10px;">
                                 <label for="turma">Turma:</label>
                                 <select class="js-example-basic-single" style="width:100%" id="turma">
                                     <option value="1">1º período </option>
@@ -149,10 +149,11 @@
 
             <!-- Seção de Aulas Pendentes -->
             <div class="card left-column-section">
-                <div class="card-body overflow-y-auto" style="height: calc(60vh - 1rem);">
+                <div class="card-body overflow-y-auto" style="height: calc(46vh);">
                     <h6 class="card-title text-center"> Aulas Pendentes (80)</h6>
                     <div class="row">
                         <div class="col-12">
+
                             <div draggable="true" data-disciplina="Matemática" data-professor="Jackson" data-aulas="4" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
                                 <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
                                     <h6 class="text-primary">
@@ -288,7 +289,7 @@
 
         <!-- Tabela de Horários (Manhã, Tarde, Noite) - Lado direito (9 colunas) -->
         <div class="col-lg-9">
-            <div class="card" style="height: 80vh;">
+            <div class="card" style="height: 70vh;">
                 <div class="card-body overflow-y-auto overflow-x-hidden">
                     <div class="row">
                         <div class="col-12">
@@ -646,23 +647,23 @@
                             !celulaAtual.classList.contains('sabado-fixo')) {
 
                             celulaAtual.innerHTML = `
-                            <div class="card border-1 shadow-sm bg-gradient" style="cursor: pointer; height: 100%;">
-                                <div class="card-body p-1 d-flex flex-column justify-content-center align-items-center text-center">
-                                    <h6 class="card-title mb-0 fs-6 text-primary text-truncate" style="font-size: 0.75rem !important;">
-                                        <i class="mdi mdi-book-outline me-1"></i>
-                                        ${disciplinaSelecionada}
-                                    </h6>
-                                    <div class="d-flex align-items-center mb-0 py-0">
-                                        <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
-                                        <small class="text-secondary text-truncate" style="font-size: 0.65rem !important;">${professorSelecionado}</small>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <i class="mdi mdi-door fs-6 text-muted me-1"></i>
-                                        <small class="text-secondary" style="font-size: 0.65rem !important;">${ambienteSelecionado}</small>
+                                <div class="card border-1 shadow-sm bg-gradient" style="cursor: pointer; height: 100%;">
+                                    <div class="card-body p-1 d-flex flex-column justify-content-center align-items-center text-center">
+                                        <h6 class="text-wrap mb-0 fs-6 text-primary" style="font-size: 0.75rem !important;">
+                                            <i class="mdi mdi-book-outline me-1"></i>
+                                            ${disciplinaSelecionada}
+                                        </h6>
+                                        <div class="d-flex align-items-center mb-0 py-0">
+                                            <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
+                                            <small class="text-secondary" style="font-size: 0.65rem !important;">${professorSelecionado}</small>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <i class="mdi mdi-door fs-6 text-muted me-1"></i>
+                                            <small class="text-secondary" style="font-size: 0.65rem !important;">${ambienteSelecionado}</small>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        `;
+                            `;
 
                             celulaAtual.dataset.disciplina = disciplinaSelecionada;
                             celulaAtual.dataset.professor = professorSelecionado;

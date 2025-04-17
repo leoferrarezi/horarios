@@ -110,15 +110,6 @@
 				</li>
 
 				<li class="nav-item">
-					<a class="nav-link" href="<?php echo base_url('sys/turma'); ?>">
-						<span class="menu-icon">
-							<i class="mdi mdi-account-group"></i>
-						</span>
-						<span class="menu-title">Turmas</span>
-					</a>
-				</li>
-
-				<li class="nav-item">
 					<a class="nav-link" href="<?php echo base_url('sys/horario'); ?>">
 						<span class="menu-icon">
 							<i class="mdi mdi-calendar-cursor-outline"></i>
@@ -134,7 +125,17 @@
 						</span>
 						<span class="menu-title">Tempos de Aula</span>
 					</a>
+				</li>				
+
+				<li class="nav-item">
+					<a class="nav-link" href="<?php echo base_url('sys/turma'); ?>">
+						<span class="menu-icon">
+							<i class="mdi mdi-account-group"></i>
+						</span>
+						<span class="menu-title">Turmas</span>
+					</a>
 				</li>
+
 				<li class="nav-item">
 					<a class="nav-link" href="<?php echo base_url('sys/cadastro-ambientes'); ?>">
 						<span class="menu-icon">

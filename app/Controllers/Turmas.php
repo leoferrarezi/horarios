@@ -204,4 +204,18 @@ class Turmas extends BaseController
         session()->setFlashdata('sucesso', "{$insertedCount} registros importados com sucesso!");
         return redirect()->to(base_url('/sys/turma'));
     }
+
+    public function getTurmasByCurso($curso_id)
+	{
+		$turmasModel = new TurmasModel();
+		$turmas = $turmasModel->getTurmasByCursos($curso_id);
+		return json_encode($turmas);
+	}
+
+    public function getTurmasByCursoAndSemestre($curso_id, $semestre)
+	{
+		$turmasModel = new TurmasModel();
+		$turmas = $turmasModel->getTurmasByCursosAndSemestre($curso_id, $semestre);
+		return json_encode($turmas);
+	}
 }

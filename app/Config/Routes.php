@@ -122,6 +122,8 @@ $routes->group('sys', function ($routes) {
         $routes->post('deletar', 'Turmas::deletar');
         $routes->post('importar', 'Turmas::importar');
         $routes->post('processarImportacao', 'Turmas::processarImportacao');
+        $routes->get('getTurmasByCurso/(:num)', 'Turmas::getTurmasByCurso/$1');
+        $routes->get('getTurmasByCursoAndSemestre/(:num)', 'Turmas::getTurmasByCursoAndSemestre/$1');
     });
 
     $routes->group('aulas', function ($routes) {

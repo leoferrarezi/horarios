@@ -121,11 +121,11 @@
                         <div class="col-md-12">
                             <div class="form-group" style="margin-bottom: 10px;">
                                 <label for="curso">Curso:</label>
-                                <select class="js-example-basic-single" style="width:100%" id="curso">
-                                    <option value="ADS">Análise e Desenvolvimento de Sistemas</option>
-                                    <option value="ECA">Engenharia de Controle e Automação</option>
-                                    <option value="FIS">Licenciatura em Física</option>
-                                    <option value="INFO">Técnico em Informática</option>
+                                <select class="form-select filtro" id="filtroCurso">
+                                    <option value="0">-</option>
+                                    <?php foreach ($cursos as $curso): ?>
+                                        <option value="<?php echo esc($curso['id']) ?>"><?php echo esc($curso['nome']) ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                         </div>
@@ -133,13 +133,9 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group" style="margin-bottom: 10px;">
-                                <label for="turma">Turma:</label>
-                                <select class="js-example-basic-single" style="width:100%" id="turma">
-                                    <option value="1">1º período </option>
-                                    <option value="2">2º período </option>
-                                    <option value="3">3º período </option>
-                                    <option value="4">4º período </option>
-                                    <option value="5">1º A </option>
+                                <label for="curso">Turma:</label>
+                                <select class="form-select filtro" id="filtroTurma">
+                                    <option value="0">-</option>                                    
                                 </select>
                             </div>
                         </div>
@@ -505,19 +501,36 @@
         </div>
     </div>
 
-
-
-    <!-- Referente select2 do filtro -->
+    
     <script>
-        (function($) {
-            'use strict';
-            if ($(".js-example-basic-single").length) {
-                $(".js-example-basic-single").select2();
-            }
-            if ($(".js-example-basic-multiple").length) {
-                $(".js-example-basic-multiple").select2();
-            }
-        })(jQuery);
+        $(document).ready(function()
+        {
+            $('#filtroCurso').on('change', function()
+            {
+                $('#filtroTurma').find('option').remove().end().append('<option value="0">-</option>');
+                $('#filtroTurma option[value="0"]').prop('selected', true);
+
+                //Buscar turmas do curso selecionado.
+                $.get('<?php echo base_url('sys/turma/getTurmasByCurso/'); ?>' + $('#filtroCurso').val(), function(data)
+                {
+                    $.each(data, function(idx, obj)
+                    {
+                        $('#filtroTurma').append('<option value="' + obj.id + '">' + obj.sigla + '</option>');
+                    });
+                }, 'json');
+
+                //limpar tabela e listas ... ou refresh total da pagina.
+                
+            });
+
+            $('#filtroTurma').on('change', function()
+            {
+                if($('#filtroTurma').val() != 0)
+                {
+                    
+                }
+            });
+        });
 
         document.addEventListener('DOMContentLoaded', function() {
             const alertHorariosVazios = document.getElementById('alert-horarios-vazios');

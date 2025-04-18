@@ -107,6 +107,16 @@ class TurmasModel extends Model
             ->findAll();
     }
 
+    public function getTurmasByCursos($curso_id)
+    {
+        return $this->select('id,sigla')->where('curso_id', $curso_id)->findAll();
+    }
+
+    public function getTurmasByCursosAndSemestre($curso_id,$semestre)
+    {
+        return $this->select('id,sigla')->where(['curso_id' => $curso_id, 'semestre' => $semestre])->findAll();
+    }
+
     public function verificarReferencias(array $data)
     {
         $id = $data['id'];

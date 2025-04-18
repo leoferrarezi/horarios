@@ -110,5 +110,5 @@ class Aulas extends BaseController
 		//} catch (ReferenciaException $e) {
 		//	return redirect()->to(base_url('/sys/professor'))->with('erros', ['erro' => $e->getMessage()]);
 		//}
-	}
+	}	
 }

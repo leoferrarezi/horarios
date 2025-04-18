@@ -218,4 +218,6 @@ class Turmas extends BaseController
 		$turmas = $turmasModel->getTurmasByCursosAndSemestre($curso_id, $semestre);
 		return json_encode($turmas);
 	}
+
+    
 }

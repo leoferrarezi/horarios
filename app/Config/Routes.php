@@ -123,7 +123,7 @@ $routes->group('sys', function ($routes) {
         $routes->post('importar', 'Turmas::importar');
         $routes->post('processarImportacao', 'Turmas::processarImportacao');
         $routes->get('getTurmasByCurso/(:num)', 'Turmas::getTurmasByCurso/$1');
-        $routes->get('getTurmasByCursoAndSemestre/(:num)', 'Turmas::getTurmasByCursoAndSemestre/$1');
+        $routes->get('getTurmasByCursoAndSemestre/(:num)/(:num)', 'Turmas::getTurmasByCursoAndSemestre/$1/$2');        
     });
 
     $routes->group('aulas', function ($routes) {
@@ -131,6 +131,7 @@ $routes->group('sys', function ($routes) {
         $routes->post('salvar', 'Aulas::salvar');
         $routes->post('deletar', 'Aulas::deletar');
         $routes->post('atualizar', 'Aulas::atualizar');
+        $routes->get('getAulasFromTurma/(:num)', 'Aulas::getAulasFromTurma/$1');
     });
 
     $routes->group('versao', function ($routes) {

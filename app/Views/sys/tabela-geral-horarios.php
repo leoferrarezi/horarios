@@ -46,7 +46,21 @@
         width: 5px;
         background-color: #000;
     }
+
+    .loader-demo-box {
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+        height: 20vh;
+        width: 20vh;
+        background-color: #191c24;
+        position: absolute;
+        z-index: 999;
+    }
+
 </style>
+
+
 
 
 <!-- Modal -->
@@ -92,12 +106,9 @@
                 <div class="form-group">
                     <label for="selectAmbiente">Selecione o ambiente:</label>
                     <select class="form-control" id="selectAmbiente">
-                        <option value="Sala 101">Sala 101</option>
-                        <option value="Sala 102">Sala 102</option>
-                        <option value="Sala 103">Sala 103</option>
-                        <option value="Sala 104">Sala 104</option>
-                        <option value="Laboratório 1">Laboratório 1</option>
-                        <option value="Quadra A">Quadra A</option>
+                        <?php foreach ($ambientes as $ambiente): ?>
+                            <option value="<?php echo esc($ambiente['id']) ?>"><?php echo esc($ambiente['nome']) ?></option>
+                        <?php endforeach; ?>                        
                     </select>
                 </div>
             </div>
@@ -116,6 +127,11 @@
         <div class="col-md-3">
             <!-- Seção de Filtros -->
             <div class="card left-column-section mb-3">
+
+                <!--<div class="loader-demo-box">
+                    <div class="circle-loader"></div>
+                </div>-->
+
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
@@ -141,142 +157,16 @@
                         </div>
                     </div>
                 </div>
+
             </div>
 
             <!-- Seção de Aulas Pendentes -->
             <div class="card left-column-section">
                 <div class="card-body overflow-y-auto" style="height: calc(46vh);">
-                    <h6 class="card-title text-center"> Aulas Pendentes (80)</h6>
+                    <h6 class="card-title text-center"> Aulas Pendentes (<span id="aulasCounter">0</span>)</h6>
                     <div class="row">
-                        <div class="col-12">
-
-                            <div draggable="true" data-disciplina="Matemática" data-professor="Jackson" data-aulas="4" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
-                                <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
-                                    <h6 class="text-primary">
-                                        <i class="mdi mdi-book-outline me-1"></i> Matemática
-                                    </h6>
-                                    <div class="d-flex align-items-center mb-0 py-0">
-                                        <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
-                                        <small class="text-secondary">Jackson</small>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <i class="mdi mdi-door fs-6 text-muted me-1"></i>
-                                        <small class="text-secondary">4 aulas</small>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div draggable="true" data-disciplina="Algoritimos e Linguagens de Programação" data-professor="Leandro" data-aulas="4" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
-                                <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
-                                    <h6 class="text-primary">
-                                        <i class="mdi mdi-book-outline me-1"></i> Algoritimos e Linguagens de Programação
-                                    </h6>
-                                    <div class="d-flex align-items-center mb-0 py-0">
-                                        <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
-                                        <small class="text-secondary">Leandro</small>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <i class="mdi mdi-door fs-6 text-muted me-1"></i>
-                                        <small class="text-secondary">4 aulas</small>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div draggable="true" data-disciplina="Análise e Projetos de Sistemas" data-professor="Elisângela" data-aulas="4" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
-                                <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
-                                    <h6 class="text-primary">
-                                        <i class="mdi mdi-book-outline me-1"></i> Análise e Projetos de Sistemas
-                                    </h6>
-                                    <div class="d-flex align-items-center mb-0 py-0">
-                                        <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
-                                        <small class="text-secondary">Elisângela</small>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <i class="mdi mdi-door fs-6 text-muted me-1"></i>
-                                        <small class="text-secondary">4 aulas</small>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div draggable="true" data-disciplina="Comunicação e Expressão" data-professor="Iza" data-aulas="2" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
-                                <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
-                                    <h6 class="text-primary">
-                                        <i class="mdi mdi-book-outline me-1"></i> Comunicação e Expressão
-                                    </h6>
-                                    <div class="d-flex align-items-center mb-0 py-0">
-                                        <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
-                                        <small class="text-secondary">Iza</small>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <i class="mdi mdi-door fs-6 text-muted me-1"></i>
-                                        <small class="text-secondary">2 aulas</small>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div draggable="true" data-disciplina="Organização de Computadores" data-professor="Brenda" data-aulas="2" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
-                                <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
-                                    <h6 class="text-primary">
-                                        <i class="mdi mdi-book-outline me-1"></i> Organização de Computadores
-                                    </h6>
-                                    <div class="d-flex align-items-center mb-0 py-0">
-                                        <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
-                                        <small class="text-secondary">Brenda</small>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <i class="mdi mdi-door fs-6 text-muted me-1"></i>
-                                        <small class="text-secondary">2 aulas</small>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div draggable="true" data-disciplina="Algoritmos Avançados" data-professor="Leandro" data-aulas="2" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
-                                <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
-                                    <h6 class="text-primary">
-                                        <i class="mdi mdi-book-outline me-1"></i> Algoritmos Avançados
-                                    </h6>
-                                    <div class="d-flex align-items-center mb-0 py-0">
-                                        <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
-                                        <small class="text-secondary">Leandro</small>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <i class="mdi mdi-door fs-6 text-muted me-1"></i>
-                                        <small class="text-secondary">2 aulas</small>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div draggable="true" data-disciplina="Análise Orientada a Objetos" data-professor="Elisangela" data-aulas="4" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
-                                <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
-                                    <h6 class="text-primary">
-                                        <i class="mdi mdi-book-outline me-1"></i> Análise Orientada a Objetos
-                                    </h6>
-                                    <div class="d-flex align-items-center mb-0 py-0">
-                                        <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
-                                        <small class="text-secondary">Elisangela</small>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <i class="mdi mdi-door fs-6 text-muted me-1"></i>
-                                        <small class="text-secondary">4 aulas</small>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div draggable="true" data-disciplina="Banco de Dados: Modelagem e Projetos" data-professor="Fernando" data-aulas="4" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
-                                <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
-                                    <h6 class="text-primary">
-                                        <i class="mdi mdi-book-outline me-1"></i> Banco de Dados: Modelagem e Projetos
-                                    </h6>
-                                    <div class="d-flex align-items-center mb-0 py-0">
-                                        <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
-                                        <small class="text-secondary">Fernando</small>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <i class="mdi mdi-door fs-6 text-muted me-1"></i>
-                                        <small class="text-secondary">4 aulas</small>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="col-12" id="aulasContainer">
+                            
                         </div>
                     </div>
                 </div>
@@ -307,7 +197,6 @@
                                             <th class="col-1">Quarta-Feira</th>
                                             <th class="col-1">Quinta-Feira</th>
                                             <th class="col-1">Sexta-Feira</th>
-                                            <th class="col-1">Sábado</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -318,7 +207,6 @@
                                             <td class="horario-vazio" data-dia="Quarta" data-horario="07:30 - 08:20"></td>
                                             <td class="horario-vazio" data-dia="Quinta" data-horario="07:30 - 08:20"></td>
                                             <td class="horario-vazio" data-dia="Sexta" data-horario="07:30 - 08:20"></td>
-                                            <td class="sabado-fixo">REPOSIÇÃO</td>
                                         </tr>
                                         <tr style="height: 60px;">
                                             <td class="coluna-fixa">08:20 - 09:10</td>
@@ -327,7 +215,6 @@
                                             <td class="horario-vazio" data-dia="Quarta" data-horario="08:20 - 09:10"></td>
                                             <td class="horario-vazio" data-dia="Quinta" data-horario="08:20 - 09:10"></td>
                                             <td class="horario-vazio" data-dia="Sexta" data-horario="08:20 - 09:10"></td>
-                                            <td class="sabado-fixo">REPOSIÇÃO</td>
                                         </tr>
                                         <tr style="height: 60px;">
                                             <td class="coluna-fixa">09:10 - 10:00</td>
@@ -336,7 +223,6 @@
                                             <td class="horario-vazio" data-dia="Quarta" data-horario="09:10 - 10:00"></td>
                                             <td class="horario-vazio" data-dia="Quinta" data-horario="09:10 - 10:00"></td>
                                             <td class="horario-vazio" data-dia="Sexta" data-horario="09:10 - 10:00"></td>
-                                            <td class="sabado-fixo">REPOSIÇÃO</td>
                                         </tr>
                                         <tr style="height: 60px;">
                                             <td class="coluna-fixa">10:15 - 11:05</td>
@@ -345,7 +231,6 @@
                                             <td class="horario-vazio" data-dia="Quarta" data-horario="10:15 - 11:05"></td>
                                             <td class="horario-vazio" data-dia="Quinta" data-horario="10:15 - 11:05"></td>
                                             <td class="horario-vazio" data-dia="Sexta" data-horario="10:15 - 11:05"></td>
-                                            <td class="sabado-fixo">REPOSIÇÃO</td>
                                         </tr>
                                         <tr style="height: 60px;">
                                             <td class="coluna-fixa">11:05 - 11:55</td>
@@ -354,7 +239,6 @@
                                             <td class="horario-vazio" data-dia="Quarta" data-horario="11:05 - 11:55"></td>
                                             <td class="horario-vazio" data-dia="Quinta" data-horario="11:05 - 11:55"></td>
                                             <td class="horario-vazio" data-dia="Sexta" data-horario="11:05 - 11:55"></td>
-                                            <td class="sabado-fixo">REPOSIÇÃO</td>
                                         </tr>
                                         <tr style="height: 60px;">
                                             <td class="coluna-fixa">11:55 - 12:45</td>
@@ -363,7 +247,6 @@
                                             <td class="horario-vazio" data-dia="Quarta" data-horario="11:55 - 12:45"></td>
                                             <td class="horario-vazio" data-dia="Quinta" data-horario="11:55 - 12:45"></td>
                                             <td class="horario-vazio" data-dia="Sexta" data-horario="11:55 - 12:45"></td>
-                                            <td class="sabado-fixo">REPOSIÇÃO</td>
                                         </tr>
                                     </tbody>
 
@@ -379,7 +262,6 @@
                                             <th class="col-1">Quarta-Feira</th>
                                             <th class="col-1">Quinta-Feira</th>
                                             <th class="col-1">Sexta-Feira</th>
-                                            <th class="col-1">Sábado</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -390,7 +272,6 @@
                                             <td class="horario-vazio" data-dia="Quarta" data-horario="13:30 - 14:20"></td>
                                             <td class="horario-vazio" data-dia="Quinta" data-horario="13:30 - 14:20"></td>
                                             <td class="horario-vazio" data-dia="Sexta" data-horario="13:30 - 14:20"></td>
-                                            <td class="sabado-fixo">REPOSIÇÃO</td>
                                         </tr>
                                         <tr style="height: 60px;">
                                             <td class="coluna-fixa">14:20 - 15:10</td>
@@ -399,7 +280,6 @@
                                             <td class="horario-vazio" data-dia="Quarta" data-horario="14:20 - 15:10"></td>
                                             <td class="horario-vazio" data-dia="Quinta" data-horario="14:20 - 15:10"></td>
                                             <td class="horario-vazio" data-dia="Sexta" data-horario="14:20 - 15:10"></td>
-                                            <td class="sabado-fixo">REPOSIÇÃO</td>
                                         </tr>
                                         <tr style="height: 60px;">
                                             <td class="coluna-fixa">15:10 - 16:00</td>
@@ -408,7 +288,6 @@
                                             <td class="horario-vazio" data-dia="Quarta" data-horario="15:10 - 16:00"></td>
                                             <td class="horario-vazio" data-dia="Quinta" data-horario="15:10 - 16:00"></td>
                                             <td class="horario-vazio" data-dia="Sexta" data-horario="15:10 - 16:00"></td>
-                                            <td class="sabado-fixo">REPOSIÇÃO</td>
                                         </tr>
                                         <tr style="height: 60px;">
                                             <td class="coluna-fixa">16:15 - 17:05</td>
@@ -417,7 +296,6 @@
                                             <td class="horario-vazio" data-dia="Quarta" data-horario="16:15 - 17:05"></td>
                                             <td class="horario-vazio" data-dia="Quinta" data-horario="16:15 - 17:05"></td>
                                             <td class="horario-vazio" data-dia="Sexta" data-horario="16:15 - 17:05"></td>
-                                            <td class="sabado-fixo">REPOSIÇÃO</td>
                                         </tr>
                                         <tr style="height: 60px;">
                                             <td class="coluna-fixa">17:05 - 17:55</td>
@@ -426,7 +304,6 @@
                                             <td class="horario-vazio" data-dia="Quarta" data-horario="17:05 - 17:55"></td>
                                             <td class="horario-vazio" data-dia="Quinta" data-horario="17:05 - 17:55"></td>
                                             <td class="horario-vazio" data-dia="Sexta" data-horario="17:05 - 17:55"></td>
-                                            <td class="sabado-fixo">REPOSIÇÃO</td>
                                         </tr>
                                         <tr style="height: 60px;">
                                             <td class="coluna-fixa">17:55 - 18:45</td>
@@ -435,7 +312,6 @@
                                             <td class="horario-vazio" data-dia="Quarta" data-horario="17:55 - 18:45"></td>
                                             <td class="horario-vazio" data-dia="Quinta" data-horario="17:55 - 18:45"></td>
                                             <td class="horario-vazio" data-dia="Sexta" data-horario="17:55 - 18:45"></td>
-                                            <td class="sabado-fixo">REPOSIÇÃO</td>
                                         </tr>
                                     </tbody>
 
@@ -451,7 +327,6 @@
                                             <th class="col-1">Quarta-Feira</th>
                                             <th class="col-1">Quinta-Feira</th>
                                             <th class="col-1">Sexta-Feira</th>
-                                            <th class="col-1">Sábado</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -462,7 +337,6 @@
                                             <td class="horario-vazio" data-dia="Quarta" data-horario="19:00 - 19:50"></td>
                                             <td class="horario-vazio" data-dia="Quinta" data-horario="19:00 - 19:50"></td>
                                             <td class="horario-vazio" data-dia="Sexta" data-horario="19:00 - 19:50"></td>
-                                            <td class="sabado-fixo">REPOSIÇÃO</td>
                                         </tr>
                                         <tr style="height: 60px;">
                                             <td class="coluna-fixa">19:50 - 20:40</td>
@@ -471,7 +345,6 @@
                                             <td class="horario-vazio" data-dia="Quarta" data-horario="19:50 - 20:40"></td>
                                             <td class="horario-vazio" data-dia="Quinta" data-horario="19:50 - 20:40"></td>
                                             <td class="horario-vazio" data-dia="Sexta" data-horario="19:50 - 20:40"></td>
-                                            <td class="sabado-fixo">REPOSIÇÃO</td>
                                         </tr>
                                         <tr style="height: 60px;">
                                             <td class="coluna-fixa">20:50 - 21:40</td>
@@ -480,7 +353,6 @@
                                             <td class="horario-vazio" data-dia="Quarta" data-horario="20:50 - 21:40"></td>
                                             <td class="horario-vazio" data-dia="Quinta" data-horario="20:50 - 21:40"></td>
                                             <td class="horario-vazio" data-dia="Sexta" data-horario="20:50 - 21:40"></td>
-                                            <td class="sabado-fixo">REPOSIÇÃO</td>
                                         </tr>
                                         <tr style="height: 60px;">
                                             <td class="coluna-fixa">21:40 - 22:30</td>
@@ -489,7 +361,6 @@
                                             <td class="horario-vazio" data-dia="Quarta" data-horario="21:40 - 22:30"></td>
                                             <td class="horario-vazio" data-dia="Quinta" data-horario="21:40 - 22:30"></td>
                                             <td class="horario-vazio" data-dia="Sexta" data-horario="21:40 - 22:30"></td>
-                                            <td class="sabado-fixo">REPOSIÇÃO</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -511,7 +382,7 @@
                 $('#filtroTurma option[value="0"]').prop('selected', true);
 
                 //Buscar turmas do curso selecionado.
-                $.get('<?php echo base_url('sys/turma/getTurmasByCurso/'); ?>' + $('#filtroCurso').val(), function(data)
+                $.get('<?php echo base_url('sys/turma/getTurmasByCursoAndSemestre/'); ?>' + $('#filtroCurso').val() + '/<?php echo $semestre; ?>', function(data)
                 {
                     $.each(data, function(idx, obj)
                     {
@@ -527,12 +398,66 @@
             {
                 if($('#filtroTurma').val() != 0)
                 {
-                    
+                    //Buscar aulas da turma selecionada.
+                    $.get('<?php echo base_url('sys/aulas/getAulasFromTurma/'); ?>' + $('#filtroTurma').val(), function(data)
+                    {
+                        //Limpar todas as aulas pendentes.
+                        $('#aulasContainer').empty();
+
+                        //Verifica se a aula atual já está na lista, para a questão de mais de um professor.
+                        $.each(data, function(idx, obj)
+                        {
+                            var found = false;
+
+                            //Verifica se a aula atual já está na lista, para a questão de mais de um professor.
+                            $("#aulasContainer").children().each(function()
+                            {
+                                //Verifica o numero da aula através do id do card.
+                                var aula = $(this).attr('id').split('_')[1];
+                                if (aula == obj.id)
+                                {
+                                    found = true; //encontrado
+                                    //Adiciona o professor na aula já existente
+                                    $('#professor_aula_' + obj.id).append(' &nbsp; + &nbsp; '
+                                        + '<i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>'
+                                        + '<small class="text-secondary">' + obj.professor.split(" ")[0] + '</small>'
+                                    );
+                                }
+                            });
+
+                            //Se não encontrou a aula atual, adiciona na lista.
+                            if(!found)
+                            {
+                                var cardAula = ''
+                                + '<div id="aula_' + obj.id +'" draggable="true" data-disciplina="' + obj.disciplina + '" data-professor="' + obj.professor.split(" ")[0] + '" data-aulas="' + (obj.ch / 20) + '" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">'
+                                    + '<div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">'
+                                        + '<h6 class="text-primary">'
+                                        + '<i class="mdi mdi-book-outline me-1"></i> ' + obj.disciplina
+                                        + '</h6>'
+                                        + '<div class="d-flex align-items-center mb-0 py-0" id="professor_aula_' + obj.id +'">'
+                                            + '<i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>'
+                                            + '<small class="text-secondary">' + obj.professor.split(" ")[0] + '</small>'
+                                        + '</div>'
+                                        + '<div class="d-flex align-items-center">'
+                                            + '<i class="mdi mdi-door fs-6 text-muted me-1"></i>'
+                                            + '<small class="text-secondary">' + (obj.ch / 20) + ' aulas</small>'
+                                        + '</div>'
+                                    + '</div>'
+                                + '</div>';
+
+                                $('#aulasContainer').append(cardAula);
+                            }                            
+                        });
+                    }, 'json');
                 }
             });
         });
 
-        document.addEventListener('DOMContentLoaded', function() {
+
+
+        //Gambiarras do Bergon
+        document.addEventListener('DOMContentLoaded', function() 
+        {
             const alertHorariosVazios = document.getElementById('alert-horarios-vazios');
             const contadorHorariosVazios = document.getElementById('contador-horarios-vazios');
             const modalAtribuirDisciplinaElement = document.getElementById('modalAtribuirDisciplina');
@@ -628,7 +553,7 @@
                 e.preventDefault();
                 e.stopPropagation();
 
-                const ambienteSelecionado = selectAmbiente.value;
+                const ambienteSelecionado = $("#selectAmbiente option:selected").text();
                 const numAulas = cardSelecionado ? parseInt(cardSelecionado.dataset.aulas) || 1 : 1;
 
                 if (horarioSelecionado) {
@@ -657,7 +582,8 @@
                         // Verifica se a célula está vazia e não é coluna fixa ou sábado
                         if (celulaAtual.classList.contains('horario-vazio') &&
                             !celulaAtual.classList.contains('coluna-fixa') &&
-                            !celulaAtual.classList.contains('sabado-fixo')) {
+                            !celulaAtual.classList.contains('sabado-fixo'))
+                            {
 
                             celulaAtual.innerHTML = `
                                 <div class="card border-1 shadow-sm bg-gradient" style="cursor: pointer; height: 100%;">
@@ -668,11 +594,11 @@
                                         </h6>
                                         <div class="d-flex align-items-center mb-0 py-0">
                                             <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
-                                            <small class="text-secondary" style="font-size: 0.65rem !important;">${professorSelecionado}</small>
+                                            <small class="text-wrap text-secondary" style="font-size: 0.65rem !important;">${professorSelecionado}</small>
                                         </div>
                                         <div class="d-flex align-items-center">
                                             <i class="mdi mdi-door fs-6 text-muted me-1"></i>
-                                            <small class="text-secondary" style="font-size: 0.65rem !important;">${ambienteSelecionado}</small>
+                                            <small class="text-wrap text-secondary" style="font-size: 0.65rem !important;">${ambienteSelecionado}</small>
                                         </div>
                                     </div>
                                 </div>
@@ -680,7 +606,7 @@
 
                             celulaAtual.dataset.disciplina = disciplinaSelecionada;
                             celulaAtual.dataset.professor = professorSelecionado;
-                            celulaAtual.dataset.ambiente = ambienteSelecionado;
+                            celulaAtual.dataset.ambiente = $("#selectAmbiente").val();
                             celulaAtual.classList.add('horario-preenchido', 'p-0');
 
                             aulasRestantes--;

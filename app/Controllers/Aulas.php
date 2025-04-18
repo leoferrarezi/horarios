@@ -110,5 +110,18 @@ class Aulas extends BaseController
 		//} catch (ReferenciaException $e) {
 		//	return redirect()->to(base_url('/sys/professor'))->with('erros', ['erro' => $e->getMessage()]);
 		//}
-	}	
+	}
+
+	public function getAulasFromTurma($turma)
+	{
+		$aula = new AulasModel();
+		$aulas = $aula->select('aulas.id, disciplinas.nome as disciplina, disciplinas.ch, professores.nome as professor')
+						->join('disciplinas', 'disciplinas.id = aulas.disciplina_id')
+						->join('aula_professor', 'aula_professor.aula_id = aulas.id')
+						->join('professores', 'professores.id = aula_professor.professor_id')
+						->where('aulas.turma_id', $turma)
+						->findAll();
+
+		return json_encode($aulas);
+	}
 }

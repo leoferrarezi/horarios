@@ -253,7 +253,7 @@
                         });
                     },
                     error: function() {
-                        alert('Erro ao buscar as restrições do professor.');
+                        alert('Erro ao buscar as restrições do professor. \n' + data);
                     }
                 });
             });

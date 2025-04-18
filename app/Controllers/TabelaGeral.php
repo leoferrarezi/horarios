@@ -32,6 +32,7 @@ class TabelaGeral extends BaseController
         }
 
         $this->content_data['content'] = view('sys/tabela-geral-horarios.php', $data);
+        
         return view('dashboard', $this->content_data);
     }
 }

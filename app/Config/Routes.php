@@ -111,6 +111,7 @@ $routes->group('sys', function ($routes) {
         $routes->post('salvar', 'TemposAula::salvar');
         $routes->post('atualizar', 'TemposAula::atualizar');
         $routes->post('deletar', 'TemposAula::deletar');
+        $routes->get('getTemposFromTurma/(:num)', 'TemposAula::getTemposFromTurma/$1');
     });
 
     $routes->group('turma', function ($routes) {

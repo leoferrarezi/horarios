@@ -184,7 +184,9 @@
                             Há <span id="contador-horarios-vazios">0</span> aulas sem horário atribuído.
                         </div>-->
                             <div class="table-responsive">
-                                <table id="tabela-horarios-manha" class="table table-bordered text-center mb-4">
+
+                                <table id="tabela-horarios" class="table table-bordered text-center mb-4">
+                                    
                                     <!-- MANHÃ -->
                                     <thead>
                                         <tr>
@@ -378,6 +380,9 @@
         {
             $('#filtroCurso').on('change', function()
             {
+                //Limpar a tabela de horários inteira
+                $("#tabela-horarios").empty();
+
                 $('#filtroTurma').find('option').remove().end().append('<option value="0">-</option>');
                 $('#filtroTurma option[value="0"]').prop('selected', true);
 
@@ -388,14 +393,14 @@
                     {
                         $('#filtroTurma').append('<option value="' + obj.id + '">' + obj.sigla + '</option>');
                     });
-                }, 'json');
-
-                //limpar tabela e listas ... ou refresh total da pagina.
-                
+                }, 'json');                
             });
 
             $('#filtroTurma').on('change', function()
             {
+                //Limpar a tabela de horários inteira
+                $("#tabela-horarios").empty();
+
                 if($('#filtroTurma').val() != 0)
                 {
                     //Buscar aulas da turma selecionada.
@@ -449,6 +454,135 @@
                             }                            
                         });
                     }, 'json');
+
+                    //Buscar horários da turma selecionada para montar a tabela de horários.
+                    $.get('<?php echo base_url('sys/tempoAula/getTemposFromTurma/'); ?>' + $('#filtroTurma').val(), function(data)
+                    {
+                        var nome_dia = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sabado'];
+                        var dias = [];
+                        var horarios = [];
+                        var temManha = false;
+                        var temTarde = false;
+                        var temNoite = false;
+
+                        $.each(data, function(idx, obj)
+                        {
+                            //Montar o array com os dias do horário da turma
+                            if(dias.includes(obj.dia_semana) == false)
+                            {
+                                dias.push(obj.dia_semana);
+                            }
+
+                            let horario = {id: obj.id, hora_inicio: obj.hora_inicio, minuto_inicio: obj.minuto_inicio, hora_fim: obj.hora_fim, minuto_fim: obj.minuto_fim};
+                            horarios.push(horario);
+
+                            //Verifica se tem horário de manhã, tarde ou noite
+                            if(obj.hora_inicio < 12) temManha = true;
+                            if(obj.hora_inicio >= 12 && obj.hora_inicio < 18) temTarde = true;
+                            if(obj.hora_inicio >= 18) temNoite = true;
+                        });
+
+                        var htmlDaTableHead = ''
+                            + '<tr style="height: 60px;">'
+                                + '<th class="col-1">Horário</th>';
+
+                                //Iterar pelos dias existentes no horário
+                                $.each(dias, function(idx, obj)
+                                {
+                                    htmlDaTableHead += '<th class="col-1">' + nome_dia[obj] + '</th>';
+                                });
+                                
+                                htmlDaTableHead +=  ''
+                            + '</tr>';
+
+                        //Insere os horários na tabela se tiver aula pela manhã
+                        if(temManha)
+                        {
+                            var htmlDaTabela = ''
+                                + '<thead>'
+                                    + '<tr>'
+                                        + '<th colspan="' + (dias.length+1) +'" class="text-center bg-primary text-white">MANHÃ</th>'
+                                    + '</tr>'
+                                + '</thead>'
+                                + htmlDaTableHead;
+                            
+                            $('#tabela-horarios').append(htmlDaTabela);
+                        }
+                        
+                        //Insere os horários na tabela se tiver aula pela tarde
+                        if(temTarde)
+                        {
+                            var htmlDaTabela = ''
+                                + '<thead>'
+                                    + '<tr>'
+                                        + '<th colspan="' + (dias.length+1) +'" class="text-center bg-primary text-white">TARDE</th>'
+                                    + '</tr>'                                    
+                                + '</thead>'
+                                + htmlDaTableHead;
+                            
+                            $('#tabela-horarios').append(htmlDaTabela);
+                        }
+
+                        //Insere os horários na tabela se tiver aula pela tarde
+                        if(temNoite)
+                        {
+                            var htmlDaTabela = ''
+                                + '<thead>'
+                                    + '<tr>'
+                                        + '<th colspan="' + (dias.length+1) +'" class="text-center bg-primary text-white">NOITE</th>'
+                                    + '</tr>'                                    
+                                + '</thead>'
+                                + htmlDaTableHead;
+                            
+                            $('#tabela-horarios').append(htmlDaTabela);
+
+                            $('#tabela-horarios').append('<tbody id="tabela-horarios-noite">');
+
+                            //Vetor para guardar os horarios já adicionados na tabela
+                            var horariosJaAdicionados = [];
+
+                            $.each(horarios, function(idx, obj)
+                            {
+                                //Verificar se já tem o horário na lista
+                                var jaTemHorario = false;
+
+                                $.each(horariosJaAdicionados, function(idx2, obj2)
+                                {
+                                    if(obj2.hora_inicio == obj.hora_inicio && 
+                                        obj2.minuto_inicio == obj.minuto_inicio && 
+                                        obj2.hora_fim == obj.hora_fim && 
+                                        obj2.minuto_fim == obj.minuto_fim)
+                                    {
+                                        jaTemHorario = true;
+                                    }
+                                });
+
+                                if(!jaTemHorario)
+                                {
+                                    if(obj.hora_inicio >= 18)
+                                    {
+                                        $('#tabela-horarios-noite').append(''
+                                            + '<tr style="height: 60px;">'
+                                                + '<td class="coluna-fixa">' + obj.hora_inicio + ':' + obj.minuto_inicio + '-' + obj.hora_fim + ':' + obj.minuto_fim + '</td>'
+                                                + '<td class="horario-vazio"></td>'
+                                                + '<td class="horario-vazio"></td>'
+                                                + '<td class="horario-vazio"></td>'
+                                                + '<td class="horario-vazio"></td>'
+                                                + '<td class="horario-vazio"></td>'
+                                            + '</tr>'
+                                        );
+
+                                        let gravaHorario = {hora_inicio: obj.hora_inicio, minuto_inicio: obj.minuto_inicio, hora_fim: obj.hora_fim, minuto_fim: obj.minuto_fim};
+                                        horariosJaAdicionados.push(gravaHorario);
+
+                                    } //if hora > 18
+                                }
+                            });
+
+                            $('#tabela-horarios').append('</tbody>');
+
+                        }// if tem noite
+                    }, 'json');
                 }
             });
         });
@@ -478,7 +612,7 @@
 
             // Atualiza o contador de horários vazios
             function atualizarContadorHorariosVazios() {
-                const todasCelulas = document.querySelectorAll('#tabela-horarios-manha td.horario-vazio:not(.coluna-fixa):not(.sabado-fixo)');
+                const todasCelulas = document.querySelectorAll('#tabela-horarios td.horario-vazio:not(.coluna-fixa):not(.sabado-fixo)');
                 const totalHorariosVazios = Array.from(todasCelulas).filter(celula => celula.innerHTML.trim() === "").length;
                 if (contadorHorariosVazios) {
                     contadorHorariosVazios.textContent = totalHorariosVazios;
@@ -568,7 +702,7 @@
                     const indiceColuna = celulasLinha.indexOf(horarioSelecionado);
 
                     // Encontra todas as linhas da tabela
-                    const todasLinhas = Array.from(document.querySelectorAll('#tabela-horarios-manha tbody tr'));
+                    const todasLinhas = Array.from(document.querySelectorAll('#tabela-horarios tbody tr'));
                     const indiceLinha = todasLinhas.indexOf(linhaAtual);
 
                     // Preenche os horários necessários
@@ -750,7 +884,7 @@
             }
 
             // Configura os eventos de drag-and-drop para os horários
-            const todosHorarios = document.querySelectorAll('#tabela-horarios-manha td.horario-vazio, #tabela-horarios-manha td.horario-preenchido');
+            const todosHorarios = document.querySelectorAll('#tabela-horarios td.horario-vazio, #tabela-horarios td.horario-preenchido');
 
             todosHorarios.forEach(horario => {
                 // Abre o modal ao clicar em um horário

@@ -121,4 +121,12 @@ class TemposAula extends BaseController
             return redirect()->to(base_url('/sys/tempoAula'))->with('erros', ['erro' => $e->getMessage()]);
         }
     }
+
+    //Retorna um jSon com os tempos de aula da turma
+    public function getTemposFromTurma($turma)
+    {
+        $tempoAulaModel = new TemposAulasModel();
+        $tempos = $tempoAulaModel->getTemposFromTurma($turma);
+        return $this->response->setJSON($tempos); // Retorna os dados em formato JSON
+    }
 }

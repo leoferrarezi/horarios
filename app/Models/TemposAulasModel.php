@@ -114,7 +114,6 @@ class TemposAulasModel extends Model
         $tabelas = [
             'aula_horario' => 'tempo_de_aula_id',
             'professor_regras' => 'tempo_de_aula_id',
-
         ];
 
         $referenciasEncontradas = [];
@@ -198,5 +197,15 @@ class TemposAulasModel extends Model
         }    
 
         return $horariosPorDia;
+    }
+
+    // Método para obter os tempos de aula de uma turma específica
+    public function getTemposFromTurma($turma)
+    {
+        return $this->select("tempos_de_aula.id, dia_semana, hora_inicio, LPAD(minuto_inicio, 2, '0') as minuto_inicio, hora_fim, LPAD(minuto_fim, 2, '0') as minuto_fim")
+            ->join('turmas', 'turmas.horario_id = tempos_de_aula.horario_id')
+            ->where('turmas.id', $turma)
+            ->orderBy('dia_semana, hora_inicio, minuto_inicio')
+            ->findAll();
     }
 }

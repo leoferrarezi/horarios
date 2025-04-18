@@ -16,8 +16,6 @@
                     </button>
                 </div>
 
-
-
                 <div class="modal-body">
                     <input type="hidden" name="professorID" id="professorID">
                     <?php $first = true; ?>

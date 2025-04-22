@@ -195,18 +195,26 @@
     </div>
 </div>
 
-<!-- Modal de Confirmação para Remover Horário -->
-<div class="modal fade" id="modalConfirmarRemocao" tabindex="-1" aria-labelledby="modalConfirmarRemocaoLabel" aria-hidden="true">
+<!-- Modal de Confirmação de Remoção -->
+<div class="modal fade" id="modalConfirmarRemocao" tabindex="-1" aria-labelledby="modalConfirmarRemocaoLabel" aria-hidden="true" style="z-index: 10001;">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalConfirmarRemocaoLabel">Confirmar Remoção</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content bg-dark">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title text-white" id="modalConfirmarRemocaoLabel">
+                    <i class="mdi mdi-alert-circle-outline me-2 text-warning"></i> Confirmar Remoção
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Tem certeza que deseja remover esta aula do horário?
+                <p class="text-light">Deseja realmente remover esta disciplina do horário?</p>
+                <div class="card bg-dark border-warning mb-3">
+                    <div class="card-body p-2">
+                        <h6 class="text-warning mb-1" id="modalRemocaoDisciplina"></h6>
+                        <small class="text-muted" id="modalRemocaoProfessor"></small>
+                    </div>
+                </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer border-secondary">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-danger" id="confirmarRemocao">Remover</button>
             </div>
@@ -329,163 +337,239 @@
         let horarioSelecionado = null;
         let disciplinaSelecionada = null;
         let professorSelecionado = null;
-        let aulaSelecionadaId = null;
-        let numAulasSelecionada = 1;
+        let cardSelecionado = null;
 
-        // Função para abrir o modal de seleção de ambiente
-        function abrirModalAmbiente(aula) {
-            let minhaAula = getAulaById(aula);
-            $("#modalAmbienteNomeDisciplina").html(minhaAula.disciplina);
-            $("#modalAmbienteProfessor").html(minhaAula.professores.join(", "));
-            numAulasSelecionada = minhaAula.ch / 20;
-            $("#modalAmbienteAulas").html(numAulasSelecionada);
-            modalSelecionarAmbiente.show();
+        // Função para atualizar contador de pendentes
+        function atualizarContadorPendentes() {
+            let totalAulasPendentes = 0;
+            $('.card[draggable="true"]').each(function() {
+                totalAulasPendentes += parseInt($(this).data('aulas-pendentes'));
+            });
+            $('#aulasCounter').text(totalAulasPendentes);
         }
 
-        // Configura o evento de confirmação do ambiente - VERSÃO ATUALIZADA
-        $("#confirmarAmbiente").click(function(e) {
-            e.preventDefault();
-            e.stopPropagation();
+        // Função para mover disciplina de volta para pendentes
+        function moverDisciplinaParaPendentes(horarioElement) {
+            const $horario = $(horarioElement);
+            const disciplina = $horario.data('disciplina');
+            const professor = $horario.data('professor');
+            const aulaId = $horario.data('aula-id');
+            const aulasTotal = $horario.data('aulas-total') || '1';
 
-            const ambienteSelecionado = $("#selectAmbiente option:selected").text();
-            const ambienteId = $("#selectAmbiente").val();
-
-            if (horarioSelecionado) {
-                // Encontra a linha atual e todas as células da mesma linha
-                const linhaAtual = horarioSelecionado.parent();
-                const celulasLinha = linhaAtual.find('td');
-                const indiceColuna = celulasLinha.index(horarioSelecionado);
-
-                // Encontra todas as linhas da tabela
-                const todasLinhas = $('#tabela-horarios tbody tr');
-                const indiceLinha = todasLinhas.index(linhaAtual);
-
-                // Preenche os horários necessários
-                let aulasRestantes = numAulasSelecionada;
-                let linha = indiceLinha;
-                let coluna = indiceColuna;
-                let horariosPreenchidos = [];
-
-                while (aulasRestantes > 0 && linha < todasLinhas.length) {
-                    const celulaAtual = $(todasLinhas[linha]).find('td').eq(coluna);
-
-                    // Verifica se a célula está vazia e não é coluna fixa ou sábado
-                    if (celulaAtual.hasClass('horario-vazio') &&
-                        !celulaAtual.hasClass('coluna-fixa') &&
-                        !celulaAtual.hasClass('sabado-fixo')) {
-
-                        celulaAtual.html(`
-                            <div class="card border-1 shadow-sm bg-gradient" style="cursor: pointer; height: 100%;">
-                                <div class="card-body p-1 d-flex flex-column justify-content-center align-items-center text-center">
-                                    <h6 class="text-wrap mb-0 fs-6 text-primary" style="font-size: 0.75rem !important;">
-                                        <i class="mdi mdi-book-outline me-1"></i>
-                                        ${disciplinaSelecionada}
-                                    </h6>
-                                    <div class="d-flex align-items-center mb-0 py-0">
-                                        <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
-                                        <small class="text-wrap text-secondary" style="font-size: 0.65rem !important;">${professorSelecionado}</small>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <i class="mdi mdi-door fs-6 text-muted me-1"></i>
-                                        <small class="text-wrap text-secondary" style="font-size: 0.65rem !important;">${ambienteSelecionado}</small>
-                                    </div>
-                                </div>
+            // Verifica se já existe na lista de pendentes
+            if ($(`#aula_${aulaId}`).length > 0) {
+                const cardAula = $(`#aula_${aulaId}`);
+                const aulasPendentes = cardAula.data('aulas-pendentes') + 1;
+                cardAula.data('aulas-pendentes', aulasPendentes);
+                cardAula.find('.aulas-pendentes').text(aulasPendentes);
+            } else {
+                const cardAula = `
+                    <div id="aula_${aulaId}" draggable="true" data-aula-id="${aulaId}" data-disciplina="${disciplina}" data-professor="${professor}" data-aulas-total="${aulasTotal}" data-aulas-pendentes="1" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
+                        <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
+                            <h6 class="text-primary">
+                                <i class="mdi mdi-book-outline me-1"></i> ${disciplina}
+                            </h6>
+                            <div class="d-flex align-items-center mb-0 py-0" id="professor_aula_${aulaId}">
+                                <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
+                                <small class="text-secondary">${professor}</small>
                             </div>
-                        `);
-
-                        celulaAtual.data('disciplina', disciplinaSelecionada);
-                        celulaAtual.data('professor', professorSelecionado);
-                        celulaAtual.data('ambiente', ambienteId);
-                        celulaAtual.data('aula-id', aulaSelecionadaId);
-                        celulaAtual.removeClass('horario-vazio').addClass('horario-preenchido');
-
-                        // Adiciona evento de clique para remover
-                        celulaAtual.off('click').on('click', function() {
-                            removerAulaDoHorario($(this));
-                        });
-
-                        horariosPreenchidos.push(celulaAtual);
-                        aulasRestantes--;
-                    }
-
-                    // Move para a próxima célula (mesma coluna, próxima linha)
-                    linha++;
-
-                    // Se chegou ao final da tabela, volta para o início e próxima coluna
-                    if (linha >= todasLinhas.length) {
-                        linha = 0;
-                        coluna = (coluna + 1) % 7; // 7 colunas na tabela
-                        if (coluna === 0) coluna = 1; // Pula a coluna de horários
-                    }
-                }
-
-                // Remove o card da lista de pendentes
-                $(`#aula_${aulaSelecionadaId}`).remove();
-                atualizarContadorPendentes();
-
-                // Fecha os modais
-                modalSelecionarAmbiente.hide();
-                modalAtribuirDisciplina.hide();
-            }
-        });
-
-        // Função para remover aula do horário e voltar para pendentes
-        function removerAulaDoHorario(celula) {
-            const aulaId = celula.data('aula-id');
-            const aula = getAulaById(aulaId);
-
-            // Recria o card na lista de pendentes
-            const cardAula = `
-                <div id="aula_${aula.id}" draggable="true" data-aula-id="${aula.id}" data-disciplina="${aula.disciplina}" data-professor="${aula.professores.join(", ")}" data-aulas="${aula.ch / 20}" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
-                    <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
-                        <h6 class="text-primary">
-                            <i class="mdi mdi-book-outline me-1"></i> ${aula.disciplina}
-                        </h6>
-                        <div class="d-flex align-items-center mb-0 py-0" id="professor_aula_${aula.id}">
-                            <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
-                            <small class="text-secondary">${aula.professores.join(", ")}</small>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <i class="mdi mdi-door fs-6 text-muted me-1"></i>
-                            <small class="text-secondary">${aula.ch / 20} aulas</small>
+                            <div class="d-flex align-items-center">
+                                <i class="mdi mdi-door fs-6 text-muted me-1"></i>
+                                <small class="text-secondary"><span class="aulas-pendentes">1</span> aulas</small>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `;
-
-            $('#aulasContainer').append(cardAula);
-            celula.html('').removeData().removeClass('horario-preenchido').addClass('horario-vazio');
-
-            // Restaura o evento de clique original
-            celula.off('click').on('click', function() {
-                horarioSelecionado = $(this);
-                carregarDisciplinasPendentes($(this).attr('id'));
-                modalAtribuirDisciplina.show();
-            });
-
+                `;
+                $('#aulasContainer').append(cardAula);
+                configurarDragAndDrop(); // Reconfigura eventos para o novo card
+            }
             atualizarContadorPendentes();
         }
 
-        // Função para atualizar o contador de pendentes
-        function atualizarContadorPendentes() {
-            const count = $('.card[draggable="true"]').length;
-            $("#aulasCounter").html(count);
+        // Modal de confirmação de remoção (estilo Bootstrap)
+        function mostrarModalConfirmacaoRemocao(horarioElement) {
+            const $horario = $(horarioElement);
+            const modalConfirmarRemocao = new bootstrap.Modal(document.getElementById('modalConfirmarRemocao'));
+
+            // Preenche os dados no modal
+            $('#modalRemocaoDisciplina').text($horario.data('disciplina'));
+            $('#modalRemocaoProfessor').text('Professor: ' + $horario.data('professor'));
+
+            // Remove qualquer evento anterior do botão de confirmação
+            $('#confirmarRemocao').off('click');
+
+            // Configura o evento de confirmação
+            $('#confirmarRemocao').on('click', function() {
+                moverDisciplinaParaPendentes(horarioElement);
+
+                // Limpa o horário
+                $horario.html('')
+                    .removeClass('horario-preenchido')
+                    .addClass('horario-vazio')
+                    .removeData(['disciplina', 'professor', 'ambiente', 'aula-id', 'aulas-total', 'aulas-pendentes'])
+                    .off('click')
+                    .click(function() {
+                        horarioSelecionado = $(this);
+                        carregarDisciplinasPendentes($(this).attr('id'));
+                        modalAtribuirDisciplina.show();
+                    });
+
+                // Fecha o modal
+                modalConfirmarRemocao.hide();
+
+                // Mostra feedback de sucesso (opcional)
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Removido!',
+                    text: 'A disciplina foi removida do horário.',
+                    timer: 2000,
+                    showConfirmButton: false,
+                    background: '#2a3038',
+                    color: '#f8f9fa'
+                });
+            });
+
+            // Mostra o modal
+            modalConfirmarRemocao.show();
         }
 
-        // Função para atribuir disciplina ao horário selecionado - VERSÃO ATUALIZADA
-        function atribuirDisciplina(aula) {
-            let minhaAula = getAulaById(aula);
-            disciplinaSelecionada = minhaAula.disciplina;
-            professorSelecionado = minhaAula.professores.join(", ");
-            aulaSelecionadaId = aula;
+        // Configura drag and drop
+        function configurarDragAndDrop() {
+            // Drag start para cards de disciplinas
+            $('.card[draggable="true"]').on('dragstart', function(e) {
+                e.originalEvent.dataTransfer.setData('text/plain', $(this).data('aula-id'));
+                $(this).addClass('dragging');
+            });
 
+            // Drag end para cards de disciplinas
+            $('.card[draggable="true"]').on('dragend', function() {
+                $(this).removeClass('dragging');
+            });
+
+            // Drag over para horários
+            $('.horario-vazio, .horario-preenchido').on('dragover', function(e) {
+                e.preventDefault();
+                $(this).addClass('drag-over');
+            });
+
+            // Drag leave para horários
+            $('.horario-vazio, .horario-preenchido').on('dragleave', function() {
+                $(this).removeClass('drag-over');
+            });
+
+            // Drop para horários
+            $('.horario-vazio, .horario-preenchido').on('drop', function(e) {
+                e.preventDefault();
+                $(this).removeClass('drag-over');
+
+                const aulaId = e.originalEvent.dataTransfer.getData('text/plain');
+                if (aulaId) {
+                    horarioSelecionado = $(this);
+                    atribuirDisciplina(aulaId);
+                }
+            });
+        }
+
+        // Função para atribuir disciplina ao horário selecionado
+        function atribuirDisciplina(aulaId) {
             modalAtribuirDisciplina.hide();
 
             // Pequeno delay para garantir que o modal feche antes de abrir o próximo
             setTimeout(() => {
-                abrirModalAmbiente(aula);
+                abrirModalAmbiente(aulaId);
             }, 300);
         }
+
+        // Função para abrir o modal de seleção de ambiente
+        function abrirModalAmbiente(aulaId) {
+            let minhaAula = getAulaById(aulaId);
+            $("#modalAmbienteNomeDisciplina").html(minhaAula.disciplina);
+            $("#modalAmbienteProfessor").html(minhaAula.professores.join(", "));
+            $("#modalAmbienteAulas").html("1 aula"); // Sempre atribui 1 aula por vez
+
+            // Armazena o ID da aula para uso posterior
+            $('#modalSelecionarAmbiente').data('aula-id', aulaId);
+
+            modalSelecionarAmbiente.show();
+        }
+
+        // Configura o evento de confirmação do ambiente
+        $("#confirmarAmbiente").click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const ambienteSelecionadoId = $("#selectAmbiente").val();
+            const ambienteSelecionadoNome = $("#selectAmbiente option:selected").text();
+            const aulaId = $('#modalSelecionarAmbiente').data('aula-id');
+            const aula = getAulaById(aulaId);
+            const cardAula = $(`#aula_${aulaId}`);
+
+            if (horarioSelecionado) {
+                // Se o horário já contém uma disciplina, move-a de volta para a lista de pendentes
+                if (horarioSelecionado.html().trim() !== "") {
+                    moverDisciplinaParaPendentes(horarioSelecionado[0]);
+                }
+
+                // Preenche o horário selecionado
+                horarioSelecionado.html(`
+                    <div class="card border-1 shadow-sm bg-gradient" style="cursor: pointer; height: 100%;">
+                        <div class="card-body p-1 d-flex flex-column justify-content-center align-items-center text-center">
+                            <h6 class="text-wrap mb-0 fs-6 text-primary" style="font-size: 0.75rem !important;">
+                                <i class="mdi mdi-book-outline me-1"></i>
+                                ${aula.disciplina}
+                            </h6>
+                            <div class="d-flex align-items-center mb-0 py-0">
+                                <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
+                                <small class="text-wrap text-secondary" style="font-size: 0.65rem !important;">${aula.professores.join(", ")}</small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i class="mdi mdi-door fs-6 text-muted me-1"></i>
+                                <small class="text-wrap text-secondary" style="font-size: 0.65rem !important;">${ambienteSelecionadoNome}</small>
+                            </div>
+                        </div>
+                    </div>
+                `);
+
+                // Adiciona os dados ao horário
+                horarioSelecionado
+                    .data('disciplina', aula.disciplina)
+                    .data('professor', aula.professores.join(", "))
+                    .data('ambiente', ambienteSelecionadoId)
+                    .data('aula-id', aulaId)
+                    .data('aulas-total', cardAula.data('aulas-total'))
+                    .data('aulas-pendentes', cardAula.data('aulas-pendentes'))
+                    .removeClass('horario-vazio')
+                    .addClass('horario-preenchido')
+                    .off('click')
+                    .click(function() {
+                        mostrarModalConfirmacaoRemocao(this);
+                    });
+
+                // Atualiza a quantidade de aulas pendentes no card
+                const aulasPendentes = cardAula.data('aulas-pendentes') - 1;
+                cardAula.data('aulas-pendentes', aulasPendentes);
+                cardAula.find('.aulas-pendentes').text(aulasPendentes);
+
+                // Se zerou, remove o card
+                if (aulasPendentes <= 0) {
+                    cardAula.remove();
+                }
+
+                atualizarContadorPendentes();
+                modalSelecionarAmbiente.hide();
+
+                // Mostra feedback de sucesso
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Atribuído!',
+                    text: 'A disciplina foi atribuída ao horário.',
+                    timer: 2000,
+                    showConfirmButton: false,
+                    background: '#2a3038',
+                    color: '#f8f9fa'
+                });
+            }
+        });
 
         // Carrega as disciplinas pendentes no modal
         function carregarDisciplinasPendentes(id) {
@@ -498,6 +582,26 @@
 
             $("#tabelaDisciplinasModal tbody").empty();
 
+            // Verifica se há uma disciplina atribuída no horário selecionado
+            if (horarioSelecionado && horarioSelecionado.data('disciplina')) {
+                const row = `
+                    <tr>
+                        <td>${horarioSelecionado.data('disciplina')}</td>
+                        <td>${horarioSelecionado.data('professor')}</td>
+                        <td>1 aula</td>
+                        <td><button class="btn btn-danger btn-sm btn-remover">Remover</button></td>
+                    </tr>
+                `;
+
+                $("#tabelaDisciplinasModal tbody").append(row);
+
+                // Evento para botão remover
+                $("#tabelaDisciplinasModal .btn-remover").click(function() {
+                    mostrarModalConfirmacaoRemocao(horarioSelecionado[0]);
+                    modalAtribuirDisciplina.hide();
+                });
+            }
+
             $('.card[draggable="true"]').each(function() {
                 var theCard = $(this);
 
@@ -505,7 +609,7 @@
                     '<tr>' +
                     '<td>' + $(this).data("disciplina") + '</td>' +
                     '<td>' + $(this).data("professor") + '</td>' +
-                    '<td>' + $(this).data("aulas") + '</td>' +
+                    '<td>' + $(this).data("aulas-pendentes") + ' aulas</td>' +
                     '<td>' +
                     '<button type="button" class="btn btn-primary btn-sm botao_atribuir" id="botao_atribuir_' + $(this).data("aula-id") + '" >Atribuir</button>' +
                     '</td>' +
@@ -594,7 +698,6 @@
                 });
         });
 
-
         //Progração do evento "change" dos select de turmas
         $('#filtroTurma').on('change', function() {
             $(".loader-demo-box").css("visibility", "visible");
@@ -644,7 +747,7 @@
                             //Se não encontrou a aula atual, adiciona na lista.
                             if (!found) {
                                 var cardAula = '' +
-                                    '<div id="aula_' + obj.id + '" draggable="true" data-aula-id="' + obj.id + '" data-disciplina="' + obj.disciplina + '" data-professor="' + obj.professor.split(" ")[0] + '" data-aulas="' + (obj.ch / 20) + '" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">' +
+                                    '<div id="aula_' + obj.id + '" draggable="true" data-aula-id="' + obj.id + '" data-disciplina="' + obj.disciplina + '" data-professor="' + obj.professor.split(" ")[0] + '" data-aulas-total="' + (obj.ch / 20) + '" data-aulas-pendentes="' + (obj.ch / 20) + '" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">' +
                                     '<div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">' +
                                     '<h6 class="text-primary">' +
                                     '<i class="mdi mdi-book-outline me-1"></i> ' + obj.disciplina +
@@ -655,7 +758,7 @@
                                     '</div>' +
                                     '<div class="d-flex align-items-center">' +
                                     '<i class="mdi mdi-door fs-6 text-muted me-1"></i>' +
-                                    '<small class="text-secondary">' + (obj.ch / 20) + ' aulas</small>' +
+                                    '<small class="text-secondary"><span class="aulas-pendentes">' + (obj.ch / 20) + '</span> aulas</small>' +
                                     '</div>' +
                                     '</div>' +
                                     '</div>';
@@ -676,6 +779,7 @@
                     .done(function() {
                         $("#aulasCounter").html(quantasAulas);
                         $("#btn_atribuir_automaticamente").prop('disabled', false);
+                        configurarDragAndDrop();
                         $(".loader-demo-box").css("visibility", "hidden");
                     });
 
@@ -806,8 +910,9 @@
 
                     } // if tem noite
 
+                    // Configura eventos após criar a tabela
+                    configurarDragAndDrop();
                     $(".horario-vazio").click(function() {
-                        // Abre o modal ao clicar em um horário
                         horarioSelecionado = $(this);
                         carregarDisciplinasPendentes($(this).attr('id'));
                         modalAtribuirDisciplina.show();
@@ -825,144 +930,6 @@
                 //Esconder o div do loader
                 $(".loader-demo-box").css("visibility", "hidden");
             }
-        });
-    });
-
-    //Gambiarras do Bergon
-    document.addEventListener('DOMContentLoaded', function() {
-        const alertHorariosVazios = document.getElementById('alert-horarios-vazios');
-        const contadorHorariosVazios = document.getElementById('contador-horarios-vazios');
-
-        const tabelaDisciplinasModal = document.getElementById('tabelaDisciplinasModal').querySelector('tbody');
-        const selectAmbiente = document.getElementById('selectAmbiente');
-        const confirmarAmbiente = document.getElementById('confirmarAmbiente');
-
-        let horarioSelecionado = null;
-        let disciplinaSelecionada = null;
-        let professorSelecionado = null;
-        let cardSelecionado = null;
-
-        // Atualiza o contador de horários vazios
-        function atualizarContadorHorariosVazios() {
-            const todasCelulas = document.querySelectorAll('#tabela-horarios-noite td.horario-vazio:not(.coluna-fixa):not(.sabado-fixo)');
-            const totalHorariosVazios = Array.from(todasCelulas).filter(celula => celula.innerHTML.trim() === "").length;
-            if (contadorHorariosVazios) {
-                contadorHorariosVazios.textContent = totalHorariosVazios;
-            }
-            if (alertHorariosVazios) {
-                alertHorariosVazios.style.display = totalHorariosVazios > 0 ? 'block' : 'none';
-            }
-        }
-
-        // Configura o evento dragstart para os cards de disciplinas pendentes
-        function configurarDragStart(cardDisciplina) {
-            cardDisciplina.addEventListener('dragstart', function(e) {
-                const ghost = document.createElement('div');
-                ghost.className = 'card shadow-sm border-primary';
-                ghost.style.width = '180px';
-                ghost.style.pointerEvents = 'none';
-                ghost.style.position = 'absolute';
-                ghost.style.left = '-9999px';
-
-                const disciplinaNome = cardDisciplina.dataset.disciplina;
-                const professorNome = cardDisciplina.dataset.professor;
-                const aulas = cardDisciplina.dataset.aulas;
-                const numAulas = parseInt(aulas) || 1;
-
-                ghost.innerHTML = `
-                    <div class="card-body p-2">
-                        <h6 class="card-title text-primary mb-1">${disciplinaNome}</h6>
-                        <p class="card-text text-muted mb-1 small">
-                            <i class="mdi mdi-account me-1"></i>
-                            <small class="text-secondary text-truncate">${professorNome}</small>
-                        </p>
-                        <p class="card-text text-muted small mb-0">
-                            <i class="mdi mdi-clock-outline me-1"></i> ${aulas}
-                        </p>
-                    </div>
-                `;
-
-                document.body.appendChild(ghost);
-                e.dataTransfer.setDragImage(ghost, 90, 20);
-                e.dataTransfer.setData('text/plain', JSON.stringify({
-                    disciplina: disciplinaNome,
-                    professor: professorNome,
-                    aulas: numAulas
-                }));
-
-                // Guarda a referência ao card
-                e.dataTransfer.setData('cardElement', cardDisciplina.dataset.disciplina + '|' + cardDisciplina.dataset.professor);
-
-                setTimeout(() => document.body.removeChild(ghost), 0);
-            });
-        }
-
-        // Função para remover a disciplina do horário selecionado
-        function removerDisciplina() {
-            if (horarioSelecionado) {
-                moverDisciplinaParaPendentes(horarioSelecionado);
-
-                horarioSelecionado.innerHTML = '';
-                delete horarioSelecionado.dataset.disciplina;
-                delete horarioSelecionado.dataset.professor;
-                delete horarioSelecionado.dataset.ambiente;
-                horarioSelecionado.classList.remove('horario-preenchido');
-
-                atualizarContadorHorariosVazios();
-                modalAtribuirDisciplina.hide();
-            }
-        }
-
-        // Configura os eventos de drag-and-drop para os horários
-        const todosHorarios = document.querySelectorAll('td.horario-vazio, td.horario-preenchido');
-
-        todosHorarios.forEach(horario => {
-            // Abre o modal ao clicar em um horário
-            horario.addEventListener('click', function() {
-                horarioSelecionado = horario;
-                carregarDisciplinasPendentes();
-                modalAtribuirDisciplina.show();
-            });
-
-            // Permite soltar uma disciplina no horário
-            horario.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                this.classList.add('drag-over');
-            });
-
-            horario.addEventListener('dragleave', function() {
-                this.classList.remove('drag-over');
-            });
-
-            // Atribui a disciplina ao horário ao soltar
-            horario.addEventListener('drop', function(e) {
-                e.preventDefault();
-                this.classList.remove('drag-over');
-                const data = JSON.parse(e.dataTransfer.getData('text/plain'));
-
-                // Encontra o card correspondente na lista de pendentes
-                const cardIdentifier = e.dataTransfer.getData('cardElement');
-                const cards = document.querySelectorAll('.card[draggable="true"]');
-                let cardToRemove = null;
-
-                cards.forEach(card => {
-                    const cardId = card.dataset.disciplina + '|' + card.dataset.professor;
-                    if (cardId === cardIdentifier) {
-                        cardToRemove = card;
-                    }
-                });
-
-                horarioSelecionado = horario;
-                abrirModalAmbiente(data.disciplina, data.professor, cardToRemove, data.aulas);
-            });
-        });
-
-        // Configura o drag-and-drop para os cards de disciplinas pendentes
-        const cardsDisciplinas = document.querySelectorAll('.card[draggable="true"]');
-        cardsDisciplinas.forEach(card => {
-            // Adiciona um identificador único para cada card
-            card.dataset.cardId = card.dataset.disciplina + '|' + card.dataset.professor;
-            configurarDragStart(card);
         });
     });
 </script>

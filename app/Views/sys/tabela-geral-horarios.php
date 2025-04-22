@@ -195,6 +195,25 @@
     </div>
 </div>
 
+<!-- Modal de Confirmação para Remover Horário -->
+<div class="modal fade" id="modalConfirmarRemocao" tabindex="-1" aria-labelledby="modalConfirmarRemocaoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalConfirmarRemocaoLabel">Confirmar Remoção</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja remover esta aula do horário?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmarRemocao">Remover</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!--só pra testar o modal de ambiente-->
 <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalSelecionarAmbiente">Launch demo modal</button> -->
 
@@ -310,78 +329,82 @@
         let horarioSelecionado = null;
         let disciplinaSelecionada = null;
         let professorSelecionado = null;
-        let cardSelecionado = null;
+        let aulaSelecionadaId = null;
+        let numAulasSelecionada = 1;
 
         // Função para abrir o modal de seleção de ambiente
         function abrirModalAmbiente(aula) {
             let minhaAula = getAulaById(aula);
             $("#modalAmbienteNomeDisciplina").html(minhaAula.disciplina);
             $("#modalAmbienteProfessor").html(minhaAula.professores.join(", "));
-            $("#modalAmbienteAulas").html(minhaAula.ch / 20);
+            numAulasSelecionada = minhaAula.ch / 20;
+            $("#modalAmbienteAulas").html(numAulasSelecionada);
             modalSelecionarAmbiente.show();
         }
 
-        // Configura o evento de confirmação do ambiente
+        // Configura o evento de confirmação do ambiente - VERSÃO ATUALIZADA
         $("#confirmarAmbiente").click(function(e) {
             e.preventDefault();
             e.stopPropagation();
 
             const ambienteSelecionado = $("#selectAmbiente option:selected").text();
-            //const numAulas = cardSelecionado ? parseInt(cardSelecionado.dataset.aulas) || 1 : 1;
-            const numAulas = 4
+            const ambienteId = $("#selectAmbiente").val();
 
             if (horarioSelecionado) {
-                // Se o horário já contém uma disciplina, move-a de volta para a lista de pendentes
-                /*if (horarioSelecionado.innerHTML.trim() !== "") {
-                    moverDisciplinaParaPendentes(horarioSelecionado);
-                }*/
-
                 // Encontra a linha atual e todas as células da mesma linha
-                const linhaAtual = horarioSelecionado.parentNode;
-                const celulasLinha = Array.from(linhaAtual.cells);
-                const indiceColuna = celulasLinha.indexOf(horarioSelecionado);
+                const linhaAtual = horarioSelecionado.parent();
+                const celulasLinha = linhaAtual.find('td');
+                const indiceColuna = celulasLinha.index(horarioSelecionado);
 
                 // Encontra todas as linhas da tabela
-                const todasLinhas = Array.from(document.querySelectorAll('#tabela-horarios tbody tr'));
-                const indiceLinha = todasLinhas.indexOf(linhaAtual);
+                const todasLinhas = $('#tabela-horarios tbody tr');
+                const indiceLinha = todasLinhas.index(linhaAtual);
 
                 // Preenche os horários necessários
-                let aulasRestantes = numAulas;
+                let aulasRestantes = numAulasSelecionada;
                 let linha = indiceLinha;
                 let coluna = indiceColuna;
+                let horariosPreenchidos = [];
 
                 while (aulasRestantes > 0 && linha < todasLinhas.length) {
-                    const celulaAtual = todasLinhas[linha].cells[coluna];
+                    const celulaAtual = $(todasLinhas[linha]).find('td').eq(coluna);
 
                     // Verifica se a célula está vazia e não é coluna fixa ou sábado
-                    if (celulaAtual.classList.contains('horario-vazio') &&
-                        !celulaAtual.classList.contains('coluna-fixa') &&
-                        !celulaAtual.classList.contains('sabado-fixo')) {
+                    if (celulaAtual.hasClass('horario-vazio') &&
+                        !celulaAtual.hasClass('coluna-fixa') &&
+                        !celulaAtual.hasClass('sabado-fixo')) {
 
-                        celulaAtual.innerHTML = `
-                                <div class="card border-1 shadow-sm bg-gradient" style="cursor: pointer; height: 100%;">
-                                    <div class="card-body p-1 d-flex flex-column justify-content-center align-items-center text-center">
-                                        <h6 class="text-wrap mb-0 fs-6 text-primary" style="font-size: 0.75rem !important;">
-                                            <i class="mdi mdi-book-outline me-1"></i>
-                                            ${disciplinaSelecionada}
-                                        </h6>
-                                        <div class="d-flex align-items-center mb-0 py-0">
-                                            <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
-                                            <small class="text-wrap text-secondary" style="font-size: 0.65rem !important;">${professorSelecionado}</small>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <i class="mdi mdi-door fs-6 text-muted me-1"></i>
-                                            <small class="text-wrap text-secondary" style="font-size: 0.65rem !important;">${ambienteSelecionado}</small>
-                                        </div>
+                        celulaAtual.html(`
+                            <div class="card border-1 shadow-sm bg-gradient" style="cursor: pointer; height: 100%;">
+                                <div class="card-body p-1 d-flex flex-column justify-content-center align-items-center text-center">
+                                    <h6 class="text-wrap mb-0 fs-6 text-primary" style="font-size: 0.75rem !important;">
+                                        <i class="mdi mdi-book-outline me-1"></i>
+                                        ${disciplinaSelecionada}
+                                    </h6>
+                                    <div class="d-flex align-items-center mb-0 py-0">
+                                        <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
+                                        <small class="text-wrap text-secondary" style="font-size: 0.65rem !important;">${professorSelecionado}</small>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <i class="mdi mdi-door fs-6 text-muted me-1"></i>
+                                        <small class="text-wrap text-secondary" style="font-size: 0.65rem !important;">${ambienteSelecionado}</small>
                                     </div>
                                 </div>
-                            `;
+                            </div>
+                        `);
 
-                        celulaAtual.dataset.disciplina = disciplinaSelecionada;
-                        celulaAtual.dataset.professor = professorSelecionado;
-                        celulaAtual.dataset.ambiente = $("#selectAmbiente").val();
-                        celulaAtual.classList.add('horario-preenchido', 'p-0');
+                        celulaAtual.data('disciplina', disciplinaSelecionada);
+                        celulaAtual.data('professor', professorSelecionado);
+                        celulaAtual.data('ambiente', ambienteId);
+                        celulaAtual.data('aula-id', aulaSelecionadaId);
+                        celulaAtual.removeClass('horario-vazio').addClass('horario-preenchido');
 
+                        // Adiciona evento de clique para remover
+                        celulaAtual.off('click').on('click', function() {
+                            removerAulaDoHorario($(this));
+                        });
+
+                        horariosPreenchidos.push(celulaAtual);
                         aulasRestantes--;
                     }
 
@@ -397,19 +420,65 @@
                 }
 
                 // Remove o card da lista de pendentes
-                /*if (cardSelecionado && cardSelecionado.parentNode) {
-                    cardSelecionado.parentNode.removeChild(cardSelecionado);
-                    atualizarContadorPendentes();
-                }*/
+                $(`#aula_${aulaSelecionadaId}`).remove();
+                atualizarContadorPendentes();
 
-                //atualizarContadorHorariosVazios();
+                // Fecha os modais
                 modalSelecionarAmbiente.hide();
                 modalAtribuirDisciplina.hide();
             }
         });
 
-        // Função para atribuir disciplina ao horário selecionado
+        // Função para remover aula do horário e voltar para pendentes
+        function removerAulaDoHorario(celula) {
+            const aulaId = celula.data('aula-id');
+            const aula = getAulaById(aulaId);
+
+            // Recria o card na lista de pendentes
+            const cardAula = `
+                <div id="aula_${aula.id}" draggable="true" data-aula-id="${aula.id}" data-disciplina="${aula.disciplina}" data-professor="${aula.professores.join(", ")}" data-aulas="${aula.ch / 20}" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">
+                    <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
+                        <h6 class="text-primary">
+                            <i class="mdi mdi-book-outline me-1"></i> ${aula.disciplina}
+                        </h6>
+                        <div class="d-flex align-items-center mb-0 py-0" id="professor_aula_${aula.id}">
+                            <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
+                            <small class="text-secondary">${aula.professores.join(", ")}</small>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="mdi mdi-door fs-6 text-muted me-1"></i>
+                            <small class="text-secondary">${aula.ch / 20} aulas</small>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            $('#aulasContainer').append(cardAula);
+            celula.html('').removeData().removeClass('horario-preenchido').addClass('horario-vazio');
+
+            // Restaura o evento de clique original
+            celula.off('click').on('click', function() {
+                horarioSelecionado = $(this);
+                carregarDisciplinasPendentes($(this).attr('id'));
+                modalAtribuirDisciplina.show();
+            });
+
+            atualizarContadorPendentes();
+        }
+
+        // Função para atualizar o contador de pendentes
+        function atualizarContadorPendentes() {
+            const count = $('.card[draggable="true"]').length;
+            $("#aulasCounter").html(count);
+        }
+
+        // Função para atribuir disciplina ao horário selecionado - VERSÃO ATUALIZADA
         function atribuirDisciplina(aula) {
+            let minhaAula = getAulaById(aula);
+            disciplinaSelecionada = minhaAula.disciplina;
+            professorSelecionado = minhaAula.professores.join(", ");
+            aulaSelecionadaId = aula;
+
             modalAtribuirDisciplina.hide();
 
             // Pequeno delay para garantir que o modal feche antes de abrir o próximo
@@ -428,26 +497,6 @@
             $("#modal_Turma").html($('#filtroTurma option:selected').text());
 
             $("#tabelaDisciplinasModal tbody").empty();
-
-            // Verifica se há uma disciplina atribuída no horário selecionado
-            /*if (horarioSelecionado && horarioSelecionado.dataset.disciplina)
-            {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${horarioSelecionado.dataset.disciplina}</td>
-                    <td>${horarioSelecionado.dataset.professor}</td>
-                    <td>1</td>
-                    <td><button class="btn btn-danger btn-sm btn-remover">Remover</button></td>
-                `;
-
-                tabelaDisciplinasModal.appendChild(row);
-
-                // Adiciona evento de clique diretamente
-                row.querySelector('.btn-remover').addEventListener('click', function()
-                {
-                    removerDisciplina();
-                });
-            }*/
 
             $('.card[draggable="true"]').each(function() {
                 var theCard = $(this);
@@ -779,10 +828,7 @@
         });
     });
 
-
-
     //Gambiarras do Bergon
-
     document.addEventListener('DOMContentLoaded', function() {
         const alertHorariosVazios = document.getElementById('alert-horarios-vazios');
         const contadorHorariosVazios = document.getElementById('contador-horarios-vazios');
@@ -807,15 +853,6 @@
                 alertHorariosVazios.style.display = totalHorariosVazios > 0 ? 'block' : 'none';
             }
         }
-
-        // Atualiza o contador de disciplinas pendentes
-        /*function atualizarContadorPendentes() {
-            const cardsPendentes = document.querySelectorAll('.card[draggable="true"]');
-            const contadorPendentes = document.querySelector('.card-title.text-center');
-            if (contadorPendentes) {
-                contadorPendentes.textContent = `Aulas Pendentes (${cardsPendentes.length})`;
-            }
-        }*/
 
         // Configura o evento dragstart para os cards de disciplinas pendentes
         function configurarDragStart(cardDisciplina) {
@@ -860,98 +897,6 @@
             });
         }
 
-
-
-        // Configura o evento de confirmação do ambiente
-        /*confirmarAmbiente.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            const ambienteSelecionado = $("#selectAmbiente option:selected").text();
-            const numAulas = cardSelecionado ? parseInt(cardSelecionado.dataset.aulas) || 1 : 1;
-
-            if (horarioSelecionado) {
-                // Se o horário já contém uma disciplina, move-a de volta para a lista de pendentes
-                if (horarioSelecionado.innerHTML.trim() !== "") {
-                    moverDisciplinaParaPendentes(horarioSelecionado);
-                }
-
-                // Encontra a linha atual e todas as células da mesma linha
-                const linhaAtual = horarioSelecionado.parentNode;
-                const celulasLinha = Array.from(linhaAtual.cells);
-                const indiceColuna = celulasLinha.indexOf(horarioSelecionado);
-
-                // Encontra todas as linhas da tabela
-                const todasLinhas = Array.from(document.querySelectorAll('#tabela-horarios tbody tr'));
-                const indiceLinha = todasLinhas.indexOf(linhaAtual);
-
-                // Preenche os horários necessários
-                let aulasRestantes = numAulas;
-                let linha = indiceLinha;
-                let coluna = indiceColuna;
-
-                while (aulasRestantes > 0 && linha < todasLinhas.length) {
-                    const celulaAtual = todasLinhas[linha].cells[coluna];
-
-                    // Verifica se a célula está vazia e não é coluna fixa ou sábado
-                    if (celulaAtual.classList.contains('horario-vazio') &&
-                        !celulaAtual.classList.contains('coluna-fixa') &&
-                        !celulaAtual.classList.contains('sabado-fixo')) {
-
-                        celulaAtual.innerHTML = `
-                            <div class="card border-1 shadow-sm bg-gradient" style="cursor: pointer; height: 100%;">
-                                <div class="card-body p-1 d-flex flex-column justify-content-center align-items-center text-center">
-                                    <h6 class="text-wrap mb-0 fs-6 text-primary" style="font-size: 0.75rem !important;">
-                                        <i class="mdi mdi-book-outline me-1"></i>
-                                        ${disciplinaSelecionada}
-                                    </h6>
-                                    <div class="d-flex align-items-center mb-0 py-0">
-                                        <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
-                                        <small class="text-wrap text-secondary" style="font-size: 0.65rem !important;">${professorSelecionado}</small>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <i class="mdi mdi-door fs-6 text-muted me-1"></i>
-                                        <small class="text-wrap text-secondary" style="font-size: 0.65rem !important;">${ambienteSelecionado}</small>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-
-                        celulaAtual.dataset.disciplina = disciplinaSelecionada;
-                        celulaAtual.dataset.professor = professorSelecionado;
-                        celulaAtual.dataset.ambiente = $("#selectAmbiente").val();
-                        celulaAtual.classList.add('horario-preenchido', 'p-0');
-
-                        aulasRestantes--;
-                    }
-
-                    // Move para a próxima célula (mesma coluna, próxima linha)
-                    linha++;
-
-                    // Se chegou ao final da tabela, volta para o início e próxima coluna
-                    if (linha >= todasLinhas.length) {
-                        linha = 0;
-                        coluna = (coluna + 1) % 7; // 7 colunas na tabela
-                        if (coluna === 0) coluna = 1; // Pula a coluna de horários
-                    }
-                }
-
-                // Remove o card da lista de pendentes
-                if (cardSelecionado && cardSelecionado.parentNode) {
-                    cardSelecionado.parentNode.removeChild(cardSelecionado);
-                    atualizarContadorPendentes();
-                }
-
-                atualizarContadorHorariosVazios();
-                modalSelecionarAmbiente.hide();
-                modalAtribuirDisciplina.hide();
-            }
-        });*/
-
-
-
-
-
         // Função para remover a disciplina do horário selecionado
         function removerDisciplina() {
             if (horarioSelecionado) {
@@ -967,46 +912,6 @@
                 modalAtribuirDisciplina.hide();
             }
         }
-
-        // Move uma disciplina de volta para a lista de pendentes
-        /*function moverDisciplinaParaPendentes(horario) {
-            const disciplinaExistente = {
-                disciplina: horario.dataset.disciplina,
-                professor: horario.dataset.professor,
-                ambiente: horario.dataset.ambiente
-            };
-
-            const novoCard = document.createElement('div');
-            novoCard.setAttribute('draggable', 'true');
-            novoCard.dataset.disciplina = disciplinaExistente.disciplina;
-            novoCard.dataset.professor = disciplinaExistente.professor;
-            novoCard.dataset.aulas = "1 aula";
-            novoCard.className = 'card border-1 shadow-sm mx-4 my-1 bg-gradient';
-            novoCard.style.cursor = 'pointer';
-
-            novoCard.innerHTML = `
-                <div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">
-                    <h6 class="text-primary">
-                        <i class="mdi mdi-book-outline me-1"></i> ${disciplinaExistente.disciplina}
-                    </h6>
-                    <div class="d-flex align-items-center mb-0 py-0">
-                        <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
-                        <small class="text-secondary">${disciplinaExistente.professor}</small>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <i class="mdi mdi-door fs-6 text-muted me-1"></i>
-                        <small class="text-secondary">1 aula</small>
-                    </div>
-                </div>
-            `;
-
-            const containerCards = document.querySelector('.card-body .row .col-12');
-            if (containerCards) {
-                containerCards.appendChild(novoCard);
-                configurarDragStart(novoCard);
-                atualizarContadorPendentes();
-            }
-        }*/
 
         // Configura os eventos de drag-and-drop para os horários
         const todosHorarios = document.querySelectorAll('td.horario-vazio, td.horario-preenchido');
@@ -1059,13 +964,5 @@
             card.dataset.cardId = card.dataset.disciplina + '|' + card.dataset.professor;
             configurarDragStart(card);
         });
-
-        // Atualiza os contadores ao carregar a página
-        //atualizarContadorHorariosVazios();
-        //atualizarContadorPendentes();
-
-        // Remove as funções globais e usa escopo local
-        //window.atribuirDisciplina = atribuirDisciplina;
-        //window.removerDisciplina = removerDisciplina;
     });
 </script>

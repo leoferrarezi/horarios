@@ -1,17 +1,19 @@
 <style>
-    /* Substitua #cards-container pelo seletor correto */
-    .card-body.overflow-y-auto::-webkit-scrollbar {
+    .card-body.overflow-y-auto::-webkit-scrollbar,
+    .custom-scrollbar::-webkit-scrollbar {
         width: 5px;
         background-color: #000;
     }
 
-    .card-body.overflow-y-auto::-webkit-scrollbar-track {
+    .card-body.overflow-y-auto::-webkit-scrollbar-track,
+    .custom-scrollbar::-webkit-scrollbar-track {
         box-shadow: inset 0 0 5px rgba(6, 6, 6, 0.3);
         background: #f1f1f1;
         /* Cor de fundo da trilha */
     }
 
-    .card-body.overflow-y-auto::-webkit-scrollbar-thumb {
+    .card-body.overflow-y-auto::-webkit-scrollbar-thumb,
+    .custom-scrollbar::-webkit-scrollbar-thumb {
         background-color: #333;
         outline: 1px solid slategrey;
         border-radius: 10px;
@@ -268,19 +270,21 @@
 
         <!-- Seção de Aulas Pendentes -->
         <div class="card left-column-section" style="flex: 1; min-height: 0;">
-            <div class="card-body overflow-y-auto d-flex flex-column">
+            <div class="card-body overflow-y-hidden d-flex flex-column">
                 <p class="text-center"> Aulas Pendentes: &nbsp; <span class="badge badge-pill badge-info" id="aulasCounter">-</span></p>
 
                 <div class="row">
                     <div class="col-12 text-center">
-                        <button id="btn_atribuir_automaticamente" type="button" class="btn btn-info" disabled><i class="mdi mdi-auto-fix"></i> Atribuir automaticamente</button>
+                        <button id="btn_atribuir_automaticamente" type="button" class="btn btn-info" disabled>
+                            <i class="mdi mdi-auto-fix"></i> Atribuir automaticamente
+                        </button>
                     </div>
                 </div>
 
-                <hr />
+                <hr class="my-2">
 
-                <div class="row flex-grow-1">
-                    <div class="col-12" id="aulasContainer"></div>
+                <div class="row flex-grow-1 min-vh-0">
+                    <div class="col-12 overflow-y-auto custom-scrollbar" id="aulasContainer"></div>
                 </div>
             </div>
         </div>
@@ -417,15 +421,14 @@
                 // Fecha o modal
                 modalConfirmarRemocao.hide();
 
-                // Mostra feedback de sucesso (opcional)
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Removido!',
+                // Mostra feedback de sucesso
+                $.toast({
+                    heading: 'Sucesso',
                     text: 'A disciplina foi removida do horário.',
-                    timer: 2000,
-                    showConfirmButton: false,
-                    background: '#2a3038',
-                    color: '#f8f9fa'
+                    showHideTransition: 'slide',
+                    icon: 'success',
+                    loaderBg: '#f96868',
+                    position: 'top-center'
                 });
             });
 
@@ -559,14 +562,13 @@
                 modalSelecionarAmbiente.hide();
 
                 // Mostra feedback de sucesso
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Atribuído!',
+                $.toast({
+                    heading: 'Sucesso',
                     text: 'A disciplina foi atribuída ao horário.',
-                    timer: 2000,
-                    showConfirmButton: false,
-                    background: '#2a3038',
-                    color: '#f8f9fa'
+                    showHideTransition: 'slide',
+                    icon: 'success',
+                    loaderBg: '#f96868',
+                    position: 'top-center'
                 });
             }
         });

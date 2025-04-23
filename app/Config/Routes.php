@@ -17,21 +17,11 @@ $routes->post('login', [LoginController::class, 'loginAction']);
 $routes->get('/', 'Home::home');
 $routes->get('/sys', 'Home::home');
 $routes->get('/sys/home', 'Home::home');
+
 $routes->get('/sys/em-construcao', 'Home::emConstrucao');
 
 //cadastro de turmas
 $routes->get('sys/cadastro-turmas', 'Turmas::index');
-
-//cadastro de ambientes
-$routes->get('sys/cadastro-ambientes', 'Ambientes::index');
-$routes->post('sys/cadastro-ambientes/salvar-ambiente', 'Ambientes::salvarAmbiente');
-$routes->post('sys/cadastro-ambientes/deletar-ambiente', 'Ambientes::deletarAmbiente');
-$routes->post('sys/cadastro-ambientes/atualizar-ambiente', 'Ambientes::atualizarAmbiente');
-$routes->post('sys/cadastro-ambientes/salvar-grupo-ambientes', 'Ambientes::salvarGrupoAmbientes');
-$routes->post('sys/cadastro-ambientes/deletar-grupo-ambientes', 'Ambientes::deletarGrupoAmbientes');
-$routes->post('sys/cadastro-ambientes/editar-grupo-ambientes', 'Ambientes::editarGrupoAmbientes');
-$routes->post('sys/cadastro-ambientes/adicionar-ambientes-grupo', 'Ambientes::adicionarAmbientesAoGrupo');
-$routes->post('sys/cadastro-ambientes/remover-ambientes-grupo', 'Ambientes::removerAmbienteDoGrupo');
 
 //horarios de aula
 $routes->get('sys/cadastro-horarios-de-aula', 'TemposAula::cadastro');
@@ -39,13 +29,30 @@ $routes->get('sys/cadastro-horarios-de-aula', 'TemposAula::cadastro');
 //Relatórios
 $routes->get('sys/relatorios', 'Relatorios::index');
 
-//Tabela Geral de Horários
-$routes->get('sys/tabela-geral-horarios', 'TabelaGeral::index');
-
 //adicionar o filter (middleware de login no group depois)
-$routes->group('sys', function ($routes) {
+$routes->group('sys', function ($routes)
+{
+    $routes->group('tabela-horarios', function ($routes) 
+    {
+        $routes->get('', 'TabelaHorarios::index');
+        $routes->post('atribuirAula', 'TabelaHorarios::atribuirAula');
+    });
 
-    $routes->group('professor', function ($routes) {
+    $routes->group('cadastro-ambientes', function ($routes) 
+    {
+        $routes->get('', 'Ambientes::index');
+        $routes->post('salvar-ambiente', 'Ambientes::salvarAmbiente');
+        $routes->post('deletar-ambiente', 'Ambientes::deletarAmbiente');
+        $routes->post('atualizar-ambiente', 'Ambientes::atualizarAmbiente');
+        $routes->post('salvar-grupo-ambientes', 'Ambientes::salvarGrupoAmbientes');
+        $routes->post('deletar-grupo-ambientes', 'Ambientes::deletarGrupoAmbientes');
+        $routes->post('editar-grupo-ambientes', 'Ambientes::editarGrupoAmbientes');
+        $routes->post('adicionar-ambientes-grupo', 'Ambientes::adicionarAmbientesAoGrupo');
+        $routes->post('remover-ambientes-grupo', 'Ambientes::removerAmbienteDoGrupo');
+    });
+
+    $routes->group('professor', function ($routes) 
+    {
         $routes->get('', 'Professor::index');
         $routes->get('listar', 'Professor::index');
         $routes->get('cadastro', 'Professor::cadastro');
@@ -62,7 +69,8 @@ $routes->group('sys', function ($routes) {
         $routes->get('horarios', 'Professor::horarios');
     });
 
-    $routes->group('matriz', function ($routes) {
+    $routes->group('matriz', function ($routes) 
+    {
         $routes->get('', 'MatrizCurricular::index');
         $routes->get('cadastro', 'MatrizCurricular::cadastro');
         $routes->post('salvar', 'MatrizCurricular::salvar');
@@ -74,7 +82,8 @@ $routes->group('sys', function ($routes) {
         $routes->post('processarImportacaoDisciplinas', 'MatrizCurricular::processarImportacaoDisciplinas');
     });
 
-    $routes->group('horario', function ($routes) {
+    $routes->group('horario', function ($routes) 
+    {
         $routes->get('', 'Horario::index');
         $routes->get('cadastro', 'Horario::cadastro');
         $routes->post('salvar', 'Horario::salvar');
@@ -82,7 +91,8 @@ $routes->group('sys', function ($routes) {
         $routes->post('deletar', 'Horario::deletar');
     });
 
-    $routes->group('curso', function ($routes) {
+    $routes->group('curso', function ($routes) 
+    {
         $routes->get('', 'Cursos::index');
         $routes->get('listar', 'Cursos::index');
         $routes->get('cadastro', 'Cursos::cadastro');
@@ -93,7 +103,8 @@ $routes->group('sys', function ($routes) {
         $routes->post('processarImportacao', 'Cursos::processarImportacao');
     });
 
-    $routes->group('disciplina', function ($routes) {
+    $routes->group('disciplina', function ($routes) 
+    {
         //CRUD Disciplinas
         $routes->get('', 'Disciplinas::index');
         $routes->get('listar', 'Disciplinas::index');
@@ -103,8 +114,8 @@ $routes->group('sys', function ($routes) {
         $routes->post('deletar', 'Disciplinas::deletar');
     });
 
-    $routes->group('tempoAula', function ($routes) {
-
+    $routes->group('tempoAula', function ($routes) 
+    {
         $routes->get('', 'TemposAula::index');
         $routes->get('listar', 'TemposAula::index');
         $routes->get('cadastro', 'TemposAula::cadastro');
@@ -114,7 +125,8 @@ $routes->group('sys', function ($routes) {
         $routes->get('getTemposFromTurma/(:num)', 'TemposAula::getTemposFromTurma/$1');
     });
 
-    $routes->group('turma', function ($routes) {
+    $routes->group('turma', function ($routes) 
+    {
         $routes->get('', 'Turmas::index');
         $routes->get('listar', 'Turmas::index');
         $routes->get('cadastro', 'Turmas::cadastro');
@@ -127,7 +139,8 @@ $routes->group('sys', function ($routes) {
         $routes->get('getTurmasByCursoAndSemestre/(:num)/(:num)', 'Turmas::getTurmasByCursoAndSemestre/$1/$2');        
     });
 
-    $routes->group('aulas', function ($routes) {
+    $routes->group('aulas', function ($routes) 
+    {
         $routes->get('', 'Aulas::index');
         $routes->post('salvar', 'Aulas::salvar');
         $routes->post('deletar', 'Aulas::deletar');
@@ -135,8 +148,8 @@ $routes->group('sys', function ($routes) {
         $routes->get('getAulasFromTurma/(:num)', 'Aulas::getAulasFromTurma/$1');
     });
 
-    $routes->group('versao', function ($routes) {
-
+    $routes->group('versao', function ($routes) 
+    {
         $routes->get('', 'Versao::index');
         $routes->get('listar', 'Versao::index');
         $routes->get('cadastro', 'Versao::cadastro');
@@ -147,7 +160,8 @@ $routes->group('sys', function ($routes) {
         $routes->post('duplicar', 'Versao::duplicar');
     });
 
-    $routes->group('admin', ['filter' => 'admin'], function ($routes) {
+    $routes->group('admin', ['filter' => 'admin'], function ($routes) 
+    {
         $routes->get('/', 'AdminController::index'); // Página inicial da admin
         $routes->post('alterar-grupo', 'AdminController::alterarGrupoUsuario'); // Atribuir
         $routes->post('atualizar-usuario', 'AdminController::atualizarUsuario');

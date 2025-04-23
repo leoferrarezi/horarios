@@ -7,7 +7,7 @@ use App\Models\CursosModel;
 use App\Models\VersoesModel;
 use App\Models\AmbientesModel;
 
-class TabelaGeral extends BaseController
+class TabelaHorarios extends BaseController
 {
     public function index()
     {
@@ -31,8 +31,17 @@ class TabelaGeral extends BaseController
             $data['semestre'] = $versao['semestre'];
         }
 
-        $this->content_data['content'] = view('sys/tabela-geral-horarios.php', $data);
+        $this->content_data['content'] = view('sys/tabela-horarios.php', $data);
         
         return view('dashboard', $this->content_data);
+    }
+
+    public function atribuirAula()
+    {
+        $dadosPost = $this->request->getPost();
+        $aula_id = strip_tags($dadosPost['aula_id']);
+        $tempo_de_aula_id = strip_tags($dadosPost['tempo_de_aula_id']);
+        $ambiente_id = strip_tags($dadosPost['ambiente_id']);
+        echo "$aula_id $tempo_de_aula_id $ambiente_id";
     }
 }

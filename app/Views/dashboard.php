@@ -52,7 +52,7 @@
 				</li>
 
 				<li class="nav-item">
-					<a class="nav-link" href="<?php echo base_url('sys/tabela-geral-horarios'); ?>">
+					<a class="nav-link" href="<?php echo base_url('sys/tabela-horarios'); ?>">
 						<span class="menu-icon">
 							<i class="mdi mdi-clock-time-eight"></i>
 						</span>

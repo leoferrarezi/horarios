@@ -125,6 +125,20 @@
     //essa linha abaixo é para detectar que o documento foi completamente carregado e executar o código após isso
     $(document).ready(function() {
 
+        $("#nome").on("invalid", function() {
+            this.setCustomValidity("Preencha o nome do horario!");
+        });
+        $("#nome").on("input", function() {
+            this.setCustomValidity("");
+        });
+
+        $("#edit-nome").on("invalid", function() {
+            this.setCustomValidity("Preencha o nome do horario!");
+        });
+        $("#edit-nome").on("input", function() {
+            this.setCustomValidity("");
+        });
+
         //Verificar se tem curso para então "transformar" a tabela em DataTable
         <?php if (!empty($horarios)): ?>
 

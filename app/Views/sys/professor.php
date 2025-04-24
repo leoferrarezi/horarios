@@ -15,7 +15,6 @@
         </ol>
     </nav>
 </div>
-
 <!-- ações e filtros -->
 <div class="row">
     <div class="col-md-12 grid-margin stretch-card">
@@ -153,6 +152,40 @@
 
     //essa linha abaixo é para detectar que o documento foi completamente carregado e executar o código após isso
     $(document).ready(function() {
+
+        $("#nome").on("input", function() {
+            this.setCustomValidity("");
+        });
+        $("#nome").on("invalid", function() {
+            this.setCustomValidity("Preencha o nome do professor!");
+        });
+        $("#edit-nome").on("input", function() {
+            this.setCustomValidity("");
+        });
+        $("#edit-nome").on("invalid", function() {
+            this.setCustomValidity("Preencha o nome do professor!");
+        });
+
+        $("#email").on("input", function() {
+            this.setCustomValidity("");
+        });
+        $("#email").on("invalid", function() {
+            if(this.validity.typeMismatch) {
+                this.setCustomValidity("Insira um e-mail válido!");
+            } else {
+                this.setCustomValidity("");
+            }
+        });
+        $("#edit-email").on("input", function() {
+            this.setCustomValidity("");
+        });
+        $("#edit-email").on("invalid", function() {
+            if(this.validity.typeMismatch) {
+                this.setCustomValidity("Insira um e-mail válido!");
+            } else {
+                this.setCustomValidity("");
+            }
+        });
 
         //Verificar se tem professores para então "transformar" a tabela em DataTable
         <?php if (!empty($professores)): ?>

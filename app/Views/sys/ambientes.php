@@ -227,6 +227,34 @@
 
     $(document).ready(function() {
 
+        $("#nome").on("invalid", function() {
+            this.setCustomValidity("Preencha o nome do ambiente!");
+        });
+        $("#nome").on("input", function() {
+            this.setCustomValidity("");
+        });
+
+        $("#nome-gp").on("invalid", function() {
+            this.setCustomValidity("Preencha o nome do grupo!");
+        });
+        $("#nome-gp").on("input", function() {
+            this.setCustomValidity("");
+        });
+
+        $("[id^='edit-nome-']").on("invalid", function() {
+            this.setCustomValidity("Preencha o nome do ambiente!");
+        });
+        $("[id^='edit-nome-']").on("input", function() {
+            this.setCustomValidity("");
+        });
+
+        $("[id^='edit-nome-gp-']").on("invalid", function() {
+            this.setCustomValidity("Preencha o nome do grupo!");
+        });
+        $("[id^='edit-nome-gp-']").on("input", function() {
+            this.setCustomValidity("");
+        });
+
         <?php if (!empty($ambientes)): ?>
             $("#ambientes").DataTable({
 

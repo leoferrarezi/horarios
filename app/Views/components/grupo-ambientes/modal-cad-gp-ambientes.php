@@ -11,9 +11,9 @@
                 <div class="modal-body">
                     <?php echo csrf_field() ?>
                     <div class="form-group">
-                        <label for="exampleInputUsername1">Nome</label>
-                        <input type="text" class="form-control"
-                            id="nome" name="nome" placeholder="Digite o nome do Grupo de Ambientes"
+                        <label for="nome-gp">Nome</label>
+                        <input type="text" class="form-control" required
+                            id="nome-gp" name="nome" placeholder="Digite o nome do Grupo de Ambientes"
                             value="<?php echo esc(old('nome')) ?>">
                     </div>
                 </div>

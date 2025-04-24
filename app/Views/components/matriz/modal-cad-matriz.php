@@ -11,8 +11,8 @@
                 <div class="modal-body">
                     <?php echo csrf_field() ?>
                     <div class="form-group">
-                        <label for="exampleInputUsername1">Nome</label>
-                        <input type="text" class="form-control" 
+                        <label for="nome">Nome</label>
+                        <input type="text" class="form-control" required
                             id="nome" name="nome" placeholder="Digite o nome da matriz" 
                             value="<?php echo esc(old('nome'))?>">
                     </div>

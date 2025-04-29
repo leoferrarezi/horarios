@@ -24,10 +24,10 @@ class Aulas extends BaseController
 		$matrizModel = new MatrizCurricularModel();
 
 		$data['aulas'] = $aulaModel->findAll();
-		$data['turmas'] = $turmasModel->findAll();
+		$data['turmas'] = $turmasModel->orderBy('CHAR_LENGTH(sigla)')->orderBy('sigla')->findAll();
 		$data['cursos'] = $cursosModel->findAll();
 		$data['disciplinas'] = $disciplinasModel->findAll();
-		$data['professores'] = $professorModel->findAll();
+		$data['professores'] = $professorModel->orderBy('nome')->findAll();
 		$data['matrizes'] = $matrizModel->findAll();
 
 		$data['consulta'] = $aulaModel->getAulasComTurmaDisciplinaEProfessores();

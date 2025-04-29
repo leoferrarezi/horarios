@@ -43,10 +43,15 @@
                                 $marcado = ($emailValido && !$jaCadastrado);
 
                                 $tooltip = '';
-                                if ($jaCadastrado) {
+                                
+                                if ($jaCadastrado) 
+                                {
                                     $tooltip = "Este professor já está cadastrado";
-                                } else {
-                                    if (!$emailValido) {
+                                } 
+                                else 
+                                {
+                                    if (!$emailValido) 
+                                    {
                                         $tooltip = "E-mail institucional inválido";
                                     }
                                 }

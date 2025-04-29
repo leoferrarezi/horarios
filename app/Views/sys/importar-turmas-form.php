@@ -3,7 +3,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="<?=base_url('/sys/home')?>">Início</a></li>
-            <li class="breadcrumb-item"><a href="<?=base_url('/sys/turmas')?>">Turmas</a></li>
+            <li class="breadcrumb-item"><a href="<?=base_url('/sys/turma')?>">Turmas</a></li>
             <li class="breadcrumb-item active" aria-current="page">Importar Turmas</li>
         </ol>
     </nav>
@@ -39,9 +39,15 @@
                             <?php foreach ($turmas as $index => $turma): ?>
                                 <tr>
                                     <td>
-                                        <div class="form-check">
+                                        <div class="form-check"
+                                            <?php echo ($turma['no_curso'] == 0) ? " data-bs-toggle='tooltip' data-placement='top' title='Curso inexistente no banco de dados. Impossível importar.'" : "" ?>>
                                             <label class="form-check-label">
-                                                <input type="checkbox" checked name="selecionados[]" class="form-check-input" value="<?= htmlspecialchars(json_encode($turma), ENT_QUOTES, 'UTF-8') ?>">
+                                                <input type="checkbox" 
+                                                    <?php echo ($turma['no_curso'] == 0) ? "disabled" : "checked"; ?>
+                                                    name="selecionados[]" 
+                                                    class="form-check-input" 
+                                                    value="<?= htmlspecialchars(json_encode($turma), ENT_QUOTES, 'UTF-8') ?>"
+                                                >
                                             </label>
                                         </div>
                                     </td>
@@ -63,8 +69,10 @@
 <?php endif; ?>
 
 <script>
-    $(document).ready(function(){
-        document.getElementById('select-all').addEventListener('change', function() {
+    $(document).ready(function()
+    {
+        document.getElementById('select-all').addEventListener('change', function() 
+        {
             const checkboxes = document.querySelectorAll('input[name="selecionados[]"]:not([disabled])');
             checkboxes.forEach(checkbox => checkbox.checked = this.checked);
         });

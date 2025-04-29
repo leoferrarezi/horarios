@@ -37,7 +37,7 @@ class TurmasModel extends Model
         'semestre' => 'required|regex_match[/^[12]$/]', //verifica se 1 ou 2.
         'periodo' => 'required',
         'curso_id' => 'required|max_length[11]|is_not_unique[cursos.id]',
-        'tempos_diarios' => 'required|is_natural|max_length[2]',
+        //'tempos_diarios' => 'required|is_natural|max_length[2]',
         'horario_id' => 'permit_empty|is_not_unique[horarios.id]|max_length[11]',
         'horario_preferencial_id' => 'permit_empty|is_not_unique[horarios.id]|max_length[11]'
     ];
@@ -67,11 +67,11 @@ class TurmasModel extends Model
             'max_length'     => 'O Curso deve ter no máximo 11 caracteres.',
             'is_not_unique'  => 'O Curso informado não está cadastrado.'
         ],
-        'tempos_diarios' => [
+        /*'tempos_diarios' => [
             'required'     => 'Informe os Tempos de Aula Diários da turma.',
             'is_natural'   => 'O campo tempos diários deve ser um número.',
             'max_length'   => 'O campo tempos diários não pode exceder 2 caracteres.'
-        ],
+        ],*/
         'horario_id' => [
             'permit_empty'  => 'O campo Horário é opcional.',
             'is_not_unique' => 'O Horário informado não está cadastrado.',
@@ -104,17 +104,18 @@ class TurmasModel extends Model
             ->join('horarios as horario', 'horario.id = turmas.horario_id', 'left')
             ->join('horarios as hp', 'hp.id = turmas.horario_preferencial_id', 'left')
             ->join('cursos as curso', 'curso.id = turmas.curso_id')
+            ->orderBy('turmas.sigla', 'asc')
             ->findAll();
     }
 
     public function getTurmasByCursos($curso_id)
     {
-        return $this->select('id,sigla')->where('curso_id', $curso_id)->findAll();
+        return $this->select('id,sigla')->where('curso_id', $curso_id)->orderBy('sigla')->findAll();
     }
 
     public function getTurmasByCursosAndSemestre($curso_id,$semestre)
     {
-        return $this->select('id,sigla')->where(['curso_id' => $curso_id, 'semestre' => $semestre])->findAll();
+        return $this->select('id,sigla')->where(['curso_id' => $curso_id, 'semestre' => $semestre])->orderBy('sigla')->findAll();
     }
 
     public function verificarReferencias(array $data)
@@ -123,8 +124,10 @@ class TurmasModel extends Model
 
         $referencias = $this->verificarReferenciasEmTabelas($id);
         $referencias = implode(", ", $referencias);
+
         // Se o ID for referenciado em outras tabelas, lança a exceção
-        if (!empty($referencias)) {
+        if (!empty($referencias)) 
+        {
             // Passa o nome das tabelas onde o ID foi encontrado para a exceção
             throw new ReferenciaException("Esta turma não pode ser excluída, porque está em uso. <br>
                     Para excluir esta turma, primeiro remova as associações em {$referencias} que estão utilizando esta turma'.");
@@ -147,12 +150,14 @@ class TurmasModel extends Model
         $referenciasEncontradas = [];
 
         // Verificar se o ID é referenciado
-        foreach ($tabelas as $tabela => $fk_coluna) {
+        foreach ($tabelas as $tabela => $fk_coluna) 
+        {
             $builder = $db->table($tabela);
             $builder->where($fk_coluna, $id);
             $query = $builder->get();
 
-            if ($query->getNumRows() > 0) {
+            if ($query->getNumRows() > 0) 
+            {
                 // Adiciona a tabela à lista de referências encontradas
                 $referenciasEncontradas[] = $tabela;
             }

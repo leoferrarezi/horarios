@@ -20,7 +20,7 @@ class Turmas extends BaseController
         $horarios = new HorariosModel();
         $cursos = new CursosModel();
 
-        $data['turmas'] = $turmas->orderBy('sigla', 'asc')->getTurmasWithHorarioAndCursos();
+        $data['turmas'] = $turmas->getTurmasWithHorarioAndCursos();
         $data['horarios'] = $horarios->orderBy('nome', 'asc')->findAll();
         $data['cursos'] = $cursos->orderBy('nome', 'asc')->findAll();
 
@@ -82,21 +82,27 @@ class Turmas extends BaseController
 
     public function deletar()
     {
-
         $dadosPost = $this->request->getPost();
         $id = strip_tags($dadosPost['id']);
 
         $turmas = new TurmasModel();
-        try {
-            $turmas->verificaReferencia(['id' => $id]);
 
-            if ($turmas->delete($id)) {
+        try 
+        {
+            $turmas->verificarReferencias(['id' => $id]);
+
+            if ($turmas->delete($id)) 
+            {
                 session()->setFlashdata('sucesso', 'Turma excluída com sucesso.');
                 return redirect()->to(base_url('/sys/turma'));
-            } else {
+            } 
+            else 
+            {
                 return redirect()->to(base_url('/sys/turma'))->with('erro', 'Falha ao deletar disciplina');
             }
-        } catch (ReferenciaException $e) {
+        } 
+        catch (ReferenciaException $e) 
+        {
             session()->setFlashdata('erro', $e->getMessage());
             return redirect()->to(base_url('/sys/turma'));
         }
@@ -104,25 +110,30 @@ class Turmas extends BaseController
 
     public function importar()
     {
-
         $file = $this->request->getFile('arquivo');
 
-        if (!$file->isValid()) {
+        if (!$file->isValid())
+        {
             return $this->response->setStatusCode(ResponseInterface::HTTP_BAD_REQUEST)
                 ->setBody('Erro: Arquivo não enviado.');
         }
 
         $extension = $file->getClientExtension();
-        if (!in_array($extension, ['xls', 'xlsx'])) {
+
+        if (!in_array($extension, ['xls', 'xlsx'])) 
+        {
             return $this->response->setStatusCode(ResponseInterface::HTTP_UNSUPPORTED_MEDIA_TYPE)
                 ->setBody('Erro: Formato de arquivo não suportado. Apenas XLSX ou XLS');
         }
 
         $reader = $extension === 'xlsx' ? new Xlsx() : new Xls();
 
-        try {
+        try 
+        {
             $spreadsheet = $reader->load($file->getRealPath());
-        } catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) {
+        } 
+        catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) 
+        {
             return $this->response->setStatusCode(ResponseInterface::HTTP_INTERNAL_SERVER_ERROR)
                 ->setBody('Erro ao carregar o arquivo: ' . $e->getMessage());
         }
@@ -130,14 +141,17 @@ class Turmas extends BaseController
         $sheet = $spreadsheet->getActiveSheet();
         $dataRows = [];
 
-        $turmaModel = new TurmasModel();
         $data['turmasExistentes'] = [];
+
+        $cursoModel = new CursosModel();
 
         // Lê os dados da planilha
         $primeiraLinha = true;
-        foreach ($sheet->getRowIterator() as $row) {
 
-            if ($primeiraLinha) {
+        foreach ($sheet->getRowIterator() as $row) 
+        {
+            if ($primeiraLinha) 
+            {
                 $primeiraLinha = false;
                 continue;
             }
@@ -146,12 +160,18 @@ class Turmas extends BaseController
             $cellIterator->setIterateOnlyExistingCells(false);
 
             $rowData = [];
-            foreach ($cellIterator as $cell) {
+
+            foreach ($cellIterator as $cell) 
+            {
                 $rowData[] = $cell->getValue();
             }
 
             $curso = (isset($rowData[1])) ? explode(", ", $rowData[1]) : null;
             $curso = (is_array($curso)) ? $curso[0] : null;
+
+            $curso_id = $cursoModel->getIdByNome($curso);
+            if($curso_id == null)
+                $curso_id = 0;
 
             $codigo = (isset($rowData[0])) ? explode(".", $rowData[0]) : null;
             $periodo = (is_array($codigo)) ? $codigo[1] : null;
@@ -162,7 +182,8 @@ class Turmas extends BaseController
                 'ano' => $rowData[3] ?? null,
                 'semestre' => $rowData[4] ?? null,
                 'curso' => $curso,
-                'periodo' => $periodo
+                'periodo' => $periodo,
+                'no_curso' => $curso_id
             ];
         }
 
@@ -172,13 +193,12 @@ class Turmas extends BaseController
         return view('dashboard', $this->content_data);
     }
 
-
     public function processarImportacao()
     {
-
         $selecionados = $this->request->getPost('selecionados');
 
-        if (empty($selecionados)) {
+        if (empty($selecionados)) 
+        {
             session()->setFlashdata('erro', 'Nenhum registro selecionado para importação.');
             return redirect()->to(base_url('/sys/matriz'));
         }
@@ -187,18 +207,23 @@ class Turmas extends BaseController
         $cursoModel = new CursosModel();
         $insertedCount = 0;
 
-        foreach ($selecionados as $registroJson) {
+        foreach ($selecionados as $registroJson) 
+        {
             $registro = json_decode($registroJson, true);
 
             $registro['curso_id'] = $cursoModel->getIdByNome($registro['curso']);
             unset($registro['curso']);
 
-            if (!empty($registro['sigla'])) {
-                $turmaModel->insert($registro);
-                //print_r($turmaModel->errors());
-                //die();
-                $insertedCount++;
-            }
+            if($registro['curso_id'] != null)
+            {
+                if (!empty($registro['sigla'])) 
+                {
+                    $turmaModel->insert($registro);
+                    //print_r($turmaModel->errors());
+                    //die();
+                    $insertedCount++;
+                }
+            }            
         }
 
         session()->setFlashdata('sucesso', "{$insertedCount} registros importados com sucesso!");

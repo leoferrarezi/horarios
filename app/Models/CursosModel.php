@@ -80,8 +80,14 @@ class CursosModel extends Model
         $builder = $this->builder();
         $builder->where('nome', $nome);
         $query = $builder->get();
-        $res = $query->getResultArray();
-        return $res[0]['id'];
+
+        if($query->getNumRows() == 1)
+        {
+            $res = $query->getResultArray();
+            return $res[0]['id'];
+        }
+        
+        return null;
     }
 
     public function verificarReferencias(array $data)

@@ -12,7 +12,7 @@ class AulaHorarioModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['aula_id', 'tempo_de_aula_id', 'versao_id'];
+    protected $allowedFields    = ['aula_id', 'tempo_de_aula_id', 'versao_id', 'ambiente_id'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -32,7 +32,8 @@ class AulaHorarioModel extends Model
         'id' => 'permit_empty|is_natural_no_zero|max_length[11]',
         'aula_id' => 'required|is_not_unique[aulas.id]|max_length[11]',
         'tempo_de_aula_id' => 'required|is_not_unique[tempos_de_aula.id]',
-        'versao_id' => 'is_not_unique[versoes.id]|max_length[11]',
+        'versao_id' => 'required|is_not_unique[versoes.id]|max_length[11]',
+        'ambiente_id' => 'required|is_not_unique[ambientes.id]|max_length[11]'
     ];
     protected $validationMessages   = [
         "aula_id" => [
@@ -46,6 +47,10 @@ class AulaHorarioModel extends Model
         ],
         "versao_id" => [
             "is_not_unique" => "A versão deve estar cadastrada",
+            "max_length" => "O tamanho máximo é 11 dígitos"
+        ],
+        "ambiente_id" => [
+            "is_not_unique" => "O ambiente deve estar cadastrado",
             "max_length" => "O tamanho máximo é 11 dígitos"
         ]
     ];
@@ -62,4 +67,25 @@ class AulaHorarioModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function choqueAmbiente()
+    {
+        //verificar se não tem duas aulas no mesmo ambiente ao mesmo tempo
+    }
+
+    public function choqueDocente()
+    {
+        //verificar se o professor não está em 2 aulas ao mesmo tempo
+    }
+
+    public function restricaoDocente()
+    {
+        //verificar restrições cadastradas
+    }
+
+    public function restricaoHorarios()
+    {
+        //intervalo de xxxx tempo minimo
+        //ultima da noite + primeira da manha
+    }
 }

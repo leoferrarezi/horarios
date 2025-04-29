@@ -42,6 +42,10 @@ class TabelaHorarios extends BaseController
         $aula_id = strip_tags($dadosPost['aula_id']);
         $tempo_de_aula_id = strip_tags($dadosPost['tempo_de_aula_id']);
         $ambiente_id = strip_tags($dadosPost['ambiente_id']);
+
+        
+
+
         echo "$aula_id $tempo_de_aula_id $ambiente_id";
     }
 }

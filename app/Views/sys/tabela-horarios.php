@@ -534,7 +534,6 @@
 
             if (horarioSelecionado)
             {
-
                 // Requisição para atribuir a disciplina ao horário no backend
                 $.post('<?php echo base_url('sys/tabela-horarios/atribuirAula'); ?>', 
                 {
@@ -603,7 +602,7 @@
 
                 // Mostra feedback de sucesso
                 $.toast(
-                    {
+                {
                     heading: 'Sucesso',
                     text: 'A disciplina foi atribuída ao horário.',
                     showHideTransition: 'slide',

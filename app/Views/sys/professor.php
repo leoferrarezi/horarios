@@ -233,14 +233,17 @@
                 modal.find('#professor-nome').text(professorNome);
 
                 $.ajax({
-                    url: '/sys/professor/restricoes/' + professorID, // Defina a rota correta
+                    url: '<?php echo base_url('/sys/professor/restricoes/'); ?>' + professorID, // Defina a rota correta                    
                     method: 'GET',
                     data: { professorID: professorID },
-                    success: function(response) {
-                        // Iterar sobre os dados retornados e atualizar os inputs da modal
-                        Object.keys(response).forEach(function(dia) {
-                            Object.keys(response[dia]).forEach(function(periodo) {
-                                response[dia][periodo].forEach(function(horario) {
+                    success: function(response) 
+                    {
+                        Object.keys(response).forEach(function(dia) 
+                        {
+                            Object.keys(response[dia]).forEach(function(periodo) 
+                            {
+                                response[dia][periodo].forEach(function(horario) 
+                                {
                                     var tipo = horario.tipo;
                                     var id = horario.id;
 
@@ -252,7 +255,8 @@
                             });
                         });
                     },
-                    error: function() {
+                    error: function() 
+                    {
                         alert('Erro ao buscar as restrições do professor. \n' + data);
                     }
                 });

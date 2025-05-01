@@ -15,8 +15,8 @@
                     <input type="hidden" id="edit-id" name="id" />
 
                     <div class="form-group">
-                        <label for="exampleInputUsername1">Nome</label>
-                        <input type="text" class="form-control" 
+                        <label for="edit-nome">Nome</label>
+                        <input type="text" class="form-control" required
                             id="edit-nome" name="nome" placeholder="Digite o nome da versão">
                     </div>
 

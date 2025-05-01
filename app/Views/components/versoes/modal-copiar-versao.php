@@ -15,8 +15,8 @@
                     <input type="hidden" id="duplicar-id" name="id" />
 
                     <div class="form-group">
-                        <label for="exampleInputUsername1">Nome da Cópia</label>
-                        <input type="text" class="form-control" 
+                        <label for="copia-nome">Nome da Cópia</label>
+                        <input type="text" class="form-control" required
                             id="copia-nome" name="nome" placeholder="Digite o nome da nova versão">
                     </div>
 

@@ -169,6 +169,13 @@
     //essa linha abaixo é para detectar que o documento foi completamente carregado e executar o código após isso
     $(document).ready(function() {
 
+        $("#nome, #edit-nome, #copia-nome").on("input", function() {
+            this.setCustomValidity("");
+        });
+        $("#nome, #edit-nome, #copia-nome").on("invalid", function() {
+            this.setCustomValidity("Preencha o nome da versão!");
+        });
+
         //Verificar se tem curso para então "transformar" a tabela em DataTable
         <?php if (!empty($versoes)): ?>
 

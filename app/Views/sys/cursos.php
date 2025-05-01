@@ -151,18 +151,11 @@
     //essa linha abaixo é para detectar que o documento foi completamente carregado e executar o código após isso
     $(document).ready(function() {
 
-        $("#nome").on("invalid", function() {
-            this.setCustomValidity("Preencha o nome do curso!");
-        });
-        $("#nome").on("input", function() {
+        $("#nome, #edit-nome").on("input", function() {
             this.setCustomValidity("");
         });
-
-        $("#edit-nome").on("invalid", function() {
+        $("#nome, #edit-nome").on("invalid", function() {
             this.setCustomValidity("Preencha o nome do curso!");
-        });
-        $("#edit-nome").on("input", function() {
-            this.setCustomValidity("");
         });
 
         $("#Select2Matriz").on("invalid", function() {

@@ -227,33 +227,21 @@
 
     $(document).ready(function() {
 
-        $("#nome").on("invalid", function() {
+        $("#nome, [id^='edit-nome-'], #nome-gp, [id^='edit-nome-gp-']").on("input", function() {
+            this.setCustomValidity("");
+        });
+
+        $("#nome, [id^='edit-nome-']").on("invalid", function() {
             this.setCustomValidity("Preencha o nome do ambiente!");
         });
-        $("#nome").on("input", function() {
-            this.setCustomValidity("");
-        });
-
-        $("#nome-gp").on("invalid", function() {
+        
+        $("#nome-gp, [id^='edit-nome-gp-']").on("invalid", function() {
             this.setCustomValidity("Preencha o nome do grupo!");
         });
-        $("#nome-gp").on("input", function() {
-            this.setCustomValidity("");
-        });
 
-        $("[id^='edit-nome-']").on("invalid", function() {
-            this.setCustomValidity("Preencha o nome do ambiente!");
-        });
-        $("[id^='edit-nome-']").on("input", function() {
-            this.setCustomValidity("");
-        });
-
-        $("[id^='edit-nome-gp-']").on("invalid", function() {
-            this.setCustomValidity("Preencha o nome do grupo!");
-        });
-        $("[id^='edit-nome-gp-']").on("input", function() {
-            this.setCustomValidity("");
-        });
+        // $("#add-ambientes").on("change", function() {
+        //     // this.setCustomValidity("Selecione ao menos um ambiente!");
+        // });
 
         <?php if (!empty($ambientes)): ?>
             $("#ambientes").DataTable({

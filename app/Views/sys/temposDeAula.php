@@ -163,6 +163,27 @@
     //essa linha abaixo é para detectar que o documento foi completamente carregado e executar o código após isso
     $(document).ready(function() {
 
+        $("#horario_id, #edit-horario_id").on("invalid", function() {
+            this.setCustomValidity("Preencha o horário!")
+        });
+        $("#horario_id, #edit-horario_id").on("change", function() {
+            this.setCustomValidity("")
+        });
+
+        $("#tempo_inicio, #edit-tempo_inicio").on("invalid", function() {
+            this.setCustomValidity("Preencha a hora e minuto de início!")
+        });
+
+        $("#tempo_fim, #edit-tempo_fim").on("invalid", function() {
+            this.setCustomValidity("Preencha a hora e minuto de fim!")
+        });
+
+        $("#tempo_inicio, #edit-tempo_inicio, #tempo_fim, #edit-tempo_fim").on("change", function() {
+            this.setCustomValidity("");
+        });
+
+
+
         //Verificar se tem curso para então "transformar" a tabela em DataTable
         <?php if (!empty($temposAulas)): ?>
 

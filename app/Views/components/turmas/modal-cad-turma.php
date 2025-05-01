@@ -14,7 +14,7 @@
                         <div class="col-md-3 col-sm-12">
                             <div class="form-group">
                                 <label for="codigo">Código</label>
-                                <input type="text" class="form-control"
+                                <input type="text" class="form-control" required
                                     id="codigo" name="codigo" placeholder="Digite o codigo da turma"
                                     value="<?php echo esc(old('codigo')) ?>">
                             </div>
@@ -22,21 +22,21 @@
                         <div class="col-md-3 col-sm-12">
                             <div class="form-group">
                                 <label for="sigla">Sigla</label>
-                                <input class="form-control" type="text" name="sigla" id="sigla"
+                                <input class="form-control" type="text" name="sigla" id="sigla" required
                                     value="<?php echo esc(old('codigo')) ?>">
                             </div>
                         </div>
                         <div class="col-md-3 col-sm 12">
                             <div class="form-group">
                                 <label for="ano">Ano</label>
-                                <input type="number" min="2000" max="2099" class="form-control" id="ano" name="ano"
+                                <input type="number" min="2000" max="2099" class="form-control" id="ano" name="ano" required
                                     value="<?php echo esc(old('ano')) ?>">
                             </div>
                         </div>
                         <div class="col-md-3 col-sm 12">
                             <div class="form-group">
                                 <label for="periodo">Período/Turma</label>
-                                <input type="number" min="1" max="12" class="form-control" id="periodo" name="periodo"
+                                <input type="number" min="1" max="12" class="form-control" id="periodo" name="periodo" required
                                     value="<?php echo esc(old('periodo')) ?>">
                             </div>
                         </div>
@@ -47,7 +47,7 @@
                                 <div id="semestres">
                                     <div class="form-check form-check-inline d-flex m-0">
                                         <div class="form-check form-check-inline me-3">
-                                            <input class="form-check-input" type="radio" name="semestre" id="inlineRadio1" value="1" <?php echo (old('semestre') == '1') ? 'checked' : '' ?>>
+                                            <input class="form-check-input" type="radio" name="semestre" id="inlineRadio1" value="1" required <?php echo (old('semestre') == '1') ? 'checked' : '' ?>>
                                             <label class="form-check-label text-light" for="inlineRadio1">1</label>
                                         </div>
                                         <div class="form-check form-check-inline">
@@ -62,7 +62,7 @@
                         <div class="col-md-6 col-sm-12">
                             <div class="form-group">
                                 <label for="curso_id">Curso</label>
-                                <select class="form-select" id="curso_id" name="curso_id">
+                                <select class="form-select" id="curso_id" name="curso_id" required>
                                     <?php foreach ($cursos as $curso): ?>
                                         <option value="<?php echo esc($curso['id']) ?>"><?php echo esc($curso['nome']) ?></option>
                                     <?php endforeach; ?>
@@ -72,7 +72,7 @@
                         <div class="col-md-4 col-sm 12">
                             <div class="form-group">
                                 <label for="tempos_diarios">Tempos de aulas diários</label>
-                                <input type="number" min="1" max="99" class="form-control" id="tempos_diarios" name="tempos_diarios"
+                                <input type="number" min="1" max="99" class="form-control" id="tempos_diarios" name="tempos_diarios" required
                                     value="<?php echo esc(old('tempos_diarios')) ?>">
                             </div>
                         </div>

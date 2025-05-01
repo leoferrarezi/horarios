@@ -180,6 +180,109 @@
     //essa linha abaixo é para detectar que o documento foi completamente carregado e executar o código após isso
     $(document).ready(function() {
 
+        $("#codigo, #edit-codigo").on("invalid", function() {
+            this.setCustomValidity("Preencha o código da turma!");
+        });
+
+        $("#sigla, #edit-sigla").on("invalid", function() {
+            this.setCustomValidity("Preencha a sigla da turma!");
+        });
+
+        $("#codigo, #edit-codigo, #sigla, #edit-sigla").on("input", function() {
+            this.setCustomValidity("");
+        });
+
+        $("#ano, #edit-ano").on("invalid", function() {
+            if (this.validity.valueMissing) {
+               this.setCustomValidity("Preencha o ano da turma!");
+            } else if (this.validity.rangeUnderflow) {
+                this.setCustomValidity(`O ano deve ser a partir de ${this.min}.`);
+            } else if (this.validity.rangeOverflow) {
+                this.setCustomValidity(`O ano deve ser no máximo ${this.max}.`);
+            } else {
+                this.setCustomValidity("Valor inválido.");
+            }
+        });
+        $("#ano, #edit-ano").on("input", function() {
+            if (this.validity.valueMissing) {
+               this.setCustomValidity("Preencha o ano da turma!");
+            } else if (this.validity.rangeUnderflow) {
+                this.setCustomValidity(`O ano deve ser a partir de ${this.min}.`);
+            } else if (this.validity.rangeOverflow) {
+                this.setCustomValidity(`O ano deve ser no máximo ${this.max}.`);
+            } else if (this.validity.stepMismatch){
+                this.setCustomValidity("Valor inválido.");
+            } else {
+                this.setCustomValidity("");
+            }
+        });
+
+        $("#periodo, #edit-periodo").on("invalid", function() {
+            if (this.validity.valueMissing) {
+               this.setCustomValidity("Preencha o período da turma!");
+            } else if (this.validity.rangeUnderflow) {
+                this.setCustomValidity(`O período deve ser a partir de ${this.min}.`);
+            } else if (this.validity.rangeOverflow) {
+                this.setCustomValidity(`O período deve ser no máximo ${this.max}.`);
+            } else {
+                this.setCustomValidity("Valor inválido.");
+            }
+        });
+        $("#periodo, #edit-periodo").on("input", function() {
+            if (this.validity.valueMissing) {
+               this.setCustomValidity("Preencha o período da turma!");
+            } else if (this.validity.rangeUnderflow) {
+                this.setCustomValidity(`O período deve ser a partir de ${this.min}.`);
+            } else if (this.validity.rangeOverflow) {
+                this.setCustomValidity(`O período deve ser no máximo ${this.max}.`);
+            } else if (this.validity.stepMismatch) {
+                this.setCustomValidity("Valor inválido.");
+            } else {
+                this.setCustomValidity("");
+            }
+        });
+
+        $("#inlineRadio1, #inlineRadio2").on("invalid", function() {
+            this.setCustomValidity("Selecione o semestre da turma!");
+        });
+        $("#inlineRadio1, #inlineRadio2").on("change", function() {
+            $("#inlineRadio1, #inlineRadio2").each(function() {
+                this.setCustomValidity("");
+            });
+        });
+
+        $("#curso_id, #edit-curso_id").on("invalid", function() {
+            this.setCustomValidity("Preencha o curso da turma!");
+        });
+        $("#curso_id, #edit-curso_id").on("change", function() {
+            this.setCustomValidity("");
+        });
+
+        $("#tempos_diarios, #edit-tempos_diarios").on("invalid", function() {
+            if (this.validity.valueMissing) {
+               this.setCustomValidity("Preencha os tempos de aulas diários!");
+            } else if (this.validity.rangeUnderflow) {
+                this.setCustomValidity(`Os tempos de aulas diários devem ser a partir de ${this.min}.`);
+            } else if (this.validity.rangeOverflow) {
+                this.setCustomValidity(`Os tempos de aulas diários devem ser no máximo ${this.max}.`);
+            } else {
+                this.setCustomValidity("Valor inválido.");
+            }
+        });
+        $("#tempos_diarios, #edit-tempos_diarios").on("input", function() {
+            if (this.validity.valueMissing) {
+               this.setCustomValidity("Preencha os tempos de aulas diários!");
+            } else if (this.validity.rangeUnderflow) {
+                this.setCustomValidity(`Os tempos de aulas diários devem ser a partir de ${this.min}.`);
+            } else if (this.validity.rangeOverflow) {
+                this.setCustomValidity(`Os tempos de aulas diários devem ser no máximo ${this.max}.`);
+            } else if (this.validity.stepMismatch) {
+                this.setCustomValidity("Valor inválido.");
+            } else {
+                this.setCustomValidity("");
+            }
+        });
+
         <?php if (!empty($turmas)): ?>
 
             //Cria a DataTable

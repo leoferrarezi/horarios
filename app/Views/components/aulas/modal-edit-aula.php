@@ -39,7 +39,7 @@
 
                     <div class="form-group">
                         <label for="professores">Professor(es)</label>
-                        <select class="select2-professoresEdit" name="professores[]" multiple="multiple" style="width:100%;">
+                        <select class="select2-professoresEdit" id="professoresEdit" name="professores[]" multiple="multiple" style="width:100%;" required>
                             <?php foreach ($professores as $professor): ?>
                                 <option value="<?= esc($professor['id']) ?>"><?= esc($professor['nome']) ?></option>
                             <?php endforeach; ?>

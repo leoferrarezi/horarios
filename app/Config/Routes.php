@@ -36,6 +36,7 @@ $routes->group('sys', function ($routes)
     {
         $routes->get('', 'TabelaHorarios::index');
         $routes->post('atribuirAula', 'TabelaHorarios::atribuirAula');
+        $routes->post('removerAula', 'TabelaHorarios::removerAula');
     });
 
     $routes->group('cadastro-ambientes', function ($routes) 

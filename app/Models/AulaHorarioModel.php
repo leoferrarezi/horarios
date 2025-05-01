@@ -68,6 +68,24 @@ class AulaHorarioModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
+    public function getAulasFromTurma($turma_id)
+    {
+        return $this->select('aula_horario.*')
+                ->join('aulas', 'aulas.id = aula_horario.aula_id')
+                ->where('aulas.turma_id', $turma_id)
+                ->findAll();
+    }
+
+    public function deleteAulaNoHorario($aula_id, $tempo_de_aula_id, $versao_id)
+    {
+        $this->db->simpleQuery("
+            DELETE horario FROM aula_horario as horario 
+            JOIN aulas ON aulas.id = horario.aula_id 
+            WHERE horario.tempo_de_aula_id = '$tempo_de_aula_id' AND horario.versao_id = '$versao_id'
+            AND aulas.turma_id = (SELECT turma_id FROM aulas WHERE aulas.id = '$aula_id')
+        ");
+    }
+
     public function choqueAmbiente()
     {
         //verificar se não tem duas aulas no mesmo ambiente ao mesmo tempo

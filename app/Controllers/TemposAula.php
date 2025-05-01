@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\TemposAulasModel;
 use App\Models\HorariosModel;
+use App\Models\AulaHorarioModel;
 use CodeIgniter\Exceptions\ReferenciaException;
 use DateTime;
 
@@ -105,7 +106,6 @@ class TemposAula extends BaseController
     }
     public function deletar()
     {
-
         $dadosPost = $this->request->getPost();
         $id = strip_tags($dadosPost['id']);
 
@@ -126,7 +126,13 @@ class TemposAula extends BaseController
     public function getTemposFromTurma($turma)
     {
         $tempoAulaModel = new TemposAulasModel();
-        $tempos = $tempoAulaModel->getTemposFromTurma($turma);
+        $tempos = [];
+        $tempos['tempos'] = $tempoAulaModel->getTemposFromTurma($turma);
+
+        $aulaHorarioModel = new AulaHorarioModel();
+        $tempos['aulas'] = $aulaHorarioModel->getAulasFromTurma($turma);
+        //$tempos = array_merge($tempos, $aulas); // Junta os tempos de aula com as aulas
+
         return $this->response->setJSON($tempos); // Retorna os dados em formato JSON
     }
 }

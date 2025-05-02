@@ -11,14 +11,14 @@
                 <div class="modal-body">
                     <?php echo csrf_field() ?>
                     <div class="form-group">
-                        <label for="exampleInputUsername1">Nome</label>
-                        <input type="text" class="form-control" 
+                        <label for="nome">Nome</label>
+                        <input type="text" class="form-control" required
                             id="nome" name="nome" placeholder="Digite o nome do professor" 
                             value="<?php echo esc(old('nome'))?>">
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputPassword1">E-Mail</label>
-                        <input type="email" class="form-control" 
+                        <label for="email">E-Mail</label>
+                        <input type="email" class="form-control"
                             id="email" name="email" placeholder="Digite o email" 
                                 value="<?php echo esc(old('email'))?>">
                     </div>

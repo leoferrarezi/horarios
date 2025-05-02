@@ -12,13 +12,13 @@
                     <?php echo csrf_field() ?>
                     <input type="hidden" id="edit-id" name="id" />
                     <div class="form-group">
-                        <label for="exampleInputUsername1">Nome</label>
-                        <input type="text" class="form-control" 
+                        <label for="edit-nome">Nome</label>
+                        <input type="text" class="form-control" required
                             id="edit-nome" name="nome" placeholder="Digite o nome do professor">
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputPassword1">Matriz</label>
-                        <select class="Select2Matriz" id="edit-matriz" style="width:100%" name="matriz_id">
+                        <label for="edit-matriz">Matriz</label>
+                        <select class="Select2Matriz" id="edit-matriz" style="width:100%" name="matriz_id" required>
                             <?php foreach($matrizes as $matriz): ?>
                                 <option value="<?php echo esc($matriz['id']) ?>"><?php echo esc($matriz['nome']) ?></option>
                             <?php endforeach; ?>

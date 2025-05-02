@@ -13,7 +13,7 @@
 
                     <div class="form-group">
                         <label for="curso">Curso</label>
-                        <select class="form-select" id="curso" name="curso">
+                        <select class="form-select" id="curso" name="curso" required>
                             <?php foreach ($cursos as $curso): ?>
                                 <option value="<?php echo esc($curso['id']) ?>"><?php echo esc($curso['nome']) ?></option>
                             <?php endforeach; ?>
@@ -22,7 +22,7 @@
 
                     <div class="form-group">
                         <label>Turma(s)</label>
-                        <select class="select2-turmas" name="turmas[]" multiple="multiple" style="width:100%;">
+                        <select class="select2-turmas" id="turmas" name="turmas[]" multiple="multiple" style="width:100%;" required>
                             <!-- preenchido dinamicamente -->
                         </select>
                     </div>
@@ -36,7 +36,7 @@
 
                     <div class="form-group">
                         <label for="professores">Professor(es)</label>
-                        <select class="select2-professores" name="professores[]" multiple="multiple" style="width:100%;">
+                        <select class="select2-professores" id="professores" name="professores[]" multiple="multiple" style="width:100%;" required>
                             <?php foreach ($professores as $professor): ?>
                                 <option value="<?= esc($professor['id']) ?>"><?= esc($professor['nome']) ?></option>
                             <?php endforeach; ?>

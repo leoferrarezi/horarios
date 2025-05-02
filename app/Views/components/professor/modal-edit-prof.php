@@ -12,12 +12,12 @@
                     <?php echo csrf_field() ?>
                     <input type="hidden" id="edit-id" name="id" />
                     <div class="form-group">
-                        <label for="exampleInputUsername1">Nome</label>
-                        <input type="text" class="form-control" 
+                        <label for="edit-nome">Nome</label>
+                        <input type="text" class="form-control" required
                             id="edit-nome" name="nome" placeholder="Digite o nome do professor">
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputPassword1">E-Mail</label>
+                        <label for="edit-email">E-Mail</label>
                         <input type="email" class="form-control" 
                             id="edit-email" name="email" placeholder="Digite o email">
                     </div>

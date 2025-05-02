@@ -151,6 +151,26 @@
     //essa linha abaixo é para detectar que o documento foi completamente carregado e executar o código após isso
     $(document).ready(function() {
 
+        $("#nome, #edit-nome").on("input", function() {
+            this.setCustomValidity("");
+        });
+        $("#nome, #edit-nome").on("invalid", function() {
+            this.setCustomValidity("Preencha o nome do curso!");
+        });
+
+        $("#Select2Matriz").on("invalid", function() {
+            this.setCustomValidity("Selecione uma matriz!");
+        });
+        $("#Select2Matriz").on("change", function() {
+            this.setCustomValidity("");
+        });
+
+        $("#edit-matriz").on("invalid", function() {
+            this.setCustomValidity("Selecione uma matriz!");
+        });
+        $("#edit-matriz").on("change", function() {
+            this.setCustomValidity("");
+        });
 
         initSelect2('Select2Matriz', '#modal-cad-curso');
         initSelect2('edit-matriz', '#modal-edit-curso');

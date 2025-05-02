@@ -15,7 +15,7 @@
                             <input type="hidden" name="id" value="<?= $ambiente['id'] ?>" />
                             <div class="form-group">
                                 <label for="edit-nome-<?= $ambiente['id'] ?>">Nome</label>
-                                <input type="text" class="form-control" id="edit-nome-<?= $ambiente['id'] ?>" name="nome" value="<?= esc($ambiente['nome']) ?>" placeholder="Digite o nome do ambiente">
+                                <input type="text" class="form-control" id="edit-nome-<?= $ambiente['id'] ?>" name="nome" value="<?= esc($ambiente['nome']) ?>" placeholder="Digite o nome do ambiente" required>
                             </div>
                         </div>
                         <div class="modal-footer">

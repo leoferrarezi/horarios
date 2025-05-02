@@ -11,14 +11,14 @@
                 <div class="modal-body">
                     <?php echo csrf_field() ?>
                     <div class="form-group">
-                        <label for="exampleInputUsername1">Nome</label>
-                        <input type="text" class="form-control" 
+                        <label for="nome">Nome</label>
+                        <input type="text" class="form-control" required
                             id="nome" name="nome" placeholder="Digite o nome do curso" 
                             value="<?php echo esc(old('nome'))?>">
                     </div>
                     <div class="form-group">
-                        <label for="matriz">Matriz</label>
-                        <select class="Select2Matriz" id="Select2Matriz" style="width:100%" name="matriz_id">
+                        <label for="Select2Matriz">Matriz</label>
+                        <select class="Select2Matriz" id="Select2Matriz" style="width:100%" name="matriz_id" required>
                             <?php foreach($matrizes as $matriz): ?>
                                 <option value="<?php echo esc($matriz['id']) ?>"><?php echo esc($matriz['nome']) ?></option>
                             <?php endforeach; ?>

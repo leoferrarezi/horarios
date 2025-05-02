@@ -14,7 +14,7 @@
                         <div class="col-md-6 col-sm-12">
                             <div class="form-group">
                                 <label for="nome">Nome</label>
-                                <input type="text" class="form-control"
+                                <input type="text" class="form-control" required
                                     id="nome" name="nome" placeholder="Digite o nome da Disciplina"
                                     value="<?php echo esc(old('nome')) ?>">
                             </div>
@@ -22,7 +22,7 @@
                         <div class="col-md-6 col-sm-12">
                             <div class="form-group">
                                 <label for="codigo">Código</label>
-                                <input type="text" class="form-control"
+                                <input type="text" class="form-control" required
                                     id="codigo" name="codigo" placeholder="Digite o codigo da Disciplina"
                                     value="<?php echo esc(old('codigo')) ?>">
                             </div>
@@ -30,7 +30,7 @@
                         <div class="col-lg-4 col-md-6 col-sm-12">
                             <div class="form-group">
                                 <label for="matriz">Matriz</label>
-                                <select class="form-select" id="Matriz" name="matriz_id">
+                                <select class="form-select" id="Matriz" name="matriz_id" required>
                                     <?php foreach ($matrizes as $matriz): ?>
                                         <option value="<?php echo esc($matriz['id']) ?>"><?php echo esc($matriz['nome']) ?></option>
                                     <?php endforeach; ?>
@@ -40,7 +40,7 @@
                         <div class="col-lg-4 col-md-6 col-sm-12">
                             <div class="form-group">
                                 <label for="cargaHoraria">Carga Hóraria</label>
-                                <input type="number" class="form-control"
+                                <input type="number" class="form-control" required
                                     id="cargaHoraria" name="ch" placeholder="Digite a Carga Hóraria da Disciplina"
                                     value="<?php echo esc(old('ch')) ?>">
                             </div>
@@ -48,7 +48,7 @@
                         <div class="col-lg-4 col-md-6 col-sm-12">
                             <div class="form-group">
                                 <label for="max_tempos_diarios">Tempo Máximo Diário</label>
-                                <input type="number" class="form-control"
+                                <input type="number" class="form-control" required
                                     id="max_tempos_diarios" name="max_tempos_diarios" placeholder="Digite o Tempo Máximo Diário da Disciplina"
                                     value="<?php echo esc(old('ch')) ?>">
                             </div>
@@ -56,7 +56,7 @@
                         <div class="col-lg-4 col-md-6 col-sm-12">
                             <div class="form-group">
                                 <label for="periodo">Período</label>
-                                <input type="number" class="form-control"
+                                <input type="number" class="form-control" required
                                     id="periodo" name="periodo" placeholder="Digite o periodo da Disciplina"
                                     value="<?php echo esc(old('periodo')) ?>">
                             </div>
@@ -64,7 +64,7 @@
                         <div class="col-lg-4 col-md-6 col-sm-12">
                             <div class="form-group">
                                 <label for="abreviatura">Abreviatura</label>
-                                <input type="text" class="form-control"
+                                <input type="text" class="form-control" required
                                     id="abreviatura" name="abreviatura" placeholder="Digite o abreviatura da Disciplina"
                                     value="<?php echo esc(old('abreviatura')) ?>">
                             </div>

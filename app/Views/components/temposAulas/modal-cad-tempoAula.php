@@ -13,7 +13,7 @@
 
                     <div class="form-group">
                         <label for="horario_id">Horário</label>
-                        <select class="form-select" name="horario_id">
+                        <select class="form-select" id="horario_id" name="horario_id" required>
                             <?php foreach ($horarios as $h): ?>
                                 <option value="<?php echo esc($h['id']) ?>"><?php echo esc($h['nome']) ?></option>
                             <?php endforeach; ?>
@@ -66,11 +66,11 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="tempo_inicio">Hora e Minuto Início</label>
-                                <input type="time" class="form-control" name="tempo_inicio">
+                                <input type="time" class="form-control" id="tempo_inicio" name="tempo_inicio" required>
                             </div>
                             <div class="col-md-6">
                                 <label for="tempo_fim">Hora e Minuto Fim</label>
-                                <input type="time" class="form-control" name="tempo_fim">
+                                <input type="time" class="form-control" id="tempo_fim" name="tempo_fim" required>
                             </div>
                         </div>
                     </div>

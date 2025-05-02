@@ -14,8 +14,8 @@
                             <?= csrf_field() ?>
                             <input type="hidden" name="id" value="<?= $grupo['id'] ?>" />
                             <div class="form-group">
-                                <label for="edit-nome-<?= $grupo['id'] ?>">Nome</label>
-                                <input type="text" class="form-control" id="edit-nome-<?= $grupo['id'] ?>" name="nome" value="<?= esc($grupo['nome']) ?>" placeholder="Digite o nome do Grupo">
+                                <label for="edit-nome-gp-<?= $grupo['id'] ?>">Nome</label>
+                                <input type="text" class="form-control" id="edit-nome-gp-<?= $grupo['id'] ?>" name="nome" value="<?= esc($grupo['nome']) ?>" placeholder="Digite o nome do Grupo" required>
                             </div>
                         </div>
                         <div class="modal-footer">

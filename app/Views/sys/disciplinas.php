@@ -167,6 +167,27 @@
     //essa linha abaixo é para detectar que o documento foi completamente carregado e executar o código após isso
     $(document).ready(function() {
 
+        $("#nome, #codigo, #cargaHoraria, #max_tempos_diarios, #periodo, #abreviatura, #edit-nome, #edit-codigo, #edit-cargaHoraria, #edit-max_tempos_diarios, #edit-periodo, #edit-abreviatura").on("input", function() {
+            this.setCustomValidity("");
+        });
+        $("#nome, #edit-nome").on("invalid", function() {
+            this.setCustomValidity("Preencha o nome da disciplina!");
+        });
+        $("#codigo, #edit-codigo").on("invalid", function() {
+            this.setCustomValidity("Preencha o código da disciplina!");
+        });
+        $("#cargaHoraria, #edit-cargaHoraria").on("invalid", function() {
+            this.setCustomValidity("Preencha a carga horária da disciplina!");
+        });
+        $("#max_tempos_diarios, #edit-max_tempos_diarios").on("invalid", function() {
+            this.setCustomValidity("Preencha o tempo máximo diário da disciplina!");
+        });
+        $("#periodo, #edit-periodo").on("invalid", function() {
+            this.setCustomValidity("Preencha o período da disciplina!");
+        });
+        $("#abreviatura, #edit-abreviatura").on("invalid", function() {
+            this.setCustomValidity("Preencha a abreviatura da disciplina!");
+        });
 
         //Verificar se tem disciplina para então "transformar" a tabela em DataTable
         <?php if (!empty($disciplinas)): ?>

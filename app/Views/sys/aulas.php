@@ -174,6 +174,23 @@
 
     //essa linha abaixo é para detectar que o documento foi completamente carregado e executar o código após isso
     $(document).ready(function() {
+
+        $("#turmas").on("invalid", function() {
+            if(this.validity.valueMissing) {
+                this.setCustomValidity("Selecione ao menos uma turma!");
+            }
+        });
+        $("#professores, #professoresEdit").on("invalid", function() {
+            if(this.validity.valueMissing) {
+                this.setCustomValidity("Selecione ao menos um professor!");
+            }
+        });
+        
+        $("#turmas, #professores, #professoresEdit").on("change", function() {
+            this.setCustomValidity("");
+        });
+
+
         <?php if (!empty($aula)): ?>
 
             var table = $("#listagem-aulas").DataTable({

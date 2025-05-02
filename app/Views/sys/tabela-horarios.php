@@ -328,6 +328,8 @@
     //Referencia para os nomes dos dias da semana
     var nome_dia = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sabado'];
 
+    const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
+
     $(document).ready(function() 
     {
         // Define variáveis globais para armazenar os dados do modal
@@ -399,7 +401,7 @@
         }
 
         // Modal de confirmação de remoção (estilo Bootstrap)
-        function mostrarModalConfirmacaoRemocao(horarioElement) 
+        function mostrarModalConfirmacaoRemocao(horarioElement)
         {
             const $horario = $(horarioElement);
             const aulaId = $horario.data('aula-id');
@@ -518,7 +520,8 @@
 
                 const aulaId = e.originalEvent.dataTransfer.getData('text/plain');
 
-                if (aulaId) {
+                if (aulaId) 
+                {
                     horarioSelecionado = $(this);
                     atribuirDisciplina(aulaId, horarioId);
                 }
@@ -753,6 +756,21 @@
             return theIdObj;
         }
 
+        function getAmbienteNome(id)
+        {
+            var ambienteNome = "";
+
+            $("#selectAmbiente option").each(function() 
+            {
+                if ($(this).val() == id) 
+                {
+                    ambienteNome = $(this).text();
+                }
+            });
+
+            return ambienteNome;
+        }
+
         $("#btn_atribuir_automaticamente").click(function() 
         {
             alert("Que pena, vc perdeu.");
@@ -769,25 +787,28 @@
             //Limpar card de aulas pendentes
             $('#aulasContainer').empty();
 
+            atualizarContadorPendentes();
+
             $('#filtroTurma').find('option').remove().end().append('<option value="0">-</option>');
             $('#filtroTurma option[value="0"]').prop('selected', true);
 
             //Buscar turmas do curso selecionado.
             $.get('<?php echo base_url('sys/turma/getTurmasByCursoAndSemestre/'); ?>' + $('#filtroCurso').val() + '/<?php echo $semestre; ?>', function(data) 
             {
-                    $.each(data, function(idx, obj) 
-                    {
-                        $('#filtroTurma').append('<option value="' + obj.id + '">' + obj.sigla + '</option>');
-                    });
-                }, 'json')
-                .done(function() 
+                $.each(data, function(idx, obj) 
                 {
-                    $(".loader-demo-box").css("visibility", "hidden");
+                    $('#filtroTurma').append('<option value="' + obj.id + '">' + obj.sigla + '</option>');
                 });
+            }, 'json')
+            .done(function() 
+            {
+                $(".loader-demo-box").css("visibility", "hidden");
+            });
         });
 
         //Progração do evento "change" dos select de turmas
-        $('#filtroTurma').on('change', function() {
+        $('#filtroTurma').on('change', function() 
+        {
             $(".loader-demo-box").css("visibility", "visible");
 
             $("#btn_atribuir_automaticamente").prop('disabled', true);
@@ -795,83 +816,90 @@
             //Limpar a tabela de horários inteira
             $("#tabela-horarios").empty();
 
-            if ($('#filtroTurma').val() != 0) {
+            atualizarContadorPendentes();
+
+            if ($('#filtroTurma').val() != 0) 
+            {
                 var quantasAulas = 0;
 
                 //Buscar aulas da turma selecionada.
-                $.get('<?php echo base_url('sys/aulas/getAulasFromTurma/'); ?>' + $('#filtroTurma').val(), function(data) {
-                        //Limpar todas as aulas pendentes.
-                        $('#aulasContainer').empty();
+                $.get('<?php echo base_url('sys/aulas/getAulasFromTurma/'); ?>' + $('#filtroTurma').val(), function(data) 
+                {
+                    //Limpar todas as aulas pendentes.
+                    $('#aulasContainer').empty();
+
+                    //Verifica se a aula atual já está na lista, para a questão de mais de um professor.
+                    $.each(data, function(idx, obj) 
+                    {
+                        var found = false;
+
+                        //Vetor dentro do obj para casos de aulas com mais de um professor
+                        obj.professores = [];
 
                         //Verifica se a aula atual já está na lista, para a questão de mais de um professor.
-                        $.each(data, function(idx, obj) {
-                            var found = false;
+                        $("#aulasContainer").children().each(function() 
+                        {
+                            //Verifica o numero da aula através do id do card.
+                            var aula = $(this).attr('id').split('_')[1];
 
-                            //Vetor dentro do obj para casos de aulas com mais de um professor
-                            obj.professores = [];
-
-                            //Verifica se a aula atual já está na lista, para a questão de mais de um professor.
-                            $("#aulasContainer").children().each(function() {
-                                //Verifica o numero da aula através do id do card.
-                                var aula = $(this).attr('id').split('_')[1];
-
-                                if (aula == obj.id) {
-                                    found = true; //encontrado
-                                    //Adiciona o professor na aula já existente (visual do card)
-                                    $('#professor_aula_' + obj.id).append(' &nbsp; ' +
-                                        '<i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>' +
-                                        '<small class="text-secondary">' + obj.professor.split(" ")[0] + '</small>'
-                                    );
-
-                                    //Adiciona o professor na aula já existente (atributo data-professor)
-                                    $('#aula_' + obj.id).data('professor', $('#aula_' + obj.id).data('professor') + ',' + obj.professor.split(" ")[0]);
-
-                                    //Coloca o professor adicional no vetor da aula já existente
-                                    let objetoAlterar = getAulaById(obj.id);
-                                    objetoAlterar.professores.push(obj.professor.split(" ")[0]);
-                                }
-                            });
-
-                            //Se não encontrou a aula atual, adiciona na lista.
-                            if (!found) 
+                            if (aula == obj.id) 
                             {
-                                var cardAula = '' +
-                                    '<div id="aula_' + obj.id + '" draggable="true" data-aula-id="' + obj.id + '" data-disciplina="' + obj.disciplina + '" data-professor="' + obj.professor.split(" ")[0] + '" data-aulas-total="' + (obj.ch / 20) + '" data-aulas-pendentes="' + (obj.ch / 20) + '" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">' +
-                                    '<div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">' +
-                                    '<h6 class="text-primary">' +
-                                    '<i class="mdi mdi-book-outline me-1"></i> ' + obj.disciplina +
-                                    '</h6>' +
-                                    '<div class="d-flex align-items-center mb-0 py-0" id="professor_aula_' + obj.id + '">' +
+                                found = true; //encontrado
+                                //Adiciona o professor na aula já existente (visual do card)
+                                $('#professor_aula_' + obj.id).append(' &nbsp; ' +
                                     '<i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>' +
-                                    '<small class="text-secondary">' + obj.professor.split(" ")[0] + '</small>' +
-                                    '</div>' +
-                                    '<div class="d-flex align-items-center">' +
-                                    '<i class="mdi mdi-door fs-6 text-muted me-1"></i>' +
-                                    '<small class="text-secondary"><span class="aulas-pendentes">' + (obj.ch / 20) + '</span> aulas</small>' +
-                                    '</div>' +
-                                    '</div>' +
-                                    '</div>';
+                                    '<small class="text-secondary">' + obj.professor.split(" ")[0] + '</small>'
+                                );
 
-                                $('#aulasContainer').append(cardAula);
+                                //Adiciona o professor na aula já existente (atributo data-professor)
+                                $('#aula_' + obj.id).data('professor', $('#aula_' + obj.id).data('professor') + ',' + obj.professor.split(" ")[0]);
 
-                                //Coloca o professor no vetor da aula
-                                obj.professores.push(obj.professor.split(" ")[0]);
-
-                                //adiciona a aula carregada no vetor de aulas
-                                aulas.push(obj);
-
-                                //faz o somatório de aulas da turma
-                                quantasAulas += (obj.ch / 20);
+                                //Coloca o professor adicional no vetor da aula já existente
+                                let objetoAlterar = getAulaById(obj.id);
+                                objetoAlterar.professores.push(obj.professor.split(" ")[0]);
                             }
                         });
-                    }, 'json')
-                    .done(function() 
-                    {
-                        $("#aulasCounter").html(quantasAulas);
-                        $("#btn_atribuir_automaticamente").prop('disabled', false);
-                        configurarDragAndDrop();
-                        $(".loader-demo-box").css("visibility", "hidden");
+
+                        //Se não encontrou a aula atual, adiciona na lista.
+                        if (!found) 
+                        {
+                            var cardAula = '' +
+                                '<div id="aula_' + obj.id + '" draggable="true" data-aula-id="' + obj.id + '" data-disciplina="' + obj.disciplina + '" data-professor="' + obj.professor.split(" ")[0] + '" data-aulas-total="' + (obj.ch / 20) + '" data-aulas-pendentes="' + (obj.ch / 20) + '" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">' +
+                                    '<div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">' +
+                                        '<h6 class="text-primary">' +
+                                        '<i class="mdi mdi-book-outline me-1"></i> ' + obj.disciplina +
+                                        '</h6>' +
+                                        '<div class="d-flex align-items-center mb-0 py-0" id="professor_aula_' + obj.id + '">' +
+                                            '<i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>' +
+                                            '<small class="text-secondary">' + obj.professor.split(" ")[0] + '</small>' +
+                                        '</div>' +
+                                        '<div class="d-flex align-items-center">' +
+                                            '<i class="mdi mdi-door fs-6 text-muted me-1"></i>' +
+                                            '<small class="text-secondary"><span class="aulas-pendentes">' + (obj.ch / 20) + '</span> aulas</small>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>';
+
+                            $('#aulasContainer').append(cardAula);
+
+                            //Coloca o professor no vetor da aula
+                            obj.professores.push(obj.professor.split(" ")[0]);
+
+                            //adiciona a aula carregada no vetor de aulas
+                            aulas.push(obj);
+
+                            //faz o somatório de aulas da turma
+                            quantasAulas += (obj.ch / 20);
+                        }
                     });
+                }, 'json')
+                .done(function() 
+                {
+                    $("#aulasCounter").html(quantasAulas);
+                    $("#btn_atribuir_automaticamente").prop('disabled', false);
+                    configurarDragAndDrop();
+                    $(".loader-demo-box").css("visibility", "hidden");
+                });
 
                 //Buscar horários da turma selecionada para montar a tabela de horários.
                 $.get('<?php echo base_url('sys/tempoAula/getTemposFromTurma/'); ?>' + $('#filtroTurma').val(), function(data) 
@@ -912,15 +940,15 @@
 
                     var htmlDaTableHead = '' +
                         '<tr>' +
-                        '<th class="col-1">Horário</th>';
+                            '<th class="col-1">Horário</th>';
 
-                    //Iterar pelos dias existentes no horário
-                    $.each(dias, function(idx, obj) 
-                    {
-                        htmlDaTableHead += '<th class="col-1">' + nome_dia[obj] + '</th>';
-                    });
+                            //Iterar pelos dias existentes no horário
+                            $.each(dias, function(idx, obj) 
+                            {
+                                htmlDaTableHead += '<th class="col-1">' + nome_dia[obj] + '</th>';
+                            });
 
-                    htmlDaTableHead += '' +
+                            htmlDaTableHead += '' +
                         '</tr>';
 
                     //Insere os horários na tabela se tiver aula pela manhã
@@ -928,9 +956,9 @@
                     {
                         var htmlDaTabela = '' +
                             '<thead>' +
-                            '<tr>' +
-                            '<th colspan="' + (dias.length + 1) + '" class="text-center bg-primary text-white">MANHÃ</th>' +
-                            '</tr>' +
+                                '<tr>' +
+                                    '<th colspan="' + (dias.length + 1) + '" class="text-center bg-primary text-white">MANHÃ</th>' +
+                                '</tr>' +
                             '</thead>' +
                             htmlDaTableHead;
 
@@ -960,15 +988,14 @@
                                 {
                                     var linhaDeHorarios = '' +
                                         '<tr>' +
-                                        '<td class="coluna-fixa">' + obj.hora_inicio + ':' + obj.minuto_inicio + '-' + obj.hora_fim + ':' + obj.minuto_fim + '</td>';
-                                    for (var i = 0; i < dias.length; i++) 
-                                    {
-                                        linhaDeHorarios += '<td class="horario-vazio" id="horario_' +
-                                            getIdByDiaHoraMinuto(horarios, dias[i], obj.hora_inicio, obj.minuto_inicio, obj.hora_fim, obj.minuto_fim) +
-                                            '"></td>';
-                                    }
-
-                                    linhaDeHorarios += '' +
+                                            '<td class="coluna-fixa">' + obj.hora_inicio + ':' + obj.minuto_inicio + '-' + obj.hora_fim + ':' + obj.minuto_fim + '</td>';
+                                            for (var i = 0; i < dias.length; i++) 
+                                            {
+                                                linhaDeHorarios += '<td class="horario-vazio" id="horario_' +
+                                                    getIdByDiaHoraMinuto(horarios, dias[i], obj.hora_inicio, obj.minuto_inicio, obj.hora_fim, obj.minuto_fim) +
+                                                    '"></td>';
+                                            }
+                                            linhaDeHorarios += '' +
                                         '</tr>'
 
                                     $('#tabela-horarios-manha').append(linhaDeHorarios);
@@ -989,12 +1016,13 @@
                     }
 
                     //Insere os horários na tabela se tiver aula pela tarde
-                    if (temTarde) {
+                    if (temTarde) 
+                    {
                         var htmlDaTabela = '' +
                             '<thead>' +
-                            '<tr>' +
-                            '<th colspan="' + (dias.length + 1) + '" class="text-center bg-primary text-white">TARDE</th>' +
-                            '</tr>' +
+                                '<tr>' +
+                                    '<th colspan="' + (dias.length + 1) + '" class="text-center bg-primary text-white">TARDE</th>' +
+                                '</tr>' +
                             '</thead>' +
                             htmlDaTableHead;
 
@@ -1005,12 +1033,15 @@
                         //Vetor para guardar os horarios já adicionados na tabela
                         var horariosJaAdicionados = [];
 
-                        $.each(horarios, function(idx, obj) {
+                        $.each(horarios, function(idx, obj) 
+                        {
                             //Verificar se já tem o horário na lista
                             var jaTemHorario = false;
 
-                            $.each(horariosJaAdicionados, function(idx2, obj2) {
-                                if (obj2.hora_inicio == obj.hora_inicio && obj2.minuto_inicio == obj.minuto_inicio && obj2.hora_fim == obj.hora_fim && obj2.minuto_fim == obj.minuto_fim) {
+                            $.each(horariosJaAdicionados, function(idx2, obj2) 
+                            {
+                                if (obj2.hora_inicio == obj.hora_inicio && obj2.minuto_inicio == obj.minuto_inicio && obj2.hora_fim == obj.hora_fim && obj2.minuto_fim == obj.minuto_fim)
+                                {
                                     jaTemHorario = true;
                                 }
                             });
@@ -1021,15 +1052,14 @@
                                 {
                                     var linhaDeHorarios = '' +
                                         '<tr>' +
-                                        '<td class="coluna-fixa">' + obj.hora_inicio + ':' + obj.minuto_inicio + '-' + obj.hora_fim + ':' + obj.minuto_fim + '</td>';
-                                    for (var i = 0; i < dias.length; i++) 
-                                    {
-                                        linhaDeHorarios += '<td class="horario-vazio" id="horario_' +
-                                            getIdByDiaHoraMinuto(horarios, dias[i], obj.hora_inicio, obj.minuto_inicio, obj.hora_fim, obj.minuto_fim) +
-                                            '"></td>';
-                                    }
-
-                                    linhaDeHorarios += '' +
+                                            '<td class="coluna-fixa">' + obj.hora_inicio + ':' + obj.minuto_inicio + '-' + obj.hora_fim + ':' + obj.minuto_fim + '</td>';
+                                            for (var i = 0; i < dias.length; i++) 
+                                            {
+                                                linhaDeHorarios += '<td class="horario-vazio" id="horario_' +
+                                                    getIdByDiaHoraMinuto(horarios, dias[i], obj.hora_inicio, obj.minuto_inicio, obj.hora_fim, obj.minuto_fim) +
+                                                    '"></td>';
+                                            }
+                                            linhaDeHorarios += '' +
                                         '</tr>'
 
                                     $('#tabela-horarios-tarde').append(linhaDeHorarios);
@@ -1122,6 +1152,75 @@
                         horarioSelecionado = $(this);
                         carregarDisciplinasPendentes($(this).attr('id'));
                         modalAtribuirDisciplina.show();
+                    });
+
+                    var counter = 0;
+
+                    $.each(data['aulas'], async function(idx, obj)
+                    {
+                        counter++;
+
+                        setTimeout(function() 
+                        {
+                            
+                            const aulaSelecionadaId = obj.aula_id;
+                            const aula = getAulaById(obj.aula_id);
+
+                            const ambienteSelecionadoId = obj.ambiente_id;
+                            const ambienteSelecionadoNome = getAmbienteNome(ambienteSelecionadoId);
+
+                            horarioSelecionado = $(`#horario_${obj.tempo_de_aula_id}`);
+                            cardAula = $(`#aula_${obj.aula_id}`);
+
+                            // Preenche o horário selecionado
+                            horarioSelecionado.html(`
+                                <div class="card border-1 shadow-sm bg-gradient" style="cursor: pointer; height: 100%;">
+                                    <div class="card-body p-1 d-flex flex-column justify-content-center align-items-center text-center">
+                                        <h6 class="text-wrap mb-0 fs-6 text-primary" style="font-size: 0.75rem !important;">
+                                            <i class="mdi mdi-book-outline me-1"></i>
+                                            ${aula.disciplina}
+                                        </h6>
+                                        <div class="d-flex align-items-center mb-0 py-0">
+                                            <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
+                                            <small class="text-wrap text-secondary" style="font-size: 0.65rem !important;">${aula.professores.join(", ")}</small>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <i class="mdi mdi-door fs-6 text-muted me-1"></i>
+                                            <small class="text-wrap text-secondary" style="font-size: 0.65rem !important;">${ambienteSelecionadoNome}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            `);
+
+                            // Adiciona os dados ao horário
+                            horarioSelecionado
+                                .data('disciplina', aula.disciplina)
+                                .data('professor', aula.professores.join(", "))
+                                .data('ambiente', ambienteSelecionadoId)
+                                .data('aula-id', obj.aula_id)
+                                .data('aulas-total', cardAula.data('aulas-total'))
+                                .data('aulas-pendentes', cardAula.data('aulas-pendentes'))
+                                .removeClass('horario-vazio')
+                                .addClass('horario-preenchido')
+                                .off('click')
+                                .click(function() {
+                                    mostrarModalConfirmacaoRemocao(this);
+                                });
+
+                            // Atualiza a quantidade de aulas pendentes no card
+                            const aulasPendentes = cardAula.data('aulas-pendentes') - 1;
+                            cardAula.data('aulas-pendentes', aulasPendentes);
+                            cardAula.find('.aulas-pendentes').text(aulasPendentes);
+
+                            // Se zerou, remove o card
+                            if (aulasPendentes <= 0) 
+                            {
+                                cardAula.remove();
+                            }
+
+                            atualizarContadorPendentes();
+
+                        }, 100 * counter); // Atraso de 100ms para cada iteração
                     });
 
                 }, 'json');

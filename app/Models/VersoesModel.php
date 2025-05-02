@@ -66,9 +66,9 @@ class VersoesModel extends Model
 
         $referencias = $this->verificarReferenciasEmTabelas($id);
         $referencias = implode(", ", $referencias);
-        // Se o ID for referenciado em outras tabelas, lança a exceção
-        if (!empty($referencias)) {
-            // Passa o nome das tabelas onde o ID foi encontrado para a exceção
+
+        if (!empty($referencias))
+        {
             throw new ReferenciaException("Está versão não pode ser excluída, porque está em uso. <br>
                     Para excluir está versão, primeiro remova as associações em {$referencias} que estão utilizando está versão'.");
         }
@@ -81,26 +81,25 @@ class VersoesModel extends Model
     {
         // Tabelas e colunas de chave estrangeira a serem verificadas
         $tabelas = [
-            //'aula_horario' => 'versao_id',
-            //'aula_professor' => 'versao_id',
-            'aulas' => 'versao_id',
+            'aula_horario' => 'versao_id',
+            'aulas' => 'versao_id'
         ];
 
         $referenciasEncontradas = [];
 
         // Verificar se o ID é referenciado
-        foreach ($tabelas as $tabela => $fk_coluna) {
+        foreach ($tabelas as $tabela => $fk_coluna) 
+        {
             $builder = $this->db->table($tabela);
             $builder->where($fk_coluna, $id);
             $query = $builder->get();
 
-            if ($query->getNumRows() > 0) {
-                // Adiciona a tabela à lista de referências encontradas
+            if ($query->getNumRows() > 0) 
+            {
                 $referenciasEncontradas[] = $tabela;
             }
         }
 
-        // Retorna as tabelas onde o ID foi encontrado
         return $referenciasEncontradas;
     }
 
@@ -140,14 +139,13 @@ class VersoesModel extends Model
         $builder->orderBy('id', 'DESC');
         $versaoNew = $builder->get()->getRowArray()['id'];
 
-        $builder = $this->db->table('aulas');
+        /*$builder = $this->db->table('aulas');
         $query = "SELECT disciplina_id, turma_id, $versaoNew FROM aulas WHERE versao_id = $versaoOld";
-        $builder->ignore(true)->setQueryAsData(new RawSql($query), null, "disciplina_id, turma_id, versao_id")->insertBatch();
+        $builder->ignore(true)->setQueryAsData(new RawSql($query), null, "disciplina_id, turma_id, versao_id")->insertBatch();*/        
 
-        $builder = $this->db->table('aula_horario');
-        $query = "SELECT aula_id, tempo_de_aula_id, $versaoNew FROM aula_horario WHERE versao_id = $versaoOld";
-        $builder->ignore(true)->setQueryAsData(new RawSql($query), null, "aula_id, tempo_de_aula_id, versao_id")->insertBatch();
-
+        //$builder = $this->db->table('aula_horario');
+        //$query = "SELECT aula_id, tempo_de_aula_id, $versaoNew, ambiente_id FROM aula_horario WHERE versao_id = $versaoOld";
+        //$builder->ignore(true)->setQueryAsData(new RawSql($query), null, "aula_id, tempo_de_aula_id, versao_id, ambiente_id")->insertBatch();
 
     }
 }

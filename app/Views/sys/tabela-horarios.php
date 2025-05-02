@@ -1220,7 +1220,7 @@
 
                             atualizarContadorPendentes();
 
-                        }, 100 * counter); // Atraso de 100ms para cada iteração
+                        }, 50 * counter); // Atraso de 100ms para cada iteração
                     });
 
                 }, 'json');

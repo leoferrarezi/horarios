@@ -87,9 +87,6 @@ class AulasModel extends Model
 
     private function verificarReferenciasEmTabelas($id)
     {
-        // Conectar ao banco de dados
-        $db = \Config\Database::connect();
-
         // Tabelas e colunas de chave estrangeira a serem verificadas
         $tabelas = [
             'aula_horario' => 'aula_id',
@@ -99,12 +96,14 @@ class AulasModel extends Model
         $referenciasEncontradas = [];
 
         // Verificar se o ID é referenciado
-        foreach ($tabelas as $tabela => $fk_coluna) {
-            $builder = $db->table($tabela);
+        foreach ($tabelas as $tabela => $fk_coluna) 
+        {
+            $builder = $this->builder($tabela);
             $builder->where($fk_coluna, $id);
             $query = $builder->get();
 
-            if ($query->getNumRows() > 0) {
+            if ($query->getNumRows() > 0) 
+            {
                 // Adiciona a tabela à lista de referências encontradas
                 $referenciasEncontradas[] = $tabela;
             }
@@ -143,9 +142,12 @@ class AulasModel extends Model
         $builder->where('versao_id', $versao);
         $query = $builder->get();
 
-        if ($query->getNumRows() > 0) {
+        if ($query->getNumRows() > 0) 
+        {
             return true; // A versão existe na tabela
-        } else {
+        } 
+        else 
+        {
             return false; // A versão não existe na tabela
         }
     }

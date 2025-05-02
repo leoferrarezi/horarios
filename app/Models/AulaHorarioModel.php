@@ -73,6 +73,7 @@ class AulaHorarioModel extends Model
         return $this->select('aula_horario.*')
                 ->join('aulas', 'aulas.id = aula_horario.aula_id')
                 ->where('aulas.turma_id', $turma_id)
+                ->where('aula_horario.versao_id', (new VersoesModel())->getVersaoByUser(auth()->id()))
                 ->findAll();
     }
 
@@ -82,8 +83,41 @@ class AulaHorarioModel extends Model
             DELETE horario FROM aula_horario as horario 
             JOIN aulas ON aulas.id = horario.aula_id 
             WHERE horario.tempo_de_aula_id = '$tempo_de_aula_id' AND horario.versao_id = '$versao_id'
-            AND aulas.turma_id = (SELECT turma_id FROM aulas WHERE aulas.id = '$aula_id')
-        ");
+            AND aulas.turma_id = (SELECT turma_id FROM aulas WHERE aulas.id = '$aula_id'AND versao_id = '$versao_id')
+        ");        
+    }
+
+    public function checkAulaHorarioByVersao($versao)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->where('versao_id', $versao);
+        $query = $builder->get();
+
+        if ($query->getNumRows() > 0) 
+        {
+            return true; // A versão existe na tabela
+        } 
+        else 
+        {
+            return false; // A versão não existe na tabela
+        }
+    }
+
+    public function checkAulaHorarioByAula($aula)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->where('aula_id', $aula);
+        $builder->where('versao_id', (new VersoesModel())->getVersaoByUser(auth()->id()));
+        $query = $builder->get();
+
+        if ($query->getNumRows() > 0) 
+        {
+            return true; // A aula existe na tabela
+        } 
+        else 
+        {
+            return false; // A aula não existe na tabela
+        }
     }
 
     public function choqueAmbiente()

@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+
 use App\Models\AulaProfessorModel;
 use App\Models\AulasModel;
 use App\Models\TurmasModel;
@@ -11,6 +12,7 @@ use App\Models\DisciplinasModel;
 use App\Models\ProfessorModel;
 use App\Models\MatrizCurricularModel;
 use App\Models\VersoesModel;
+use App\Models\AulaHorarioModel;
 
 class Aulas extends BaseController
 {
@@ -98,12 +100,19 @@ class Aulas extends BaseController
 		$dadosPost = $this->request->getPost();
 		$id = strip_tags($dadosPost['id']);
 
-		$aula = new AulasModel();
+		$aulaHorarioModel = new AulaHorarioModel();
+		
+		if($aulaHorarioModel->checkAulaHorarioByAula($id))
+		{
+			return redirect()->to(base_url('/sys/aulas'))->with('erros', ['erro' => 'Não é possível excluir a aula, pois ela consta vinculada em horário.']);
+		}
 
-		//try {
 		$aula_prof = new AulaProfessorModel();
 		$aula_prof->where('aula_id', $id)->delete();
+		
+		$aula = new AulasModel();
 		$aula->delete($id);
+
 		session()->setFlashdata('sucesso', 'Aula Removida com sucesso!');
 		return redirect()->to(base_url('/sys/aulas'));
 

@@ -3,10 +3,12 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\VersoesModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\Exceptions\ReferenciaException;
+
+use App\Models\VersoesModel;
 use App\Models\AulasModel;
+use App\Models\AulaHorarioModel;
 
 class Versao extends BaseController
 {
@@ -64,29 +66,44 @@ class Versao extends BaseController
         
         $aulaModel = new AulasModel();
 
-        if($aulaModel->checkAulaByVersao($id)) {
+        if($aulaModel->checkAulaByVersao($id)) 
+        {
             return redirect()->to(base_url('/sys/versao'))->with('erros', ['erro' => 'Não é possível excluir a versão, pois existem aulas vinculadas a ela.']);
+        }
+
+        $aulaHorarioModel = new AulaHorarioModel();
+
+        if($aulaHorarioModel->checkAulaHorarioByVersao($id)) 
+        {
+            return redirect()->to(base_url('/sys/versao'))->with('erros', ['erro' => 'Não é possível excluir a versão, pois existem horários de aulas vinculados a ela.']);
         }
 
         $versaoModel = new VersoesModel();
 
-        try {
-            if ($versaoModel->delete($id)) {
-                
+        try 
+        {
+            if ($versaoModel->delete($id)) 
+            {               
                 session()->setFlashdata('sucesso', 'Versão excluído com sucesso.');
 
                 $versao = $versaoModel->getVersaoByUser(auth()->id());
-                if($versao == $id) {
+
+                if($versao == $id) 
+                {
                     $versao = $versaoModel->getLastVersion();
                     $versaoModel->setVersaoByUser(auth()->id(), $versao);
                 }
 
                 return redirect()->to(base_url('/sys/versao'));
 
-            } else {
+            } 
+            else 
+            {
                 return redirect()->to(base_url('/sys/versao'))->with('erro', 'Falha ao deletar versão');
             }
-        } catch (ReferenciaException $e) {
+        } 
+        catch (ReferenciaException $e) 
+        {
             return redirect()->to(base_url('/sys/versao'))->with('erros', ['erro' => $e->getMessage()]);
         }
     }

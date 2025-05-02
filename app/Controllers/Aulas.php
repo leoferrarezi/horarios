@@ -115,10 +115,6 @@ class Aulas extends BaseController
 
 		session()->setFlashdata('sucesso', 'Aula Removida com sucesso!');
 		return redirect()->to(base_url('/sys/aulas'));
-
-		//} catch (ReferenciaException $e) {
-		//	return redirect()->to(base_url('/sys/professor'))->with('erros', ['erro' => $e->getMessage()]);
-		//}
 	}
 
 	public function getAulasFromTurma($turma)

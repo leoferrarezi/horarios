@@ -77,4 +77,12 @@ class TabelaHorarios extends BaseController
         $aulaHorarioModel->deleteAulaNoHorario($dado['aula_id'], $dado['tempo_de_aula_id'], $dado['versao_id']);
         echo "1";        
     }
+
+    public function teste($aulaHorarioId)
+    {
+        $aulaHorarioModel = new AulaHorarioModel();
+
+        echo $aulaHorarioModel->choqueAmbiente($aulaHorarioId);
+        
+    }
 }

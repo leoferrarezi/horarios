@@ -35,6 +35,7 @@ $routes->group('sys', function ($routes)
     $routes->group('tabela-horarios', function ($routes) 
     {
         $routes->get('', 'TabelaHorarios::index');
+        $routes->get('teste/(:num)', 'TabelaHorarios::teste/$1');
         $routes->post('atribuirAula', 'TabelaHorarios::atribuirAula');
         $routes->post('removerAula', 'TabelaHorarios::removerAula');
     });

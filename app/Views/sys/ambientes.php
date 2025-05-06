@@ -239,9 +239,25 @@
             this.setCustomValidity("Preencha o nome do grupo!");
         });
 
-        // $("#add-ambientes").on("change", function() {
-        //     // this.setCustomValidity("Selecione ao menos um ambiente!");
-        // });
+        $("[id^='select-ambiente-grupo-']").on('change', function() {
+            let ambientes = $(this).val() ?? [];
+            if (ambientes.length === 0) {
+                this.setCustomValidity("Selecione ao menos um ambiente!");
+            } else {
+                this.setCustomValidity("");
+            }
+        });
+
+        $("[id^='addAmbientesGrupo-']").on('submit', function(e) {
+            let select = $(this).find("[id^='select-ambiente-grupo-']");
+            let ambientes = select.val() ?? [];
+            if (ambientes.length === 0) {
+                e.preventDefault();
+                select[0].setCustomValidity("Selecione ao menos um ambiente!");
+                select[0].reportValidity();
+            }
+        });
+
 
         <?php if (!empty($ambientes)): ?>
             $("#ambientes").DataTable({

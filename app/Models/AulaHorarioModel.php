@@ -130,16 +130,14 @@ class AulaHorarioModel extends Model
         $dia_semana = $builder->getRowArray()['dia_semana'];
         $hora_inicio = $builder->getRowArray()['hora_inicio'];
         $minuto_inicio = $builder->getRowArray()['minuto_inicio'];
-        $hora_fim = $builder->getRowArray()['hora_fim'];
-        $minuto_fim = $builder->getRowArray()['minuto_fim'];
 
         $builder = $this->select('aula_horario.id as theid')
             ->join('tempos_de_aula', 'aula_horario.tempo_de_aula_id = tempos_de_aula.id')
             ->where('aula_horario.id !=', $aulaHorarioId)
             ->where('aula_horario.ambiente_id', $ambiente)
             ->where('tempos_de_aula.dia_semana', $dia_semana)
-            ->where('(tempos_de_aula.hora_inicio * 60 + tempos_de_aula.minuto_inicio)', $hora_inicio * 60 + $minuto_inicio)
-            ->where('(tempos_de_aula.hora_fim * 60 + tempos_de_aula.minuto_fim)', $hora_fim * 60 + $minuto_fim)
+            ->where('(tempos_de_aula.hora_inicio * 60 + tempos_de_aula.minuto_inicio) <=', $hora_inicio * 60 + $minuto_inicio)
+            ->where('(tempos_de_aula.hora_fim * 60 + tempos_de_aula.minuto_fim) >', $hora_inicio * 60 + $minuto_inicio)
             ->get();
 
         if($builder->getNumRows() > 0)

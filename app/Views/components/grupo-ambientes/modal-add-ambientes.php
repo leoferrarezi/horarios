@@ -17,7 +17,7 @@
 
                             <div class="form-group">
                                 <label>Selecione os Ambientes</label>
-                                <select class="js-example-basic-multiple" name="ambientes[]" multiple="multiple" style="width:100%;">
+                                <select id="select-ambiente-grupo-<?= $grupo['id'] ?>" class="js-example-basic-multiple" name="ambientes[]" multiple="multiple" style="width:100%;">
                                     <?php foreach ($ambientes as $ambiente): ?>
                                         <?php
                                         $isAssigned = in_array($ambiente['id'], array_column($grupo['ambientes'], 'id'));

@@ -131,7 +131,11 @@ class TemposAula extends BaseController
 
         $aulaHorarioModel = new AulaHorarioModel();
         $tempos['aulas'] = $aulaHorarioModel->getAulasFromTurma($turma);
-        //$tempos = array_merge($tempos, $aulas); // Junta os tempos de aula com as aulas
+
+        foreach($tempos['aulas'] as $k=>$v)
+        {
+            $tempos['aulas'][$k]['choque'] = $aulaHorarioModel->choqueAmbiente($tempos['aulas'][$k]['id']);
+        }
 
         return $this->response->setJSON($tempos); // Retorna os dados em formato JSON
     }

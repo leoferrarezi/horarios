@@ -203,11 +203,28 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p class="text-light">Deseja realmente remover esta disciplina do horário?</p>
-                <div class="card bg-dark border-warning mb-3">
-                    <div class="card-body p-2">
-                        <h6 class="text-warning mb-1" id="modalRemocaoDisciplina"></h6>
-                        <small class="text-muted" id="modalRemocaoProfessor"></small>
+
+                <div class="row">
+                    <h5 class="text-danger"><i class="fa fa-exclamation-triangle"></i> Conflito identificado!</h5>
+                    <div class="card bg-dark border-danger mb-3">
+                        <div class="card-body p-2">
+                            <h6 class="text-warning mb-1" id="modalRemocaoCurso">Curso Fulano de Tal</h6>
+                            <h6 class="text-warning mb-1" id="">Turma XXXXX</h6>
+                            <p class="text-warning mb-1" id="">Disciplina xxx xx x XXXXX</p>
+                            <p class="text-warning mb-1" id="">Professor AWDA WDA WD AWD WA</p>
+                            <p class="text-warning mb-1" id="">Ambiente FSEF OSE FSF </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <p class="text-light">Deseja remover esta disciplina do horário?</p>
+                    <div class="card bg-dark border-warning mb-3">
+                        <div class="card-body p-2">
+                            <h6 class="text-warning mb-1" id="modalRemocaoDisciplina"></h6>
+                            <small class="text-muted" id="modalRemocaoProfessor"></small><br />
+                            <small class="text-muted" id="modalRemocaoAmbiente"></small>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -411,6 +428,22 @@
             // Preenche os dados no modal
             $('#modalRemocaoDisciplina').text($horario.data('disciplina'));
             $('#modalRemocaoProfessor').text('Professor: ' + $horario.data('professor'));
+            $('#modalRemocaoAmbiente').text('Ambiente: ' + $horario.data('ambienteNome'));
+
+            //Verificar e preencher dados do conflito
+            if($horario.data('conflito') > 0)
+            {
+                // Requisição para buscar os dados da aula em conflito
+                $.post('<?php echo base_url('sys/tabela-horarios/dadosDaAula'); ?>', 
+                {
+                    conflitoId: $horario.data('conflito')
+                },
+                function(data)
+                {
+                    
+                });
+                $('#modalRemocaoCurso').text('Aula ID: ' + $horario.data('conflito'));
+            }
 
             // Remove qualquer evento anterior do botão de confirmação
             $('#confirmarRemocao').off('click');
@@ -428,10 +461,6 @@
                 },
                 function(data)
                 {
-                    // lidar com a resposta do servidor
-                    // data == 1 = deletou
-                    // data == 0 = deu algum erro
-
                     if(data == "1")
                     {
                         moverDisciplinaParaPendentes(horarioElement);
@@ -475,6 +504,8 @@
                     }
                 });                
             });
+
+
 
             // Mostra o modal
             modalConfirmarRemocao.show();
@@ -580,72 +611,97 @@
                     // lidar com a resposta do servidor
                     // 1 = inseriu
                     // 0 = deu algum erro
-                });
+                    if(data == "0") 
+                    {
+                        $.toast({
+                            heading: 'Erro',
+                            text: 'Ocorreu um erro ao atribuir a disciplina ao horário.',
+                            showHideTransition: 'slide',
+                            icon: 'error',
+                            loaderBg: '#f96868',
+                            position: 'top-center'
+                        });
+                        return;
+                    }
+                    else if(data == "1" || data.indexOf("CONFLITO") >= 0)
+                    {
+                        var conflitoStyle = "text-primary";
+                        var conflitoIcon = "fa-mortar-board";
 
-                // Se o horário já contém uma disciplina, move-a de volta para a lista de pendentes
-                if (horarioSelecionado.html().trim() !== "") 
-                {
-                    moverDisciplinaParaPendentes(horarioSelecionado[0]);
-                }
+                        if(data.indexOf("AMBIENTE") >= 0)
+                        {
+                            var aulaConflito = data.split("-")[2];
+                            conflitoStyle = "text-warning";
+                            conflitoIcon = "fa-warning";
+                        }
 
-                // Preenche o horário selecionado
-                horarioSelecionado.html(`
-                    <div class="card border-1 shadow-sm bg-gradient" style="cursor: pointer; height: 100%;">
-                        <div class="card-body p-1 d-flex flex-column justify-content-center align-items-center text-center">
-                            <h6 class="text-wrap mb-0 fs-6 text-primary" style="font-size: 0.75rem !important;">
-                                <i class="mdi mdi-book-outline me-1"></i>
-                                ${aula.disciplina}
-                            </h6>
-                            <div class="d-flex align-items-center mb-0 py-0">
-                                <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
-                                <small class="text-wrap text-secondary" style="font-size: 0.65rem !important;">${aula.professores.join(", ")}</small>
+                        // Se o horário já contém uma disciplina, move-a de volta para a lista de pendentes
+                        if (horarioSelecionado.html().trim() !== "") 
+                        {
+                            moverDisciplinaParaPendentes(horarioSelecionado[0]);
+                        }
+
+                        // Preenche o horário selecionado
+                        horarioSelecionado.html(`
+                            <div class="card border-1 shadow-sm bg-gradient" style="cursor: pointer; height: 100%;">
+                                <div class="card-body p-1 d-flex flex-column justify-content-center align-items-center text-center">
+                                    <h6 class="text-wrap mb-0 fs-6 ${conflitoStyle}" style="font-size: 0.75rem !important;">
+                                        <i class="fa ${conflitoIcon} me-1"></i>
+                                        ${aula.disciplina}
+                                    </h6>
+                                    <div class="d-flex align-items-center mb-0 py-0">
+                                        <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
+                                        <small class="text-wrap text-secondary" style="font-size: 0.65rem !important;">${aula.professores.join(", ")}</small>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <i class="mdi mdi-door fs-6 text-muted me-1"></i>
+                                        <small class="text-wrap text-secondary" style="font-size: 0.65rem !important;">${ambienteSelecionadoNome}</small>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="d-flex align-items-center">
-                                <i class="mdi mdi-door fs-6 text-muted me-1"></i>
-                                <small class="text-wrap text-secondary" style="font-size: 0.65rem !important;">${ambienteSelecionadoNome}</small>
-                            </div>
-                        </div>
-                    </div>
-                `);
+                        `);
 
-                // Adiciona os dados ao horário
-                horarioSelecionado
-                    .data('disciplina', aula.disciplina)
-                    .data('professor', aula.professores.join(", "))
-                    .data('ambiente', ambienteSelecionadoId)
-                    .data('aula-id', aulaId)
-                    .data('aulas-total', cardAula.data('aulas-total'))
-                    .data('aulas-pendentes', cardAula.data('aulas-pendentes'))
-                    .removeClass('horario-vazio')
-                    .addClass('horario-preenchido')
-                    .off('click')
-                    .click(function() {
-                        mostrarModalConfirmacaoRemocao(this);
-                    });
+                        // Adiciona os dados ao horário
+                        horarioSelecionado
+                            .data('disciplina', aula.disciplina)
+                            .data('professor', aula.professores.join(", "))
+                            .data('ambiente', ambienteSelecionadoId)
+                            .data('ambienteNome', ambienteSelecionadoNome)
+                            .data('aula-id', aulaId)
+                            .data('aulas-total', cardAula.data('aulas-total'))
+                            .data('aulas-pendentes', cardAula.data('aulas-pendentes'))
+                            .removeClass('horario-vazio')
+                            .addClass('horario-preenchido')
+                            .off('click')
+                            .click(function() {
+                                mostrarModalConfirmacaoRemocao(this);
+                            });
 
-                // Atualiza a quantidade de aulas pendentes no card
-                const aulasPendentes = cardAula.data('aulas-pendentes') - 1;
-                cardAula.data('aulas-pendentes', aulasPendentes);
-                cardAula.find('.aulas-pendentes').text(aulasPendentes);
+                        // Atualiza a quantidade de aulas pendentes no card
+                        const aulasPendentes = cardAula.data('aulas-pendentes') - 1;
+                        cardAula.data('aulas-pendentes', aulasPendentes);
+                        cardAula.find('.aulas-pendentes').text(aulasPendentes);
 
-                // Se zerou, remove o card
-                if (aulasPendentes <= 0) 
-                {
-                    cardAula.remove();
-                }
+                        // Se zerou, remove o card
+                        if (aulasPendentes <= 0) 
+                        {
+                            cardAula.remove();
+                        }
 
-                atualizarContadorPendentes();
-                modalSelecionarAmbiente.hide();
+                        atualizarContadorPendentes();
+                        modalSelecionarAmbiente.hide();
 
-                // Mostra feedback de sucesso
-                $.toast({
-                    heading: 'Sucesso',
-                    text: 'A disciplina foi atribuída ao horário.',
-                    showHideTransition: 'slide',
-                    icon: 'success',
-                    loaderBg: '#f96868',
-                    position: 'top-center'
-                });
+                        // Mostra feedback de sucesso
+                        $.toast({
+                            heading: 'Sucesso',
+                            text: 'A disciplina foi atribuída ao horário.',
+                            showHideTransition: 'slide',
+                            icon: 'success',
+                            loaderBg: '#f96868',
+                            position: 'top-center'
+                        });
+                    }                
+                });                
             }
         });
 
@@ -1161,8 +1217,7 @@
                         counter++;
 
                         setTimeout(function() 
-                        {
-                            
+                        {                            
                             const aulaSelecionadaId = obj.aula_id;
                             const aula = getAulaById(obj.aula_id);
 
@@ -1172,12 +1227,21 @@
                             horarioSelecionado = $(`#horario_${obj.tempo_de_aula_id}`);
                             cardAula = $(`#aula_${obj.aula_id}`);
 
+                            var conflitoStyle = "text-primary";
+                            var conflitoIcon = "fa-mortar-board";
+
+                            if(obj.choque > 0)
+                            {
+                                conflitoStyle = "text-warning";
+                                conflitoIcon = "fa-warning";
+                            }
+
                             // Preenche o horário selecionado
                             horarioSelecionado.html(`
                                 <div class="card border-1 shadow-sm bg-gradient" style="cursor: pointer; height: 100%;">
                                     <div class="card-body p-1 d-flex flex-column justify-content-center align-items-center text-center">
-                                        <h6 class="text-wrap mb-0 fs-6 text-primary" style="font-size: 0.75rem !important;">
-                                            <i class="mdi mdi-book-outline me-1"></i>
+                                        <h6 class="text-wrap mb-0 fs-6 ${conflitoStyle}" style="font-size: 0.75rem !important;">
+                                            <i class="fa ${conflitoIcon} me-1"></i>
                                             ${aula.disciplina}
                                         </h6>
                                         <div class="d-flex align-items-center mb-0 py-0">
@@ -1197,9 +1261,11 @@
                                 .data('disciplina', aula.disciplina)
                                 .data('professor', aula.professores.join(", "))
                                 .data('ambiente', ambienteSelecionadoId)
+                                .data('ambienteNome', ambienteSelecionadoNome)
                                 .data('aula-id', obj.aula_id)
                                 .data('aulas-total', cardAula.data('aulas-total'))
                                 .data('aulas-pendentes', cardAula.data('aulas-pendentes'))
+                                .data('conflito', obj.choque)
                                 .removeClass('horario-vazio')
                                 .addClass('horario-preenchido')
                                 .off('click')
@@ -1220,7 +1286,7 @@
 
                             atualizarContadorPendentes();
 
-                        }, 50 * counter); // Atraso de 100ms para cada iteração
+                        }, 100 * counter); // Atraso de 100ms para cada iteração
                     });
 
                 }, 'json');

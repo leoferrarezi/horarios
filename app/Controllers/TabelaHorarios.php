@@ -53,8 +53,19 @@ class TabelaHorarios extends BaseController
         $aulaHorarioModel->deleteAulaNoHorario($dado['aula_id'], $dado['tempo_de_aula_id'], $dado['versao_id']);
 
         if ($aulaHorarioModel->insert($dado))
-        {            
-            echo "1";
+        {
+            $aulaHorarioId = $aulaHorarioModel->getInsertID();
+
+            $choque = $aulaHorarioModel->choqueAmbiente($aulaHorarioId);
+
+            if ($choque > 0)
+            {
+                echo "CONFLITO-AMBIENTE-$choque"; // choque de ambiente
+            }
+            else
+            {
+                echo "1"; // tudo certo e sem choques
+            }
         }
         else
         {

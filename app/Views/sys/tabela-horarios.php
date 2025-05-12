@@ -260,7 +260,7 @@
                             <select class="form-select filtro" id="filtroCurso">
                                 <option value="0">-</option>
                                 <?php foreach ($cursos as $curso): ?>
-                                    <option value="<?php echo esc($curso['id']) ?>"><?php echo esc($curso['nome']) ?></option>
+                                    <option value="<?php echo esc($curso['id']) ?>" data-regime="<?php echo esc($curso['regime']) ?>"><?php echo esc($curso['nome']) ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -338,6 +338,9 @@
 <script>
     //Vertozão global pra guardar dados dos horários da turma
     var horarios = [];
+
+    //Vertozão global pra guardar dados dos cursos
+    var cursos = [];
 
     //Vertozão global pra guardar dados das aulas da turma
     var aulas = [];
@@ -924,7 +927,7 @@
                         if (!found) 
                         {
                             var cardAula = '' +
-                                '<div id="aula_' + obj.id + '" draggable="true" data-aula-id="' + obj.id + '" data-disciplina="' + obj.disciplina + '" data-professor="' + obj.professor.split(" ")[0] + '" data-aulas-total="' + (obj.ch / 20) + '" data-aulas-pendentes="' + (obj.ch / 20) + '" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">' +
+                                '<div id="aula_' + obj.id + '" draggable="true" data-aula-id="' + obj.id + '" data-disciplina="' + obj.disciplina + '" data-professor="' + obj.professor.split(" ")[0] + '" data-aulas-total="' + (obj.ch / (($('#filtroCurso').data('regime') == 2) ? 20 : 40)) + '" data-aulas-pendentes="' + (obj.ch / (($('#filtroCurso').data('regime') == 2) ? 20 : 40)) + '" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">' +
                                     '<div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">' +
                                         '<h6 class="text-primary">' +
                                         '<i class="mdi mdi-book-outline me-1"></i> ' + obj.disciplina +
@@ -935,7 +938,7 @@
                                         '</div>' +
                                         '<div class="d-flex align-items-center">' +
                                             '<i class="mdi mdi-door fs-6 text-muted me-1"></i>' +
-                                            '<small class="text-secondary"><span class="aulas-pendentes">' + (obj.ch / 20) + '</span> aulas</small>' +
+                                            '<small class="text-secondary"><span class="aulas-pendentes">' + (obj.ch / (($('#filtroCurso').data('regime') == 2) ? 20 : 40)) + '</span> aulas</small>' +
                                         '</div>' +
                                     '</div>' +
                                 '</div>';
@@ -949,7 +952,7 @@
                             aulas.push(obj);
 
                             //faz o somatório de aulas da turma
-                            quantasAulas += (obj.ch / 20);
+                            quantasAulas += (obj.ch / (($('#filtroCurso').data('regime') == 2) ? 20 : 40));
                         }
                     });
                 }, 'json')

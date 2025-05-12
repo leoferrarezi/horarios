@@ -77,6 +77,22 @@ class AulaHorarioModel extends Model
                 ->findAll();
     }
 
+    public function getAulaHorario($aulaHorarioId)
+    {
+        return $this->select('cursos.nome as curso, disciplinas.nome as disciplina, turmas.sigla as turma, professores.nome as professor, ambientes.nome as ambiente')
+                ->join('tempos_de_aula', 'aula_horario.tempo_de_aula_id = tempos_de_aula.id')
+                ->join('ambientes', 'aula_horario.ambiente_id = ambientes.id')
+                ->join('aulas', 'aula_horario.aula_id = aulas.id')
+                ->join('aula_professor', 'aulas.id = aula_professor.aula_id')
+                ->join('professores', 'professores.id = aula_professor.professor_id')
+                ->join('disciplinas', 'disciplinas.id = aulas.disciplina_id')
+                ->join('turmas', 'turmas.id = aulas.turma_id')
+                ->join('cursos', 'cursos.id = turmas.curso_id')
+                ->where('aula_horario.id', $aulaHorarioId)
+                ->get()
+                ->getRowArray();
+    }
+
     public function deleteAulaNoHorario($aula_id, $tempo_de_aula_id, $versao_id)
     {
         $this->db->simpleQuery("

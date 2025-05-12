@@ -38,6 +38,8 @@ $routes->group('sys', function ($routes)
         $routes->get('teste/(:num)', 'TabelaHorarios::teste/$1');
         $routes->post('atribuirAula', 'TabelaHorarios::atribuirAula');
         $routes->post('removerAula', 'TabelaHorarios::removerAula');
+        $routes->get('dadosDaAula/(:num)', 'TabelaHorarios::dadosDaAula/$1');
+        
     });
 
     $routes->group('cadastro-ambientes', function ($routes) 

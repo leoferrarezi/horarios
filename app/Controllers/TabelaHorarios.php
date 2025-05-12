@@ -89,11 +89,18 @@ class TabelaHorarios extends BaseController
         echo "1";        
     }
 
+    public function dadosDaAula($aulaHorarioId)
+    {
+        $aulaHorarioModel = new AulaHorarioModel();
+        $data = $aulaHorarioModel->getAulaHorario($aulaHorarioId);
+        echo json_encode($data);
+    }
+
     public function teste($aulaHorarioId)
     {
         $aulaHorarioModel = new AulaHorarioModel();
-
-        echo $aulaHorarioModel->choqueAmbiente($aulaHorarioId);
-        
+        echo $aulaHorarioModel->choqueAmbiente($aulaHorarioId);        
     }
+
+
 }

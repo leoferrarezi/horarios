@@ -204,15 +204,15 @@
             </div>
             <div class="modal-body">
 
-                <div class="row">
+                <div class="row" id="rowConflito">
                     <h5 class="text-danger"><i class="fa fa-exclamation-triangle"></i> Conflito identificado!</h5>
                     <div class="card bg-dark border-danger mb-3">
                         <div class="card-body p-2">
-                            <h6 class="text-warning mb-1" id="modalRemocaoCurso">Curso Fulano de Tal</h6>
-                            <h6 class="text-warning mb-1" id="">Turma XXXXX</h6>
-                            <p class="text-warning mb-1" id="">Disciplina xxx xx x XXXXX</p>
-                            <p class="text-warning mb-1" id="">Professor AWDA WDA WD AWD WA</p>
-                            <p class="text-warning mb-1" id="">Ambiente FSEF OSE FSF </p>
+                            <h6 class="text-warning mb-1" id="modalRemocaoConflitoCurso">...</h6>
+                            <h6 class="text-warning mb-1" id="modalRemocaoConflitoTurma">...</h6>
+                            <p class="text-warning mb-1" id="modalRemocaoConflitoDisciplina">...</p>
+                            <p class="text-warning mb-1" id="modalRemocaoConflitoProfessor">...</p>
+                            <p class="text-warning mb-1" id="modalRemocaoConflitoAmbiente">...</p>
                         </div>
                     </div>
                 </div>
@@ -434,15 +434,22 @@
             if($horario.data('conflito') > 0)
             {
                 // Requisição para buscar os dados da aula em conflito
-                $.post('<?php echo base_url('sys/tabela-horarios/dadosDaAula'); ?>', 
-                {
-                    conflitoId: $horario.data('conflito')
-                },
+                $.get('<?php echo base_url('sys/tabela-horarios/dadosDaAula/'); ?>' + $horario.data('conflito'),
                 function(data)
                 {
-                    
-                });
-                $('#modalRemocaoCurso').text('Aula ID: ' + $horario.data('conflito'));
+                    $('#modalRemocaoConflitoCurso').text("Curso: " + data.curso);
+                    $('#modalRemocaoConflitoTurma').text("Turma: " + data.turma);
+                    $('#modalRemocaoConflitoDisciplina').text("Disciplina: " + data.disciplina);
+                    $('#modalRemocaoConflitoProfessor').text("Professor: " + data.professor);
+                    $('#modalRemocaoConflitoAmbiente').text("Ambiente: " + data.ambiente);
+
+                }, 'json');
+
+                $('#rowConflito').show();
+            }
+            else
+            {
+                $('#rowConflito').hide();
             }
 
             // Remove qualquer evento anterior do botão de confirmação
@@ -504,8 +511,6 @@
                     }
                 });                
             });
-
-
 
             // Mostra o modal
             modalConfirmarRemocao.show();
@@ -608,9 +613,6 @@
                 },
                 function(data) 
                 {
-                    // lidar com a resposta do servidor
-                    // 1 = inseriu
-                    // 0 = deu algum erro
                     if(data == "0") 
                     {
                         $.toast({
@@ -627,10 +629,11 @@
                     {
                         var conflitoStyle = "text-primary";
                         var conflitoIcon = "fa-mortar-board";
+                        var aulaConflito = 0;
 
                         if(data.indexOf("AMBIENTE") >= 0)
                         {
-                            var aulaConflito = data.split("-")[2];
+                            aulaConflito = data.split("-")[2];
                             conflitoStyle = "text-warning";
                             conflitoIcon = "fa-warning";
                         }
@@ -670,6 +673,7 @@
                             .data('aula-id', aulaId)
                             .data('aulas-total', cardAula.data('aulas-total'))
                             .data('aulas-pendentes', cardAula.data('aulas-pendentes'))
+                            .data('conflito', aulaConflito)
                             .removeClass('horario-vazio')
                             .addClass('horario-preenchido')
                             .off('click')

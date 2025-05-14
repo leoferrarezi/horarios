@@ -240,23 +240,12 @@
                 // Formar o modal com os dados preenchidos
                 var modal = $(this);
                 modal.find('#professorID').val(id);
-                // modal.find('#professor-nome').html(nome);
-            });
-
-            //Mesma abordagem do código acima, para o modal de excluir professor
-            $('#modal-restricoes-prof').on('show.bs.modal', function(event) {
-                var button = $(event.relatedTarget); // Botão que acionou o modal
-                var professorID = button.data('id'); // Obtém o ID do professor
-                var professorNome = button.data('nome');
-
-                var modal = $(this);
-                modal.find('#professorID').val(professorID);
-                modal.find('#professor-nome').text(professorNome);
+                modal.find('#professor-nome').html(nome);
 
                 $.ajax({
-                    url: '<?php echo base_url('/sys/professor/restricoes/'); ?>' + professorID, // Defina a rota correta                    
+                    url: '<?php echo base_url('/sys/professor/restricoes/'); ?>' + id, // Defina a rota correta                    
                     method: 'GET',
-                    data: { professorID: professorID },
+                    data: { id: id },
                     success: function(response) 
                     {
                         Object.keys(response).forEach(function(dia) 
@@ -266,12 +255,12 @@
                                 response[dia][periodo].forEach(function(horario) 
                                 {
                                     var tipo = horario.tipo;
-                                    var id = horario.id;
+                                    var idHorario = horario.id;
 
                                     // Atualiza os inputs na modal com base nos dados retornados
-                                    $('#preferencia_' + dia.toLowerCase() + '_' + id + '_none').prop('checked', tipo == 0);
-                                    $('#preferencia_' + dia.toLowerCase() + '_' + id + '_pref').prop('checked', tipo == 1);
-                                    $('#preferencia_' + dia.toLowerCase() + '_' + id + '_rest').prop('checked', tipo == 2);
+                                    $('#preferencia_' + dia.toLowerCase() + '_' + idHorario + '_none').prop('checked', tipo == 0);
+                                    $('#preferencia_' + dia.toLowerCase() + '_' + idHorario + '_pref').prop('checked', tipo == 1);
+                                    $('#preferencia_' + dia.toLowerCase() + '_' + idHorario + '_rest').prop('checked', tipo == 2);
                                 });
                             });
                         });
@@ -281,6 +270,17 @@
                         alert('Erro ao buscar as restrições do professor. \n' + data);
                     }
                 });
+            });
+
+            //Mesma abordagem do código acima, para o modal de excluir professor
+            $('#modal-deletar-professor').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget); // Botão que acionou o modal
+                var professorID = button.data('id'); // Obtém o ID do professor
+                var professorNome = button.data('nome');
+
+                var modal = $(this);
+                modal.find('#deletar-id').val(professorID);
+                modal.find('#deletar-nome').text(professorNome);
             });
 
             //Ativa os tooltips dos botões

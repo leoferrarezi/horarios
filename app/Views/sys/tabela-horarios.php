@@ -204,6 +204,15 @@
             </div>
             <div class="modal-body">
 
+                <div class="row" id="rowRestricao">
+                    <h5 class="text-danger"><i class="fa fa-exclamation-triangle"></i> Restrição do Docente!</h5>
+                    <div class="card bg-dark border-danger mb-3">
+                        <div class="card-body p-2">
+                            <h5 class="text-danger mb-1">Este docente tem registro de restrição para o horário atribuído.</h5>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row" id="rowConflito">
                     <h5 class="text-danger"><i class="fa fa-exclamation-triangle"></i> Conflito identificado!</h5>
                     <div class="card bg-dark border-danger mb-3">
@@ -435,8 +444,15 @@
             $('#modalRemocaoProfessor').text('Professor: ' + $horario.data('professor'));
             $('#modalRemocaoAmbiente').text('Ambiente: ' + $horario.data('ambienteNome').join(", "));
 
+            $('#rowRestricao').hide();
+            $('#rowConflito').hide();
+
             //Verificar e preencher dados do conflito
-            if($horario.data('conflito') > 0)
+            if($horario.data('restricao') > 0)
+            {
+                $('#rowRestricao').show();
+            }
+            else if($horario.data('conflito') > 0)
             {
                 // Requisição para buscar os dados da aula em conflito
                 $.get('<?php echo base_url('sys/tabela-horarios/dadosDaAula/'); ?>' + $horario.data('conflito'),
@@ -453,10 +469,6 @@
                 }, 'json');
 
                 $('#rowConflito').show();
-            }
-            else
-            {
-                $('#rowConflito').hide();
             }
 
             // Remove qualquer evento anterior do botão de confirmação
@@ -640,13 +652,19 @@
                         });
                         return;
                     }
-                    else if(data == "1" || data.indexOf("CONFLITO") >= 0)
+                    else if(data == "1" || data.indexOf("CONFLITO") >= 0 || data.indexOf("RESTRICAO") >= 0)
                     {
                         var conflitoStyle = "text-primary";
                         var conflitoIcon = "fa-mortar-board";
                         var aulaConflito = 0;
 
-                        if(data.indexOf("AMBIENTE") >= 0)
+                        if(data.indexOf("RESTRICAO") >= 0)
+                        {
+                            conflitoStyle = "text-danger";
+                            conflitoIcon = "fa-warning";
+                            aulaConflito = data.split("-")[2];
+                        }
+                        else if(data.indexOf("AMBIENTE") >= 0 || data.indexOf("PROFESSOR") >= 0)
                         {
                             aulaConflito = data.split("-")[2];
                             conflitoStyle = "text-warning";
@@ -689,6 +707,7 @@
                             .data('aulas-total', cardAula.data('aulas-total'))
                             .data('aulas-pendentes', cardAula.data('aulas-pendentes'))
                             .data('conflito', aulaConflito)
+                            .data('restricao', aulaConflito)
                             .removeClass('horario-vazio')
                             .addClass('horario-preenchido')
                             .off('click')
@@ -1257,7 +1276,12 @@
                             var conflitoStyle = "text-primary";
                             var conflitoIcon = "fa-mortar-board";
 
-                            if(obj.choque > 0)
+                            if(obj.restricao > 0)
+                            {
+                                conflitoStyle = "text-danger";
+                                conflitoIcon = "fa-warning";
+                            }
+                            else if(obj.choque > 0)
                             {
                                 conflitoStyle = "text-warning";
                                 conflitoIcon = "fa-warning";
@@ -1293,6 +1317,7 @@
                                 .data('aulas-total', cardAula.data('aulas-total'))
                                 .data('aulas-pendentes', cardAula.data('aulas-pendentes'))
                                 .data('conflito', obj.choque)
+                                .data('restricao', obj.restricao)
                                 .removeClass('horario-vazio')
                                 .addClass('horario-preenchido')
                                 .off('click')

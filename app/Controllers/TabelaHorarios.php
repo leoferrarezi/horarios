@@ -78,11 +78,26 @@ class TabelaHorarios extends BaseController
             if ($choque > 0)
             {
                 echo "CONFLITO-AMBIENTE-$choque"; // choque de ambiente
+                return;
             }
-            else
+
+            $choque = $aulaHorarioModel->choqueDocente($aulaHorarioId);
+
+            if ($choque > 0)
             {
-                echo "1"; // tudo certo e sem choques
+                echo "CONFLITO-PROFESSOR-$choque"; // choque de professor
+                return;
             }
+
+            $restricao = $aulaHorarioModel->restricaoDocente($aulaHorarioId);
+
+            if ($restricao > 0)
+            {
+                echo "RESTRICAO-PROFESSOR-$restricao"; // restrição de professor
+                return;
+            }
+
+            echo "1"; // tudo certo e sem choques            
         }
         else
         {
@@ -116,7 +131,8 @@ class TabelaHorarios extends BaseController
     public function teste($aulaHorarioId)
     {
         $aulaHorarioModel = new AulaHorarioModel();
-        echo $aulaHorarioModel->choqueAmbiente($aulaHorarioId);        
+        $data = $aulaHorarioModel->restricaoDocente($aulaHorarioId);
+        echo json_encode($data);
     }
 
 

@@ -184,14 +184,82 @@ class AulaHorarioModel extends Model
         return 0; // Sem conflito
     }
 
-    public function choqueDocente()
+    public function choqueDocente($aulaHorarioId)
     {
-        //verificar se o professor não está em 2 aulas ao mesmo tempo
+        $builder = $this->select('professor_id, tempo_de_aula_id')
+            ->join('aula_professor', 'aula_professor.aula_id = aula_horario.aula_id')
+            ->where('aula_horario.id', $aulaHorarioId)
+            ->where('versao_id', (new VersoesModel())->getVersaoByUser(auth()->id()))
+            ->get();
+
+        foreach ($builder->getResult() as $row)
+        {
+            $professor = $row->professor_id;
+            $tempo = $row->tempo_de_aula_id;
+
+            $builder2 = $this->db->table('tempos_de_aula')->select('*')->where('id', $tempo)->get();
+            $dia_semana = $builder2->getRowArray()['dia_semana'];
+            $hora_inicio = $builder2->getRowArray()['hora_inicio'];
+            $minuto_inicio = $builder2->getRowArray()['minuto_inicio'];
+
+            $builder3 = $this->select('aula_horario.id as theid')
+                ->join('tempos_de_aula', 'aula_horario.tempo_de_aula_id = tempos_de_aula.id')
+                ->join('aula_professor', 'aula_professor.aula_id = aula_horario.aula_id')
+                ->where('aula_horario.id !=', $aulaHorarioId)
+                ->where('aula_professor.professor_id', $professor)
+                ->where('tempos_de_aula.dia_semana', $dia_semana)
+                ->where('(tempos_de_aula.hora_inicio * 60 + tempos_de_aula.minuto_inicio) <=', $hora_inicio * 60 + $minuto_inicio)
+                ->where('(tempos_de_aula.hora_fim * 60 + tempos_de_aula.minuto_fim) >', $hora_inicio * 60 + $minuto_inicio)
+                ->get();
+
+            if ($builder3->getNumRows() > 0)
+            {
+                return $builder3->getRowArray()['theid']; // Conflito encontrado, retorna o ID do horário de aula em conflito
+            }
+        }
+
+        return 0; // Sem conflito
     }
 
-    public function restricaoDocente()
+    public function restricaoDocente($aulaHorarioId)
     {
-        //verificar restrições cadastradas
+        // Obter professor(es) e o tempo de aula do horário atual
+        $builder = $this->select('professor_id, tempo_de_aula_id')
+            ->join('aula_professor', 'aula_professor.aula_id = aula_horario.aula_id')
+            ->where('aula_horario.id', $aulaHorarioId)
+            ->where('versao_id', (new VersoesModel())->getVersaoByUser(auth()->id()))
+            ->get();
+
+        // Iterar sobre os resultados
+        foreach ($builder->getResult() as $row)
+        {
+            $professor = $row->professor_id;
+            $tempo = $row->tempo_de_aula_id;
+
+            //Obter o dia da semana, hora e minuto de início do tempo de aula
+            $builder2 = $this->db->table('tempos_de_aula')->select('*')->where('id', $tempo)->get();
+            $dia_semana = $builder2->getRowArray()['dia_semana'];
+            $hora_inicio = $builder2->getRowArray()['hora_inicio'];
+            $minuto_inicio = $builder2->getRowArray()['minuto_inicio'];
+
+            //Verificar se há restrições para o professor no mesmo dia e horário
+            $builder3 = $this->db->table('professor_regras')
+                ->select('tempos_de_aula.id as theid')
+                ->join('tempos_de_aula', 'tempo_de_aula_id = tempos_de_aula.id')
+                ->where('professor_regras.professor_id', $professor)
+                ->where('tipo', '2') //restrição
+                ->where('tempos_de_aula.dia_semana', $dia_semana)
+                ->where('(tempos_de_aula.hora_inicio * 60 + tempos_de_aula.minuto_inicio) <=', $hora_inicio * 60 + $minuto_inicio)
+                ->where('(tempos_de_aula.hora_fim * 60 + tempos_de_aula.minuto_fim) >', $hora_inicio * 60 + $minuto_inicio)
+                ->get();
+
+            if ($builder3->getNumRows() > 0)
+            {
+                return $builder3->getRowArray()['theid']; // Conflito encontrado, retorna o ID do da regra conflitante do professor
+            }
+        }
+
+        return 0; // Sem conflito
     }
 
     public function restricaoHorarios()

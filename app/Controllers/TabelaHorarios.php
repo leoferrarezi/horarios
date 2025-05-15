@@ -71,7 +71,23 @@ class TabelaHorarios extends BaseController
             {
                 $insert = ["aula_horario_id" => $aulaHorarioId, "ambiente_id" => $dadosPost['ambiente_id']];
                 $aulaHorarioAmbienteModel->insert($insert);
-            }            
+            }
+
+            $tresturnos = $aulaHorarioModel->verificarTresTurnos($aulaHorarioId);
+
+            if ($tresturnos > 0)
+            {
+                echo "TRES-TURNOS";
+                return;
+            }
+
+            $restricao = $aulaHorarioModel->restricaoDocente($aulaHorarioId);
+
+            if ($restricao > 0)
+            {
+                echo "RESTRICAO-PROFESSOR-$restricao"; // restrição de professor
+                return;
+            }
 
             $choque = $aulaHorarioModel->choqueAmbiente($aulaHorarioId);
 
@@ -89,13 +105,7 @@ class TabelaHorarios extends BaseController
                 return;
             }
 
-            $restricao = $aulaHorarioModel->restricaoDocente($aulaHorarioId);
-
-            if ($restricao > 0)
-            {
-                echo "RESTRICAO-PROFESSOR-$restricao"; // restrição de professor
-                return;
-            }
+            
 
             echo "1"; // tudo certo e sem choques            
         }
@@ -131,7 +141,7 @@ class TabelaHorarios extends BaseController
     public function teste($aulaHorarioId)
     {
         $aulaHorarioModel = new AulaHorarioModel();
-        $data = $aulaHorarioModel->restricaoDocente($aulaHorarioId);
+        $data = $aulaHorarioModel->verificarTresTurnos($aulaHorarioId);
         echo json_encode($data);
     }
 

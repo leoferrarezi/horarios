@@ -153,10 +153,10 @@
                                     <i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>
                                     <small class="text-secondary"><span id="modalAmbienteProfessor"></span></small>
                                 </div>
-                                <div class="d-flex align-items-center">
+                                <!--<div class="d-flex align-items-center">
                                     <i class="mdi mdi-door fs-6 text-muted me-1"></i>
-                                    <small class="text-secondary"><span id="modalAmbienteAulas"></span> aulas</small>
-                                </div>
+                                    <small class="text-secondary"><span id="modalAmbienteAulas"></span></small>
+                                </div>-->
                             </div>
                         </div>
                     </div>
@@ -209,6 +209,15 @@
                     <div class="card bg-dark border-danger mb-3">
                         <div class="card-body p-2">
                             <h5 class="text-danger mb-1">Este docente tem registro de restrição para o horário atribuído.</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id="rowTresTurnos">
+                    <h5 class="text-danger"><i class="fa fa-exclamation-triangle"></i> Restrição do Docente!</h5>
+                    <div class="card bg-dark border-danger mb-3">
+                        <div class="card-body p-2">
+                            <h5 class="text-danger mb-1">Este docente está alocado em três turnos em um mesmo dia.</h5>
                         </div>
                     </div>
                 </div>
@@ -446,9 +455,14 @@
 
             $('#rowRestricao').hide();
             $('#rowConflito').hide();
+            $('#rowTresTurnos').hide();
 
             //Verificar e preencher dados do conflito
-            if($horario.data('restricao') > 0)
+            if($horario.data('tresturnos') > 0)
+            {
+                $('#rowTresTurnos').show();
+            }
+            else if($horario.data('restricao') > 0)
             {
                 $('#rowRestricao').show();
             }
@@ -652,13 +666,20 @@
                         });
                         return;
                     }
-                    else if(data == "1" || data.indexOf("CONFLITO") >= 0 || data.indexOf("RESTRICAO") >= 0)
+                    else if(data == "1" || data.indexOf("CONFLITO") >= 0 || data.indexOf("RESTRICAO") >= 0|| data.indexOf("TRES-TURNOS") >= 0)
                     {
                         var conflitoStyle = "text-primary";
                         var conflitoIcon = "fa-mortar-board";
                         var aulaConflito = 0;
+                        var tresTurnos = 0;
 
-                        if(data.indexOf("RESTRICAO") >= 0)
+                        if(data.indexOf("TRES-TURNOS") >= 0)
+                        {
+                            conflitoStyle = "text-danger";
+                            conflitoIcon = "fa-warning";
+                            tresTurnos = 1;
+                        }
+                        else if(data.indexOf("RESTRICAO") >= 0)
                         {
                             conflitoStyle = "text-danger";
                             conflitoIcon = "fa-warning";
@@ -708,6 +729,7 @@
                             .data('aulas-pendentes', cardAula.data('aulas-pendentes'))
                             .data('conflito', aulaConflito)
                             .data('restricao', aulaConflito)
+                            .data('tresturnos', tresTurnos)
                             .removeClass('horario-vazio')
                             .addClass('horario-preenchido')
                             .off('click')
@@ -1002,6 +1024,8 @@
                 {
                     var dias = [];
 
+                    horarios = []; //Limpa o vetor de horários
+
                     var temManha = false;
                     var temTarde = false;
                     var temNoite = false;
@@ -1276,7 +1300,12 @@
                             var conflitoStyle = "text-primary";
                             var conflitoIcon = "fa-mortar-board";
 
-                            if(obj.restricao > 0)
+                            if(obj.tresturnos > 0)
+                            {
+                                conflitoStyle = "text-danger";
+                                conflitoIcon = "fa-warning";
+                            }
+                            else if(obj.restricao > 0)
                             {
                                 conflitoStyle = "text-danger";
                                 conflitoIcon = "fa-warning";
@@ -1318,6 +1347,7 @@
                                 .data('aulas-pendentes', cardAula.data('aulas-pendentes'))
                                 .data('conflito', obj.choque)
                                 .data('restricao', obj.restricao)
+                                .data('tresturnos', obj.tresturnos)
                                 .removeClass('horario-vazio')
                                 .addClass('horario-preenchido')
                                 .off('click')

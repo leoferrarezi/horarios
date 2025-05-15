@@ -262,9 +262,55 @@ class AulaHorarioModel extends Model
         return 0; // Sem conflito
     }
 
-    public function restricaoHorarios()
+    public function verificarTresTurnos($aulaHorarioId)
     {
-        //intervalo de xxxx tempo minimo
-        //ultima da noite + primeira da manha
+        // Obter professor(es) e o tempo de aula do horário atual
+        $builder = $this->select('professor_id, tempo_de_aula_id')
+            ->join('aula_professor', 'aula_professor.aula_id = aula_horario.aula_id')
+            ->where('aula_horario.id', $aulaHorarioId)
+            ->where('versao_id', (new VersoesModel())->getVersaoByUser(auth()->id()))
+            ->get();       
+
+        // Iterar sobre os resultados, para o caso de mais de um professor na aula
+        foreach ($builder->getResult() as $row)
+        {
+            $professor = $row->professor_id;
+            $tempo = $row->tempo_de_aula_id;
+
+            //Obter o dia da semana, hora e minuto de início do tempo de aula
+            $builder2 = $this->db->table('tempos_de_aula')->select('*')->where('id', $tempo)->get();
+            $dia_semana = $builder2->getRowArray()['dia_semana'];
+            $hora_inicio = $builder2->getRowArray()['hora_inicio'];
+
+            //Flags para os turnos
+            $manha = $tarde = $noite = false;
+
+            //Obter o dia da semana, hora e minuto de início do tempo de aula
+            $builder2 = $this->select()
+                ->join('aula_professor', 'aula_professor.aula_id = aula_horario.aula_id')
+                ->join('tempos_de_aula', 'aula_horario.tempo_de_aula_id = tempos_de_aula.id')
+                ->where('aula_professor.professor_id', $professor)
+                ->where('tempos_de_aula.dia_semana', $dia_semana)
+                ->get();
+
+            foreach ($builder2->getResult() as $row2)
+            {            
+                $hora_inicio = $row2->hora_inicio;
+
+                if ($hora_inicio < 12)
+                    $manha = true;
+                else if ($hora_inicio >= 12 && $hora_inicio < 18)
+                    $tarde = true;
+                else if ($hora_inicio >= 18)
+                    $noite = true;            
+
+                if($manha && $tarde && $noite)
+                {
+                    return 1; // Três turnos para o dia
+                }
+            }
+        }
+
+        return 0; // Sem três turnos para o dia
     }
 }

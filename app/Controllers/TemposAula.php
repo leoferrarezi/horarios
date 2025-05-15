@@ -148,6 +148,9 @@ class TemposAula extends BaseController
 
             //Verifica se o docente tem restrição neste horário
             $tempos['aulas'][$k]['restricao'] = $aulaHorarioModel->restricaoDocente($tempos['aulas'][$k]['id']);
+
+            //Verifica se o docente está em três turnos no mesmo dia
+            $tempos['aulas'][$k]['tresturnos'] = $aulaHorarioModel->verificarTresTurnos($tempos['aulas'][$k]['id']);
         }
 
         return $this->response->setJSON($tempos); // Retorna os dados em formato JSON

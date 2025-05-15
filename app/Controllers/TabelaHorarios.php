@@ -3,10 +3,12 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+
 use App\Models\CursosModel;
 use App\Models\VersoesModel;
 use App\Models\AmbientesModel;
 use App\Models\AulaHorarioModel;
+use App\Models\AulaHorarioAmbienteModel;
 
 class TabelaHorarios extends BaseController
 {
@@ -42,8 +44,7 @@ class TabelaHorarios extends BaseController
         $dadosPost = $this->request->getPost();
         $dado['aula_id'] = strip_tags($dadosPost['aula_id']);
         $dado['tempo_de_aula_id'] = strip_tags($dadosPost['tempo_de_aula_id']);
-        $dado['ambiente_id'] = strip_tags($dadosPost['ambiente_id']);
-
+        
         $versaoModel = new VersoesModel();
         $dado['versao_id'] = $versaoModel->getVersaoByUser(auth()->id());
 
@@ -55,6 +56,22 @@ class TabelaHorarios extends BaseController
         if ($aulaHorarioModel->insert($dado))
         {
             $aulaHorarioId = $aulaHorarioModel->getInsertID();
+
+            $aulaHorarioAmbienteModel = new AulaHorarioAmbienteModel();
+
+            if(is_array($dadosPost['ambiente_id'])) //se tiver mais de um ambiente
+            {
+                foreach ($dadosPost['ambiente_id'] as $k => $v)
+                {
+                    $insert = ["aula_horario_id" => $aulaHorarioId, "ambiente_id" => $v];
+                    $aulaHorarioAmbienteModel->insert($insert);
+                }
+            }
+            else  //apenas um ambiente
+            {
+                $insert = ["aula_horario_id" => $aulaHorarioId, "ambiente_id" => $dadosPost['ambiente_id']];
+                $aulaHorarioAmbienteModel->insert($insert);
+            }            
 
             $choque = $aulaHorarioModel->choqueAmbiente($aulaHorarioId);
 
@@ -86,7 +103,7 @@ class TabelaHorarios extends BaseController
 
         //verificar se já existe para fazer a substituição
         $aulaHorarioModel->deleteAulaNoHorario($dado['aula_id'], $dado['tempo_de_aula_id'], $dado['versao_id']);
-        echo "1";        
+        echo "1";
     }
 
     public function dadosDaAula($aulaHorarioId)

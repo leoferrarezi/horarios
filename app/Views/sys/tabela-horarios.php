@@ -168,9 +168,9 @@
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="selectAmbiente">
-                                        <h6 class="text-primary">Selecione o ambiente:</h6>
+                                        <h6 class="text-primary">Selecione o(s) ambiente(s):</h6>
                                     </label>
-                                    <select class="form-select" id="selectAmbiente">
+                                    <select class="form-select" id="selectAmbiente" multiple="multiple" name="selectAmbiente[]" style="width:100%;">
                                         <?php foreach ($ambientes as $ambiente): ?>
                                             <option value="<?php echo esc($ambiente['id']) ?>"><?php echo esc($ambiente['nome']) ?></option>
                                         <?php endforeach; ?>
@@ -350,8 +350,10 @@
 
     const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
 
-    $(document).ready(function() 
+    $(document).ready(function()
     {
+        $("#selectAmbiente").select2( { dropdownParent: $('#modalSelecionarAmbiente') });
+
         // Define variáveis globais para armazenar os dados do modal
         const modalAtribuirDisciplinaElement = document.getElementById('modalAtribuirDisciplina');
         const modalSelecionarAmbienteElement = document.getElementById('modalSelecionarAmbiente');
@@ -406,7 +408,7 @@
                             </div>
                             <div class="d-flex align-items-center">
                                 <i class="mdi mdi-door fs-6 text-muted me-1"></i>
-                                <small class="text-secondary"><span class="aulas-pendentes">1</span> aulas</small>
+                                <small class="text-secondary"><span class="aulas-pendentes">1</span> aula(s)</small>
                             </div>
                         </div>
                     </div>
@@ -431,7 +433,7 @@
             // Preenche os dados no modal
             $('#modalRemocaoDisciplina').text($horario.data('disciplina'));
             $('#modalRemocaoProfessor').text('Professor: ' + $horario.data('professor'));
-            $('#modalRemocaoAmbiente').text('Ambiente: ' + $horario.data('ambienteNome'));
+            $('#modalRemocaoAmbiente').text('Ambiente: ' + $horario.data('ambienteNome').join(", "));
 
             //Verificar e preencher dados do conflito
             if($horario.data('conflito') > 0)
@@ -439,13 +441,15 @@
                 // Requisição para buscar os dados da aula em conflito
                 $.get('<?php echo base_url('sys/tabela-horarios/dadosDaAula/'); ?>' + $horario.data('conflito'),
                 function(data)
-                {
-                    $('#modalRemocaoConflitoCurso').text("Curso: " + data.curso);
-                    $('#modalRemocaoConflitoTurma').text("Turma: " + data.turma);
-                    $('#modalRemocaoConflitoDisciplina').text("Disciplina: " + data.disciplina);
-                    $('#modalRemocaoConflitoProfessor').text("Professor: " + data.professor);
-                    $('#modalRemocaoConflitoAmbiente').text("Ambiente: " + data.ambiente);
-
+                {                    
+                    $('#modalRemocaoConflitoCurso').text("Curso: " + data[0].curso);
+                    $('#modalRemocaoConflitoTurma').text("Turma: " + data[0].turma);
+                    $('#modalRemocaoConflitoDisciplina').text("Disciplina: " + data[0].disciplina);
+                    $('#modalRemocaoConflitoProfessor').text("Professor: " + data[0].professor);
+                    $('#modalRemocaoConflitoAmbiente').text("Ambiente(s): ");
+                    $.each(data, function(index, value) {
+                        $('#modalRemocaoConflitoAmbiente').append(value.ambiente + " | ");
+                    });
                 }, 'json');
 
                 $('#rowConflito').show();
@@ -599,7 +603,15 @@
             e.stopPropagation();
 
             const ambienteSelecionadoId = $("#selectAmbiente").val();
-            const ambienteSelecionadoNome = $("#selectAmbiente option:selected").text();
+            //const ambienteSelecionadoNome = $("#selectAmbiente option:selected").text();
+            var ambientesSelecionadosNome = [];
+
+            var data = $('#selectAmbiente').select2('data'); 
+            data.forEach(function (item)
+            { 
+                ambientesSelecionadosNome.push(item.text); 
+            });
+
             const aulaId = $('#modalSelecionarAmbiente').data('aula-id');
             const aula = getAulaById(aulaId);
             const cardAula = $(`#aula_${aulaId}`);
@@ -661,7 +673,7 @@
                                     </div>
                                     <div class="d-flex align-items-center">
                                         <i class="mdi mdi-door fs-6 text-muted me-1"></i>
-                                        <small class="text-wrap text-secondary" style="font-size: 0.65rem !important;">${ambienteSelecionadoNome}</small>
+                                        <small class="text-wrap text-secondary" style="font-size: 0.65rem !important;">${ambientesSelecionadosNome.join("<br />")}</small>
                                     </div>
                                 </div>
                             </div>
@@ -672,7 +684,7 @@
                             .data('disciplina', aula.disciplina)
                             .data('professor', aula.professores.join(", "))
                             .data('ambiente', ambienteSelecionadoId)
-                            .data('ambienteNome', ambienteSelecionadoNome)
+                            .data('ambienteNome', ambientesSelecionadosNome)
                             .data('aula-id', aulaId)
                             .data('aulas-total', cardAula.data('aulas-total'))
                             .data('aulas-pendentes', cardAula.data('aulas-pendentes'))
@@ -752,7 +764,7 @@
                     '<tr>' +
                         '<td>' + $(this).data("disciplina") + '</td>' +
                         '<td>' + $(this).data("professor") + '</td>' +
-                        '<td>' + $(this).data("aulas-pendentes") + ' aulas</td>' +
+                        '<td>' + $(this).data("aulas-pendentes") + ' aula(s)</td>' +
                         '<td>' +
                             '<button type="button" class="btn btn-primary btn-sm botao_atribuir" id="botao_atribuir_' + $(this).data("aula-id") + '" >Atribuir</button>' +
                         '</td>' +
@@ -923,11 +935,13 @@
                             }
                         });
 
+                        var regime = $('#filtroCurso option:selected').data('regime');
+
                         //Se não encontrou a aula atual, adiciona na lista.
                         if (!found) 
                         {
                             var cardAula = '' +
-                                '<div id="aula_' + obj.id + '" draggable="true" data-aula-id="' + obj.id + '" data-disciplina="' + obj.disciplina + '" data-professor="' + obj.professor.split(" ")[0] + '" data-aulas-total="' + (obj.ch / (($('#filtroCurso').data('regime') == 2) ? 20 : 40)) + '" data-aulas-pendentes="' + (obj.ch / (($('#filtroCurso').data('regime') == 2) ? 20 : 40)) + '" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">' +
+                                '<div id="aula_' + obj.id + '" draggable="true" data-aula-id="' + obj.id + '" data-disciplina="' + obj.disciplina + '" data-professor="' + obj.professor.split(" ")[0] + '" data-aulas-total="' + (obj.ch / ((regime == 2) ? 20 : 40)) + '" data-aulas-pendentes="' + (obj.ch / ((regime == 2) ? 20 : 40)) + '" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">' +
                                     '<div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">' +
                                         '<h6 class="text-primary">' +
                                         '<i class="mdi mdi-book-outline me-1"></i> ' + obj.disciplina +
@@ -938,7 +952,7 @@
                                         '</div>' +
                                         '<div class="d-flex align-items-center">' +
                                             '<i class="mdi mdi-door fs-6 text-muted me-1"></i>' +
-                                            '<small class="text-secondary"><span class="aulas-pendentes">' + (obj.ch / (($('#filtroCurso').data('regime') == 2) ? 20 : 40)) + '</span> aulas</small>' +
+                                            '<small class="text-secondary"><span class="aulas-pendentes">' + (obj.ch / ((regime == 2) ? 20 : 40)) + '</span> aula(s)</small>' +
                                         '</div>' +
                                     '</div>' +
                                 '</div>';
@@ -952,7 +966,7 @@
                             aulas.push(obj);
 
                             //faz o somatório de aulas da turma
-                            quantasAulas += (obj.ch / (($('#filtroCurso').data('regime') == 2) ? 20 : 40));
+                            quantasAulas += (obj.ch / ((regime == 2) ? 20 : 40));
                         }
                     });
                 }, 'json')
@@ -1229,7 +1243,13 @@
                             const aula = getAulaById(obj.aula_id);
 
                             const ambienteSelecionadoId = obj.ambiente_id;
-                            const ambienteSelecionadoNome = getAmbienteNome(ambienteSelecionadoId);
+
+                            var ambientesSelecionadosNome = [];
+
+                            obj.ambiente.forEach(function (item)
+                            { 
+                                ambientesSelecionadosNome.push(getAmbienteNome(item)); 
+                            });
 
                             horarioSelecionado = $(`#horario_${obj.tempo_de_aula_id}`);
                             cardAula = $(`#aula_${obj.aula_id}`);
@@ -1257,7 +1277,7 @@
                                         </div>
                                         <div class="d-flex align-items-center">
                                             <i class="mdi mdi-door fs-6 text-muted me-1"></i>
-                                            <small class="text-wrap text-secondary" style="font-size: 0.65rem !important;">${ambienteSelecionadoNome}</small>
+                                            <small class="text-wrap text-secondary" style="font-size: 0.65rem !important;">${ambientesSelecionadosNome.join("<br />")}</small>
                                         </div>
                                     </div>
                                 </div>
@@ -1268,7 +1288,7 @@
                                 .data('disciplina', aula.disciplina)
                                 .data('professor', aula.professores.join(", "))
                                 .data('ambiente', ambienteSelecionadoId)
-                                .data('ambienteNome', ambienteSelecionadoNome)
+                                .data('ambienteNome', ambientesSelecionadosNome)
                                 .data('aula-id', obj.aula_id)
                                 .data('aulas-total', cardAula.data('aulas-total'))
                                 .data('aulas-pendentes', cardAula.data('aulas-pendentes'))

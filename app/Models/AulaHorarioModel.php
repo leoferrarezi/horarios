@@ -12,7 +12,7 @@ class AulaHorarioModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['aula_id', 'tempo_de_aula_id', 'versao_id', 'ambiente_id'];
+    protected $allowedFields    = ['aula_id', 'tempo_de_aula_id', 'versao_id'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -32,8 +32,7 @@ class AulaHorarioModel extends Model
         'id' => 'permit_empty|is_natural_no_zero|max_length[11]',
         'aula_id' => 'required|is_not_unique[aulas.id]|max_length[11]',
         'tempo_de_aula_id' => 'required|is_not_unique[tempos_de_aula.id]',
-        'versao_id' => 'required|is_not_unique[versoes.id]|max_length[11]',
-        'ambiente_id' => 'required|is_not_unique[ambientes.id]|max_length[11]'
+        'versao_id' => 'required|is_not_unique[versoes.id]|max_length[11]'
     ];
     protected $validationMessages   = [
         "aula_id" => [
@@ -47,10 +46,6 @@ class AulaHorarioModel extends Model
         ],
         "versao_id" => [
             "is_not_unique" => "A versão deve estar cadastrada",
-            "max_length" => "O tamanho máximo é 11 dígitos"
-        ],
-        "ambiente_id" => [
-            "is_not_unique" => "O ambiente deve estar cadastrado",
             "max_length" => "O tamanho máximo é 11 dígitos"
         ]
     ];
@@ -71,36 +66,52 @@ class AulaHorarioModel extends Model
     public function getAulasFromTurma($turma_id)
     {
         return $this->select('aula_horario.*')
-                ->join('aulas', 'aulas.id = aula_horario.aula_id')
-                ->where('aulas.turma_id', $turma_id)
-                ->where('aula_horario.versao_id', (new VersoesModel())->getVersaoByUser(auth()->id()))
-                ->findAll();
+            ->join('aulas', 'aulas.id = aula_horario.aula_id')
+            ->where('aulas.turma_id', $turma_id)
+            ->where('aula_horario.versao_id', (new VersoesModel())->getVersaoByUser(auth()->id()))
+            ->findAll();
+    }
+
+    public function getAmbientesFromAulaHorario($aulaHorarioId)
+    {
+        return $this->select('aula_horario_ambiente.*')
+            ->join('aula_horario_ambiente', 'aula_horario_ambiente.aula_horario_id = aula_horario.id')
+            ->where('aula_horario.id', $aulaHorarioId)
+            ->findAll();
     }
 
     public function getAulaHorario($aulaHorarioId)
     {
         return $this->select('cursos.nome as curso, disciplinas.nome as disciplina, turmas.sigla as turma, professores.nome as professor, ambientes.nome as ambiente')
-                ->join('tempos_de_aula', 'aula_horario.tempo_de_aula_id = tempos_de_aula.id')
-                ->join('ambientes', 'aula_horario.ambiente_id = ambientes.id')
-                ->join('aulas', 'aula_horario.aula_id = aulas.id')
-                ->join('aula_professor', 'aulas.id = aula_professor.aula_id')
-                ->join('professores', 'professores.id = aula_professor.professor_id')
-                ->join('disciplinas', 'disciplinas.id = aulas.disciplina_id')
-                ->join('turmas', 'turmas.id = aulas.turma_id')
-                ->join('cursos', 'cursos.id = turmas.curso_id')
-                ->where('aula_horario.id', $aulaHorarioId)
-                ->get()
-                ->getRowArray();
+            ->join('tempos_de_aula', 'aula_horario.tempo_de_aula_id = tempos_de_aula.id')
+            ->join('aula_horario_ambiente', 'aula_horario_ambiente.aula_horario_id = aula_horario.id')
+            ->join('ambientes', 'aula_horario_ambiente.ambiente_id = ambientes.id')
+            ->join('aulas', 'aula_horario.aula_id = aulas.id')
+            ->join('aula_professor', 'aulas.id = aula_professor.aula_id')
+            ->join('professores', 'professores.id = aula_professor.professor_id')
+            ->join('disciplinas', 'disciplinas.id = aulas.disciplina_id')
+            ->join('turmas', 'turmas.id = aulas.turma_id')
+            ->join('cursos', 'cursos.id = turmas.curso_id')
+            ->where('aula_horario.id', $aulaHorarioId)
+            ->get()
+            ->getResult();
     }
 
     public function deleteAulaNoHorario($aula_id, $tempo_de_aula_id, $versao_id)
     {
-        $this->db->simpleQuery("
-            DELETE horario FROM aula_horario as horario 
-            JOIN aulas ON aulas.id = horario.aula_id 
-            WHERE horario.tempo_de_aula_id = '$tempo_de_aula_id' AND horario.versao_id = '$versao_id'
-            AND aulas.turma_id = (SELECT turma_id FROM aulas WHERE aulas.id = '$aula_id'AND versao_id = '$versao_id')
-        ");        
+        $idHorarioAula = $this->select('aula_horario.id')
+            ->join('aulas', 'aula_horario.aula_id = aulas.id')
+            ->where('aulas.id', $aula_id)
+            ->where('aula_horario.tempo_de_aula_id', $tempo_de_aula_id)
+            ->where('aula_horario.versao_id', $versao_id)
+            ->get();
+
+        if ($idHorarioAula->getNumRows() > 0)
+        {
+            $idHorarioAula = $idHorarioAula->getRowArray()['id'];
+            $this->db->simpleQuery("DELETE FROM aula_horario_ambiente WHERE aula_horario_id = '$idHorarioAula'");
+            $this->db->simpleQuery("DELETE FROM aula_horario WHERE id = '$idHorarioAula'");
+        }
     }
 
     public function checkAulaHorarioByVersao($versao)
@@ -109,11 +120,11 @@ class AulaHorarioModel extends Model
         $builder->where('versao_id', $versao);
         $query = $builder->get();
 
-        if ($query->getNumRows() > 0) 
+        if ($query->getNumRows() > 0)
         {
             return true; // A versão existe na tabela
-        } 
-        else 
+        }
+        else
         {
             return false; // A versão não existe na tabela
         }
@@ -126,11 +137,11 @@ class AulaHorarioModel extends Model
         $builder->where('versao_id', (new VersoesModel())->getVersaoByUser(auth()->id()));
         $query = $builder->get();
 
-        if ($query->getNumRows() > 0) 
+        if ($query->getNumRows() > 0)
         {
             return true; // A aula existe na tabela
-        } 
-        else 
+        }
+        else
         {
             return false; // A aula não existe na tabela
         }
@@ -138,32 +149,39 @@ class AulaHorarioModel extends Model
 
     public function choqueAmbiente($aulaHorarioId)
     {
-        $builder = $this->select('ambiente_id, tempo_de_aula_id')->where('id', $aulaHorarioId)->get();
-        $ambiente = $builder->getRowArray()['ambiente_id'];
-        $tempo = $builder->getRowArray()['tempo_de_aula_id'];
-
-        $builder = $this->db->table('tempos_de_aula')->select('*')->where('id', $tempo)->get();
-        $dia_semana = $builder->getRowArray()['dia_semana'];
-        $hora_inicio = $builder->getRowArray()['hora_inicio'];
-        $minuto_inicio = $builder->getRowArray()['minuto_inicio'];
-
-        $builder = $this->select('aula_horario.id as theid')
-            ->join('tempos_de_aula', 'aula_horario.tempo_de_aula_id = tempos_de_aula.id')
-            ->where('aula_horario.id !=', $aulaHorarioId)
-            ->where('aula_horario.ambiente_id', $ambiente)
-            ->where('tempos_de_aula.dia_semana', $dia_semana)
-            ->where('(tempos_de_aula.hora_inicio * 60 + tempos_de_aula.minuto_inicio) <=', $hora_inicio * 60 + $minuto_inicio)
-            ->where('(tempos_de_aula.hora_fim * 60 + tempos_de_aula.minuto_fim) >', $hora_inicio * 60 + $minuto_inicio)
+        $builder = $this->select('ambiente_id, tempo_de_aula_id')
+            ->join('aula_horario_ambiente', 'aula_horario_ambiente.aula_horario_id = aula_horario.id')
+            ->where('aula_horario.id', $aulaHorarioId)
+            ->where('versao_id', (new VersoesModel())->getVersaoByUser(auth()->id()))
             ->get();
 
-        if($builder->getNumRows() > 0)
+        foreach ($builder->getResult() as $row)
         {
-            return $builder->getRowArray()['theid']; // Conflito encontrado, retorna o ID do horário de aula em conflito
+            $ambiente = $row->ambiente_id;
+            $tempo = $row->tempo_de_aula_id;
+
+            $builder2 = $this->db->table('tempos_de_aula')->select('*')->where('id', $tempo)->get();
+            $dia_semana = $builder2->getRowArray()['dia_semana'];
+            $hora_inicio = $builder2->getRowArray()['hora_inicio'];
+            $minuto_inicio = $builder2->getRowArray()['minuto_inicio'];
+
+            $builder3 = $this->select('aula_horario.id as theid')
+                ->join('tempos_de_aula', 'aula_horario.tempo_de_aula_id = tempos_de_aula.id')
+                ->join('aula_horario_ambiente', 'aula_horario_ambiente.aula_horario_id = aula_horario.id')
+                ->where('aula_horario.id !=', $aulaHorarioId)
+                ->where('aula_horario_ambiente.ambiente_id', $ambiente)
+                ->where('tempos_de_aula.dia_semana', $dia_semana)
+                ->where('(tempos_de_aula.hora_inicio * 60 + tempos_de_aula.minuto_inicio) <=', $hora_inicio * 60 + $minuto_inicio)
+                ->where('(tempos_de_aula.hora_fim * 60 + tempos_de_aula.minuto_fim) >', $hora_inicio * 60 + $minuto_inicio)
+                ->get();
+
+            if ($builder3->getNumRows() > 0)
+            {
+                return $builder3->getRowArray()['theid']; // Conflito encontrado, retorna o ID do horário de aula em conflito
+            }
         }
-        else
-        {
-            return 0; // Sem conflito
-        }
+
+        return 0; // Sem conflito
     }
 
     public function choqueDocente()

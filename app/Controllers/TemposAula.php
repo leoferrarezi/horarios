@@ -134,6 +134,11 @@ class TemposAula extends BaseController
 
         foreach($tempos['aulas'] as $k=>$v)
         {
+            foreach($aulaHorarioModel->getAmbientesFromAulaHorario($tempos['aulas'][$k]['id']) as $k2 => $v2)
+            {
+                $tempos['aulas'][$k]['ambiente'][$k2] = $v2['ambiente_id'];
+            }
+            
             $tempos['aulas'][$k]['choque'] = $aulaHorarioModel->choqueAmbiente($tempos['aulas'][$k]['id']);
         }
 

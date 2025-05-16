@@ -1,3 +1,12 @@
+<style>
+  /* Ajuste para o texto digitado ficar cinza */
+  .select2-container--default .select2-search--dropdown .select2-search__field,
+  .select2-container--default .select2-search--inline .select2-search__field {
+    color: #999 !important;
+    background-color: transparent !important;
+  }
+</style>
+
 <div class="page-header">
   <h3 class="page-title">RELATÓRIOS</h3>
   <nav aria-label="breadcrumb">
@@ -41,9 +50,43 @@
         <button type="button" id="btnLimpar" class="btn btn-secondary me-2">
           <i class="mdi mdi-filter-remove me-1"></i>Limpar Filtros
         </button>
-        <button type="button" id="btnGerarRelatorio" class="btn btn-primary">
-          <i class="mdi mdi-file-document-outline me-1"></i>Gerar Relatório
+        <button type="button" id="btnGerarVisualizacao" class="btn btn-primary">
+          <i class="mdi mdi-eye-outline me-1"></i>Gerar Visualização
         </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Área de Resultados -->
+<div class="col-md-12 grid-margin stretch-card" id="resultadosContainer" style="display: none;">
+  <div class="card">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="card-title">Resultados</h4>
+        <button type="button" id="btnExportar" class="btn btn-success">
+          <i class="mdi mdi-file-export me-1"></i>Exportar Horários
+        </button>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-striped" id="tabelaResultados">
+          <thead>
+            <tr>
+              <th>Curso</th>
+              <th>Turma</th>
+              <th>Disciplina</th>
+              <th>Professor</th>
+              <th>Ambiente</th>
+              <th>Dia</th>
+              <th>Hora Início</th>
+              <th>Hora Fim</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Os resultados serão carregados aqui via AJAX -->
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -129,7 +172,7 @@
     $(".select2-single").select2({
       placeholder: "Selecione uma opção",
       allowClear: true,
-      width: '100%'
+      width: '100%',
     });
 
     // Evento quando o tipo de relatório é alterado
@@ -156,7 +199,6 @@
           return;
       }
 
-      // Pequeno delay para garantir que o DOM foi atualizado
       setTimeout(function() {
         // Inicializa os selects múltiplos
         filtrosContainer.find('.select2-multiple').select2({
@@ -216,16 +258,19 @@
       });
     }
 
-    // Botão Gerar Relatório
-    $('#btnGerarRelatorio').on('click', function() {
+    // Botão Gerar Visualização
+    $('#btnGerarVisualizacao').on('click', function() {
       var tipo = $('#tipoRelatorio').val();
 
       if (!tipo) {
-        Swal.fire({
-          icon: 'warning',
-          title: 'Atenção',
+        // Alerta estilo do sistema
+        $.toast({
+          heading: 'Atenção',
           text: 'Selecione um tipo de relatório primeiro',
-          confirmButtonColor: '#3085d6',
+          showHideTransition: 'slide',
+          icon: 'warning',
+          loaderBg: '#f96868',
+          position: 'top-center'
         });
         return;
       }
@@ -259,20 +304,99 @@
       }
 
       if (!filtroPreenchido) {
-        Swal.fire({
-          icon: 'warning',
-          title: 'Atenção',
+        $.toast({
+          heading: 'Atenção',
           text: 'Selecione pelo menos um filtro para gerar o relatório',
-          confirmButtonColor: '#3085d6',
+          showHideTransition: 'slide',
+          icon: 'warning',
+          loaderBg: '#f96868',
+          position: 'top-center'
         });
         return;
       }
 
-      // Gera URL para o relatório
-      var url = '<?= base_url('sys/relatorios/gerar') ?>?' + $.param(dados);
+      // Mostra o loading no estilo do sistema
+      var loading = $.toast({
+        heading: 'Carregando dados...',
+        text: 'Por favor aguarde',
+        showHideTransition: 'fade',
+        icon: 'info',
+        hideAfter: false,
+        position: 'top-center',
+        bgColor: '#191c24'
+      });
 
-      // Abre em nova aba
-      window.open(url, '_blank');
+      // Faz a requisição AJAX para carregar os dados
+      $.ajax({
+        url: '<?= base_url('sys/relatorios/filtrar') ?>',
+        type: 'POST',
+        data: dados,
+        dataType: 'json',
+        success: function(response) {
+          // Fecha o loading
+          $.toast().reset('all');
+
+          if (response.success && response.data && response.data.length > 0) {
+            // Preenche a tabela com os resultados
+            var tbody = $('#tabelaResultados tbody');
+            tbody.empty();
+
+            $.each(response.data, function(index, item) {
+              var row = $('<tr>');
+              row.append($('<td>').text(item.curso || ''));
+              row.append($('<td>').text(item.turma || ''));
+              row.append($('<td>').text(item.disciplina || ''));
+              row.append($('<td>').text(item.professor || ''));
+              row.append($('<td>').text(item.ambiente || ''));
+              row.append($('<td>').text(getDiaSemana(item.dia_semana)));
+              row.append($('<td>').text(item.hora_inicio || ''));
+              row.append($('<td>').text(item.hora_fim || ''));
+
+              tbody.append(row);
+            });
+
+            // Mostra a área de resultados
+            $('#resultadosContainer').show();
+          } else {
+            // Alerta de nenhum resultado no estilo do sistema
+            $.toast({
+              heading: 'Nenhum resultado',
+              text: 'Não foram encontrados registros com os filtros selecionados',
+              showHideTransition: 'slide',
+              icon: 'info',
+              loaderBg: '#46c35f',
+              position: 'top-center'
+            });
+            $('#resultadosContainer').hide();
+          }
+        },
+        error: function(xhr, status, error) {
+          // Fecha o loading
+          $.toast().reset('all');
+
+          // Alerta de erro no estilo do sistema
+          $.toast({
+            heading: 'Erro',
+            text: 'Ocorreu um erro ao carregar os dados. Por favor, tente novamente.',
+            showHideTransition: 'slide',
+            icon: 'error',
+            loaderBg: '#f96868',
+            position: 'top-center'
+          });
+          console.error('Erro ao carregar dados:', error);
+        }
+      });
+    });
+
+    // Função para converter número do dia da semana para nome
+    function getDiaSemana(dia) {
+      var dias = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+      return dias[dia] || dia;
+    }
+
+    // Botão Exportar (sem funcionalidade por enquanto)
+    $('#btnExportar').on('click', function() {
+      alert("🚧 ATENÇÃO 🚧\n\nÁrea em construção!\n\nNossos programadores estão trabalhando duro (ou pelo menos é o que dizem)...");
     });
 
     // Botão Limpar
@@ -285,6 +409,9 @@
 
       // Reseta os filtros dinâmicos
       $('#filtrosDinamicos').html('<div class="alert alert-info mb-0">Selecione um tipo de relatório para exibir os filtros correspondentes</div>');
+
+      // Esconde a área de resultados
+      $('#resultadosContainer').hide();
     });
   });
 </script>

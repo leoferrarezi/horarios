@@ -129,6 +129,158 @@ class Relatorios extends BaseController
         return $this->response->setJSON($grupos);
     }
 
+    public function filtrar()
+    {
+        $tipo = $this->request->getPost('tipo');
+
+        if (!$tipo) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Tipo de relatório não especificado'
+            ]);
+        }
+
+        // Carrega os dados com base no tipo de relatório
+        switch ($tipo) {
+            case 'curso':
+                $dados = $this->filtrarCursos();
+                break;
+            case 'professor':
+                $dados = $this->filtrarProfessores();
+                break;
+            case 'ambiente':
+                $dados = $this->filtrarAmbientes();
+                break;
+            default:
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => 'Tipo de relatório inválido'
+                ]);
+        }
+
+        return $this->response->setJSON([
+            'success' => true,
+            'data' => $dados
+        ]);
+    }
+
+    protected function filtrarCursos()
+    {
+        $cursos = $this->request->getPost('cursos') ?? [];
+        $turmas = $this->request->getPost('turmas') ?? [];
+
+        $builder = $this->aulaHorarioModel
+            ->select('
+                cursos.nome as curso,
+                turmas.sigla as turma,
+                disciplinas.nome as disciplina,
+                professores.nome as professor,
+                ambientes.nome as ambiente,
+                tempos_de_aula.dia_semana,
+                CONCAT(LPAD(tempos_de_aula.hora_inicio, 2, "0"), ":", LPAD(tempos_de_aula.minuto_inicio, 2, "0")) as hora_inicio,
+                CONCAT(LPAD(tempos_de_aula.hora_fim, 2, "0"), ":", LPAD(tempos_de_aula.minuto_fim, 2, "0")) as hora_fim
+            ')
+            ->join('aulas', 'aulas.id = aula_horario.aula_id')
+            ->join('disciplinas', 'disciplinas.id = aulas.disciplina_id')
+            ->join('turmas', 'turmas.id = aulas.turma_id')
+            ->join('cursos', 'cursos.id = turmas.curso_id')
+            ->join('aula_professor', 'aula_professor.aula_id = aulas.id')
+            ->join('professores', 'professores.id = aula_professor.professor_id')
+            ->join('aula_horario_ambiente', 'aula_horario_ambiente.aula_horario_id = aula_horario.id')
+            ->join('ambientes', 'ambientes.id = aula_horario_ambiente.ambiente_id')
+            ->join('tempos_de_aula', 'tempos_de_aula.id = aula_horario.tempo_de_aula_id')
+            ->where('aula_horario.versao_id', (new \App\Models\VersoesModel())->getVersaoByUser(auth()->id()));
+
+        if (!empty($cursos)) {
+            $builder->whereIn('cursos.id', $cursos);
+        }
+
+        if (!empty($turmas)) {
+            $builder->whereIn('turmas.id', $turmas);
+        }
+
+        return $builder->orderBy('cursos.nome')
+            ->orderBy('turmas.sigla')
+            ->orderBy('tempos_de_aula.dia_semana')
+            ->orderBy('tempos_de_aula.hora_inicio')
+            ->orderBy('tempos_de_aula.minuto_inicio')
+            ->findAll();
+    }
+
+    protected function filtrarProfessores()
+    {
+        $professores = $this->request->getPost('professores') ?? [];
+
+        $builder = $this->aulaHorarioModel
+            ->select('
+                professores.nome as professor,
+                cursos.nome as curso,
+                turmas.sigla as turma,
+                disciplinas.nome as disciplina,
+                ambientes.nome as ambiente,
+                tempos_de_aula.dia_semana,
+                CONCAT(LPAD(tempos_de_aula.hora_inicio, 2, "0"), ":", LPAD(tempos_de_aula.minuto_inicio, 2, "0")) as hora_inicio,
+                CONCAT(LPAD(tempos_de_aula.hora_fim, 2, "0"), ":", LPAD(tempos_de_aula.minuto_fim, 2, "0")) as hora_fim
+            ')
+            ->join('aulas', 'aulas.id = aula_horario.aula_id')
+            ->join('disciplinas', 'disciplinas.id = aulas.disciplina_id')
+            ->join('turmas', 'turmas.id = aulas.turma_id')
+            ->join('cursos', 'cursos.id = turmas.curso_id')
+            ->join('aula_professor', 'aula_professor.aula_id = aulas.id')
+            ->join('professores', 'professores.id = aula_professor.professor_id')
+            ->join('aula_horario_ambiente', 'aula_horario_ambiente.aula_horario_id = aula_horario.id')
+            ->join('ambientes', 'ambientes.id = aula_horario_ambiente.ambiente_id')
+            ->join('tempos_de_aula', 'tempos_de_aula.id = aula_horario.tempo_de_aula_id')
+            ->where('aula_horario.versao_id', (new \App\Models\VersoesModel())->getVersaoByUser(auth()->id()));
+
+        if (!empty($professores)) {
+            $builder->whereIn('professores.id', $professores);
+        }
+
+        return $builder->orderBy('professores.nome')
+            ->orderBy('tempos_de_aula.dia_semana')
+            ->orderBy('tempos_de_aula.hora_inicio')
+            ->orderBy('tempos_de_aula.minuto_inicio')
+            ->findAll();
+    }
+
+    protected function filtrarAmbientes()
+    {
+        $ambientes = $this->request->getPost('ambientes') ?? [];
+
+        $builder = $this->aulaHorarioModel
+            ->select('
+                ambientes.nome as ambiente,
+                cursos.nome as curso,
+                turmas.sigla as turma,
+                disciplinas.nome as disciplina,
+                professores.nome as professor,
+                tempos_de_aula.dia_semana,
+                CONCAT(LPAD(tempos_de_aula.hora_inicio, 2, "0"), ":", LPAD(tempos_de_aula.minuto_inicio, 2, "0")) as hora_inicio,
+                CONCAT(LPAD(tempos_de_aula.hora_fim, 2, "0"), ":", LPAD(tempos_de_aula.minuto_fim, 2, "0")) as hora_fim
+            ')
+            ->join('aulas', 'aulas.id = aula_horario.aula_id')
+            ->join('disciplinas', 'disciplinas.id = aulas.disciplina_id')
+            ->join('turmas', 'turmas.id = aulas.turma_id')
+            ->join('cursos', 'cursos.id = turmas.curso_id')
+            ->join('aula_professor', 'aula_professor.aula_id = aulas.id')
+            ->join('professores', 'professores.id = aula_professor.professor_id')
+            ->join('aula_horario_ambiente', 'aula_horario_ambiente.aula_horario_id = aula_horario.id')
+            ->join('ambientes', 'ambientes.id = aula_horario_ambiente.ambiente_id')
+            ->join('tempos_de_aula', 'tempos_de_aula.id = aula_horario.tempo_de_aula_id')
+            ->where('aula_horario.versao_id', (new \App\Models\VersoesModel())->getVersaoByUser(auth()->id()));
+
+        if (!empty($ambientes)) {
+            $builder->whereIn('ambientes.id', $ambientes);
+        }
+
+        return $builder->orderBy('ambientes.nome')
+            ->orderBy('tempos_de_aula.dia_semana')
+            ->orderBy('tempos_de_aula.hora_inicio')
+            ->orderBy('tempos_de_aula.minuto_inicio')
+            ->findAll();
+    }
+
     public function gerar()
     {
         $tipo = $this->request->getGet('tipo');

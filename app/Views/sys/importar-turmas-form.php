@@ -45,7 +45,7 @@
                                             {
                                                 echo " data-bs-toggle='tooltip' data-placement='top' title='Curso inexistente no banco de dados. Impossível importar.'";
                                             }
-                                            else if(strlen($turma['sigla']) < 3)
+                                            else if(strlen(trim($turma['sigla'])) < 3)
                                             {
                                                 echo " data-bs-toggle='tooltip' data-placement='top' title='Sigla inválida, impossível importar.'";
                                             }

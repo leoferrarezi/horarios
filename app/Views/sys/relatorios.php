@@ -1,12 +1,3 @@
-<style>
-  /* Ajuste para o texto digitado ficar cinza */
-  .select2-container--default .select2-search--dropdown .select2-search__field,
-  .select2-container--default .select2-search--inline .select2-search__field {
-    color: #999 !important;
-    background-color: transparent !important;
-  }
-</style>
-
 <div class="page-header">
   <h3 class="page-title">RELATÓRIOS</h3>
   <nav aria-label="breadcrumb">

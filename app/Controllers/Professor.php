@@ -99,18 +99,32 @@ class Professor extends BaseController
     {
 
         $dadosPost = $this->request->getPost();
-        $id = strip_tags($dadosPost['id']);
+        $id = (int)strip_tags($dadosPost['id']);
 
         $professorModel = new ProfessorModel();
         try {
-            $professorModel->verificarReferencias(['id' => $id]);
+            $restricoes = $professorModel->getRestricoes($id);
 
-            if ($professorModel->delete($id)) {
-                session()->setFlashdata('sucesso', 'Professor removido com sucesso!');
-                return redirect()->to(base_url('/sys/professor'));
+            if (!$restricoes['aulas'] && !$restricoes['regras']) {
+                if ($professorModel->delete($id)) {
+                    session()->setFlashdata('sucesso', 'Professor removido com sucesso!');
+                    return redirect()->to(base_url('/sys/professor'));
+                } else {
+                    return redirect()->to(base_url('/sys/professor'))->with('erro', 'Falha ao deletar professor');
+                }
             } else {
-                return redirect()->to(base_url('/sys/professor'))->with('erro', 'Falha ao deletar professor');
+                if ($restricoes['aulas'] && $restricoes['regras']) {
+                    throw new ReferenciaException("O professor não pode ser excluído. <br>
+                    Este professor possui aula(s) e horário(s) relacionados a ele!");
+                } else if ($restricoes['aulas']) {
+                    throw new ReferenciaException("O professor não pode ser excluído. <br>
+                    Este professor possui aula(s) relacionada(s) a ele!");
+                } else {
+                    throw new ReferenciaException("O professor não pode ser excluído. <br>
+                    Este professor possui horário(s) relacionado(s) a ele!");
+                }
             }
+
         } catch (ReferenciaException $e) {
             session()->setFlashdata('erro', $e->getMessage());
             return redirect()->to(base_url('/sys/professor'))->with('erros', ['erro' => $e->getMessage()]);

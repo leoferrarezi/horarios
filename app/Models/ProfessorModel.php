@@ -85,49 +85,18 @@ class ProfessorModel extends Model
         return $query->getResultArray();
     }
 
-    public function verificarReferencias(array $data)
+    public function getRestricoes(int $id) 
     {
-        $id = $data['id'];
-
-        $referencias = $this->verificarReferenciasEmTabelas($id);
-        $referencias = implode(", ", $referencias);
-        // Se o ID for referenciado em outras tabelas, lança a exceção
-        if (!empty($referencias)) {
-            // Passa o nome das tabelas onde o ID foi encontrado para a exceção
-            throw new ReferenciaException("Este professor(a) não pode ser excluído(a), porque está em uso. <br>
-                    Para excluir este professor(a), primeiro remova as associações em {$referencias} que estão utilizando este professor(a)'.");
-        }
-
-        // Se não houver referências, retorna os dados para permitir a exclusão
-        return $data;
-    }
-
-    private function verificarReferenciasEmTabelas($id)
-    {
-        // Conectar ao banco de dados
         $db = \Config\Database::connect();
+        
+        $aulas = $db->table('aula_professor')->where('professor_id', $id)->get()->getNumRows();
+        $regras = $db->table('professor_regras')->where('professor_id', $id)->get()->getNumRows();
 
-        // Tabelas e colunas de chave estrangeira a serem verificadas
-        $tabelas = [
-            'aula_professor' => 'professor_id',
-            'professor_regras' => 'professor_id',
+        $restricoes = [
+            'aulas' => $aulas, 
+            'regras' => $regras
         ];
 
-        $referenciasEncontradas = [];
-
-        // Verificar se o ID é referenciado
-        foreach ($tabelas as $tabela => $fk_coluna) {
-            $builder = $db->table($tabela);
-            $builder->where($fk_coluna, $id);
-            $query = $builder->get();
-
-            if ($query->getNumRows() > 0) {
-                // Adiciona a tabela à lista de referências encontradas
-                $referenciasEncontradas[] = $tabela;
-            }
-        }
-
-        // Retorna as tabelas onde o ID foi encontrado
-        return $referenciasEncontradas;
+        return $restricoes;
     }
 }

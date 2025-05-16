@@ -76,7 +76,6 @@ class Professor extends BaseController
 
     public function atualizar()
     {
-
         $dadosPost = $this->request->getPost();
 
         $dadosLimpos['id'] = strip_tags($dadosPost['id']);
@@ -95,7 +94,6 @@ class Professor extends BaseController
 
     public function deletar()
     {
-
         $dadosPost = $this->request->getPost();
         $id = (int)strip_tags($dadosPost['id']);
 
@@ -131,7 +129,6 @@ class Professor extends BaseController
 
     public function importar()
     {
-
         $file = $this->request->getFile('arquivo');
 
         if (!$file->isValid()) {
@@ -177,6 +174,7 @@ class Professor extends BaseController
             $dataRows[] = [
                 'nome' => $rowData[1] ?? null,
                 'email' => $rowData[4] ?? null,
+                'siape' => $rowData[2] ?? null
             ];
         }
 

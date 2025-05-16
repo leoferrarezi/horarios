@@ -36,11 +36,13 @@
                             <?php
                                 $nome = esc($professor['nome']);
                                 $email = $professor['email'];
-                                $matricula = trim($professor['matricula'] ?? ''); // Removido da lógica de validação
+                                
+                                $matricula = trim($professor['siape'] ?? '');
+                                $matriculaValida = !empty($matricula) && is_numeric($matricula) && strlen($matricula) == 7;
                                 
                                 $emailValido = (strpos($email, '@ifro.edu.br') !== false);
                                 $jaCadastrado = in_array($nome, $professoresExistentes);
-                                $marcado = ($emailValido && !$jaCadastrado);
+                                $marcado = (($emailValido || $matriculaValida) && !$jaCadastrado);
 
                                 $tooltip = '';
                                 
@@ -48,12 +50,16 @@
                                 {
                                     $tooltip = "Este professor já está cadastrado";
                                 } 
-                                else 
+                                else
                                 {
-                                    if (!$emailValido) 
+                                    if(!$matriculaValida)
+                                    {
+                                        $tooltip = "SIAPE inválido";
+                                    }
+                                    else if (!$emailValido) 
                                     {
                                         $tooltip = "E-mail institucional inválido";
-                                    }
+                                    }                                    
                                 }
                             ?>
                             <tr>

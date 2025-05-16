@@ -95,7 +95,8 @@ class TemposAulasModel extends Model
         $referencias = $this->verificarReferenciasEmTabelas($id);
         $referencias = implode(", ", $referencias);
         // Se o ID for referenciado em outras tabelas, lança a exceção
-        if (!empty($referencias)) {
+        if (!empty($referencias))
+        {
             // Passa o nome das tabelas onde o ID foi encontrado para a exceção
             throw new ReferenciaException("Este tempo de aula não pode ser excluído, porque está em uso. <br>
                     Para excluir este tempo de aula, primeiro remova as associações em {$referencias} que estão utilizando este tempo de aula'.");
@@ -119,12 +120,14 @@ class TemposAulasModel extends Model
         $referenciasEncontradas = [];
 
         // Verificar se o ID é referenciado
-        foreach ($tabelas as $tabela => $fk_coluna) {
+        foreach ($tabelas as $tabela => $fk_coluna)
+        {
             $builder = $db->table($tabela);
             $builder->where($fk_coluna, $id);
             $query = $builder->get();
 
-            if ($query->getNumRows() > 0) {
+            if ($query->getNumRows() > 0)
+            {
                 // Adiciona a tabela à lista de referências encontradas
                 $referenciasEncontradas[] = $tabela;
             }
@@ -133,22 +136,21 @@ class TemposAulasModel extends Model
         // Retorna as tabelas onde o ID foi encontrado
         return $referenciasEncontradas;
     }
-  
+
     public function getTemposAulas($professorID = null)
     {
-        $builder = $this->table('tempos_de_aula');
-        $builder->select("id, dia_semana,
-            CASE 
-                WHEN hora_inicio < 12 THEN 'Manhã'
-                WHEN hora_inicio < 18 THEN 'Tarde'
-                ELSE 'Noite'
-            END AS periodo,
-            CONCAT(LPAD(hora_inicio, 2, '0'), ':', LPAD(minuto_inicio, 2, '0')) AS inicio,
-            CONCAT(LPAD(hora_fim, 2, '0'), ':', LPAD(minuto_fim, 2, '0')) AS fim");
-        $builder->orderBy('dia_semana', 'ASC')
-                ->orderBy('hora_inicio', 'ASC')
-                ->orderBy('minuto_inicio', 'ASC');
-
+        $builder = $this->table('tempos_de_aula')
+            ->select("id, dia_semana,
+                CASE 
+                    WHEN hora_inicio < 12 THEN 'Manhã'
+                    WHEN hora_inicio < 18 THEN 'Tarde'
+                    ELSE 'Noite'
+                END AS periodo,
+                CONCAT(LPAD(hora_inicio, 2, '0'), ':', LPAD(minuto_inicio, 2, '0')) AS inicio,
+                CONCAT(LPAD(hora_fim, 2, '0'), ':', LPAD(minuto_fim, 2, '0')) AS fim")
+            ->orderBy('dia_semana', 'ASC')
+            ->orderBy('hora_inicio', 'ASC')
+            ->orderBy('minuto_inicio', 'ASC');
 
         $tempos = $builder->get()->getResultArray();
 
@@ -166,35 +168,50 @@ class TemposAulasModel extends Model
 
         $professorRegrasModel = new \App\Models\ProfessorRegrasModel();
 
-
-        foreach ($tempos as $tempo) {
+        foreach ($tempos as $tempo)
+        {
             $diaSemanaNome = $diasSemana[$tempo['dia_semana']] ?? 'Desconhecido';
             $periodo = $tempo['periodo'];
 
-        $tipo = null;
-        if ($professorID) {
-            $regra = $professorRegrasModel->where([
-                'professor_id' => $professorID,
-                'tempo_de_aula_id' => $tempo['id']
-            ])->first();
-            $tipo = $regra['tipo'] ?? -1;
-        }
+            $tipo = null;
 
-        $horarioFormatado = [
-            'id' => $tempo['id'],
-            'inicio' => $tempo['inicio'],
-            'fim' => $tempo['fim'],
-            'tipo' => $tipo
-        ];
-
-        if (!isset($horariosPorDia[$diaSemanaNome][$periodo])) {
-            $horariosPorDia[$diaSemanaNome][$periodo] = [];
-        }
-
-        if (!in_array($horarioFormatado, $horariosPorDia[$diaSemanaNome][$periodo])) {
-            $horariosPorDia[$diaSemanaNome][$periodo][] = $horarioFormatado;
+            if ($professorID)
+            {
+                $regra = $professorRegrasModel->where([
+                    'professor_id' => $professorID,
+                    'tempo_de_aula_id' => $tempo['id']
+                ])->first();
+                $tipo = $regra['tipo'] ?? -1;
             }
-        }    
+
+            $horarioFormatado = [
+                'id' => $tempo['id'],
+                'inicio' => $tempo['inicio'],
+                'fim' => $tempo['fim'],
+                'tipo' => $tipo
+            ];
+
+            if (!isset($horariosPorDia[$diaSemanaNome][$periodo]))
+            {
+                $horariosPorDia[$diaSemanaNome][$periodo] = [];
+            }
+
+            $jatem = false;
+
+            foreach ($horariosPorDia[$diaSemanaNome][$periodo] as $tudo)
+            {
+                if($tudo['inicio'] == $horarioFormatado['inicio'] && $tudo['fim'] == $horarioFormatado['fim'])
+                {
+                    $jatem = true;
+                    break;
+                }
+            }
+
+            if (!$jatem)
+            {
+                $horariosPorDia[$diaSemanaNome][$periodo][] = $horarioFormatado;
+            }
+        }
 
         return $horariosPorDia;
     }

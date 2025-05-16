@@ -88,6 +88,10 @@
         flex: 1;
         min-height: 0;
     }
+
+    .drag-over {
+        background-color: #6c7293 !important;
+    }
 </style>
 
 <!-- Modal -->
@@ -517,6 +521,8 @@
                                 modalAtribuirDisciplina.show();
                             });
 
+                        configurarDragAndDrop();
+
                         // Fecha o modal
                         modalConfirmarRemocao.hide();
 
@@ -566,20 +572,21 @@
             });
 
             // Drag over para horários
-            $('.horario-vazio, .horario-preenchido').on('dragover', function(e) 
+            $('.horario-vazio').on('dragover', function(e)
             {
-                e.preventDefault();
+                e.preventDefault();                
+
                 $(this).addClass('drag-over');
             });
 
             // Drag leave para horários
-            $('.horario-vazio, .horario-preenchido').on('dragleave', function() 
+            $('.horario-vazio').on('dragleave', function() 
             {
                 $(this).removeClass('drag-over');
             });
 
             // Drop para horários
-            $('.horario-vazio, .horario-preenchido').on('drop', function(e) 
+            $('.horario-vazio').on('drop', function(e) 
             {
                 e.preventDefault();
 
@@ -589,7 +596,12 @@
 
                 const aulaId = e.originalEvent.dataTransfer.getData('text/plain');
 
-                if (aulaId) 
+                if ($(this).html().trim() !== "") 
+                {
+                    return; // Se o horário já contém uma disciplina, não faz nada
+                }
+
+                if (aulaId)
                 {
                     horarioSelecionado = $(this);
                     atribuirDisciplina(aulaId, horarioId);
@@ -629,7 +641,6 @@
             e.stopPropagation();
 
             const ambienteSelecionadoId = $("#selectAmbiente").val();
-            //const ambienteSelecionadoNome = $("#selectAmbiente option:selected").text();
             var ambientesSelecionadosNome = [];
 
             var data = $('#selectAmbiente').select2('data'); 
@@ -643,7 +654,7 @@
             const cardAula = $(`#aula_${aulaId}`);
             const horarioId = $('#modalSelecionarAmbiente').data('horario-id');
 
-            if (horarioSelecionado) 
+            if (horarioSelecionado)
             {
                 // Requisição para atribuir a disciplina ao horário no backend
                 $.post('<?php echo base_url('sys/tabela-horarios/atribuirAula'); ?>', 
@@ -672,6 +683,7 @@
                         var conflitoIcon = "fa-mortar-board";
                         var aulaConflito = 0;
                         var tresTurnos = 0;
+                        var restricao = 0;
 
                         if(data.indexOf("TRES-TURNOS") >= 0)
                         {
@@ -683,19 +695,13 @@
                         {
                             conflitoStyle = "text-danger";
                             conflitoIcon = "fa-warning";
-                            aulaConflito = data.split("-")[2];
+                            restricao = data.split("-")[2];
                         }
                         else if(data.indexOf("AMBIENTE") >= 0 || data.indexOf("PROFESSOR") >= 0)
                         {
                             aulaConflito = data.split("-")[2];
                             conflitoStyle = "text-warning";
                             conflitoIcon = "fa-warning";
-                        }
-
-                        // Se o horário já contém uma disciplina, move-a de volta para a lista de pendentes
-                        if (horarioSelecionado.html().trim() !== "") 
-                        {
-                            moverDisciplinaParaPendentes(horarioSelecionado[0]);
                         }
 
                         // Preenche o horário selecionado
@@ -728,11 +734,11 @@
                             .data('aulas-total', cardAula.data('aulas-total'))
                             .data('aulas-pendentes', cardAula.data('aulas-pendentes'))
                             .data('conflito', aulaConflito)
-                            .data('restricao', aulaConflito)
+                            .data('restricao', restricao)
                             .data('tresturnos', tresTurnos)
                             .removeClass('horario-vazio')
                             .addClass('horario-preenchido')
-                            .off('click')
+                            .off()
                             .click(function() {
                                 mostrarModalConfirmacaoRemocao(this);
                             });
@@ -1350,7 +1356,7 @@
                                 .data('tresturnos', obj.tresturnos)
                                 .removeClass('horario-vazio')
                                 .addClass('horario-preenchido')
-                                .off('click')
+                                .off()
                                 .click(function() {
                                     mostrarModalConfirmacaoRemocao(this);
                                 });
@@ -1370,6 +1376,9 @@
 
                         }, 100 * counter); // Atraso de 100ms para cada iteração
                     });
+
+                    // Configura eventos após preencher a tabela
+                    configurarDragAndDrop();
 
                 }, 'json');
             } 

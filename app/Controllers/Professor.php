@@ -14,7 +14,6 @@ use CodeIgniter\Exceptions\ReferenciaException;
 
 class Professor extends BaseController
 {
-
     public function index()
     {
         // Cria a instância de um model do professor
@@ -26,7 +25,6 @@ class Professor extends BaseController
         $data['professores'] = $professorModel->orderBy('nome', 'asc')->findAll();
 
         // Faz a busca por todos os horarios cadastrados no banco (tabela horarios)
-
         $data['temposAula'] = $temposAulaModel->getTemposAulas();
 
         // Exibe os professores cadastrados

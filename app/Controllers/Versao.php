@@ -135,14 +135,17 @@ class Versao extends BaseController
         $dadosLimpos['nome'] = strip_tags($dadosPost['nome']);
         $dadosLimpos['semestre'] = strip_tags($dadosPost['semestre']);
 
-        if ($versaoModel->insert($dadosLimpos)) {
+        if ($versaoModel->insert($dadosLimpos)) 
+        {
             session()->setFlashdata('sucesso', 'Cópia da versão criada com sucesso.');
 
             //TODO: rotina pra clonar no BD todos os dados que tem relação com versão
             $versaoModel->copyAllData($versaoOld);
 
             return redirect()->to(base_url('/sys/versao'));
-        } else {
+        } 
+        else 
+        {
             $data['erros'] = $versaoModel->errors(); //o(s) erro(s)
             return redirect()->to(base_url('/sys/versao'))->with('erros', $data['erros'])->withInput(); //retora com os erros e os inputs
         }

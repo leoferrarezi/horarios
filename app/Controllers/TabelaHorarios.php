@@ -121,6 +121,8 @@ class TabelaHorarios extends BaseController
         $dado['aula_id'] = strip_tags($dadosPost['aula_id']);
         $dado['tempo_de_aula_id'] = strip_tags($dadosPost['tempo_de_aula_id']);
 
+        //echo $dado['aula_id'] . " - " . $dado['tempo_de_aula_id'];
+
         $versaoModel = new VersoesModel();
         $dado['versao_id'] = $versaoModel->getVersaoByUser(auth()->id());
 
@@ -141,7 +143,7 @@ class TabelaHorarios extends BaseController
     public function teste($aulaHorarioId)
     {
         $aulaHorarioModel = new AulaHorarioModel();
-        $data = $aulaHorarioModel->verificarTresTurnos($aulaHorarioId);
+        $data = $aulaHorarioModel->choqueAmbiente($aulaHorarioId);
         echo json_encode($data);
     }
 

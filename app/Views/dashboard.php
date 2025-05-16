@@ -70,6 +70,19 @@
 				</li>
 
 				<li class="nav-item nav-category">
+					<span class="nav-link">Relatórios</span>
+				</li>
+
+				<li class="nav-item menu-items">
+					<a class="nav-link" href="<?php echo base_url('sys/relatorios'); ?>">
+						<span class="menu-icon">
+							<i class="mdi mdi-laptop"></i>
+						</span>
+						<span class="menu-title">Em construção...</span>
+					</a>
+				</li>
+
+				<li class="nav-item nav-category">
 					<span class="nav-link">Cadastros</span>
 				</li>
 
@@ -151,20 +164,7 @@
 						</span>
 						<span class="menu-title">Aulas</span>
 					</a>
-				</li>
-
-				<li class="nav-item nav-category">
-					<span class="nav-link">Relatórios</span>
-				</li>
-
-				<li class="nav-item menu-items">
-					<a class="nav-link" href="<?php echo base_url('sys/relatorios'); ?>">
-						<span class="menu-icon">
-							<i class="mdi mdi-laptop"></i>
-						</span>
-						<span class="menu-title">Em construção...</span>
-					</a>
-				</li>
+				</li>				
 
 				<?php if (auth()->user()->inGroup('admin')): ?>
 					<li class="nav-item nav-category">

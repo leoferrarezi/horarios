@@ -14,7 +14,8 @@
                     <div class="alert alert-primary text-dark" role="alert">
                         <i class="fa fa-info-circle"></i><strong>Caminho para exportação destes dados no SUAP:</strong><br>
                         Ensino -> Alunos e Professores -> Professores<br>
-                        Aplicar os devidos filtros (Campus)<br>
+                        Prencher os filtros (Campus e Ativo) e clicar em Filtrar<br>
+                        Nos resultados, clicar em Docentes<br>
                         Clicar no botão [Exportar para XLS], no canto superior direito.<br>
                         Salvar o arquivo e então enviar através do campo abaixo.
                     </div>

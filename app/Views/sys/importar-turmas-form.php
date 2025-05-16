@@ -39,11 +39,21 @@
                             <?php foreach ($turmas as $index => $turma): ?>
                                 <tr>
                                     <td>
-                                        <div class="form-check"
-                                            <?php echo ($turma['no_curso'] == 0) ? " data-bs-toggle='tooltip' data-placement='top' title='Curso inexistente no banco de dados. Impossível importar.'" : "" ?>>
+                                        <div class="form-check"                                            
+                                            <?php 
+                                            if($turma['no_curso'] == 0)
+                                            {
+                                                echo " data-bs-toggle='tooltip' data-placement='top' title='Curso inexistente no banco de dados. Impossível importar.'";
+                                            }
+                                            else if(strlen(trim($turma['sigla'])) < 2)
+                                            {
+                                                echo " data-bs-toggle='tooltip' data-placement='top' title='Sigla inválida, impossível importar.'";
+                                            }
+                                            ?>
+                                            >
                                             <label class="form-check-label">
                                                 <input type="checkbox" 
-                                                    <?php echo ($turma['no_curso'] == 0) ? "disabled" : "checked"; ?>
+                                                    <?php echo ($turma['no_curso'] == 0 || strlen($turma['sigla']) < 2) ? "disabled" : "checked"; ?>
                                                     name="selecionados[]" 
                                                     class="form-check-input" 
                                                     value="<?= htmlspecialchars(json_encode($turma), ENT_QUOTES, 'UTF-8') ?>"

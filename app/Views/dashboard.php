@@ -26,6 +26,15 @@
 	<script src="<?php echo base_url('assets/vendors/typeahead.js/typeahead.bundle.min.js') ?>"></script>
 	<script src="<?php echo base_url('assets/js/typeahead.js') ?>"></script>
 
+	<style>
+		/* Ajuste para o texto digitado ficar cinza */
+		.select2-container--default .select2-search--dropdown .select2-search__field,
+		.select2-container--default .select2-search--inline .select2-search__field {
+			color: #999 !important;
+			background-color: transparent !important;
+		}
+	</style>
+
 </head>
 
 <body>
@@ -138,7 +147,7 @@
 						</span>
 						<span class="menu-title">Tempos de Aula</span>
 					</a>
-				</li>				
+				</li>
 
 				<li class="nav-item">
 					<a class="nav-link" href="<?php echo base_url('sys/turma'); ?>">
@@ -164,7 +173,7 @@
 						</span>
 						<span class="menu-title">Aulas</span>
 					</a>
-				</li>				
+				</li>
 
 				<?php if (auth()->user()->inGroup('admin')): ?>
 					<li class="nav-item nav-category">

@@ -140,7 +140,6 @@ class Relatorios extends BaseController
             ]);
         }
 
-        // Carrega os dados com base no tipo de relatório
         switch ($tipo) {
             case 'curso':
                 $dados = $this->filtrarCursos();
@@ -289,7 +288,6 @@ class Relatorios extends BaseController
             return redirect()->to('/sys/relatorios')->with('error', 'Tipo de relatório não especificado');
         }
 
-        // Carrega os dados com base no tipo de relatório
         switch ($tipo) {
             case 'curso':
                 return $this->gerarRelatorioCursos();
@@ -344,7 +342,6 @@ class Relatorios extends BaseController
             ->orderBy('tempos_de_aula.minuto_inicio')
             ->findAll();
 
-        // Organiza os dados por curso e turma para o relatório
         $relatorio = [];
         foreach ($dados as $item) {
             $curso = $item['curso'];
@@ -407,7 +404,6 @@ class Relatorios extends BaseController
             ->orderBy('tempos_de_aula.minuto_inicio')
             ->findAll();
 
-        // Organiza os dados por professor para o relatório
         $relatorio = [];
         foreach ($dados as $item) {
             $professor = $item['professor'];
@@ -451,8 +447,7 @@ class Relatorios extends BaseController
             ->join('professores', 'professores.id = aula_professor.professor_id')
             ->join('aula_horario_ambiente', 'aula_horario_ambiente.aula_horario_id = aula_horario.id')
             ->join('ambientes', 'ambientes.id = aula_horario_ambiente.ambiente_id')
-            ->join('tempos_de_aula', 'tempos_de_aula.id = aula_horario.tempo_de_aula_id')
-            ->where('aula_horario.versao_id', (new \App\Models\VersoesModel())->getVersaoByUser(auth()->id()));
+            ->join('tempos_de_aula', 'tempos_de_aula.id = aula_horario.tempo_de_aula_id');
 
         if (!empty($ambientes)) {
             $builder->whereIn('ambientes.id', $ambientes);
@@ -464,7 +459,6 @@ class Relatorios extends BaseController
             ->orderBy('tempos_de_aula.minuto_inicio')
             ->findAll();
 
-        // Organiza os dados por ambiente para o relatório
         $relatorio = [];
         foreach ($dados as $item) {
             $ambiente = $item['ambiente'];
@@ -485,5 +479,8 @@ class Relatorios extends BaseController
         ]);
     }
 
-    protected function gerarPDF($view, $data) {}
+    protected function gerarPDF($view, $data)
+    {
+        // Implementação do PDF
+    }
 }

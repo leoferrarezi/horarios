@@ -71,7 +71,7 @@ class Filters extends BaseFilters
     public array $globals = [
         'before' => [
             // 'honeypot',
-            'csrf' => ['except' => ['sys/tabela-horarios/atribuirAula', 'sys/tabela-horarios/removerAula', 'sys/relatorios/*']], // Cross-Site Request Forgery | exceções caso necessário exemplo: => ['except' => ['api/record/save']]
+            'csrf' => ['except' => ['sys/tabela-horarios/atribuirAula', 'sys/tabela-horarios/removerAula', 'sys/tabela-horarios/fixarAula', 'sys/relatorios/*']], // Cross-Site Request Forgery | exceções caso necessário exemplo: => ['except' => ['api/record/save']]
             // 'invalidchars',
             //ATIVAR A LINHA ABAIXO PARA INICIAR AUTENTICAÇÃO
             'session' => ['except' => ['login*', 'auth/a/*', 'logout']],

@@ -77,7 +77,7 @@ class TabelaHorarios extends BaseController
 
             if ($tresturnos > 0)
             {
-                echo "TRES-TURNOS";
+                echo "$aulaHorarioId-TRES-TURNOS";
                 return;
             }
 
@@ -85,7 +85,7 @@ class TabelaHorarios extends BaseController
 
             if ($restricao > 0)
             {
-                echo "RESTRICAO-PROFESSOR-$restricao"; // restrição de professor
+                echo "$aulaHorarioId-RESTRICAO-PROFESSOR-$restricao"; // restrição de professor
                 return;
             }
 
@@ -93,7 +93,7 @@ class TabelaHorarios extends BaseController
 
             if ($choque > 0)
             {
-                echo "CONFLITO-AMBIENTE-$choque"; // choque de ambiente
+                echo "$aulaHorarioId-CONFLITO-AMBIENTE-$choque"; // choque de ambiente
                 return;
             }
 
@@ -101,17 +101,15 @@ class TabelaHorarios extends BaseController
 
             if ($choque > 0)
             {
-                echo "CONFLITO-PROFESSOR-$choque"; // choque de professor
+                echo "$aulaHorarioId-CONFLITO-PROFESSOR-$choque"; // choque de professor
                 return;
-            }
+            }            
 
-            
-
-            echo "1"; // tudo certo e sem choques            
+            echo "$aulaHorarioId-OK"; // tudo certo e sem choques
         }
         else
         {
-            echo "0";
+            echo "0"; //erro de inserção .. sera?
         }
     }
 
@@ -130,6 +128,24 @@ class TabelaHorarios extends BaseController
 
         //verificar se já existe para fazer a substituição
         $aulaHorarioModel->deleteAulaNoHorario($dado['aula_id'], $dado['tempo_de_aula_id'], $dado['versao_id']);
+        echo "1";
+    }
+
+    public function fixarAula()
+    {
+        $dadosPost = $this->request->getPost();
+        $dado['aula_horario_id'] = strip_tags($dadosPost['aula_horario_id']);
+
+        $aulaHorarioModel = new AulaHorarioModel();
+
+        if($dadosPost['tipo'] == 1)
+        {
+            $aulaHorarioModel->fixarAulaHorario($dado['aula_horario_id']);
+        }
+        else
+        {
+            $aulaHorarioModel->desfixarAulaHorario($dado['aula_horario_id']);
+        }
         echo "1";
     }
 

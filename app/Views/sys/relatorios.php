@@ -56,7 +56,7 @@
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="card-title">Resultados</h4>
         <button type="button" id="btnExportar" class="btn btn-success">
-          <i class="mdi mdi-file-export me-1"></i>Exportar Horários
+          <i class="mdi mdi-file-export me-1"></i>Exportar PDF
         </button>
       </div>
 

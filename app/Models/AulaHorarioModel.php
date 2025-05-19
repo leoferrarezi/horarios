@@ -104,7 +104,7 @@ class AulaHorarioModel extends Model
             ->where('aulas.id', $aula_id)
             ->where('aula_horario.tempo_de_aula_id', $tempo_de_aula_id)
             ->where('aula_horario.versao_id', $versao_id)
-            ->where('aula_horario.fixa !=', 1)
+            //->where('aula_horario.fixa !=', '1')
             ->get();
 
         if ($idHorarioAula->getNumRows() > 0)

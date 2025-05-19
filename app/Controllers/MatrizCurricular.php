@@ -59,22 +59,33 @@ class MatrizCurricular extends BaseController
 
     public function deletar()
     {
-
         $dadosPost = $this->request->getPost();
-        $id = strip_tags($dadosPost['id']);
+        $id = (int)strip_tags($dadosPost['id']);
 
         $matrizModel = new MatrizCurricularModel();
-
         try {
-            $matrizModel->verificarReferencias(['id' => $id]);
+            $restricoes = $matrizModel->getRestricoes(['id' => $id]);
 
-            if ($matrizModel->delete($id)) {
-                session()->setFlashdata('sucesso', 'Matriz Curricular removida com sucesso!');
-                return redirect()->to(base_url('/sys/matriz'));
+            if (!$restricoes['cursos'] && !$restricoes['disciplinas']) {
+                if ($matrizModel->delete($id)) {
+                    session()->setFlashdata('sucesso', 'Matriz Curricular removida com sucesso!');
+                    return redirect()->to(base_url('/sys/matriz'));
+                } else {
+                    return redirect()->to(base_url('/sys/matriz'))->with('erro', 'Erro inesperado ao remover Matriz');
+                }
             } else {
-                session()->setFlashdata('erro', 'Erro inesperado ao remover Matriz');
-                return redirect()->to(base_url('/sys/matriz'))->with('erro', 'Falha ao deletar matriz');
+                if ($restricoes['cursos'] && $restricoes['disciplinas']) {
+                    throw new ReferenciaException("A matriz não pode ser excluída. <br>
+                    Esta matriz possui curso(s) e disciplina(s) relacionadas a ela!");
+                } else if ($restricoes['cursos']) {
+                    throw new ReferenciaException("A matriz não pode ser excluída. <br>
+                    Esta matriz possui curso(s) relacionado(s) a ela!");
+                } else {
+                    throw new ReferenciaException("A matriz não pode ser excluída. <br>
+                    Esta matriz possui disciplina(s) relacionada(s) a ela!");
+                }
             }
+
         } catch (ReferenciaException $e) {
             session()->setFlashdata('erro', $e->getMessage());
             return redirect()->to(base_url('/sys/matriz'));

@@ -99,14 +99,14 @@ class Professor extends BaseController
 
         $professorModel = new ProfessorModel();
         try {
-            $restricoes = $professorModel->getRestricoes($id);
+            $restricoes = $professorModel->getRestricoes(['id' => $id]);
 
             if (!$restricoes['aulas'] && !$restricoes['regras']) {
                 if ($professorModel->delete($id)) {
                     session()->setFlashdata('sucesso', 'Professor removido com sucesso!');
                     return redirect()->to(base_url('/sys/professor'));
                 } else {
-                    return redirect()->to(base_url('/sys/professor'))->with('erro', 'Falha ao deletar professor');
+                    return redirect()->to(base_url('/sys/professor'))->with('erro', 'Erro inesperado ao remover Professor');
                 }
             } else {
                 if ($restricoes['aulas'] && $restricoes['regras']) {
@@ -123,7 +123,7 @@ class Professor extends BaseController
 
         } catch (ReferenciaException $e) {
             session()->setFlashdata('erro', $e->getMessage());
-            return redirect()->to(base_url('/sys/professor'))->with('erros', ['erro' => $e->getMessage()]);
+            return redirect()->to(base_url('/sys/professor'));
         }
     }
 

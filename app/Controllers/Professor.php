@@ -106,7 +106,7 @@ class Professor extends BaseController
                     session()->setFlashdata('sucesso', 'Professor removido com sucesso!');
                     return redirect()->to(base_url('/sys/professor'));
                 } else {
-                    return redirect()->to(base_url('/sys/professor'))->with('erro', 'Falha ao deletar professor');
+                    return redirect()->to(base_url('/sys/professor'))->with('erro', 'Erro inesperado ao remover Professor');
                 }
             } else {
                 if ($restricoes['aulas'] && $restricoes['regras']) {

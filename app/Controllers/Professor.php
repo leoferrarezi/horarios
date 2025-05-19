@@ -99,7 +99,7 @@ class Professor extends BaseController
 
         $professorModel = new ProfessorModel();
         try {
-            $restricoes = $professorModel->getRestricoes($id);
+            $restricoes = $professorModel->getRestricoes(['id' => $id]);
 
             if (!$restricoes['aulas'] && !$restricoes['regras']) {
                 if ($professorModel->delete($id)) {
@@ -123,7 +123,7 @@ class Professor extends BaseController
 
         } catch (ReferenciaException $e) {
             session()->setFlashdata('erro', $e->getMessage());
-            return redirect()->to(base_url('/sys/professor'))->with('erros', ['erro' => $e->getMessage()]);
+            return redirect()->to(base_url('/sys/professor'));
         }
     }
 

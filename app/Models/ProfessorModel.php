@@ -63,7 +63,7 @@ class ProfessorModel extends Model
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
-    protected $beforeDelete   = ['verificarReferencias'];
+    protected $beforeDelete   = ['getRestricoes'];
     protected $afterDelete    = [];
 
 
@@ -85,9 +85,10 @@ class ProfessorModel extends Model
         return $query->getResultArray();
     }
 
-    public function getRestricoes(int $id) 
+    public function getRestricoes($id) 
     {
         $db = \Config\Database::connect();
+        $id = $id['id'];
         
         $aulas = $db->table('aula_professor')->where('professor_id', $id)->get()->getNumRows();
         $regras = $db->table('professor_regras')->where('professor_id', $id)->get()->getNumRows();

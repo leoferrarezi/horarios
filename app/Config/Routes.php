@@ -30,8 +30,10 @@ $routes->get('sys/cadastro-horarios-de-aula', 'TemposAula::cadastro');
 $routes->get('sys/relatorios', 'Relatorios::index');
 
 //adicionar o filter (middleware de login no group depois)
-$routes->group('sys', function ($routes) {
-    $routes->group('tabela-horarios', function ($routes) {
+$routes->group('sys', function ($routes) 
+{
+    $routes->group('tabela-horarios', function ($routes) 
+    {
         $routes->get('', 'TabelaHorarios::index');
         $routes->get('teste/(:num)', 'TabelaHorarios::teste/$1');
         $routes->post('atribuirAula', 'TabelaHorarios::atribuirAula');
@@ -40,7 +42,8 @@ $routes->group('sys', function ($routes) {
         $routes->post('fixarAula', 'TabelaHorarios::fixarAula');
     });
 
-    $routes->group('cadastro-ambientes', function ($routes) {
+    $routes->group('cadastro-ambientes', function ($routes) 
+    {
         $routes->get('', 'Ambientes::index');
         $routes->post('salvar-ambiente', 'Ambientes::salvarAmbiente');
         $routes->post('deletar-ambiente', 'Ambientes::deletarAmbiente');
@@ -52,7 +55,8 @@ $routes->group('sys', function ($routes) {
         $routes->post('remover-ambientes-grupo', 'Ambientes::removerAmbienteDoGrupo');
     });
 
-    $routes->group('professor', function ($routes) {
+    $routes->group('professor', function ($routes) 
+    {
         $routes->get('', 'Professor::index');
         $routes->get('listar', 'Professor::index');
         $routes->get('cadastro', 'Professor::cadastro');
@@ -164,14 +168,14 @@ $routes->group('sys', function ($routes) {
         $routes->post('excluir-permanentemente', 'AdminController::excluirPermanentemente');
     });
 
-    $routes->group('relatorios', function ($routes) {
+    $routes->group('relatorios', function ($routes) 
+    {
         $routes->get('/', 'Relatorios::index');
-        $routes->get('teste-filtrar', 'Relatorios::filtrar');
         $routes->post('filtrar', 'Relatorios::filtrar');
-        $routes->post('getTurmasByCurso', 'Relatorios::getTurmasByCurso');
-        $routes->post('getProfessoresByCurso', 'Relatorios::getProfessoresByCurso');
-        $routes->post('getAmbientesByCurso', 'Relatorios::getAmbientesByCurso');
-        $routes->post('getGruposByCurso', 'Relatorios::getGruposByCurso');
+        $routes->post('getTurmasByCurso', 'Relatorios::getTurmasByCurso');        
         $routes->get('relatorios/gerar', 'Relatorios::gerar');
+        $routes->post('exportar', 'Relatorios::exportar');
     });
+
+    
 });

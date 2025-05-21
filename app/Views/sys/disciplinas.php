@@ -3,6 +3,7 @@
 <?php echo view('components/disciplina/modal-cad-disciplina'); ?>
 <?php echo view('components/disciplina/modal-deletar-disciplina') ?>
 
+
 <div class="page-header">
     <h3 class="page-title">GERENCIAR DISCIPLINAS</h3>
     <nav aria-label="breadcrumb">
@@ -35,8 +36,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="curso">Matriz:</label>
-                            <select class="form-select filtro" id="filtroMatriz">
-                                <option value="">-</option>
+                            <select class="js-example-basic-multiple" name="matrizes[]" multiple="multiple" style="width:100%;" id="filtroMatriz">
                                 <?php foreach ($matrizes as $matriz): ?>
                                     <option value="<?php echo esc($matriz['nome']) ?>"><?php echo esc($matriz['nome']) ?></option>
                                 <?php endforeach; ?>
@@ -131,7 +131,7 @@
                                     <?php else: ?>
                                         <!-- caso não haja curso cadastrado -->
                                         <tr>
-                                            <td colspan="4">Nenhum disciplina cadastrada.</td>
+                                            <td colspan="8">Nenhuma disciplina cadastrada.</td>
                                         </tr>
                                     <?php endif; ?>
                                 </tbody>
@@ -266,9 +266,19 @@
                 modal.find('#deletar-nome').text(nome);
             });
 
-            $('.filtro').on('change', function() {
-                table.columns(1).search($("#filtroMatriz").val());
-                table.draw();
+
+            $('#filtroMatriz').on('change', function() {
+                var matrizesSelecionadas = $(this).val(); // Array de matrizes selecionadas
+
+                $('#listagem-disciplina tbody tr').each(function() {
+                    var nomeMatriz = $(this).find('td:nth-child(2)').text().trim(); // Coluna da Matriz
+
+                    if (matrizesSelecionadas.length === 0 || matrizesSelecionadas.includes(nomeMatriz)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
             });
 
             //Ativa os tooltips dos botões
@@ -319,3 +329,26 @@
         });
     </script>
 <?php endif; ?>
+
+<!--Referente ao select 2-->
+<script>
+    $(document).ready(function() {
+        $('.js-example-basic-multiple').select2();
+
+        $('form[id^="filtroMatriz"]').on('submit', function(e) {
+            const selectElement = $(this).find('select[name="matrizes[]"]');
+
+            const selectedOptions = selectElement.select2('data');
+
+            selectedOptions.forEach(function(option) {
+                const optionElement = selectElement.find('option[value="' + option.id + '"]');
+                optionElement.removeAttr('selected');
+            });
+        });
+
+        $('#filtroMatriz').select2({
+            placeholder: "Selecione uma ou mais matrizes:",
+            allowClear: true
+        });
+    });
+</script>

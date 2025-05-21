@@ -43,11 +43,16 @@
 
 <script>
     $(document).ready(function() {
-        $('.js-example-basic-multiple').select2();
+        // Para cada grupo
+        <?php foreach ($grupos as $grupo): ?>
+            $('#select-ambiente-grupo-<?= $grupo['id'] ?>').select2({
+                dropdownParent: $('#modal-add-ambientes-gp-<?= $grupo['id'] ?>'),
+                width: '100%'
+            });
+        <?php endforeach; ?>
 
-        $(form[id ^= "addAmbientesGrupo-"]).on('submit', function(e) {
+        $('form[id^="addAmbientesGrupo-"]').on('submit', function(e) {
             const selectElement = $(this).find('select[name="ambientes[]"]');
-
             const selectedOptions = selectElement.select2('data');
 
             selectedOptions.forEach(function(option) {

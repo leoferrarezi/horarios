@@ -26,6 +26,7 @@ class Ambientes extends BaseController
             $grupo['ambientes'] = $ambienteGrupoModel
                 ->where('grupo_de_ambiente_id', $grupo['id'])
                 ->join('ambientes', 'ambientes.id = ambiente_grupo.ambiente_id')
+                //->orderBy('nome')
                 ->findAll();
         }
 

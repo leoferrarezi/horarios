@@ -114,19 +114,6 @@
   padding: 0.3rem 0.5rem;
 }
 
-/*Estilização para select2*/
-.select2-container {
-  z-index: 9999;
-}
-
-.select2-dropdown {
-  z-index: 1050;
-}
-
-.select2-search {
-  z-index: 1060;
-}
-
 .select2-container--default .select2-results__option[aria-selected=true] {
   background-color: #495057 !important;
   /*Fundo da seleção de opções do select2*/

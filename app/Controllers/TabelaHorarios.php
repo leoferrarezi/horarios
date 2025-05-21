@@ -15,10 +15,10 @@ class TabelaHorarios extends BaseController
     public function index()
     {
         $ambientesModel = new AmbientesModel();
-        $data['ambientes'] = $ambientesModel->findAll();
+        $data['ambientes'] = $ambientesModel->orderBy('nome')->findAll();
 
         $cursosModel = new CursosModel();
-        $data['cursos'] = $cursosModel->findAll();
+        $data['cursos'] = $cursosModel->orderBy('nome')->findAll();
 
         $versaoModel = new VersoesModel();
         $versao = $versaoModel->getVersaoByUser(auth()->id());

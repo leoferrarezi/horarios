@@ -17,7 +17,7 @@ class Ambientes extends BaseController
         $ambienteGrupoModel = new AmbienteGrupoModel();
 
         // Carrega todos os ambientes e grupos
-        $data['ambientes'] = $ambientesModel->findAll();
+        $data['ambientes'] = $ambientesModel->orderBy('nome')->findAll();
         $data['grupos'] = $gruposAmbientesModel->findAll();
 
         // Para cada grupo, recuperar os ambientes associados

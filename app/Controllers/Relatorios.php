@@ -109,8 +109,7 @@ class Relatorios extends BaseController
                 professores.nome as professor,
                 ambientes.nome as ambiente,
                 tempos_de_aula.dia_semana,
-                CONCAT(LPAD(tempos_de_aula.hora_inicio, 2, "0"), ":", LPAD(tempos_de_aula.minuto_inicio, 2, "0")) as hora_inicio,
-                CONCAT(LPAD(tempos_de_aula.hora_fim, 2, "0"), ":", LPAD(tempos_de_aula.minuto_fim, 2, "0")) as hora_fim
+                CONCAT(LPAD(tempos_de_aula.hora_inicio, 2, "0"), ":", LPAD(tempos_de_aula.minuto_inicio, 2, "0")) as hora_inicio
             ')
             ->join('aulas', 'aulas.id = aula_horario.aula_id')
             ->join('disciplinas', 'disciplinas.id = aulas.disciplina_id')
@@ -153,8 +152,7 @@ class Relatorios extends BaseController
                 disciplinas.nome as disciplina,
                 ambientes.nome as ambiente,
                 tempos_de_aula.dia_semana,
-                CONCAT(LPAD(tempos_de_aula.hora_inicio, 2, "0"), ":", LPAD(tempos_de_aula.minuto_inicio, 2, "0")) as hora_inicio,
-                CONCAT(LPAD(tempos_de_aula.hora_fim, 2, "0"), ":", LPAD(tempos_de_aula.minuto_fim, 2, "0")) as hora_fim
+                CONCAT(LPAD(tempos_de_aula.hora_inicio, 2, "0"), ":", LPAD(tempos_de_aula.minuto_inicio, 2, "0")) as hora_inicio
             ')
             ->join('aulas', 'aulas.id = aula_horario.aula_id')
             ->join('disciplinas', 'disciplinas.id = aulas.disciplina_id')
@@ -191,8 +189,7 @@ class Relatorios extends BaseController
                 disciplinas.nome as disciplina,
                 professores.nome as professor,
                 tempos_de_aula.dia_semana,
-                CONCAT(LPAD(tempos_de_aula.hora_inicio, 2, "0"), ":", LPAD(tempos_de_aula.minuto_inicio, 2, "0")) as hora_inicio,
-                CONCAT(LPAD(tempos_de_aula.hora_fim, 2, "0"), ":", LPAD(tempos_de_aula.minuto_fim, 2, "0")) as hora_fim
+                CONCAT(LPAD(tempos_de_aula.hora_inicio, 2, "0"), ":", LPAD(tempos_de_aula.minuto_inicio, 2, "0")) as hora_inicio
             ')
             ->join('aulas', 'aulas.id = aula_horario.aula_id')
             ->join('disciplinas', 'disciplinas.id = aulas.disciplina_id')
@@ -219,84 +216,477 @@ class Relatorios extends BaseController
 
     public function exportar()
     {
+        $tipo = $this->request->getPost('tipoRelatorio');
+
+        if (!$tipo)
+        {
+            die("Sem tipo selecionado.");
+        }
+
+        switch ($tipo)
+        {
+            case 'curso':
+                $dados = $this->filtrarCursos();
+                $this->exportarCursoTurma($dados);
+                break;
+            case 'professor':
+                $dados = $this->filtrarProfessores();
+                $this->exportarProfessor($dados);
+                break;
+            case 'ambiente':
+                $dados = $this->filtrarAmbientes();
+                break;
+            default:
+                die("Tipo inválido.");
+        }
+    }
+
+    public function exportarProfessor($dados)
+    {
+        $tabelas = [];
+
+        foreach ($dados as $key => $value)
+        {
+            if (!in_array($value['professor'], $tabelas))
+            {
+                $tabelas[$value['professor']] = [];
+            }
+        }
+
+        foreach ($dados as $key => $value)
+        {
+            for($i = 1 ; $i <= 5 ; $i++)
+            {
+                if (!in_array($i, $tabelas[$value['professor']]))
+                {
+                    $tabelas[$value['professor']][$i] = [];
+                }
+            }
+        }        
+
+        foreach ($dados as $key => $value)
+        {
+            if (!in_array($value['hora_inicio'], $tabelas[$value['professor']][$value['dia_semana']]))
+            {
+                $tabelas[$value['professor']][$value['dia_semana']][$value['hora_inicio']] = [];
+            }
+        }        
+
+        foreach ($dados as $key => $value)
+        {
+            if(empty($tabelas[$value['professor']] [$value['dia_semana']] [$value['hora_inicio']] ['disciplina']))
+            {
+                $tabelas[$value['professor']] [$value['dia_semana']] [$value['hora_inicio']] ['professor'] = $value['professor'];
+                $tabelas[$value['professor']] [$value['dia_semana']] [$value['hora_inicio']] ['disciplina'] = $value['disciplina'];
+                $tabelas[$value['professor']] [$value['dia_semana']] [$value['hora_inicio']] ['ambiente'] = $value['ambiente'];
+                $tabelas[$value['professor']] [$value['dia_semana']] [$value['hora_inicio']] ['curso'] = $value['curso'];
+                $tabelas[$value['professor']] [$value['dia_semana']] [$value['hora_inicio']] ['turma'] = $value['turma'];
+            }
+            else
+            {
+                if($tabelas[$value['professor']] [$value['dia_semana']] [$value['hora_inicio']] ['professor'] != $value['professor'])
+                {
+                    $tabelas[$value['professor']] [$value['dia_semana']] [$value['hora_inicio']] ['professor'] .= ', ' . $value['professor'];
+                }
+                else if($tabelas[$value['professor']] [$value['dia_semana']] [$value['hora_inicio']] ['ambiente'] != $value['ambiente'])
+                {
+                    $tabelas[$value['professor']] [$value['dia_semana']] [$value['hora_inicio']] ['ambiente'] .= ', ' . $value['ambiente'];
+                }
+            }
+        }
+
         $pdf = new \App\Libraries\PDF();
 
         $pdf->setCSS('
-            @page { margin: 10 !important; padding: 0 !important; margin-top: 110px !important; }
-            body { font-family: Arial, sans-serif; font-size: 10px; padding: 20px; background: #fff; color: #000; }
-            header { align-items: center; padding-bottom: 5px; margin-bottom: 50px; position: fixed; margin-top: -100px; width: 96%; }
-            header img { height: 70px; margin-right: 10px; margin-left: 10px; }
-            h1 { font-size: 15px; color:rgb(5, 56, 5); padding: 0px; margin: 0px; }
-            h2 { font-size: 14px; color: #1a5d1a; padding: 0px; margin: 0px; }
-            h3 { font-size: 13px; color: #1a5d1a; padding: 0px; margin: 0px; }
-            table { width: 100%; border-collapse: collapse; margin-bottom: 20px; table-layout:fixed; page-break-inside: avoid; }
-            .caption { font-size: 13px; font-weight: bold; background-color: #1a5d1a; color: white; padding: 6px; border-radius: 4px 4px 0 0; text-align: center; }
+            @page { margin: 10 !important; padding: 0 !important; margin-top: 100px !important; }
+            body { font-family: Arial, sans-serif; font-size: 9px; padding: 10px; background: #fff; color: #000; }
+            header { align-items: center; padding-bottom: 2px; margin-bottom: 10px; position: fixed; margin-top: -80px; width: 98%; }
+            header img { height: 60px; margin-right: 10px; margin-left: 10px; }
+            h1 { font-size: 13px; color:rgb(5, 56, 5); padding: 0px; margin: 0px; }
+            h2 { font-size: 12px; color: #1a5d1a; padding: 0px; margin: 0px; }
+            h3 { font-size: 11px; color: #1a5d1a; padding: 0px; margin: 0px; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 10px; table-layout:fixed; page-break-inside: avoid; }
+            .caption { font-size: 13px; font-weight: bold; background-color: #1a5d1a; color: white; padding: 2px; border-radius: 4px 4px 0 0; text-align: center; }
+            .periodo { font-size: 10px; font-weight: bold; background-color: #1a5d1a; color: white; padding: 0px; text-align: center; border: none }
             th, td { border: 1px solid #ccc; padding: 4px; text-align: center; vertical-align: middle; }
             th { background-color: #d1e7d1; color: #1a5d1a; }
             tr:nth-child(even) td { background-color: #f5fdf5; }
             .hora { font-weight: bold; }
-            em { font-style: normal; font-weight: bold; display: block; margin-top: 2px; color: #3d7b3d; }
+            em { font-style: normal;  display: block; margin-top: 1px; color: #3d7b3d; }
+            .page_break { page-break-before: always; }
         ');
 
         $pdf->setHeader('
-            <table><tr><td width="25%"><img src="' . base_url("assets/images/logoifro.png") . '" alt="Logo IFRO"></td>
-            <td width="75%"><h1>Instituto Federal de Educação, Ciência e Tecnologia de Rondônia</h1><h2><i>Campus</i> Porto Velho Calama</h2><h3>Departamento de Apoio ao Ensino - DAPE</h3><h1>Horários por Cursos e Turmas - versão 2025.1</h1></td>
-            </tr></table>');
-
-        $pdf->setBody('
             <table>
-                <thead>
-                    <tr>
-                        <td colspan="6" style="border: none; padding: 0px; text-align: center;">
-                            <div class="caption">Licenciatura em Física - 1º p Lic em Física</div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th width="5%">Horário</th>
-                        <th width="19%">Segunda</th>
-                        <th width="19%">Terça</th>
-                        <th width="19%">Quarta</th>
-                        <th width="19%">Quinta</th>
-                        <th width="19%">Sexta</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="hora">19:00</td>
-                        <td>GEOMETRIA ANALIT E VETORI<br><em>Vlademir F<br>Sala 07</em></td>
-                        <td>INTROD AO CALCULO<br><em>Vlademir F<br>Sala 07</em></td>
-                        <td>FILOS DA ED ETICA PROF<br><em>Mateus G.<br>Sala 07</em></td>
-                        <td>LINGUA PORTUGUESA<br><em>Neusa T.<br>Sala 07</em></td>
-                        <td>METOD DO TRAB CIENT<br><em>Neusa T.<br>Sala 07</em></td>
-                    </tr>
-                    <tr>
-                        <td class="hora">19:50</td><td>GEOMETRIA ANALIT E VETORI<br><em>Vlademir F<br>Sala 07</em></td>
-                        <td>INTROD AO CALCULO<br><em>Vlademir F<br>Sala 07</em></td>
-                        <td>FILOS DA ED ETICA PROF<br><em>Mateus G.<br>Sala 07</em></td>
-                        <td>LINGUA PORTUGUESA<br><em>Neusa T.<br>Sala 07</em></td>
-                        <td>METOD DO TRAB CIENT<br><em>Neusa T.<br>Sala 07</em></td>
-                    </tr>
-                    <tr>
-                        <td class="hora">20:50</td>
-                        <td>HISTORIA EPIST DA FISICA<br><em>Cléver R.<br>Sala 07</em></td>
-                        <td>METOD PROJ INTEG EXTENS<br><em>Neusa T.<br>Sala 07</em></td>
-                        <td>LINGUA PORTUGUESA<br><em>Neusa T.<br>Sala 07</em></td>
-                        <td>METOD PROJ INTEG EXTENS<br><em>Neusa T.<br>Sala 07</em></td>
-                        <td>—</td>
-                    </tr>
-                    <tr>
-                        <td class="hora">21:40</td>
-                        <td>HISTORIA EPIST DA FISICA<br><em>Cléver R.<br>Sala 07</em></td>
-                        <td>METOD PROJ INTEG EXTENS<br><em>Neusa T.<br>Sala 07</em></td>
-                        <td>LINGUA PORTUGUESA<br><em>Neusa T.<br>Sala 07</em></td>
-                        <td>METOD PROJ INTEG EXTENS<br><em>Neusa T.<br>Sala 07</em></td>
-                        <td>—</td>
-                    </tr>
-                </tbody>
-            </table>
-        ');
+                <tr>
+                    <td width="25%"><img src="' . base_url("assets/images/logoifro.png") . '" alt="Logo IFRO"></td>
+                    <td width="75%">
+                        <h1>Instituto Federal de Educação, Ciência e Tecnologia de Rondônia</h1>
+                        <h2><i>Campus</i> Porto Velho Calama</h2>
+                        <h3>Departamento de Apoio ao Ensino - DAPE</h3>
+                        <h1>Horários por Professor</h1>
+                    </td>
+                </tr>
+            </table>');
+
+        $nome_dia = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sabado'];
+
+        $conta = 0;
+
+        foreach($tabelas as $professor => $dias)
+        {            
+            $temDias = [1,2,3,4,5];
+            $temHorarios = [];
+
+            foreach ($dias as $dia => $horarios) //catalogar os dias da semana que estão no horário do curso/turma
+            {
+                foreach ($horarios as $hora_inicio => $outros)
+                {
+                    if(in_array($hora_inicio,$temHorarios))
+                        continue;
+                    
+                    array_push($temHorarios,$hora_inicio);
+                }
+            }
+
+            sort($temDias);
+            sort($temHorarios);
+
+            $pdf->appendHTML('
+                <table>
+                    <thead>
+                        <tr>
+                            <td colspan="' . (sizeof($temDias) + 1) . '" style="border: none; padding: 0px; text-align: center;">
+                                <div class="caption">'. $professor . '</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th width="5%">Horário</th>');
+
+            foreach ($temDias as $dia)
+            {
+                $pdf->appendHTML('
+                    <th width="19%">'. $nome_dia[$dia] .'</th>
+                ');
+            }
+
+            $pdf->appendHTML('</tr></thead><tbody>');
+
+            $ultimoTurno = 0;
+            
+
+            foreach ($temHorarios as $horario)
+            {
+                $horarioAtual = (int)(substr($horario,0,2));
+                $turnoAtual = ($horarioAtual <= 12) ? 1 : (($horarioAtual >= 13 && $horarioAtual <= 17) ? 2 : 3);
+
+                if($ultimoTurno == 0 || $turnoAtual != $ultimoTurno)
+                {
+                    if($turnoAtual == 1)
+                        $pdf->appendHTML('<tr><th colspan="' . (sizeof($temDias) + 1) . '" class="periodo">M A N H Ã</th></tr>');
+                    else if($turnoAtual == 2)
+                        $pdf->appendHTML('<tr><th colspan="' . (sizeof($temDias) + 1) . '" class="periodo">T A R D E</th></tr>');
+                    else
+                        $pdf->appendHTML('<tr><th colspan="' . (sizeof($temDias) + 1) . '" class="periodo">N O I T E</th></tr>');
+                }
+
+                $ultimoTurno = $turnoAtual;
+
+                $pdf->appendHTML('<tr>');
+                    $pdf->appendHTML('<td class="hora">' . $horario . '</td>');
+
+                    foreach ($temDias as $dia)
+                    {
+                        if(isset($tabelas[$professor][$dia]))
+                        {
+                            if(isset($tabelas[$professor][$dia][$horario]))
+                            {
+                                $pdf->appendHTML('<td>');
+                                
+                                if(strlen($tabelas[$professor][$dia][$horario]['disciplina']) >= 40)
+                                    $pdf->appendHTML('<small>');
+
+                                $pdf->appendHTML('<strong>' . $tabelas[$professor][$dia][$horario]['disciplina'] . '</strong>');
+
+                                if(strlen($tabelas[$professor][$dia][$horario]['disciplina']) >= 40)
+                                    $pdf->appendHTML('</small>');                                    
+                                
+                                $pdf->appendHTML('<br />');
+                                $pdf->appendHTML('<em>');
+                                
+                                if(strlen($tabelas[$professor][$dia][$horario]['curso']) >= 40)
+                                    $pdf->appendHTML('<small>');
+                                
+                                $pdf->appendHTML($tabelas[$professor][$dia][$horario]['curso']);
+                                
+                                if(strlen($tabelas[$professor][$dia][$horario]['curso']) >= 40)
+                                    $pdf->appendHTML('</small>');
+
+                                $pdf->appendHTML('<br />');
+
+                                if(strlen($tabelas[$professor][$dia][$horario]['turma']) >= 40)
+                                    $pdf->appendHTML('<small>');
+                                
+                                $pdf->appendHTML($tabelas[$professor][$dia][$horario]['turma']);
+                                
+                                if(strlen($tabelas[$professor][$dia][$horario]['turma']) >= 40)
+                                    $pdf->appendHTML('</small>');
+
+                                $pdf->appendHTML('<br />');
+
+                                if(strlen($tabelas[$professor][$dia][$horario]['ambiente']) >= 40)
+                                    $pdf->appendHTML('<small>');
+
+                                $pdf->appendHTML('<strong>' . $tabelas[$professor][$dia][$horario]['ambiente'] . '</strong>');
+
+                                if(strlen($tabelas[$professor][$dia][$horario]['ambiente']) >= 40)
+                                    $pdf->appendHTML('</small>');                                    
+                                
+                                $pdf->appendHTML('</em>');
+                                $pdf->appendHTML('</td>');
+                            }
+                            else
+                            {
+                                $pdf->appendHTML('<td>—</td>');
+                            }
+                        }
+                    }
+
+                $pdf->appendHTML('</tr>');
+            }
+
+            $pdf->appendHTML('
+                    </tbody>
+                </table>
+            ');
+
+            $conta++;
+
+            if($conta < sizeof($tabelas))
+                $pdf->appendHTML('<div class="page_break"></div>');
+        }
 
         $pdf->generatePDF();
-        print_r($this->request->getPost());
+    }
+
+    public function exportarCursoTurma($dados)
+    {
+        $tabelas = [];
+
+        foreach ($dados as $key => $value)
+        {
+            if (!in_array($value['curso'], $tabelas))
+            {
+                $tabelas[$value['curso']] = [];
+            }
+        }
+
+        foreach ($dados as $key => $value)
+        {
+            if (!in_array($value['turma'], $tabelas[$value['curso']]))
+            {
+                $tabelas[$value['curso']][$value['turma']] = [];
+            }
+        }
+
+        foreach ($dados as $key => $value)
+        {
+            for($i = 1 ; $i <= 5 ; $i++)
+            {
+                if (!in_array($i, $tabelas[$value['curso']][$value['turma']]))
+                {
+                    $tabelas[$value['curso']][$value['turma']][$i] = [];
+                }
+            }
+        }
+
+        foreach ($dados as $key => $value)
+        {
+            if (!in_array($value['hora_inicio'], $tabelas[$value['curso']][$value['turma']][$value['dia_semana']]))
+            {
+                $tabelas[$value['curso']][$value['turma']][$value['dia_semana']][$value['hora_inicio']] = [];
+            }
+        }        
+
+        foreach ($dados as $key => $value)
+        {
+            if(empty($tabelas[$value['curso']] [$value['turma']] [$value['dia_semana']] [$value['hora_inicio']] ['disciplina']))
+            {
+                $tabelas[$value['curso']] [$value['turma']] [$value['dia_semana']] [$value['hora_inicio']] ['disciplina'] = $value['disciplina'];
+                $tabelas[$value['curso']] [$value['turma']] [$value['dia_semana']] [$value['hora_inicio']] ['professor'] = $value['professor'];
+                $tabelas[$value['curso']] [$value['turma']] [$value['dia_semana']] [$value['hora_inicio']] ['ambiente'] = $value['ambiente'];
+            }
+            else
+            {
+                if($tabelas[$value['curso']] [$value['turma']] [$value['dia_semana']] [$value['hora_inicio']] ['professor'] != $value['professor'])
+                {
+                    $tabelas[$value['curso']] [$value['turma']] [$value['dia_semana']] [$value['hora_inicio']] ['professor'] .= ', ' . $value['professor'];
+                }
+                else if($tabelas[$value['curso']] [$value['turma']] [$value['dia_semana']] [$value['hora_inicio']] ['ambiente'] != $value['ambiente'])
+                {
+                    $tabelas[$value['curso']] [$value['turma']] [$value['dia_semana']] [$value['hora_inicio']] ['ambiente'] .= ', ' . $value['ambiente'];
+                }
+            }
+        }
+
+        $pdf = new \App\Libraries\PDF();
+
+        $pdf->setCSS('
+            @page { margin: 10 !important; padding: 0 !important; margin-top: 100px !important; }
+            body { font-family: Arial, sans-serif; font-size: 9px; padding: 10px; background: #fff; color: #000; }
+            header { align-items: center; padding-bottom: 2px; margin-bottom: 10px; position: fixed; margin-top: -80px; width: 98%; }
+            header img { height: 60px; margin-right: 10px; margin-left: 10px; }
+            h1 { font-size: 13px; color:rgb(5, 56, 5); padding: 0px; margin: 0px; }
+            h2 { font-size: 12px; color: #1a5d1a; padding: 0px; margin: 0px; }
+            h3 { font-size: 11px; color: #1a5d1a; padding: 0px; margin: 0px; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 10px; table-layout:fixed; page-break-inside: avoid; }
+            .caption { font-size: 13px; font-weight: bold; background-color: #1a5d1a; color: white; padding: 2px; border-radius: 4px 4px 0 0; text-align: center; }
+            .periodo { font-size: 10px; font-weight: bold; background-color: #1a5d1a; color: white; padding: 0px; text-align: center; border: none }
+            th, td { border: 1px solid #ccc; padding: 4px; text-align: center; vertical-align: middle; }
+            th { background-color: #d1e7d1; color: #1a5d1a; }
+            tr:nth-child(even) td { background-color: #f5fdf5; }
+            .hora { font-weight: bold; }
+            em { font-style: normal;  display: block; margin-top: 1px; color: #3d7b3d; }
+        ');
+
+        $pdf->setHeader('
+            <table>
+                <tr>
+                    <td width="25%"><img src="' . base_url("assets/images/logoifro.png") . '" alt="Logo IFRO"></td>
+                    <td width="75%">
+                        <h1>Instituto Federal de Educação, Ciência e Tecnologia de Rondônia</h1>
+                        <h2><i>Campus</i> Porto Velho Calama</h2>
+                        <h3>Departamento de Apoio ao Ensino - DAPE</h3>
+                        <h1>Horários por Cursos e Turmas</h1>
+                    </td>
+                </tr>
+            </table>');
+
+        $nome_dia = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sabado'];
+
+        foreach($tabelas as $curso => $turmas)
+        {
+            foreach ($turmas as $turma => $dias)
+            {
+                $temDias = [];
+                $temHorarios = [];
+
+                foreach ($dias as $dia => $horarios) //catalogar os dias da semana que estão no horário do curso/turma
+                {
+                    if(!in_array($dia,$temDias))
+                        array_push($temDias,$dia);
+
+                    foreach ($horarios as $hora_inicio => $outros)
+                    {
+                        if(in_array($hora_inicio,$temHorarios))
+                            continue;
+                        
+                        array_push($temHorarios,$hora_inicio);
+                    }
+                }
+
+                sort($temDias);
+                sort($temHorarios);
+
+                $pdf->appendHTML('
+                    <table>
+                        <thead>
+                            <tr>
+                                <td colspan="' . (sizeof($temDias) + 1) . '" style="border: none; padding: 0px; text-align: center;">
+                                    <div class="caption">'. $curso .' - ' . $turma . '</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th width="5%">Horário</th>');
+
+                foreach ($temDias as $dia)
+                {
+                    $pdf->appendHTML('
+                        <th width="19%">'. $nome_dia[$dia] .'</th>
+                    ');
+                }
+
+                $pdf->appendHTML('</tr></thead><tbody>');
+
+                $ultimoTurno = 0;
+
+                foreach ($temHorarios as $horario)
+                {
+                    $horarioAtual = (int)(substr($horario,0,2));
+                    $turnoAtual = ($horarioAtual <= 12) ? 1 : (($horarioAtual >= 13 && $horarioAtual <= 17) ? 2 : 3);
+
+                    if($ultimoTurno == 0 || $turnoAtual != $ultimoTurno)
+                    {
+                        if($turnoAtual == 1)
+                            $pdf->appendHTML('<tr><th colspan="' . (sizeof($temDias) + 1) . '" class="periodo">M A N H Ã</th></tr>');
+                        else if($turnoAtual == 2)
+                            $pdf->appendHTML('<tr><th colspan="' . (sizeof($temDias) + 1) . '" class="periodo">T A R D E</th></tr>');
+                        else
+                            $pdf->appendHTML('<tr><th colspan="' . (sizeof($temDias) + 1) . '" class="periodo">N O I T E</th></tr>');
+                    }
+
+                    $ultimoTurno = $turnoAtual;
+
+                    $pdf->appendHTML('<tr>');
+                        $pdf->appendHTML('<td class="hora">' . $horario . '</td>');
+
+                        foreach ($temDias as $dia)
+                        {
+                            if(isset($tabelas[$curso][$turma][$dia]))
+                            {
+                                if(isset($tabelas[$curso][$turma][$dia][$horario]))
+                                {
+                                    $pdf->appendHTML('<td>');
+                                    
+                                    if(strlen($tabelas[$curso][$turma][$dia][$horario]['disciplina']) >= 40)
+                                        $pdf->appendHTML('<small>');
+
+                                    $pdf->appendHTML('<strong>' . $tabelas[$curso][$turma][$dia][$horario]['disciplina'] . '</strong>');
+
+                                    if(strlen($tabelas[$curso][$turma][$dia][$horario]['disciplina']) >= 40)
+                                        $pdf->appendHTML('</small>');                                    
+                                    
+                                    $pdf->appendHTML('<br />');
+                                    $pdf->appendHTML('<em>');
+                                    
+                                    if(strlen($tabelas[$curso][$turma][$dia][$horario]['professor']) >= 40)
+                                        $pdf->appendHTML('<small>');
+                                    
+                                    $pdf->appendHTML($tabelas[$curso][$turma][$dia][$horario]['professor']);
+                                    
+                                    if(strlen($tabelas[$curso][$turma][$dia][$horario]['professor']) >= 40)
+                                        $pdf->appendHTML('</small>');
+
+                                    $pdf->appendHTML('<br />');
+
+                                    if(strlen($tabelas[$curso][$turma][$dia][$horario]['ambiente']) >= 40)
+                                        $pdf->appendHTML('<small>');
+
+                                    $pdf->appendHTML('<strong>' . $tabelas[$curso][$turma][$dia][$horario]['ambiente'] . '</strong>');
+
+                                    if(strlen($tabelas[$curso][$turma][$dia][$horario]['ambiente']) >= 40)
+                                        $pdf->appendHTML('</small>');                                    
+                                    
+                                    $pdf->appendHTML('</em>');
+                                    $pdf->appendHTML('</td>');
+                                }
+                                else
+                                {
+                                    $pdf->appendHTML('<td>—</td>');
+                                }
+                            }
+                        }
+
+                    $pdf->appendHTML('</tr>');
+                }
+
+                $pdf->appendHTML('
+                        </tbody>
+                    </table>
+                ');
+            }
+        }        
+
+        $pdf->generatePDF();
     }
 }

@@ -92,6 +92,10 @@
     .drag-over {
         background-color: #6c7293 !important;
     }
+
+    .botaoFixar {
+        z-index: 9999;
+    }
 </style>
 
 <!-- Modal -->
@@ -261,7 +265,6 @@
 <!--só pra testar o modal de ambiente-->
 <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalSelecionarAmbiente">Launch demo modal</button> -->
 
-
 <!-- Filtro -->
 <div class="row g-3">
     <!-- Coluna esquerda - Filtros e Aulas Pendentes -->
@@ -370,8 +373,6 @@
     //Referencia para os nomes dos dias da semana
     var nome_dia = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sabado'];
 
-    const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
-
     $(document).ready(function()
     {
         $("#selectAmbiente").select2( { dropdownParent: $('#modalSelecionarAmbiente') });
@@ -398,6 +399,84 @@
 
             $('#aulasCounter').text(totalAulasPendentes);
         }
+
+        function fixarAulaHorario(tipo, aula_horario_id, aula_id)
+        {
+            elemento = $(`#horario_${aula_id}`);
+
+            $.post('<?php echo base_url('sys/tabela-horarios/fixarAula'); ?>', 
+            {
+                tipo: tipo, //1 = fixar, 0 = desfixar
+                aula_horario_id: aula_horario_id
+            },
+            function(data)
+            {
+                if(data == "1")
+                {
+                    //encontrar o botão pelo nomezim e mudar a cor, além de desativar a remoção de alguma forma
+                    if(tipo == 1)
+                    {
+                        $("#btnFixar_horario_" + aula_horario_id)
+                            .removeClass("text-primary")
+                            .addClass("text-warning")
+                            .off()
+                            .click(function(e) 
+                            {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                fixarAulaHorario(0, aula_horario_id, aula_id); //desfixar
+                            });                        
+
+                        $.toast({
+                            heading: 'Sucesso',
+                            text: 'A aula foi marcada como fixa no horário.',
+                            showHideTransition: 'slide',
+                            icon: 'success',
+                            loaderBg: '#f96868',
+                            position: 'top-center'
+                        });
+
+                        elemento.data('fixa', 1);
+                    }
+                    else
+                    {
+                        $("#btnFixar_horario_" + aula_horario_id)
+                            .removeClass("text-warning")
+                            .addClass("text-primary")
+                            .off()
+                            .click(function(e) 
+                            {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                fixarAulaHorario(0, aula_horario_id, aula_id); //desfixar
+                            });
+
+                        $.toast({
+                            heading: 'Sucesso',
+                            text: 'A aula foi desmarcada como fixa no horário.',
+                            showHideTransition: 'slide',
+                            icon: 'success',
+                            loaderBg: '#f96868',
+                            position: 'top-center'
+                        });
+
+                        elemento.data('fixa', 0);
+                    }                    
+                }
+                else
+                {
+                    // Mostra feedback de erro
+                    $.toast({
+                        heading: 'Erro',
+                        text: 'Ocorreu um erro ao tentar fixar/desafixar a aula no horário.',
+                        showHideTransition: 'slide',
+                        icon: 'error',
+                        loaderBg: '#f96868',
+                        position: 'top-center'
+                    });
+                }
+            });
+        }                
 
         // Função para mover disciplina de volta para pendentes
         function moverDisciplinaParaPendentes(horarioElement) 
@@ -460,6 +539,15 @@
             $('#rowRestricao').hide();
             $('#rowConflito').hide();
             $('#rowTresTurnos').hide();
+
+            if($horario.data('fixa') == 1)
+            {
+                $("#confirmarRemocao").prop("disabled", true);
+            }
+            else
+            {
+                $("#confirmarRemocao").prop("disabled", false);
+            }
 
             //Verificar e preencher dados do conflito
             if($horario.data('tresturnos') > 0)
@@ -617,7 +705,7 @@
             // Pequeno delay para garantir que o modal feche antes de abrir o próximo
             setTimeout(() => {
                 abrirModalAmbiente(aulaId, horarioId);
-            }, 300);
+            }, 100);
         }
 
         // Função para abrir o modal de seleção de ambiente
@@ -677,13 +765,15 @@
                         });
                         return;
                     }
-                    else if(data == "1" || data.indexOf("CONFLITO") >= 0 || data.indexOf("RESTRICAO") >= 0|| data.indexOf("TRES-TURNOS") >= 0)
+                    else if(data.indexOf("OK") >= 0 || data.indexOf("CONFLITO") >= 0 || data.indexOf("RESTRICAO") >= 0|| data.indexOf("TRES-TURNOS") >= 0)
                     {
                         var conflitoStyle = "text-primary";
                         var conflitoIcon = "fa-mortar-board";
                         var aulaConflito = 0;
                         var tresTurnos = 0;
                         var restricao = 0;
+
+                        var aulaHorarioId = data.split("-")[0];
 
                         if(data.indexOf("TRES-TURNOS") >= 0)
                         {
@@ -720,9 +810,19 @@
                                         <i class="mdi mdi-door fs-6 text-muted me-1"></i>
                                         <small class="text-wrap text-secondary" style="font-size: 0.65rem !important;">${ambientesSelecionadosNome.join("<br />")}</small>
                                     </div>
+                                    <div style="width: 100%; text-align: right;">
+                                        <i class="mdi mdi-lock fs-6 text-primary me-1" id="btnFixar_horario_${aulaHorarioId}"></i>
+                                    </div>
                                 </div>
                             </div>
                         `);
+                            
+                        $("#btnFixar_horario_" + aulaHorarioId).off().click(function(e) 
+                        {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            fixarAulaHorario(1, aulaHorarioId, horarioId);
+                        });
 
                         // Adiciona os dados ao horário
                         horarioSelecionado
@@ -736,6 +836,8 @@
                             .data('conflito', aulaConflito)
                             .data('restricao', restricao)
                             .data('tresturnos', tresTurnos)
+                            .data('aula_horario_id', aulaHorarioId)
+                            .data('fixa', 0)
                             .removeClass('horario-vazio')
                             .addClass('horario-preenchido')
                             .off()
@@ -1322,6 +1424,12 @@
                                 conflitoIcon = "fa-warning";
                             }
 
+                            var btnFixar = "text-primary";
+
+                            if(obj.fixa == 1)
+                                btnFixar = "text-warning";
+
+
                             // Preenche o horário selecionado
                             horarioSelecionado.html(`
                                 <div class="card border-1 shadow-sm bg-gradient" style="cursor: pointer; height: 100%;">
@@ -1338,9 +1446,22 @@
                                             <i class="mdi mdi-door fs-6 text-muted me-1"></i>
                                             <small class="text-wrap text-secondary" style="font-size: 0.65rem !important;">${ambientesSelecionadosNome.join("<br />")}</small>
                                         </div>
+                                        <div style="width: 100%; text-align: right;">
+                                            <i class="mdi mdi-lock fs-6 ${btnFixar} me-1" id="btnFixar_horario_${obj.id}"></i>
+                                        </div>
                                     </div>
                                 </div>
                             `);
+                            
+                            $("#btnFixar_horario_" + obj.id).off().click(function(e) 
+                            {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                if(obj.fixa == 1)
+                                    fixarAulaHorario(0, obj.id, obj.tempo_de_aula_id); //desfixar
+                                else
+                                    fixarAulaHorario(1, obj.id, obj.tempo_de_aula_id); //fixar
+                            });
 
                             // Adiciona os dados ao horário
                             horarioSelecionado
@@ -1354,6 +1475,8 @@
                                 .data('conflito', obj.choque)
                                 .data('restricao', obj.restricao)
                                 .data('tresturnos', obj.tresturnos)
+                                .data('aula_horario_id', obj.id)
+                                .data('fixa', obj.fixa)
                                 .removeClass('horario-vazio')
                                 .addClass('horario-preenchido')
                                 .off()
@@ -1378,7 +1501,7 @@
                     });
 
                     // Configura eventos após preencher a tabela
-                    configurarDragAndDrop();
+                    configurarDragAndDrop();                    
 
                 }, 'json');
             } 
@@ -1392,7 +1515,7 @@
 
                 //Esconder o div do loader
                 $(".loader-demo-box").css("visibility", "hidden");
-            }
-        });
+            }                       
+        });        
     });
 </script>

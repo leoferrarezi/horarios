@@ -82,12 +82,12 @@
 					<span class="nav-link">Relatórios</span>
 				</li>
 
-				<li class="nav-item menu-items">
+				<li class="nav-item">
 					<a class="nav-link" href="<?php echo base_url('sys/relatorios'); ?>">
 						<span class="menu-icon">
 							<i class="mdi mdi-laptop"></i>
 						</span>
-						<span class="menu-title">Em construção...</span>
+						<span class="menu-title">Horários de Aula</span>
 					</a>
 				</li>
 

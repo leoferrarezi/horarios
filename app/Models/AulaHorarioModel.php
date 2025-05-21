@@ -104,6 +104,7 @@ class AulaHorarioModel extends Model
             ->where('aulas.id', $aula_id)
             ->where('aula_horario.tempo_de_aula_id', $tempo_de_aula_id)
             ->where('aula_horario.versao_id', $versao_id)
+            //->where('aula_horario.fixa !=', '1')
             ->get();
 
         if ($idHorarioAula->getNumRows() > 0)
@@ -112,6 +113,16 @@ class AulaHorarioModel extends Model
             $this->db->simpleQuery("DELETE FROM aula_horario_ambiente WHERE aula_horario_id = '$idHorarioAula'");
             $this->db->simpleQuery("DELETE FROM aula_horario WHERE id = '$idHorarioAula'");
         }
+    }
+
+    public function fixarAulaHorario($tempo_de_aula_id)
+    {
+        $this->db->simpleQuery("UPDATE aula_horario SET fixa = 1 WHERE id = '$tempo_de_aula_id'");
+    }
+
+    public function desfixarAulaHorario($tempo_de_aula_id)
+    {
+        $this->db->simpleQuery("UPDATE aula_horario SET fixa = 0 WHERE id = '$tempo_de_aula_id'");
     }
 
     public function checkAulaHorarioByVersao($versao)

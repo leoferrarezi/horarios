@@ -46,7 +46,8 @@ class Relatorios extends BaseController
     {
         $cursos = $this->request->getPost('cursos');
 
-        if (empty($cursos)) {
+        if (empty($cursos))
+        {
             return $this->response->setJSON([]);
         }
 
@@ -59,89 +60,20 @@ class Relatorios extends BaseController
         return $this->response->setJSON($turmas);
     }
 
-    public function getProfessoresByCurso()
-    {
-        $cursos = $this->request->getPost('cursos');
-
-        if (empty($cursos)) {
-            return $this->response->setJSON([]);
-        }
-
-        $professores = $this->professorModel
-            ->select('professores.id, professores.nome as text')
-            ->join('aula_professor', 'aula_professor.professor_id = professores.id')
-            ->join('aulas', 'aulas.id = aula_professor.aula_id')
-            ->join('turmas', 'turmas.id = aulas.turma_id')
-            ->whereIn('turmas.curso_id', $cursos)
-            ->where('aulas.versao_id', (new \App\Models\VersoesModel())->getVersaoByUser(auth()->id()))
-            ->groupBy('professores.id')
-            ->orderBy('professores.nome', 'ASC')
-            ->findAll();
-
-        return $this->response->setJSON($professores);
-    }
-
-    public function getAmbientesByCurso()
-    {
-        $cursos = $this->request->getPost('cursos');
-
-        if (empty($cursos)) {
-            return $this->response->setJSON([]);
-        }
-
-        $ambientes = $this->ambientesModel
-            ->select('ambientes.id, ambientes.nome as text')
-            ->join('aula_horario_ambiente', 'aula_horario_ambiente.ambiente_id = ambientes.id')
-            ->join('aula_horario', 'aula_horario.id = aula_horario_ambiente.aula_horario_id')
-            ->join('aulas', 'aulas.id = aula_horario.aula_id')
-            ->join('turmas', 'turmas.id = aulas.turma_id')
-            ->whereIn('turmas.curso_id', $cursos)
-            ->where('aula_horario.versao_id', (new \App\Models\VersoesModel())->getVersaoByUser(auth()->id()))
-            ->groupBy('ambientes.id')
-            ->orderBy('ambientes.nome', 'ASC')
-            ->findAll();
-
-        return $this->response->setJSON($ambientes);
-    }
-
-    public function getGruposByCurso()
-    {
-        $cursos = $this->request->getPost('cursos');
-
-        if (empty($cursos)) {
-            return $this->response->setJSON([]);
-        }
-
-        $grupos = $this->aulaHorarioModel
-            ->select('grupos_de_ambientes.id, grupos_de_ambientes.nome as text')
-            ->join('aulas', 'aulas.id = aula_horario.aula_id')
-            ->join('turmas', 'turmas.id = aulas.turma_id')
-            ->join('aula_horario_ambiente', 'aula_horario_ambiente.aula_horario_id = aula_horario.id')
-            ->join('ambientes', 'ambientes.id = aula_horario_ambiente.ambiente_id')
-            ->join('ambiente_grupo', 'ambiente_grupo.ambiente_id = ambientes.id')
-            ->join('grupos_de_ambientes', 'grupos_de_ambientes.id = ambiente_grupo.grupo_de_ambiente_id')
-            ->whereIn('turmas.curso_id', $cursos)
-            ->where('aula_horario.versao_id', (new \App\Models\VersoesModel())->getVersaoByUser(auth()->id()))
-            ->groupBy('grupos_de_ambientes.id')
-            ->orderBy('grupos_de_ambientes.nome', 'ASC')
-            ->findAll();
-
-        return $this->response->setJSON($grupos);
-    }
-
     public function filtrar()
     {
         $tipo = $this->request->getPost('tipo');
 
-        if (!$tipo) {
+        if (!$tipo)
+        {
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'Tipo de relatório não especificado'
             ]);
         }
 
-        // Carrega os dados com base no tipo de relatório
-        switch ($tipo) {
+        switch ($tipo)
+        {
             case 'curso':
                 $dados = $this->filtrarCursos();
                 break;
@@ -191,11 +123,13 @@ class Relatorios extends BaseController
             ->join('tempos_de_aula', 'tempos_de_aula.id = aula_horario.tempo_de_aula_id')
             ->where('aula_horario.versao_id', (new \App\Models\VersoesModel())->getVersaoByUser(auth()->id()));
 
-        if (!empty($cursos)) {
+        if (!empty($cursos))
+        {
             $builder->whereIn('cursos.id', $cursos);
         }
 
-        if (!empty($turmas)) {
+        if (!empty($turmas))
+        {
             $builder->whereIn('turmas.id', $turmas);
         }
 
@@ -233,7 +167,8 @@ class Relatorios extends BaseController
             ->join('tempos_de_aula', 'tempos_de_aula.id = aula_horario.tempo_de_aula_id')
             ->where('aula_horario.versao_id', (new \App\Models\VersoesModel())->getVersaoByUser(auth()->id()));
 
-        if (!empty($professores)) {
+        if (!empty($professores))
+        {
             $builder->whereIn('professores.id', $professores);
         }
 
@@ -270,7 +205,8 @@ class Relatorios extends BaseController
             ->join('tempos_de_aula', 'tempos_de_aula.id = aula_horario.tempo_de_aula_id')
             ->where('aula_horario.versao_id', (new \App\Models\VersoesModel())->getVersaoByUser(auth()->id()));
 
-        if (!empty($ambientes)) {
+        if (!empty($ambientes))
+        {
             $builder->whereIn('ambientes.id', $ambientes);
         }
 
@@ -279,211 +215,88 @@ class Relatorios extends BaseController
             ->orderBy('tempos_de_aula.hora_inicio')
             ->orderBy('tempos_de_aula.minuto_inicio')
             ->findAll();
-    }
+    }    
 
-    public function gerar()
+    public function exportar()
     {
-        $tipo = $this->request->getGet('tipo');
+        $pdf = new \App\Libraries\PDF();
 
-        if (!$tipo) {
-            return redirect()->to('/sys/relatorios')->with('error', 'Tipo de relatório não especificado');
-        }
+        $pdf->setCSS('
+            @page { margin: 10 !important; padding: 0 !important; margin-top: 110px !important; }
+            body { font-family: Arial, sans-serif; font-size: 10px; padding: 20px; background: #fff; color: #000; }
+            header { align-items: center; padding-bottom: 5px; margin-bottom: 50px; position: fixed; margin-top: -100px; width: 96%; }
+            header img { height: 70px; margin-right: 10px; margin-left: 10px; }
+            h1 { font-size: 15px; color:rgb(5, 56, 5); padding: 0px; margin: 0px; }
+            h2 { font-size: 14px; color: #1a5d1a; padding: 0px; margin: 0px; }
+            h3 { font-size: 13px; color: #1a5d1a; padding: 0px; margin: 0px; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 20px; table-layout:fixed; page-break-inside: avoid; }
+            .caption { font-size: 13px; font-weight: bold; background-color: #1a5d1a; color: white; padding: 6px; border-radius: 4px 4px 0 0; text-align: center; }
+            th, td { border: 1px solid #ccc; padding: 4px; text-align: center; vertical-align: middle; }
+            th { background-color: #d1e7d1; color: #1a5d1a; }
+            tr:nth-child(even) td { background-color: #f5fdf5; }
+            .hora { font-weight: bold; }
+            em { font-style: normal; font-weight: bold; display: block; margin-top: 2px; color: #3d7b3d; }
+        ');
 
-        // Carrega os dados com base no tipo de relatório
-        switch ($tipo) {
-            case 'curso':
-                return $this->gerarRelatorioCursos();
-            case 'professor':
-                return $this->gerarRelatorioProfessores();
-            case 'ambiente':
-                return $this->gerarRelatorioAmbientes();
-            default:
-                return redirect()->to('/sys/relatorios')->with('error', 'Tipo de relatório inválido');
-        }
+        $pdf->setHeader('
+            <table><tr><td width="25%"><img src="' . base_url("assets/images/logoifro.png") . '" alt="Logo IFRO"></td>
+            <td width="75%"><h1>Instituto Federal de Educação, Ciência e Tecnologia de Rondônia</h1><h2><i>Campus</i> Porto Velho Calama</h2><h3>Departamento de Apoio ao Ensino - DAPE</h3><h1>Horários por Cursos e Turmas - versão 2025.1</h1></td>
+            </tr></table>');
+
+        $pdf->setBody('
+            <table>
+                <thead>
+                    <tr>
+                        <td colspan="6" style="border: none; padding: 0px; text-align: center;">
+                            <div class="caption">Licenciatura em Física - 1º p Lic em Física</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="5%">Horário</th>
+                        <th width="19%">Segunda</th>
+                        <th width="19%">Terça</th>
+                        <th width="19%">Quarta</th>
+                        <th width="19%">Quinta</th>
+                        <th width="19%">Sexta</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="hora">19:00</td>
+                        <td>GEOMETRIA ANALIT E VETORI<br><em>Vlademir F<br>Sala 07</em></td>
+                        <td>INTROD AO CALCULO<br><em>Vlademir F<br>Sala 07</em></td>
+                        <td>FILOS DA ED ETICA PROF<br><em>Mateus G.<br>Sala 07</em></td>
+                        <td>LINGUA PORTUGUESA<br><em>Neusa T.<br>Sala 07</em></td>
+                        <td>METOD DO TRAB CIENT<br><em>Neusa T.<br>Sala 07</em></td>
+                    </tr>
+                    <tr>
+                        <td class="hora">19:50</td><td>GEOMETRIA ANALIT E VETORI<br><em>Vlademir F<br>Sala 07</em></td>
+                        <td>INTROD AO CALCULO<br><em>Vlademir F<br>Sala 07</em></td>
+                        <td>FILOS DA ED ETICA PROF<br><em>Mateus G.<br>Sala 07</em></td>
+                        <td>LINGUA PORTUGUESA<br><em>Neusa T.<br>Sala 07</em></td>
+                        <td>METOD DO TRAB CIENT<br><em>Neusa T.<br>Sala 07</em></td>
+                    </tr>
+                    <tr>
+                        <td class="hora">20:50</td>
+                        <td>HISTORIA EPIST DA FISICA<br><em>Cléver R.<br>Sala 07</em></td>
+                        <td>METOD PROJ INTEG EXTENS<br><em>Neusa T.<br>Sala 07</em></td>
+                        <td>LINGUA PORTUGUESA<br><em>Neusa T.<br>Sala 07</em></td>
+                        <td>METOD PROJ INTEG EXTENS<br><em>Neusa T.<br>Sala 07</em></td>
+                        <td>—</td>
+                    </tr>
+                    <tr>
+                        <td class="hora">21:40</td>
+                        <td>HISTORIA EPIST DA FISICA<br><em>Cléver R.<br>Sala 07</em></td>
+                        <td>METOD PROJ INTEG EXTENS<br><em>Neusa T.<br>Sala 07</em></td>
+                        <td>LINGUA PORTUGUESA<br><em>Neusa T.<br>Sala 07</em></td>
+                        <td>METOD PROJ INTEG EXTENS<br><em>Neusa T.<br>Sala 07</em></td>
+                        <td>—</td>
+                    </tr>
+                </tbody>
+            </table>
+        ');
+
+        $pdf->generatePDF();
+        print_r($this->request->getPost());
     }
-
-    protected function gerarRelatorioCursos()
-    {
-        $cursos = $this->request->getGet('cursos') ?? [];
-        $turmas = $this->request->getGet('turmas') ?? [];
-
-        $builder = $this->aulaHorarioModel
-            ->select('
-                cursos.nome as curso,
-                turmas.sigla as turma,
-                disciplinas.nome as disciplina,
-                professores.nome as professor,
-                ambientes.nome as ambiente,
-                tempos_de_aula.dia_semana,
-                CONCAT(LPAD(tempos_de_aula.hora_inicio, 2, "0"), ":", LPAD(tempos_de_aula.minuto_inicio, 2, "0")) as hora_inicio,
-                CONCAT(LPAD(tempos_de_aula.hora_fim, 2, "0"), ":", LPAD(tempos_de_aula.minuto_fim, 2, "0")) as hora_fim
-            ')
-            ->join('aulas', 'aulas.id = aula_horario.aula_id')
-            ->join('disciplinas', 'disciplinas.id = aulas.disciplina_id')
-            ->join('turmas', 'turmas.id = aulas.turma_id')
-            ->join('cursos', 'cursos.id = turmas.curso_id')
-            ->join('aula_professor', 'aula_professor.aula_id = aulas.id')
-            ->join('professores', 'professores.id = aula_professor.professor_id')
-            ->join('aula_horario_ambiente', 'aula_horario_ambiente.aula_horario_id = aula_horario.id')
-            ->join('ambientes', 'ambientes.id = aula_horario_ambiente.ambiente_id')
-            ->join('tempos_de_aula', 'tempos_de_aula.id = aula_horario.tempo_de_aula_id')
-            ->where('aula_horario.versao_id', (new \App\Models\VersoesModel())->getVersaoByUser(auth()->id()));
-
-        if (!empty($cursos)) {
-            $builder->whereIn('cursos.id', $cursos);
-        }
-
-        if (!empty($turmas)) {
-            $builder->whereIn('turmas.id', $turmas);
-        }
-
-        $dados = $builder->orderBy('cursos.nome')
-            ->orderBy('turmas.sigla')
-            ->orderBy('tempos_de_aula.dia_semana')
-            ->orderBy('tempos_de_aula.hora_inicio')
-            ->orderBy('tempos_de_aula.minuto_inicio')
-            ->findAll();
-
-        // Organiza os dados por curso e turma para o relatório
-        $relatorio = [];
-        foreach ($dados as $item) {
-            $curso = $item['curso'];
-            $turma = $item['turma'];
-
-            if (!isset($relatorio[$curso])) {
-                $relatorio[$curso] = [];
-            }
-
-            if (!isset($relatorio[$curso][$turma])) {
-                $relatorio[$curso][$turma] = [];
-            }
-
-            $relatorio[$curso][$turma][] = $item;
-        }
-
-        return $this->gerarPDF('relatorio_cursos', [
-            'titulo' => 'Relatório por Cursos e Turmas',
-            'dados' => $relatorio,
-            'filtros' => [
-                'cursos' => $this->cursosModel->whereIn('id', $cursos)->findAll(),
-                'turmas' => $this->turmasModel->whereIn('id', $turmas)->findAll()
-            ]
-        ]);
-    }
-
-    protected function gerarRelatorioProfessores()
-    {
-        $professores = $this->request->getGet('professores') ?? [];
-
-        $builder = $this->aulaHorarioModel
-            ->select('
-                professores.nome as professor,
-                cursos.nome as curso,
-                turmas.sigla as turma,
-                disciplinas.nome as disciplina,
-                ambientes.nome as ambiente,
-                tempos_de_aula.dia_semana,
-                CONCAT(LPAD(tempos_de_aula.hora_inicio, 2, "0"), ":", LPAD(tempos_de_aula.minuto_inicio, 2, "0")) as hora_inicio,
-                CONCAT(LPAD(tempos_de_aula.hora_fim, 2, "0"), ":", LPAD(tempos_de_aula.minuto_fim, 2, "0")) as hora_fim
-            ')
-            ->join('aulas', 'aulas.id = aula_horario.aula_id')
-            ->join('disciplinas', 'disciplinas.id = aulas.disciplina_id')
-            ->join('turmas', 'turmas.id = aulas.turma_id')
-            ->join('cursos', 'cursos.id = turmas.curso_id')
-            ->join('aula_professor', 'aula_professor.aula_id = aulas.id')
-            ->join('professores', 'professores.id = aula_professor.professor_id')
-            ->join('aula_horario_ambiente', 'aula_horario_ambiente.aula_horario_id = aula_horario.id')
-            ->join('ambientes', 'ambientes.id = aula_horario_ambiente.ambiente_id')
-            ->join('tempos_de_aula', 'tempos_de_aula.id = aula_horario.tempo_de_aula_id')
-            ->where('aula_horario.versao_id', (new \App\Models\VersoesModel())->getVersaoByUser(auth()->id()));
-
-        if (!empty($professores)) {
-            $builder->whereIn('professores.id', $professores);
-        }
-
-        $dados = $builder->orderBy('professores.nome')
-            ->orderBy('tempos_de_aula.dia_semana')
-            ->orderBy('tempos_de_aula.hora_inicio')
-            ->orderBy('tempos_de_aula.minuto_inicio')
-            ->findAll();
-
-        // Organiza os dados por professor para o relatório
-        $relatorio = [];
-        foreach ($dados as $item) {
-            $professor = $item['professor'];
-
-            if (!isset($relatorio[$professor])) {
-                $relatorio[$professor] = [];
-            }
-
-            $relatorio[$professor][] = $item;
-        }
-
-        return $this->gerarPDF('relatorio_professores', [
-            'titulo' => 'Relatório por Professores',
-            'dados' => $relatorio,
-            'filtros' => [
-                'professores' => $this->professorModel->whereIn('id', $professores)->findAll()
-            ]
-        ]);
-    }
-
-    protected function gerarRelatorioAmbientes()
-    {
-        $ambientes = $this->request->getGet('ambientes') ?? [];
-
-        $builder = $this->aulaHorarioModel
-            ->select('
-                ambientes.nome as ambiente,
-                cursos.nome as curso,
-                turmas.sigla as turma,
-                disciplinas.nome as disciplina,
-                professores.nome as professor,
-                tempos_de_aula.dia_semana,
-                CONCAT(LPAD(tempos_de_aula.hora_inicio, 2, "0"), ":", LPAD(tempos_de_aula.minuto_inicio, 2, "0")) as hora_inicio,
-                CONCAT(LPAD(tempos_de_aula.hora_fim, 2, "0"), ":", LPAD(tempos_de_aula.minuto_fim, 2, "0")) as hora_fim
-            ')
-            ->join('aulas', 'aulas.id = aula_horario.aula_id')
-            ->join('disciplinas', 'disciplinas.id = aulas.disciplina_id')
-            ->join('turmas', 'turmas.id = aulas.turma_id')
-            ->join('cursos', 'cursos.id = turmas.curso_id')
-            ->join('aula_professor', 'aula_professor.aula_id = aulas.id')
-            ->join('professores', 'professores.id = aula_professor.professor_id')
-            ->join('aula_horario_ambiente', 'aula_horario_ambiente.aula_horario_id = aula_horario.id')
-            ->join('ambientes', 'ambientes.id = aula_horario_ambiente.ambiente_id')
-            ->join('tempos_de_aula', 'tempos_de_aula.id = aula_horario.tempo_de_aula_id')
-            ->where('aula_horario.versao_id', (new \App\Models\VersoesModel())->getVersaoByUser(auth()->id()));
-
-        if (!empty($ambientes)) {
-            $builder->whereIn('ambientes.id', $ambientes);
-        }
-
-        $dados = $builder->orderBy('ambientes.nome')
-            ->orderBy('tempos_de_aula.dia_semana')
-            ->orderBy('tempos_de_aula.hora_inicio')
-            ->orderBy('tempos_de_aula.minuto_inicio')
-            ->findAll();
-
-        // Organiza os dados por ambiente para o relatório
-        $relatorio = [];
-        foreach ($dados as $item) {
-            $ambiente = $item['ambiente'];
-
-            if (!isset($relatorio[$ambiente])) {
-                $relatorio[$ambiente] = [];
-            }
-
-            $relatorio[$ambiente][] = $item;
-        }
-
-        return $this->gerarPDF('relatorio_ambientes', [
-            'titulo' => 'Relatório por Ambientes',
-            'dados' => $relatorio,
-            'filtros' => [
-                'ambientes' => $this->ambientesModel->whereIn('id', $ambientes)->findAll()
-            ]
-        ]);
-    }
-
-    protected function gerarPDF($view, $data) {}
 }

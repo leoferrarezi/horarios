@@ -798,7 +798,7 @@
                         horarioSelecionado.html(`
                             <div class="card border-1 shadow-sm bg-gradient" style="cursor: pointer; height: 100%;">
                                 <div class="card-body p-1 d-flex flex-column justify-content-center align-items-center text-center">
-                                    <h6 class="text-wrap mb-0 fs-6 ${conflitoStyle}" style="font-size: 0.75rem !important;">
+                                    <h6 class="text-wrap mb-0 fs-6 ${conflitoStyle}" style="font-size: 0.75rem !important; margin-right: 15px">
                                         <i class="fa ${conflitoIcon} me-1"></i>
                                         ${aula.disciplina}
                                     </h6>
@@ -810,12 +810,12 @@
                                         <i class="mdi mdi-door fs-6 text-muted me-1"></i>
                                         <small class="text-wrap text-secondary" style="font-size: 0.65rem !important;">${ambientesSelecionadosNome.join("<br />")}</small>
                                     </div>
-                                    <div style="width: 100%; text-align: right;">
+                                    <div style="width: 100%; text-align: right; top: 0; position: absolute">
                                         <i class="mdi mdi-lock fs-6 text-primary me-1" id="btnFixar_horario_${aulaHorarioId}"></i>
                                     </div>
                                 </div>
                             </div>
-                        `);
+                        `);                        
                             
                         $("#btnFixar_horario_" + aulaHorarioId).off().click(function(e) 
                         {

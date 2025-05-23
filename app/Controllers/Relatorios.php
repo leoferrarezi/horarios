@@ -349,7 +349,7 @@ class Relatorios extends BaseController
             sort($temHorarios);
 
             if($conta > 0 && $conta < sizeof($tabelas) && sizeof($temHorarios) < 10)
-                $pdf->appendHTML('<div class="page_break"></div>');
+                $pdf->appendHTML('<div class="page_break">asd</div>');
 
             $pdf->appendHTML('
                 <table>
@@ -458,7 +458,7 @@ class Relatorios extends BaseController
                 </table>
             ');
 
-            $conta++;            
+            $conta++;
         }
 
         $pdf->generatePDF();

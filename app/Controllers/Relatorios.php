@@ -309,7 +309,7 @@ class Relatorios extends BaseController
             tr:nth-child(even) td { background-color: #f5fdf5; }
             .hora { font-weight: bold; }
             em { font-style: normal;  display: block; margin-top: 1px; color: #3d7b3d; }
-            .page_break { page-break-after: always; }
+            .page_break { page-break-before: always; }
         ');
 
         $pdf->setHeader('
@@ -349,7 +349,7 @@ class Relatorios extends BaseController
             sort($temHorarios);
 
             if($conta > 0 && $conta < sizeof($tabelas) && sizeof($temHorarios) < 10)
-                $pdf->appendHTML('<div class="page_break">asd</div>');
+                $pdf->appendHTML('<div class="page_break"></div>');
 
             $pdf->appendHTML('
                 <table>

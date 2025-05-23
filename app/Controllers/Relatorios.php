@@ -309,7 +309,7 @@ class Relatorios extends BaseController
             tr:nth-child(even) td { background-color: #f5fdf5; }
             .hora { font-weight: bold; }
             em { font-style: normal;  display: block; margin-top: 1px; color: #3d7b3d; }
-            .page_break { page-break-before: always; }
+            .page_break { page-break-after: always; }
         ');
 
         $pdf->setHeader('
@@ -348,6 +348,9 @@ class Relatorios extends BaseController
             sort($temDias);
             sort($temHorarios);
 
+            if($conta > 0 && $conta < sizeof($tabelas) && sizeof($temHorarios) < 9)
+                $pdf->appendHTML('<div class="page_break"></div>');
+
             $pdf->appendHTML('
                 <table>
                     <thead>
@@ -369,7 +372,6 @@ class Relatorios extends BaseController
             $pdf->appendHTML('</tr></thead><tbody>');
 
             $ultimoTurno = 0;
-            
 
             foreach ($temHorarios as $horario)
             {
@@ -456,10 +458,7 @@ class Relatorios extends BaseController
                 </table>
             ');
 
-            $conta++;
-
-            if($conta < sizeof($tabelas))
-                $pdf->appendHTML('<div class="page_break"></div>');
+            $conta++;            
         }
 
         $pdf->generatePDF();

@@ -83,26 +83,27 @@ class Turmas extends BaseController
     public function deletar()
     {
         $dadosPost = $this->request->getPost();
-        $id = strip_tags($dadosPost['id']);
+        $id = (int)strip_tags($dadosPost['id']);
 
         $turmas = new TurmasModel();
+        try {
+            $restricoes = $turmas->getRestricoes(['id' => $id]);
 
-        try 
-        {
-            $turmas->verificarReferencias(['id' => $id]);
-
-            if ($turmas->delete($id)) 
-            {
-                session()->setFlashdata('sucesso', 'Turma excluída com sucesso.');
-                return redirect()->to(base_url('/sys/turma'));
-            } 
-            else 
-            {
-                return redirect()->to(base_url('/sys/turma'))->with('erro', 'Falha ao deletar disciplina');
+            if (!$restricoes['aulas']) {
+                if ($turmas->delete($id)) {
+                    session()->setFlashdata('sucesso', 'Turma removida com sucesso!');
+                    return redirect()->to(base_url('/sys/turma'));
+                } else {
+                    return redirect()->to(base_url('/sys/turma'))->with('erro', 'Erro inesperado ao remover Turma');
+                }
+            } else {
+                $mensagem = "A turma não pode ser excluída.<br>Esta turma possui ";
+                if ($restricoes['aulas']) {
+                    $mensagem = $mensagem . "aula(s) relacionada(s) a ela!";
+                }
+                throw new ReferenciaException($mensagem);
             }
-        } 
-        catch (ReferenciaException $e) 
-        {
+        } catch (ReferenciaException $e) {
             session()->setFlashdata('erro', $e->getMessage());
             return redirect()->to(base_url('/sys/turma'));
         }

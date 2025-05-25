@@ -74,16 +74,15 @@ class MatrizCurricular extends BaseController
                     return redirect()->to(base_url('/sys/matriz'))->with('erro', 'Erro inesperado ao remover Matriz');
                 }
             } else {
+                $mensagem = "A matriz não pode ser excluída.<br>Esta matriz possui ";
                 if ($restricoes['cursos'] && $restricoes['disciplinas']) {
-                    throw new ReferenciaException("A matriz não pode ser excluída. <br>
-                    Esta matriz possui curso(s) e disciplina(s) relacionadas a ela!");
+                    $mensagem = $mensagem . "curso(s) e disciplina(s) relacionadas a ela!";
                 } else if ($restricoes['cursos']) {
-                    throw new ReferenciaException("A matriz não pode ser excluída. <br>
-                    Esta matriz possui curso(s) relacionado(s) a ela!");
+                    $mensagem = $mensagem . "curso(s) relacionado(s) a ela!";
                 } else {
-                    throw new ReferenciaException("A matriz não pode ser excluída. <br>
-                    Esta matriz possui disciplina(s) relacionada(s) a ela!");
+                    $mensagem = $mensagem . "disciplina(s) relacionada(s) a ela!";
                 }
+                throw new ReferenciaException($mensagem);
             }
 
         } catch (ReferenciaException $e) {

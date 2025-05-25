@@ -27,8 +27,8 @@ class Aulas extends BaseController
 
 		$data['aulas'] = $aulaModel->findAll();
 		$data['turmas'] = $turmasModel->orderBy('CHAR_LENGTH(sigla)')->orderBy('sigla')->findAll();
-		$data['cursos'] = $cursosModel->findAll();
-		$data['disciplinas'] = $disciplinasModel->findAll();
+		$data['cursos'] = $cursosModel->orderBy('nome')->findAll();
+		$data['disciplinas'] = $disciplinasModel->orderBy('nome')->findAll();
 		$data['professores'] = $professorModel->orderBy('nome')->findAll();
 		$data['matrizes'] = $matrizModel->findAll();
 

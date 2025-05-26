@@ -103,22 +103,21 @@ class Professor extends BaseController
 
             if (!$restricoes['aulas'] && !$restricoes['regras']) {
                 if ($professorModel->delete($id)) {
-                    session()->setFlashdata('sucesso', 'Professor removido com sucesso!');
+                    session()->setFlashdata('sucesso', 'Professor excluído com sucesso!');
                     return redirect()->to(base_url('/sys/professor'));
                 } else {
-                    return redirect()->to(base_url('/sys/professor'))->with('erro', 'Erro inesperado ao remover Professor');
+                    return redirect()->to(base_url('/sys/professor'))->with('erro', 'Erro inesperado ao excluir Professor!');
                 }
             } else {
+                $mensagem = "O professor não pode ser excluído.<br>Este professor possui ";
                 if ($restricoes['aulas'] && $restricoes['regras']) {
-                    throw new ReferenciaException("O professor não pode ser excluído. <br>
-                    Este professor possui aula(s) e horário(s) relacionados a ele!");
+                    $mensagem = $mensagem . "aula(s) e horário(s) relacionados a ele!";
                 } else if ($restricoes['aulas']) {
-                    throw new ReferenciaException("O professor não pode ser excluído. <br>
-                    Este professor possui aula(s) relacionada(s) a ele!");
+                    $mensagem = $mensagem . "aula(s) relacionada(s) a ele!";
                 } else {
-                    throw new ReferenciaException("O professor não pode ser excluído. <br>
-                    Este professor possui horário(s) relacionado(s) a ele!");
+                    $mensagem = $mensagem . "horário(s) relacionado(s) a ele!";
                 }
+                throw new ReferenciaException($mensagem);
             }
 
         } catch (ReferenciaException $e) {

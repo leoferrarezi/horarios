@@ -89,7 +89,7 @@ class DisciplinasModel extends Model
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
-    protected $beforeDelete   = ['verificarReferencias'];
+    protected $beforeDelete   = ['getRestricoes'];
     protected $afterDelete    = [];
 
     public function getDisciplinaWithMatrizAndGrupo()
@@ -105,48 +105,17 @@ class DisciplinasModel extends Model
         $this->where('matriz_id', $matriz)->delete();
     }
 
-    public function verificarReferencias(array $data)
+    public function getRestricoes($id)
     {
-        $id = $data['id'];
-
-        $referencias = $this->verificarReferenciasEmTabelas($id);
-        $referencias = implode(", ", $referencias);
-        // Se o ID for referenciado em outras tabelas, lança a exceção
-        if (!empty($referencias)) {
-            // Passa o nome das tabelas onde o ID foi encontrado para a exceção
-            throw new ReferenciaException("Esta disciplina não pode ser excluída, porque está em uso. <br>
-                    Para excluir esta disciplina, primeiro remova as associações em {$referencias} que estão utilizando esta disciplina'.");
-        }
-
-        // Se não houver referências, retorna os dados para permitir a exclusão
-        return $data;
-    }
-
-    private function verificarReferenciasEmTabelas($id)
-    {
-        // Conectar ao banco de dados
         $db = \Config\Database::connect();
+        $id = $id['id'];
 
-        // Tabelas e colunas de chave estrangeira a serem verificadas
-        $tabelas = [
-            'aulas' => 'disciplina_id',
+        $aulas = $db->table('aulas')->where('disciplina_id', $id)->get()->getNumRows();
+        
+        $restricoes = [
+            'aulas' => $aulas
         ];
 
-        $referenciasEncontradas = [];
-
-        // Verificar se o ID é referenciado
-        foreach ($tabelas as $tabela => $fk_coluna) {
-            $builder = $db->table($tabela);
-            $builder->where($fk_coluna, $id);
-            $query = $builder->get();
-
-            if ($query->getNumRows() > 0) {
-                // Adiciona a tabela à lista de referências encontradas
-                $referenciasEncontradas[] = $tabela;
-            }
-        }
-
-        // Retorna as tabelas onde o ID foi encontrado
-        return $referenciasEncontradas;
+        return $restricoes;
     }
 }

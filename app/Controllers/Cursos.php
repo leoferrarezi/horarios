@@ -66,24 +66,30 @@ class Cursos extends BaseController
     }
     public function deletar()
     {
-
         $dadosPost = $this->request->getPost();
-        $id = strip_tags($dadosPost['id']);
+        $id = (int)strip_tags($dadosPost['id']);
 
         $cursoModel = new CursosModel();
         try {
+            $restricoes = $cursoModel->getRestricoes(['id' => $id]);
 
-            $cursoModel->verificarReferencias(['id' => $id]);
-
-            if ($cursoModel->delete($id)) {
-                session()->setFlashdata('sucesso', 'Curso removido com sucesso!');
-                return redirect()->to(base_url('/sys/curso'));
+            if (!$restricoes['turmas']) {
+                if ($cursoModel->delete($id)) {
+                    session()->setFlashdata('sucesso', 'Curso excluído com sucesso!');
+                    return redirect()->to(base_url('/sys/curso'));
+                } else {
+                    return redirect()->to(base_url('/sys/curso'))->with('erro', 'Erro inesperado ao excluir Curso!');
+                }
             } else {
-                return redirect()->to(base_url('/sys/curso'))->with('erro', 'Falha ao deletar curso');
+                $mensagem = "O curso não pode ser excluído.<br>Este curso possui ";
+                if ($restricoes['turmas']) {
+                    $mensagem = $mensagem . "turma(s) relacionada(s) a ele!";
+                }
+                throw new ReferenciaException($mensagem);
             }
         } catch (ReferenciaException $e) {
             session()->setFlashdata('erro', $e->getMessage());
-            return redirect()->to(base_url('/sys/curso'))->with('erros', ['erro' => $e->getMessage()]);
+            return redirect()->to(base_url('/sys/curso'));
         }
     }
 

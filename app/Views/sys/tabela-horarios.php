@@ -584,6 +584,7 @@
                             .removeClass('text-danger');
                     }
 
+
                     if($horario.data('conflitoAmbiente') == 1)
                     {
                         $('#modalRemocaoConflitoAmbiente')
@@ -817,21 +818,23 @@
                         {
                             conflitoStyle = "text-danger";
                             conflitoIcon = "fa-warning";
-                            restricao = data.split("-")[2];
+                            restricao = data.split("-")[3];
                         }
                         else if(data.indexOf("AMBIENTE") >= 0)
                         {
-                            aulaConflito = data.split("-")[2];
+                            aulaConflito = data.split("-")[3];
                             conflitoStyle = "text-warning";
                             conflitoIcon = "fa-warning";
                             conflitoAmbiente = 1;
+                            alert('amb-' + conflitoAmbiente)
                         }
                         else if(data.indexOf("PROFESSOR") >= 0)
                         {
-                            aulaConflito = data.split("-")[2];
+                            aulaConflito = data.split("-")[3];
                             conflitoStyle = "text-warning";
                             conflitoIcon = "fa-warning";
                             conflitoProfessor = 1;
+                            alert('prof-' + conflitoProfessor)
                         }
 
                         // Preenche o horário selecionado

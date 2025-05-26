@@ -104,7 +104,8 @@ class VersoesModel extends Model
         //$builder->ignore(true)->setQueryAsData(new RawSql($query), null, "aula_id, tempo_de_aula_id, versao_id, ambiente_id")->insertBatch();
     }
 
-    public function getRestricoes($id) {
+    public function getRestricoes($id) 
+    {
         $db = \Config\Database::connect();
         $id = $id['id'];
 

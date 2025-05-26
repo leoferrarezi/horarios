@@ -65,7 +65,7 @@ class AulasModel extends Model
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
-    protected $beforeDelete   = ['getReferences'];
+    protected $beforeDelete   = ['getRestricoes'];
     protected $afterDelete    = [];
 
     public function getAulasComTurmaDisciplinaEProfessores()
@@ -107,7 +107,7 @@ class AulasModel extends Model
         }
     }
 
-    public function getReferences($id) 
+    public function getRestricoes($id) 
     {
         $db = \Config\Database::connect();
         $id = $id['id'];

@@ -103,7 +103,7 @@ class Aulas extends BaseController
 
 		$aulasModel = new AulasModel();
 		try {
-			$restricoes = $aulasModel->getReferences(['id' => $id]);
+			$restricoes = $aulasModel->getRestricoes(['id' => $id]);
 
 			if (!$restricoes['horarios']) {
 				$aulaProfModel = new AulaProfessorModel();

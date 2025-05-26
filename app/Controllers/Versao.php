@@ -70,7 +70,7 @@ class Versao extends BaseController
 
             if (!$restricoes['horarios'] && !$restricoes['aulas']) {
                 if ($versaoModel->delete($id)) {
-                    session()->setFlashdata('sucesso', 'Versão removida com sucesso!');
+                    session()->setFlashdata('sucesso', 'Versão excluída com sucesso!');
                     
                     $versao = $versaoModel->getVersaoByUser(auth()->id());
 
@@ -82,7 +82,7 @@ class Versao extends BaseController
 
                     return redirect()->to(base_url('/sys/versao'));
                 } else {
-                    return redirect()->to(base_url('/sys/versao'))->with('erro', 'Erro inesperado ao remover Versão');
+                    return redirect()->to(base_url('/sys/versao'))->with('erro', 'Erro inesperado ao excluir Versão!');
                 }
             } else {
                 $mensagem = "A versão não pode ser excluída.<br>Esta versão possui ";

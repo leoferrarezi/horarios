@@ -103,10 +103,10 @@ class Professor extends BaseController
 
             if (!$restricoes['aulas'] && !$restricoes['regras']) {
                 if ($professorModel->delete($id)) {
-                    session()->setFlashdata('sucesso', 'Professor removido com sucesso!');
+                    session()->setFlashdata('sucesso', 'Professor excluído com sucesso!');
                     return redirect()->to(base_url('/sys/professor'));
                 } else {
-                    return redirect()->to(base_url('/sys/professor'))->with('erro', 'Erro inesperado ao remover Professor');
+                    return redirect()->to(base_url('/sys/professor'))->with('erro', 'Erro inesperado ao excluir Professor!');
                 }
             } else {
                 $mensagem = "O professor não pode ser excluído.<br>Este professor possui ";

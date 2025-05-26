@@ -91,10 +91,10 @@ class Turmas extends BaseController
 
             if (!$restricoes['aulas']) {
                 if ($turmas->delete($id)) {
-                    session()->setFlashdata('sucesso', 'Turma removida com sucesso!');
+                    session()->setFlashdata('sucesso', 'Turma excluída com sucesso!');
                     return redirect()->to(base_url('/sys/turma'));
                 } else {
-                    return redirect()->to(base_url('/sys/turma'))->with('erro', 'Erro inesperado ao remover Turma');
+                    return redirect()->to(base_url('/sys/turma'))->with('erro', 'Erro inesperado ao excluir Turma!');
                 }
             } else {
                 $mensagem = "A turma não pode ser excluída.<br>Esta turma possui ";

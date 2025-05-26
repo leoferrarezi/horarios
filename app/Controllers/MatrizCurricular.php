@@ -68,10 +68,10 @@ class MatrizCurricular extends BaseController
 
             if (!$restricoes['cursos'] && !$restricoes['disciplinas']) {
                 if ($matrizModel->delete($id)) {
-                    session()->setFlashdata('sucesso', 'Matriz Curricular removida com sucesso!');
+                    session()->setFlashdata('sucesso', 'Matriz Curricular excluída com sucesso!');
                     return redirect()->to(base_url('/sys/matriz'));
                 } else {
-                    return redirect()->to(base_url('/sys/matriz'))->with('erro', 'Erro inesperado ao remover Matriz');
+                    return redirect()->to(base_url('/sys/matriz'))->with('erro', 'Erro inesperado ao excluir Matriz!');
                 }
             } else {
                 $mensagem = "A matriz não pode ser excluída.<br>Esta matriz possui ";

@@ -62,6 +62,7 @@
                                     <tr>
                                         <th>Nome</th>
                                         <th>Matriz</th>
+                                        <th>Regime</th>
                                         <th>Ações</th>
                                     </tr>
                                 </thead>
@@ -71,6 +72,7 @@
                                             <tr>
                                                 <td><?php echo esc($curso['nome']); ?></td>
                                                 <td><?php echo esc($curso['nome_matriz']); ?></td>
+                                                <td><?php echo ($curso['regime'] == 1) ? "Anual" : "Semestral"; ?></td>
                                                 <td>
                                                     <div class="d-flex">
                                                         <!-- o elemento <span> é apenas para mostrar o tooltip -->
@@ -83,7 +85,8 @@
                                                                 data-bs-target="#modal-edit-curso"
                                                                 data-id="<?php echo esc($curso['id']); ?>"
                                                                 data-nome="<?php echo esc($curso['nome']); ?>"
-                                                                data-matriz_id="<?php echo esc($curso['matriz_id']); ?>">
+                                                                data-matriz_id="<?php echo esc($curso['matriz_id']); ?>"
+                                                                data-regime="<?php echo esc($curso['regime']); ?>">
                                                                 <!-- icone do botão -->
                                                                 <i class="fa fa-edit"></i>
                                                             </button>
@@ -206,7 +209,7 @@
                     [1, 'asc']
                 ],
                 //Desativa a ordenação por ações
-                columns: [null, null, {
+                columns: [null, null, null, {
                     orderable: false
                 }]
             });
@@ -221,6 +224,7 @@
                 // Extrair as informações dos atributos data-* 
                 var nome = button.data('nome');
                 var matriz = button.data('matriz_id');
+                var regime = button.data('regime');
                 var id = button.data('id');
 
                 // Formar o modal com os dados preenchidos
@@ -229,6 +233,7 @@
                 modal.find('#edit-nome').val(nome);
                 // Definir o valor no select antes de reiniciar o Select2
                 modal.find('#edit-matriz').val(matriz); // Atualiza a seleção do select
+                modal.find('input[name="regime"][value="' + regime + '"]').prop('checked', true);
 
                 //reinicia o select2
                 $('#edit-matriz').select2('destroy');

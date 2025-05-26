@@ -14,7 +14,7 @@
                     <div class="form-group">
                         <label for="edit-nome">Nome</label>
                         <input type="text" class="form-control" required
-                            id="edit-nome" name="nome" placeholder="Digite o nome do professor">
+                            id="edit-nome" name="nome" placeholder="Digite o nome do curso">
                     </div>
                     <div class="form-group">
                         <label for="edit-matriz">Matriz</label>
@@ -23,6 +23,19 @@
                                 <option value="<?php echo esc($matriz['id']) ?>"><?php echo esc($matriz['nome']) ?></option>
                             <?php endforeach; ?>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="regimeOpts">Regime</label>
+                        <div id="regimeOpts">                            
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="regime" id="Radio1" value="1" required <?php echo (old('regime') == '1') ? 'checked' : '' ?>>
+                                <label class="form-check-label text-light" for="Radio1">Anual</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="regime" id="Radio2" value="2" <?php echo (old('regime') == '2') ? 'checked' : '' ?>>
+                                <label class="form-check-label text-light" for="Radio2">Semestral</label>
+                            </div>                            
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

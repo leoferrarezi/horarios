@@ -13,7 +13,7 @@ class CursosModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['nome', 'matriz_id'];
+    protected $allowedFields    = ['nome', 'matriz_id', 'regime'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

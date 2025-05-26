@@ -77,23 +77,31 @@ class Disciplinas extends BaseController
     }
     public function deletar()
     {
-
         $dadosPost = $this->request->getPost();
-        $id = strip_tags($dadosPost['id']);
+        $id = (int)strip_tags($dadosPost['id']);
 
         $disciplinaModel = new DisciplinasModel();
         try {
-            $disciplinaModel->verificarReferencias(['id' => $id]);
+            $restricoes = $disciplinaModel->getRestricoes(['id' => $id]);
 
-            if ($disciplinaModel->delete($id)) {
-                session()->setFlashdata('sucesso', 'Disciplina removida com sucesso!');
-                return redirect()->to(base_url('/sys/disciplina'));
+            if (!$restricoes['aulas']) {
+                if ($disciplinaModel->delete($id)) {
+                    session()->setFlashdata('sucesso', 'Disciplina excluída com sucesso!');
+                    return redirect()->to(base_url('/sys/disciplina'));
+                } else {
+                    return redirect()->to(base_url('/sys/disciplina'))->with('erro', 'Erro inesperado ao excluir Disciplina!');
+                }
             } else {
-                return redirect()->to(base_url('/sys/disciplina'))->with('erro', 'Falha ao deletar disciplina');
+                $mensagem = "A disciplina não pode ser excluída.<br>Esta disciplina possui ";
+                if ($restricoes['aulas']) {
+                    $mensagem = $mensagem . "aula(s) relacionada(s) a ela!";
+                }
+                throw new ReferenciaException($mensagem);
             }
+            
         } catch (ReferenciaException $e) {
-            session()->setFlashdata('erros', $e->getMessage());
-            return redirect()->to(base_url('/sys/disciplina'))->with('erros', ['erro' => $e->getMessage()]);
+            session()->setFlashdata('erro', $e->getMessage());
+            return redirect()->to(base_url('/sys/disciplina'));
         }
     }
 }

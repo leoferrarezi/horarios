@@ -62,49 +62,42 @@ class Versao extends BaseController
     public function deletar()
     {
         $dadosPost = $this->request->getPost();
-        $id = strip_tags($dadosPost['id']);
+        $id = (int)strip_tags($dadosPost['id']);
         
-        $aulaModel = new AulasModel();
-
-        if($aulaModel->checkAulaByVersao($id)) 
-        {
-            return redirect()->to(base_url('/sys/versao'))->with('erros', ['erro' => 'Não é possível excluir a versão, pois existem aulas vinculadas a ela.']);
-        }
-
-        $aulaHorarioModel = new AulaHorarioModel();
-
-        if($aulaHorarioModel->checkAulaHorarioByVersao($id)) 
-        {
-            return redirect()->to(base_url('/sys/versao'))->with('erros', ['erro' => 'Não é possível excluir a versão, pois existem horários de aulas vinculados a ela.']);
-        }
-
         $versaoModel = new VersoesModel();
+        try {
+            $restricoes = $versaoModel->getRestricoes(['id' => $id]);
 
-        try 
-        {
-            if ($versaoModel->delete($id)) 
-            {               
-                session()->setFlashdata('sucesso', 'Versão excluído com sucesso.');
+            if (!$restricoes['horarios'] && !$restricoes['aulas']) {
+                if ($versaoModel->delete($id)) {
+                    session()->setFlashdata('sucesso', 'Versão excluída com sucesso!');
+                    
+                    $versao = $versaoModel->getVersaoByUser(auth()->id());
 
-                $versao = $versaoModel->getVersaoByUser(auth()->id());
+                    if($versao == $id) 
+                    {
+                        $versao = $versaoModel->getLastVersion();
+                        $versaoModel->setVersaoByUser(auth()->id(), $versao);
+                    }
 
-                if($versao == $id) 
-                {
-                    $versao = $versaoModel->getLastVersion();
-                    $versaoModel->setVersaoByUser(auth()->id(), $versao);
+                    return redirect()->to(base_url('/sys/versao'));
+                } else {
+                    return redirect()->to(base_url('/sys/versao'))->with('erro', 'Erro inesperado ao excluir Versão!');
                 }
-
-                return redirect()->to(base_url('/sys/versao'));
-
-            } 
-            else 
-            {
-                return redirect()->to(base_url('/sys/versao'))->with('erro', 'Falha ao deletar versão');
+            } else {
+                $mensagem = "A versão não pode ser excluída.<br>Esta versão possui ";
+                if ($restricoes['aulas'] && $restricoes['horarios']) {
+                    $mensagem = $mensagem . "aula(s) e horário(s) de aula relacionados a ela!";
+                } else if ($restricoes['aulas']) {
+                    $mensagem = $mensagem . "aula(s) relacionada(s) a ela!";
+                } else {
+                    $mensagem = $mensagem . "horário(s) de aula relacionado(s) a ela!";
+                }
+                throw new ReferenciaException($mensagem);
             }
-        } 
-        catch (ReferenciaException $e) 
-        {
-            return redirect()->to(base_url('/sys/versao'))->with('erros', ['erro' => $e->getMessage()]);
+        } catch (ReferenciaException $e) {
+            session()->setFlashdata('erro', $e->getMessage());
+            return redirect()->to(base_url('/sys/versao'));
         }
     }
 

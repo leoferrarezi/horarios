@@ -13,6 +13,7 @@ use App\Models\ProfessorModel;
 use App\Models\MatrizCurricularModel;
 use App\Models\VersoesModel;
 use App\Models\AulaHorarioModel;
+use CodeIgniter\Exceptions\ReferenciaException;
 
 class Aulas extends BaseController
 {
@@ -98,23 +99,32 @@ class Aulas extends BaseController
 	public function deletar()
 	{
 		$dadosPost = $this->request->getPost();
-		$id = strip_tags($dadosPost['id']);
+		$id = (int)strip_tags($dadosPost['id']);
 
-		$aulaHorarioModel = new AulaHorarioModel();
-		
-		if($aulaHorarioModel->checkAulaHorarioByAula($id))
-		{
-			return redirect()->to(base_url('/sys/aulas'))->with('erros', ['erro' => 'Não é possível excluir a aula, pois ela consta vinculada em horário.']);
+		$aulasModel = new AulasModel();
+		try {
+			$restricoes = $aulasModel->getRestricoes(['id' => $id]);
+
+			if (!$restricoes['horarios']) {
+				$aulaProfModel = new AulaProfessorModel();
+				$aulaProfModel->where('aula_id', $id)->delete();
+				if ($aulasModel->delete($id)) {
+					session()->setFlashdata('sucesso', 'Aula excluída com sucesso!');
+					return redirect()->to(base_url('/sys/aulas'));
+				} else {
+					return redirect()->to(base_url('/sys/aulas'))->with('erro', 'Erro inesperado ao excluir Aula!');
+				}
+			} else {
+				$mensagem = "A aula não pode ser excluída.<br>Esta aula possui ";
+				if($restricoes['professores'] && $restricoes['horarios']) {
+					$mensagem = $mensagem . "horário(s) relacionado(s) a ela!";
+				}
+				throw new ReferenciaException($mensagem);
+			}
+		} catch (ReferenciaException $e) {
+			session()->setFlashdata('erro', $e->getMessage());
+			return redirect()->to(base_url('/sys/aulas'));
 		}
-
-		$aula_prof = new AulaProfessorModel();
-		$aula_prof->where('aula_id', $id)->delete();
-		
-		$aula = new AulasModel();
-		$aula->delete($id);
-
-		session()->setFlashdata('sucesso', 'Aula Removida com sucesso!');
-		return redirect()->to(base_url('/sys/aulas'));
 	}
 
 	public function getAulasFromTurma($turma)

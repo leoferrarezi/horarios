@@ -65,53 +65,8 @@ class AulasModel extends Model
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
-    protected $beforeDelete   = ['verificarReferencias'];
+    protected $beforeDelete   = ['getRestricoes'];
     protected $afterDelete    = [];
-
-    public function verificarReferencias(array $data)
-    {
-        $id = $data['id'];
-
-        $referencias = $this->verificarReferenciasEmTabelas($id);
-        $referencias = implode(", ", $referencias);
-        // Se o ID for referenciado em outras tabelas, lança a exceção
-        if (!empty($referencias)) {
-            // Passa o nome das tabelas onde o ID foi encontrado para a exceção
-            throw new ReferenciaException("Esta aula não pode ser excluída, porque está em uso. <br>
-                    Para excluir esta aula, primeiro remova as associações em {$referencias} que estão utilizando esta aula'.");
-        }
-
-        // Se não houver referências, retorna os dados para permitir a exclusão
-        return $data;
-    }
-
-    private function verificarReferenciasEmTabelas($id)
-    {
-        // Tabelas e colunas de chave estrangeira a serem verificadas
-        $tabelas = [
-            'aula_horario' => 'aula_id',
-            'aula_professor' => 'aula_id',
-        ];
-
-        $referenciasEncontradas = [];
-
-        // Verificar se o ID é referenciado
-        foreach ($tabelas as $tabela => $fk_coluna) 
-        {
-            $builder = $this->builder($tabela);
-            $builder->where($fk_coluna, $id);
-            $query = $builder->get();
-
-            if ($query->getNumRows() > 0) 
-            {
-                // Adiciona a tabela à lista de referências encontradas
-                $referenciasEncontradas[] = $tabela;
-            }
-        }
-
-        // Retorna as tabelas onde o ID foi encontrado
-        return $referenciasEncontradas;
-    }
 
     public function getAulasComTurmaDisciplinaEProfessores()
     {
@@ -152,5 +107,20 @@ class AulasModel extends Model
         }
     }
 
+    public function getRestricoes($id) 
+    {
+        $db = \Config\Database::connect();
+        $id = $id['id'];
+
+        $professores = $db->table('aula_professor')->where('aula_id', $id)->get()->getNumRows();
+        $horarios = $db->table('aula_horario')->where('aula_id', $id)->get()->getNumRows();
+
+        $restricoes = [
+            'professores' => $professores, 
+            'horarios' => $horarios
+        ];
+
+        return $restricoes;
+    }
     
 }

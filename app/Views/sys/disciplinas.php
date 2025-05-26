@@ -324,7 +324,8 @@
                 showHideTransition: 'fade',
                 icon: 'error',
                 loaderBg: '#dc3545',
-                position: 'top-center'
+                position: 'top-center', 
+                hideAfter: false
             });
         });
     </script>

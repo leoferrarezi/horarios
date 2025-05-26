@@ -56,52 +56,8 @@ class VersoesModel extends Model
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
-    protected $beforeDelete   = ['verificarReferencias'];
+    protected $beforeDelete   = ['getRestricoes'];
     protected $afterDelete    = [];
-
-
-    public function verificarReferencias(array $data)
-    {
-        $id = $data['id'];
-
-        $referencias = $this->verificarReferenciasEmTabelas($id);
-        $referencias = implode(", ", $referencias);
-
-        if (!empty($referencias))
-        {
-            throw new ReferenciaException("Está versão não pode ser excluída, porque está em uso. <br>
-                    Para excluir está versão, primeiro remova as associações em {$referencias} que estão utilizando está versão'.");
-        }
-
-        // Se não houver referências, retorna os dados para permitir a exclusão
-        return $data;
-    }
-
-    private function verificarReferenciasEmTabelas($id)
-    {
-        // Tabelas e colunas de chave estrangeira a serem verificadas
-        $tabelas = [
-            'aula_horario' => 'versao_id',
-            'aulas' => 'versao_id'
-        ];
-
-        $referenciasEncontradas = [];
-
-        // Verificar se o ID é referenciado
-        foreach ($tabelas as $tabela => $fk_coluna) 
-        {
-            $builder = $this->db->table($tabela);
-            $builder->where($fk_coluna, $id);
-            $query = $builder->get();
-
-            if ($query->getNumRows() > 0) 
-            {
-                $referenciasEncontradas[] = $tabela;
-            }
-        }
-
-        return $referenciasEncontradas;
-    }
 
     public function getVersaoByUser($user)
     {
@@ -146,5 +102,21 @@ class VersoesModel extends Model
         //$builder = $this->db->table('aula_horario');
         //$query = "SELECT aula_id, tempo_de_aula_id, $versaoNew, ambiente_id FROM aula_horario WHERE versao_id = $versaoOld";
         //$builder->ignore(true)->setQueryAsData(new RawSql($query), null, "aula_id, tempo_de_aula_id, versao_id, ambiente_id")->insertBatch();
+    }
+
+    public function getRestricoes($id) 
+    {
+        $db = \Config\Database::connect();
+        $id = $id['id'];
+
+        $aulas = $db->table('aulas')->where('versao_id', $id)->get()->getNumRows();
+        $aulaHorarios = $db->table('aula_horario')->where('versao_id', $id)->get()->getNumRows();
+
+        $restricoes = [
+            'aulas' => $aulas, 
+            'horarios' => $aulaHorarios
+        ];
+
+        return $restricoes;
     }
 }

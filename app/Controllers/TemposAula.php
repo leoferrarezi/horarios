@@ -152,12 +152,24 @@ class TemposAula extends BaseController
             {
                 $tempos['aulas'][$k]['ambiente'][$k2] = $v2['ambiente_id'];
             }
+
+            $tempos['aulas'][$k]['choqueProfessor'] = 0;
+            $tempos['aulas'][$k]['choqueAmbiente'] = 0;
             
             $tempos['aulas'][$k]['choque'] = $aulaHorarioModel->choqueAmbiente($tempos['aulas'][$k]['id']);
 
             if($tempos['aulas'][$k]['choque'] == 0) //se não deu choque de ambiente, verifica o choque de professor
             {
                 $tempos['aulas'][$k]['choque'] = $aulaHorarioModel->choqueDocente($tempos['aulas'][$k]['id']);
+                
+                if($tempos['aulas'][$k]['choque'] != 0)
+                {
+                    $tempos['aulas'][$k]['choqueProfessor'] = 1;
+                }
+            }
+            else
+            {
+                $tempos['aulas'][$k]['choqueAmbiente'] = 1;
             }
 
             //Verifica se o docente tem restrição neste horário

@@ -35,6 +35,7 @@ class Cursos extends BaseController
 
         $dadosLimpos['nome'] = strip_tags($dadosPost['nome']);
         $dadosLimpos['matriz_id'] = strip_tags($dadosPost['matriz_id']);
+        $dadosLimpos['regime'] = strip_tags($dadosPost['regime']);
 
         //tenta cadastrar o novo professor no banco
         if ($cursoModel->insert($dadosLimpos)) {
@@ -46,14 +47,15 @@ class Cursos extends BaseController
             return redirect()->to(base_url('/sys/curso'))->with('erros', $data['erros'])->withInput(); //retora com os erros e os inputs
         }
     }
+
     public function atualizar()
     {
-
         $dadosPost = $this->request->getPost();
 
         $dadosLimpos['id'] = strip_tags($dadosPost['id']);
         $dadosLimpos['nome'] = strip_tags($dadosPost['nome']);
         $dadosLimpos['matriz_id'] = strip_tags($dadosPost['matriz_id']);
+        $dadosLimpos['regime'] = strip_tags($dadosPost['regime']);
 
         $cursoModel = new CursosModel();
         if ($cursoModel->save($dadosLimpos)) {
@@ -64,6 +66,7 @@ class Cursos extends BaseController
             return redirect()->to(base_url('/sys/curso'))->with('erros', $data['erros']); //retora com os erros
         }
     }
+    
     public function deletar()
     {
         $dadosPost = $this->request->getPost();

@@ -210,6 +210,7 @@
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+
             <div class="modal-body">
 
                 <div class="row" id="rowRestricao">
@@ -448,7 +449,7 @@
                             {
                                 e.preventDefault();
                                 e.stopPropagation();
-                                fixarAulaHorario(0, aula_horario_id, aula_id); //desfixar
+                                fixarAulaHorario(1, aula_horario_id, aula_id); //fixar
                             });
 
                         $.toast({
@@ -567,8 +568,38 @@
                     $('#modalRemocaoConflitoCurso').text("Curso: " + data[0].curso);
                     $('#modalRemocaoConflitoTurma').text("Turma: " + data[0].turma);
                     $('#modalRemocaoConflitoDisciplina').text("Disciplina: " + data[0].disciplina);
-                    $('#modalRemocaoConflitoProfessor').text("Professor: " + data[0].professor);
-                    $('#modalRemocaoConflitoAmbiente').text("Ambiente(s): ");
+
+                    if($horario.data('conflitoProfessor') == 1)
+                    {
+                        $('#modalRemocaoConflitoProfessor')
+                            .html('<i class="fa fa-exclamation-circle me-1"></i> ' + 'Professor: ' + data[0].professor)
+                            .addClass('text-danger')
+                            .removeClass('text-warning');
+                    }
+                    else
+                    {
+                        $('#modalRemocaoConflitoProfessor')
+                            .text("Professor: " + data[0].professor)
+                            .addClass('text-warning')
+                            .removeClass('text-danger');
+                    }
+
+
+                    if($horario.data('conflitoAmbiente') == 1)
+                    {
+                        $('#modalRemocaoConflitoAmbiente')
+                            .html('<i class="fa fa-exclamation-circle me-1"></i> ' + 'Ambiente(s): ')
+                            .addClass('text-danger')
+                            .removeClass('text-warning');
+                    }
+                    else
+                    {
+                        $('#modalRemocaoConflitoAmbiente')
+                            .text("Ambiente(s): ")
+                            .addClass('text-warning')
+                            .removeClass('text-danger');
+                    }
+
                     $.each(data, function(index, value) {
                         $('#modalRemocaoConflitoAmbiente').append(value.ambiente + " | ");
                     });
@@ -772,6 +803,8 @@
                         var aulaConflito = 0;
                         var tresTurnos = 0;
                         var restricao = 0;
+                        var conflitoAmbiente = 0;
+                        var conflitoProfessor = 0;
 
                         var aulaHorarioId = data.split("-")[0];
 
@@ -785,13 +818,21 @@
                         {
                             conflitoStyle = "text-danger";
                             conflitoIcon = "fa-warning";
-                            restricao = data.split("-")[2];
+                            restricao = data.split("-")[3];
                         }
-                        else if(data.indexOf("AMBIENTE") >= 0 || data.indexOf("PROFESSOR") >= 0)
+                        else if(data.indexOf("AMBIENTE") >= 0)
                         {
-                            aulaConflito = data.split("-")[2];
+                            aulaConflito = data.split("-")[3];
                             conflitoStyle = "text-warning";
                             conflitoIcon = "fa-warning";
+                            conflitoAmbiente = 1;
+                        }
+                        else if(data.indexOf("PROFESSOR") >= 0)
+                        {
+                            aulaConflito = data.split("-")[3];
+                            conflitoStyle = "text-warning";
+                            conflitoIcon = "fa-warning";
+                            conflitoProfessor = 1;
                         }
 
                         // Preenche o horário selecionado
@@ -815,7 +856,7 @@
                                     </div>
                                 </div>
                             </div>
-                        `);                        
+                        `);
                             
                         $("#btnFixar_horario_" + aulaHorarioId).off().click(function(e) 
                         {
@@ -834,6 +875,8 @@
                             .data('aulas-total', cardAula.data('aulas-total'))
                             .data('aulas-pendentes', cardAula.data('aulas-pendentes'))
                             .data('conflito', aulaConflito)
+                            .data('conflitoAmbiente', conflitoAmbiente)
+                            .data('conflitoProfessor', conflitoProfessor)
                             .data('restricao', restricao)
                             .data('tresturnos', tresTurnos)
                             .data('aula_horario_id', aulaHorarioId)
@@ -1384,7 +1427,7 @@
 
                     var counter = 0;
 
-                    $.each(data['aulas'], async function(idx, obj)
+                    $.each(data['aulas'], function(idx, obj)
                     {
                         counter++;
 
@@ -1473,6 +1516,8 @@
                                 .data('aulas-total', cardAula.data('aulas-total'))
                                 .data('aulas-pendentes', cardAula.data('aulas-pendentes'))
                                 .data('conflito', obj.choque)
+                                .data('conflitoAmbiente', obj.choqueAmbiente)
+                                .data('conflitoProfessor', obj.choqueProfessor)
                                 .data('restricao', obj.restricao)
                                 .data('tresturnos', obj.tresturnos)
                                 .data('aula_horario_id', obj.id)
@@ -1497,7 +1542,7 @@
 
                             atualizarContadorPendentes();
 
-                        }, 100 * counter); // Atraso de 100ms para cada iteração
+                        }, 50 * counter); // Atraso de 100ms para cada iteração
                     });
 
                     // Configura eventos após preencher a tabela

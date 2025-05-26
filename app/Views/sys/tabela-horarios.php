@@ -826,7 +826,6 @@
                             conflitoStyle = "text-warning";
                             conflitoIcon = "fa-warning";
                             conflitoAmbiente = 1;
-                            alert('amb-' + conflitoAmbiente)
                         }
                         else if(data.indexOf("PROFESSOR") >= 0)
                         {
@@ -834,7 +833,6 @@
                             conflitoStyle = "text-warning";
                             conflitoIcon = "fa-warning";
                             conflitoProfessor = 1;
-                            alert('prof-' + conflitoProfessor)
                         }
 
                         // Preenche o horário selecionado

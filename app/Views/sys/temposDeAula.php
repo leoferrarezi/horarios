@@ -34,8 +34,8 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label for="filtroHorario">Grade de Horário:</label>
-                            <select class="form-select filtro" id="filtroHorario">
-                                <option value="">-</option>
+                            <select class="js-example-basic-single" name="grade" style="width:100%;" id="filtroHorario">
+                                <option value=""></option>
                                 <?php foreach ($horarios as $horario): ?>
                                     <option value="<?php echo esc($horario['nome']) ?>"><?php echo esc($horario['nome']) ?></option>
                                 <?php endforeach; ?>
@@ -258,9 +258,10 @@
             //Ativa os tooltips dos botões
             $('[data-bs-toggle="tooltip"]').tooltip();
 
-            $('.filtro').on('change', function() {
-                table.columns(0).search($("#filtroHorario").val());
-                table.draw();
+            //Seleciona opção do filtro para a tabela
+            $('#filtroHorario').on('change', function() {
+                var filtroSelecionado = $(this).val();
+                table.columns(0).search(filtroSelecionado).draw();
             });
 
         <?php endif; ?>
@@ -303,9 +304,20 @@
                 showHideTransition: 'fade',
                 icon: 'error',
                 loaderBg: '#dc3545',
-                position: 'top-center', 
+                position: 'top-center',
                 hideAfter: false
             });
         });
     </script>
 <?php endif; ?>
+
+<!--Referente ao select 2-->
+<script>
+    $(document).ready(function() {
+        $('.js-example-basic-single').select2({
+            placeholder: "Selecione uma opção:",
+            allowClear: true,
+            width: '100%'
+        });
+    });
+</script>

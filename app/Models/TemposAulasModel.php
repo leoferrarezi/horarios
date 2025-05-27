@@ -77,7 +77,7 @@ class TemposAulasModel extends Model
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
-    protected $beforeDelete   = [];
+    protected $beforeDelete   = ['getRestricoes'];
     protected $afterDelete    = [];
 
     public function getTemposAulaWithHorario()
@@ -224,5 +224,21 @@ class TemposAulasModel extends Model
             ->where('turmas.id', $turma)
             ->orderBy('dia_semana, hora_inicio, minuto_inicio')
             ->findAll();
+    }
+
+    public function getRestricoes($id)
+    {
+        $db = \Config\Database::connect();
+        $id = $id['id'];
+
+        $aula_horario = $db->table('aula_horario')->where('tempo_de_aula_id', $id)->get()->getNumRows();
+        $professor_regras = $db->table('professor_regras')->where('tempo_de_aula_id', $id)->get()->getNumRows();
+
+        $restricoes = [
+            'horarios' => $aula_horario, 
+            'regras' => $professor_regras
+        ];
+
+        return $restricoes;
     }
 }

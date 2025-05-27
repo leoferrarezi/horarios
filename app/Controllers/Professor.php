@@ -64,11 +64,14 @@ class Professor extends BaseController
         // }
 
         //tenta cadastrar o novo professor no banco
-        if ($professor->insert($dadosLimpos)) {
+        if ($professor->insert($dadosLimpos))
+        {
             //se deu certo, direciona pra lista de professores
             session()->setFlashdata('sucesso', 'Professor cadastrado com sucesso!');
             return redirect()->to(base_url('/sys/professor')); // Redireciona para a página de listagem
-        } else {
+        }
+        else
+        {
             $data['erros'] = $professor->errors(); //o(s) erro(s)
             return redirect()->to(base_url('/sys/professor'))->with('erros', $data['erros'])->withInput(); //retora com os erros e os inputs
         }
@@ -83,10 +86,13 @@ class Professor extends BaseController
         $dadosLimpos['email'] = strip_tags($dadosPost['email']);
 
         $professorModel = new ProfessorModel();
-        if ($professorModel->save($dadosLimpos)) {
+        if ($professorModel->save($dadosLimpos))
+        {
             session()->setFlashdata('sucesso', 'Dados do professor atualizados com sucesso.');
             return redirect()->to(base_url('/sys/professor')); // Redireciona para a página de listagem
-        } else {
+        }
+        else
+        {
             $data['erros'] = $professorModel->errors(); //o(s) erro(s)
             return redirect()->to(base_url('/sys/professor'))->with('erros', $data['erros']); //retora com os erros
         }
@@ -98,29 +104,42 @@ class Professor extends BaseController
         $id = (int)strip_tags($dadosPost['id']);
 
         $professorModel = new ProfessorModel();
-        try {
+        try
+        {
             $restricoes = $professorModel->getRestricoes(['id' => $id]);
 
-            if (!$restricoes['aulas'] && !$restricoes['regras']) {
-                if ($professorModel->delete($id)) {
+            if (!$restricoes['aulas'] && !$restricoes['regras'])
+            {
+                if ($professorModel->delete($id))
+                {
                     session()->setFlashdata('sucesso', 'Professor excluído com sucesso!');
                     return redirect()->to(base_url('/sys/professor'));
-                } else {
+                }
+                else
+                {
                     return redirect()->to(base_url('/sys/professor'))->with('erro', 'Erro inesperado ao excluir Professor!');
                 }
-            } else {
+            }
+            else
+            {
                 $mensagem = "O professor não pode ser excluído.<br>Este professor possui ";
-                if ($restricoes['aulas'] && $restricoes['regras']) {
+                if ($restricoes['aulas'] && $restricoes['regras'])
+                {
                     $mensagem = $mensagem . "aula(s) e horário(s) relacionados a ele!";
-                } else if ($restricoes['aulas']) {
+                }
+                else if ($restricoes['aulas'])
+                {
                     $mensagem = $mensagem . "aula(s) relacionada(s) a ele!";
-                } else {
+                }
+                else
+                {
                     $mensagem = $mensagem . "horário(s) relacionado(s) a ele!";
                 }
                 throw new ReferenciaException($mensagem);
             }
-
-        } catch (ReferenciaException $e) {
+        }
+        catch (ReferenciaException $e)
+        {
             session()->setFlashdata('erro', $e->getMessage());
             return redirect()->to(base_url('/sys/professor'));
         }
@@ -130,22 +149,27 @@ class Professor extends BaseController
     {
         $file = $this->request->getFile('arquivo');
 
-        if (!$file->isValid()) {
+        if (!$file->isValid())
+        {
             return $this->response->setStatusCode(ResponseInterface::HTTP_BAD_REQUEST)
                 ->setBody('Erro: Arquivo não enviado.');
         }
 
         $extension = $file->getClientExtension();
-        if (!in_array($extension, ['xls', 'xlsx'])) {
+        if (!in_array($extension, ['xls', 'xlsx']))
+        {
             return $this->response->setStatusCode(ResponseInterface::HTTP_UNSUPPORTED_MEDIA_TYPE)
                 ->setBody('Erro: Formato de arquivo não suportado. Apenas XLSX ou XLS');
         }
 
         $reader = $extension === 'xlsx' ? new Xlsx() : new Xls();
 
-        try {
+        try
+        {
             $spreadsheet = $reader->load($file->getRealPath());
-        } catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) {
+        }
+        catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e)
+        {
             return $this->response->setStatusCode(ResponseInterface::HTTP_INTERNAL_SERVER_ERROR)
                 ->setBody('Erro ao carregar o arquivo: ' . $e->getMessage());
         }
@@ -156,17 +180,20 @@ class Professor extends BaseController
         $professorModel = new ProfessorModel();
         $data['professoresExistentes'] = [];
 
-        foreach ($professorModel->getProfessoresNome() as $k) {
+        foreach ($professorModel->getProfessoresNome() as $k)
+        {
             array_push($data['professoresExistentes'], $k['nome']);
         }
 
         // Lê os dados da planilha e captura Nome e E-mail
-        foreach ($sheet->getRowIterator() as $row) {
+        foreach ($sheet->getRowIterator() as $row)
+        {
             $cellIterator = $row->getCellIterator();
             $cellIterator->setIterateOnlyExistingCells(false);
 
             $rowData = [];
-            foreach ($cellIterator as $cell) {
+            foreach ($cellIterator as $cell)
+            {
                 $rowData[] = $cell->getValue();
             }
 
@@ -188,10 +215,10 @@ class Professor extends BaseController
 
     public function processarImportacao()
     {
-
         $selecionados = $this->request->getPost('selecionados');
 
-        if (empty($selecionados)) {
+        if (empty($selecionados))
+        {
             session()->setFlashdata('erro', 'Nenhum registro selecionado para importação.');
             return redirect()->to(base_url('/sys/professor'));
         }
@@ -199,10 +226,12 @@ class Professor extends BaseController
         $professorModel = new ProfessorModel();
         $insertedCount = 0;
 
-        foreach ($selecionados as $registroJson) {
+        foreach ($selecionados as $registroJson)
+        {
             $registro = json_decode($registroJson, true);
 
-            if (!empty($registro['nome']) && !empty($registro['email'])) {
+            if (!empty($registro['nome']) && !empty($registro['email']))
+            {
                 $professorModel->insert($registro);
                 $insertedCount++;
             }
@@ -218,34 +247,36 @@ class Professor extends BaseController
         $temposAulaModel = new TemposAulasModel();
 
         $data['professor'] = $professorModel->find($professorId);
-        // Faz a busca por todos os horarios cadastrados no banco (tabela horarios)
         $data['temposAula'] = $temposAulaModel->getTemposAulas();
-
 
         // Exibe os professores cadastrados
         $this->content_data['content'] = view('sys/preferencias-professor', $data);
         return view('dashboard', $this->content_data);
     }
-  
+
     public function salvarRestricoes()
     {
         $dadosPost = $this->request->getPost();
         $professorID = $dadosPost['professorID'] ?? null;
 
-        if (!$professorID) {
+        if (!$professorID)
+        {
             session()->setFlashdata('erro', "ID do professor é obrigatório");
             return redirect()->to(base_url('/sys/professor'));
         }
 
         $professorRegrasModel = new ProfessorRegrasModel();
 
-        foreach ($dadosPost as $key => $value) {
-            if ($key === 'professorID') {
+        foreach ($dadosPost as $key => $value)
+        {
+            if ($key === 'professorID')
+            {
                 continue;
             }
 
-            if (preg_match('/_(\d+)$/', $key, $matches)) {
-                $tempoDeAulaID = (int)$matches[1];
+            if (preg_match('/_(\d+)$/', $key, $matches))
+            {
+                $tempoDeAulaID = (int)$matches[1];                
 
                 // Verifica se já existe um registro para esse professor e tempo de aula
                 $registroExistente = $professorRegrasModel->where([
@@ -253,12 +284,18 @@ class Professor extends BaseController
                     'tempo_de_aula_id' => $tempoDeAulaID
                 ])->first();
 
-                if ($registroExistente) {
-                    // Atualiza se já existir
-                    $professorRegrasModel->update($registroExistente['id'], [
-                        'tipo' => $value
-                    ]);
-                } else {
+                if ($registroExistente)
+                {
+                    if($value == 0)
+                        $professorRegrasModel->delete($registroExistente['id']);
+                    else
+                        $professorRegrasModel->update($registroExistente['id'], ['tipo' => $value]);
+                }
+                else
+                {
+                    if($value == 0)
+                        continue;
+
                     // Insere novo registro se não existir
                     $professorRegrasModel->insert([
                         'professor_id' => $professorID,
@@ -272,7 +309,9 @@ class Professor extends BaseController
         session()->setFlashdata('sucesso', "Restrições do professor salvas com sucesso!");
         return redirect()->to(base_url('/sys/professor'));
     }
-    public function buscarRestricoes($professorID) {
+
+    public function buscarRestricoes($professorID)
+    {
         $temposAulaModel = new TemposAulasModel();
         $data = $temposAulaModel->getTemposAulas($professorID);
         return $this->response->setJSON($data);

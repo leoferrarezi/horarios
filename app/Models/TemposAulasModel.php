@@ -181,7 +181,7 @@ class TemposAulasModel extends Model
                     'professor_id' => $professorID,
                     'tempo_de_aula_id' => $tempo['id']
                 ])->first();
-                $tipo = $regra['tipo'] ?? -1;
+                $tipo = $regra['tipo'] ?? 0;
             }
 
             $horarioFormatado = [

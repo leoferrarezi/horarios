@@ -246,9 +246,9 @@
                     url: '<?php echo base_url('/sys/professor/restricoes/'); ?>' + id, // Defina a rota correta                    
                     method: 'GET',
                     data: { id: id },
-                    success: function(response) 
+                    success: function(response)
                     {
-                        Object.keys(response).forEach(function(dia) 
+                        Object.keys(response).forEach(function(dia)
                         {
                             Object.keys(response[dia]).forEach(function(periodo) 
                             {

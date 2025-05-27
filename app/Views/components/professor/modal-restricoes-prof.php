@@ -75,7 +75,9 @@
                                                             <td class="text-center">
                                                                 <?= $horario['inicio'] . '-' . $horario['fim'] ?>
                                                             </td>
+
                                                             <td class="d-flex justify-content-center">
+
                                                                 <input type="radio" class="btn-check"
                                                                     name="preferencia-<?= strtolower($dia) . "_" . $horario['id'] ?>"
                                                                     id="preferencia_<?= strtolower($dia) . "_" . $horario['id'] ?>_none"
@@ -102,6 +104,7 @@
                                                                     for="preferencia_<?= strtolower($dia) . "_" . $horario['id'] ?>_rest">
                                                                     <i class="fa fa-times"></i>
                                                                 </label>
+                                                                
                                                             </td>
                                                         </tr>
                                                         <?php endforeach; ?>

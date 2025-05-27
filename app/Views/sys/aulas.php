@@ -56,8 +56,8 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="curso">Curso:</label>
-                            <select class="form-select filtro" id="filtroCurso">
-                                <option value="">-</option>
+                            <select class="js-example-basic-single" style="width:100%;" id="filtroCurso">
+                                <option value=""></option>
                                 <?php foreach ($cursos as $curso): ?>
                                     <option value="<?php echo esc($curso['nome']) ?>"><?php echo esc($curso['nome']) ?></option>
                                 <?php endforeach; ?>
@@ -67,8 +67,8 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="curso">Turma:</label>
-                            <select class="form-select filtro" id="filtroTurma">
-                                <option value="">-</option>
+                            <select class="js-example-basic-single" style="width:100%;" id="filtroTurma">
+                                <option value=""></option>
                                 <?php foreach ($turmas as $turma): ?>
                                     <option value="<?php echo esc($turma['sigla']) ?>"><?php echo esc($turma['sigla']) ?></option>
                                 <?php endforeach; ?>
@@ -176,16 +176,16 @@
     $(document).ready(function() {
 
         $("#turmas").on("invalid", function() {
-            if(this.validity.valueMissing) {
+            if (this.validity.valueMissing) {
                 this.setCustomValidity("Selecione ao menos uma turma!");
             }
         });
         $("#professores, #professoresEdit").on("invalid", function() {
-            if(this.validity.valueMissing) {
+            if (this.validity.valueMissing) {
                 this.setCustomValidity("Selecione ao menos um professor!");
             }
         });
-        
+
         $("#turmas, #professores, #professoresEdit").on("change", function() {
             this.setCustomValidity("");
         });
@@ -254,9 +254,10 @@
             //Ativa os tooltips dos botões
             $('[data-bs-toggle="tooltip"]').tooltip();
 
-            $('.filtro').on('change', function() {
-                table.columns(0).search($("#filtroCurso").val());
-                table.columns(1).search($("#filtroTurma").val());
+            //Seleciona opção do filtro para a tabela
+            $('#filtroCurso, #filtroTurma').on('change', function() {
+                table.columns(0).search($('#filtroCurso').val());
+                table.columns(1).search($('#filtroTurma').val());
                 table.draw();
             });
 
@@ -300,9 +301,20 @@
                 showHideTransition: 'fade',
                 icon: 'error',
                 loaderBg: '#dc3545',
-                position: 'top-center', 
+                position: 'top-center',
                 hideAfter: false
             });
         });
     </script>
 <?php endif; ?>
+
+<!--Referente ao select 2-->
+<script>
+    $(document).ready(function() {
+        $('.js-example-basic-single').select2({
+            placeholder: "Selecione uma opção:",
+            allowClear: true,
+            width: '100%'
+        });
+    });
+</script>

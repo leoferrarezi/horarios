@@ -33,10 +33,11 @@
             <div class="card-body">
                 <h4 class="card-title">Filtros</h4>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="form-group">
                             <label for="curso">Matriz:</label>
-                            <select class="js-example-basic-multiple" name="matrizes[]" multiple="multiple" style="width:100%;" id="filtroMatriz">
+                            <select class="js-example-basic-single" name="matriz" style="width:100%;" id="filtroMatriz">
+                                <option value=""></option>
                                 <?php foreach ($matrizes as $matriz): ?>
                                     <option value="<?php echo esc($matriz['nome']) ?>"><?php echo esc($matriz['nome']) ?></option>
                                 <?php endforeach; ?>
@@ -266,19 +267,10 @@
                 modal.find('#deletar-nome').text(nome);
             });
 
-
+            //Seleciona opção do filtro para a tabela
             $('#filtroMatriz').on('change', function() {
-                var matrizesSelecionadas = $(this).val(); // Array de matrizes selecionadas
-
-                $('#listagem-disciplina tbody tr').each(function() {
-                    var nomeMatriz = $(this).find('td:nth-child(2)').text().trim(); // Coluna da Matriz
-
-                    if (matrizesSelecionadas.length === 0 || matrizesSelecionadas.includes(nomeMatriz)) {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                });
+                var filtroSelecionado = $(this).val();
+                table.columns(1).search(filtroSelecionado).draw();
             });
 
             //Ativa os tooltips dos botões
@@ -324,7 +316,7 @@
                 showHideTransition: 'fade',
                 icon: 'error',
                 loaderBg: '#dc3545',
-                position: 'top-center', 
+                position: 'top-center',
                 hideAfter: false
             });
         });
@@ -334,22 +326,10 @@
 <!--Referente ao select 2-->
 <script>
     $(document).ready(function() {
-        $('.js-example-basic-multiple').select2();
-
-        $('form[id^="filtroMatriz"]').on('submit', function(e) {
-            const selectElement = $(this).find('select[name="matrizes[]"]');
-
-            const selectedOptions = selectElement.select2('data');
-
-            selectedOptions.forEach(function(option) {
-                const optionElement = selectElement.find('option[value="' + option.id + '"]');
-                optionElement.removeAttr('selected');
-            });
-        });
-
-        $('#filtroMatriz').select2({
-            placeholder: "Selecione uma ou mais matrizes:",
-            allowClear: true
+        $('.js-example-basic-single').select2({
+            placeholder: "Selecione a matriz:",
+            allowClear: true,
+            width: '100%'
         });
     });
 </script>

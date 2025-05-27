@@ -35,11 +35,11 @@
             <div class="card-body">
                 <h4 class="card-title">Filtros</h4>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="form-group">
                             <label for="curso">Curso:</label>
-                            <select class="form-select filtro" id="filtroCurso">
-                                <option value="">-</option>
+                            <select class="js-example-basic-single" style="width:100%;" id="filtroCurso">
+                                <option value=""></option>
                                 <?php foreach ($cursos as $curso): ?>
                                     <option value="<?php echo esc($curso['nome']) ?>"><?php echo esc($curso['nome']) ?></option>
                                 <?php endforeach; ?>
@@ -194,7 +194,7 @@
 
         $("#ano, #edit-ano").on("invalid", function() {
             if (this.validity.valueMissing) {
-               this.setCustomValidity("Preencha o ano da turma!");
+                this.setCustomValidity("Preencha o ano da turma!");
             } else if (this.validity.rangeUnderflow) {
                 this.setCustomValidity(`O ano deve ser a partir de ${this.min}.`);
             } else if (this.validity.rangeOverflow) {
@@ -205,12 +205,12 @@
         });
         $("#ano, #edit-ano").on("input", function() {
             if (this.validity.valueMissing) {
-               this.setCustomValidity("Preencha o ano da turma!");
+                this.setCustomValidity("Preencha o ano da turma!");
             } else if (this.validity.rangeUnderflow) {
                 this.setCustomValidity(`O ano deve ser a partir de ${this.min}.`);
             } else if (this.validity.rangeOverflow) {
                 this.setCustomValidity(`O ano deve ser no máximo ${this.max}.`);
-            } else if (this.validity.stepMismatch){
+            } else if (this.validity.stepMismatch) {
                 this.setCustomValidity("Valor inválido.");
             } else {
                 this.setCustomValidity("");
@@ -219,7 +219,7 @@
 
         $("#periodo, #edit-periodo").on("invalid", function() {
             if (this.validity.valueMissing) {
-               this.setCustomValidity("Preencha o período da turma!");
+                this.setCustomValidity("Preencha o período da turma!");
             } else if (this.validity.rangeUnderflow) {
                 this.setCustomValidity(`O período deve ser a partir de ${this.min}.`);
             } else if (this.validity.rangeOverflow) {
@@ -230,7 +230,7 @@
         });
         $("#periodo, #edit-periodo").on("input", function() {
             if (this.validity.valueMissing) {
-               this.setCustomValidity("Preencha o período da turma!");
+                this.setCustomValidity("Preencha o período da turma!");
             } else if (this.validity.rangeUnderflow) {
                 this.setCustomValidity(`O período deve ser a partir de ${this.min}.`);
             } else if (this.validity.rangeOverflow) {
@@ -260,7 +260,7 @@
 
         $("#tempos_diarios, #edit-tempos_diarios").on("invalid", function() {
             if (this.validity.valueMissing) {
-               this.setCustomValidity("Preencha os tempos de aulas diários!");
+                this.setCustomValidity("Preencha os tempos de aulas diários!");
             } else if (this.validity.rangeUnderflow) {
                 this.setCustomValidity(`Os tempos de aulas diários devem ser a partir de ${this.min}.`);
             } else if (this.validity.rangeOverflow) {
@@ -271,7 +271,7 @@
         });
         $("#tempos_diarios, #edit-tempos_diarios").on("input", function() {
             if (this.validity.valueMissing) {
-               this.setCustomValidity("Preencha os tempos de aulas diários!");
+                this.setCustomValidity("Preencha os tempos de aulas diários!");
             } else if (this.validity.rangeUnderflow) {
                 this.setCustomValidity(`Os tempos de aulas diários devem ser a partir de ${this.min}.`);
             } else if (this.validity.rangeOverflow) {
@@ -362,9 +362,10 @@
                 modal.find('#deletar-nome').text(nome);
             });
 
-            $('.filtro').on('change', function() {
-                table.columns(5).search($("#filtroCurso").val());
-                table.draw();
+            //Seleciona opção do filtro para a tabela
+            $('#filtroCurso').on('change', function() {
+                var filtroSelecionado = $(this).val();
+                table.columns(5).search(filtroSelecionado).draw();
             });
 
             //Ativa os tooltips dos botões
@@ -410,9 +411,20 @@
                 showHideTransition: 'fade',
                 icon: 'error',
                 loaderBg: '#dc3545',
-                position: 'top-center', 
+                position: 'top-center',
                 hideAfter: false
             });
         });
     </script>
 <?php endif; ?>
+
+<!--Referente ao select 2-->
+<script>
+    $(document).ready(function() {
+        $('.js-example-basic-single').select2({
+            placeholder: "Selecione uma opção:",
+            allowClear: true,
+            width: '100%'
+        });
+    });
+</script>

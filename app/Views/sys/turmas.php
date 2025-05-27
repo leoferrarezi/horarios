@@ -38,7 +38,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label for="curso">Curso:</label>
-                            <select class="js-example-basic-single" style="width:100%;" id="filtroCurso">
+                            <select class="js-example-basic-single filtro" style="width:100%;" id="filtroCurso">
                                 <option value=""></option>
                                 <?php foreach ($cursos as $curso): ?>
                                     <option value="<?php echo esc($curso['nome']) ?>"><?php echo esc($curso['nome']) ?></option>
@@ -176,33 +176,7 @@
     {
         $("#sigla, #edit-sigla").on("invalid", function() {
             this.setCustomValidity("Preencha a sigla da turma!");
-        });
-
-        $("#ano, #edit-ano").on("invalid", function() {
-            if (this.validity.valueMissing) {
-                this.setCustomValidity("Preencha o ano da turma!");
-            } else if (this.validity.rangeUnderflow) {
-                this.setCustomValidity(`O ano deve ser a partir de ${this.min}.`);
-            } else if (this.validity.rangeOverflow) {
-                this.setCustomValidity(`O ano deve ser no máximo ${this.max}.`);
-            } else {
-                this.setCustomValidity("Valor inválido.");
-            }
-        });
-
-        $("#ano, #edit-ano").on("input", function() {
-            if (this.validity.valueMissing) {
-                this.setCustomValidity("Preencha o ano da turma!");
-            } else if (this.validity.rangeUnderflow) {
-                this.setCustomValidity(`O ano deve ser a partir de ${this.min}.`);
-            } else if (this.validity.rangeOverflow) {
-                this.setCustomValidity(`O ano deve ser no máximo ${this.max}.`);
-            } else if (this.validity.stepMismatch) {
-                this.setCustomValidity("Valor inválido.");
-            } else {
-                this.setCustomValidity("");
-            }
-        });
+        });     
 
         $("#periodo, #edit-periodo").on("invalid", function() {
             if (this.validity.valueMissing) {

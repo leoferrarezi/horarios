@@ -13,24 +13,9 @@
                     <div class="row">
                         <div class="col-md-3 col-sm-12">
                             <div class="form-group">
-                                <label for="codigo">Código</label>
-                                <input type="text" class="form-control" required
-                                    id="codigo" name="codigo" placeholder="Digite o codigo da turma"
-                                    value="<?php echo esc(old('codigo')) ?>">
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-12">
-                            <div class="form-group">
                                 <label for="sigla">Sigla</label>
                                 <input class="form-control" type="text" name="sigla" id="sigla" required
                                     value="<?php echo esc(old('codigo')) ?>">
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm 12">
-                            <div class="form-group">
-                                <label for="ano">Ano</label>
-                                <input type="number" min="2000" max="2099" class="form-control" id="ano" name="ano" required
-                                    value="<?php echo esc(old('ano')) ?>">
                             </div>
                         </div>
                         <div class="col-md-3 col-sm 12">

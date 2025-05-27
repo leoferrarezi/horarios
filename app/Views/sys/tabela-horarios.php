@@ -1060,7 +1060,7 @@
             $('#filtroTurma option[value="0"]').prop('selected', true);
 
             //Buscar turmas do curso selecionado.
-            $.get('<?php echo base_url('sys/turma/getTurmasByCursoAndSemestre/'); ?>' + $('#filtroCurso').val() + '/<?php echo $semestre; ?>', function(data) 
+            $.get('<?php echo base_url('sys/turma/getTurmasByCurso/'); ?>' + $('#filtroCurso').val(), function(data) 
             {
                 $.each(data, function(idx, obj) 
                 {

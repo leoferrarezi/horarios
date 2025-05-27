@@ -13,7 +13,7 @@ class TurmasModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['codigo', 'sigla', 'ano', 'semestre', 'periodo', 'curso_id', 'tempos_diarios', 'horario_id', 'horario_preferencial_id'];
+    protected $allowedFields    = ['sigla', 'semestre', 'periodo', 'curso_id', 'tempos_diarios', 'horario_id', 'horario_preferencial_id'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -31,9 +31,7 @@ class TurmasModel extends Model
     // Validation
     protected $validationRules = [
         'id' => 'permit_empty|is_natural_no_zero|max_length[11]',
-        'codigo' => 'required|max_length[32]',
         'sigla' => 'required|max_length[32]',
-        'ano' => 'required|regex_match[/^(20)\d{2}$/]', //regex valida se o ano começa com 20 e aceita qualquer outros 2 dígitos no fim | 2000 até 2099. issue RF05.
         'semestre' => 'required|regex_match[/^[12]$/]', //verifica se 1 ou 2.
         'periodo' => 'required',
         'curso_id' => 'required|max_length[11]|is_not_unique[cursos.id]',
@@ -43,17 +41,9 @@ class TurmasModel extends Model
     ];
 
     protected $validationMessages   = [
-        'codigo' => [
-            'required'    => 'Informe o Código da Turma.',
-            'max_length'  => 'O Código da Turma deve ter no máximo 32 caracteres.'
-        ],
         'sigla' => [
             'required'    => 'Informe a Sigla da Turma.',
             'max_length'  => 'A Sigla da Turma deve ter no máximo 32 caracteres.'
-        ],
-        'ano' => [
-            'required'    => 'Informe o Ano da Turma',
-            'regex_match' => 'O Ano da Turma deve ser um ano válido, começando com "20" e seguido por dois dígitos (ex: 2000 - 2099).'
         ],
         'semestre' => [
             'required'    => 'Informe o Semestre da Turma.',
@@ -120,10 +110,9 @@ class TurmasModel extends Model
 
     public function getRestricoes($id) 
     {
-        $db = \Config\Database::connect();
         $id = $id['id'];
 
-        $aulas = $db->table('aulas')->where('turma_id', $id)->get()->getNumRows();
+        $aulas = $this->db->table('aulas')->where('turma_id', $id)->get()->getNumRows();
 
         $restricoes = [
             'aulas' => $aulas

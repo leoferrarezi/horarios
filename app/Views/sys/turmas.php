@@ -65,13 +65,11 @@
                                 <!-- cabeçalho da tabela -->
                                 <thead>
                                     <tr>
-                                        <th>Código</th>
-                                        <th>Sigla</th>
-                                        <th>Ano</th>
-                                        <th>Sem.</th>
-                                        <th>Per/Tur</th>
                                         <th>Curso</th>
-                                        <th>Aulas Dia</th>
+                                        <th>Sigla</th>
+                                        <th>Semest</th>
+                                        <th>Per./Turma</th>                                        
+                                        <th>Aulas/Dia</th>
                                         <th>Horário</th>
                                         <th>Horário Pref</th>
                                         <th>Ações</th>
@@ -87,12 +85,10 @@
                                         <?php foreach ($turmas as $t): //loop para percorrer todos os professores retornados do bd 
                                         ?>
                                             <tr>
-                                                <td><?php echo esc($t['codigo']); ?></td>
+                                                <td><?php echo esc($t['curso']); ?></td>    
                                                 <td><?php echo esc($t['sigla']); ?></td>
-                                                <td><?php echo esc($t['ano']); ?></td>
                                                 <td><?php echo esc($t['semestre']); ?></td>
-                                                <td><?php echo esc($t['periodo']); ?>º</td>
-                                                <td><?php echo esc($t['curso']); ?></td>
+                                                <td><?php echo esc($t['periodo']); ?>º</td>                                                
                                                 <td><?php echo esc($t['tempos_diarios']); ?></td>
                                                 <td><?php echo esc($t['horario']); ?></td>
                                                 <td><?php echo esc($t['horario_preferencial']); ?></td>
@@ -110,9 +106,7 @@
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#modal-edit-turmas"
                                                                 data-id="<?php echo esc($t['id']); ?>"
-                                                                data-codigo="<?php echo esc($t['codigo']); ?>"
                                                                 data-sigla="<?php echo esc($t['sigla']); ?>"
-                                                                data-ano="<?php echo esc($t['ano']); ?>"
                                                                 data-semestre="<?php echo esc($t['semestre']); ?>"
                                                                 data-periodo="<?php echo esc($t['periodo']); ?>"
                                                                 data-curso_id="<?php echo esc($t['curso_id']); ?>"
@@ -178,18 +172,10 @@
 
 
     //essa linha abaixo é para detectar que o documento foi completamente carregado e executar o código após isso
-    $(document).ready(function() {
-
-        $("#codigo, #edit-codigo").on("invalid", function() {
-            this.setCustomValidity("Preencha o código da turma!");
-        });
-
+    $(document).ready(function() 
+    {
         $("#sigla, #edit-sigla").on("invalid", function() {
             this.setCustomValidity("Preencha a sigla da turma!");
-        });
-
-        $("#codigo, #edit-codigo, #sigla, #edit-sigla").on("input", function() {
-            this.setCustomValidity("");
         });
 
         $("#ano, #edit-ano").on("invalid", function() {
@@ -203,6 +189,7 @@
                 this.setCustomValidity("Valor inválido.");
             }
         });
+
         $("#ano, #edit-ano").on("input", function() {
             if (this.validity.valueMissing) {
                this.setCustomValidity("Preencha o ano da turma!");
@@ -228,6 +215,7 @@
                 this.setCustomValidity("Valor inválido.");
             }
         });
+
         $("#periodo, #edit-periodo").on("input", function() {
             if (this.validity.valueMissing) {
                this.setCustomValidity("Preencha o período da turma!");
@@ -245,6 +233,7 @@
         $("#inlineRadio1, #inlineRadio2").on("invalid", function() {
             this.setCustomValidity("Selecione o semestre da turma!");
         });
+
         $("#inlineRadio1, #inlineRadio2").on("change", function() {
             $("#inlineRadio1, #inlineRadio2").each(function() {
                 this.setCustomValidity("");
@@ -254,6 +243,7 @@
         $("#curso_id, #edit-curso_id").on("invalid", function() {
             this.setCustomValidity("Preencha o curso da turma!");
         });
+
         $("#curso_id, #edit-curso_id").on("change", function() {
             this.setCustomValidity("");
         });
@@ -269,6 +259,7 @@
                 this.setCustomValidity("Valor inválido.");
             }
         });
+
         $("#tempos_diarios, #edit-tempos_diarios").on("input", function() {
             if (this.validity.valueMissing) {
                this.setCustomValidity("Preencha os tempos de aulas diários!");
@@ -307,7 +298,7 @@
                     [1, 'asc']
                 ],
                 //Desativa a ordenação por ações
-                columns: [null, null, null, null, null, null, null, null, null, {
+                columns: [null, null, null, null, null, null, null, {
                     orderable: false
                 }]
             });
@@ -321,9 +312,7 @@
 
                 // Extrair as informações dos atributos data-* 
                 var id = button.data('id');
-                var codigo = button.data('codigo');
                 var sigla = button.data('sigla');
-                var ano = button.data('ano');
                 var semestre = button.data('semestre');
                 var periodo = button.data('periodo');
                 var cursoId = button.data('curso_id');
@@ -336,9 +325,7 @@
                 var modal = $(this);
                 modal.find('#edit-id').val(id);
                 modal.find('#edit-id').val(id); // Preenche o campo com o id
-                modal.find('#edit-codigo').val(codigo); // Preenche o campo com o código
                 modal.find('#edit-sigla').val(sigla); // Preenche o campo com a sigla
-                modal.find('#edit-ano').val(ano); // Preenche o campo com o ano
                 modal.find('#edit-periodo').val(periodo); // Preenche o campo com o periodo
                 modal.find('input[name="semestre"][value="' + semestre + '"]').prop('checked', true);
                 modal.find('#edit-curso_id').val(cursoId); // Preenche o campo com o curso_id
@@ -363,7 +350,7 @@
             });
 
             $('.filtro').on('change', function() {
-                table.columns(5).search($("#filtroCurso").val());
+                table.columns(0).search($("#filtroCurso").val());
                 table.draw();
             });
 

@@ -35,9 +35,7 @@ class Turmas extends BaseController
         //coloca todos os dados do formulario no vetor dadosPost
         $dadosPost = $this->request->getPost();
 
-        $dadosLimpos['codigo'] = strip_tags($dadosPost['codigo']);
         $dadosLimpos['sigla'] = strip_tags($dadosPost['sigla']);
-        $dadosLimpos['ano'] = strip_tags($dadosPost['ano']);
         $dadosLimpos['semestre'] = strip_tags($dadosPost['semestre']);
         $dadosLimpos['periodo'] = strip_tags($dadosPost['periodo']);
         $dadosLimpos['curso_id'] = strip_tags($dadosPost['curso_id']);
@@ -60,9 +58,7 @@ class Turmas extends BaseController
         $dadosPost = $this->request->getPost();
 
         $dadosLimpos['id'] = strip_tags($dadosPost['id']);
-        $dadosLimpos['codigo'] = strip_tags($dadosPost['codigo']);
         $dadosLimpos['sigla'] = strip_tags($dadosPost['sigla']);
-        $dadosLimpos['ano'] = strip_tags($dadosPost['ano']);
         $dadosLimpos['semestre'] = strip_tags($dadosPost['semestre']);
         $dadosLimpos['periodo'] = strip_tags($dadosPost['periodo']);
         $dadosLimpos['curso_id'] = strip_tags($dadosPost['curso_id']);
@@ -178,9 +174,9 @@ class Turmas extends BaseController
             $periodo = (is_array($codigo)) ? $codigo[1] : null;
 
             $dataRows[] = [
-                'codigo' => $rowData[0] ?? null,
+                //'codigo' => $rowData[0] ?? null,
                 'sigla' => $rowData[2] ?? null,
-                'ano' => $rowData[3] ?? null,
+                //'ano' => $rowData[3] ?? null,
                 'semestre' => $rowData[4] ?? null,
                 'curso' => $curso,
                 'periodo' => $periodo,

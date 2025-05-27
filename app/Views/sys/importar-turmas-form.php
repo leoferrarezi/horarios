@@ -27,9 +27,7 @@
                                         </label>
                                     </div>
                                 </th>
-                                <th>Código</th>
                                 <th>Sigla</th>
-                                <th>Ano</th>
                                 <th>Semestre</th>
                                 <th>Curso</th>
                                 <th>Período</th>
@@ -61,9 +59,7 @@
                                             </label>
                                         </div>
                                     </td>
-                                    <td><?= esc($turma['codigo']) ?></td>
                                     <td><?= esc($turma['sigla']) ?></td>
-                                    <td><?= esc($turma['ano']) ?></td>                                    
                                     <td><?= esc($turma['semestre']) ?></td>
                                     <td><?= esc($turma['curso']) ?></td>
                                     <td><?= esc($turma['periodo']) ?>º</td>

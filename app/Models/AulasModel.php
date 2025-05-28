@@ -109,11 +109,10 @@ class AulasModel extends Model
 
     public function getRestricoes($id) 
     {
-        $db = \Config\Database::connect();
         $id = $id['id'];
 
-        $professores = $db->table('aula_professor')->where('aula_id', $id)->get()->getNumRows();
-        $horarios = $db->table('aula_horario')->where('aula_id', $id)->get()->getNumRows();
+        $professores = $this->db->table('aula_professor')->where('aula_id', $id)->get()->getNumRows();
+        $horarios = $this->db->table('aula_horario')->where('aula_id', $id)->get()->getNumRows();
 
         $restricoes = [
             'professores' => $professores, 

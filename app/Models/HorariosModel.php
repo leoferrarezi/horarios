@@ -93,12 +93,11 @@ class HorariosModel extends BaseModel
 
     public function getRestricoes($id) 
     {
-        $db = \Config\Database::connect();
         $id = $id['id'];
 
-        $tempos_aula = $db->table('tempos_de_aula')->where('horario_id', $id)->get()->getNumRows();
-        $turmas = $db->table('turmas')->where('horario_id', $id)->get()->getNumRows();
-        $turmas_pref = $db->table('turmas')->where('horario_preferencial_id', $id)->get()->getNumRows();
+        $tempos_aula = $this->db->table('tempos_de_aula')->where('horario_id', $id)->get()->getNumRows();
+        $turmas = $this->db->table('turmas')->where('horario_id', $id)->get()->getNumRows();
+        $turmas_pref = $this->db->table('turmas')->where('horario_preferencial_id', $id)->get()->getNumRows();
 
         $restricoes = [
             'tempos_aula' => $tempos_aula, 

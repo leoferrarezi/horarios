@@ -87,11 +87,10 @@ class ProfessorModel extends Model
 
     public function getRestricoes($id) 
     {
-        $db = \Config\Database::connect();
         $id = $id['id'];
         
-        $aulas = $db->table('aula_professor')->where('professor_id', $id)->get()->getNumRows();
-        $regras = $db->table('professor_regras')->where('professor_id', $id)->get()->getNumRows();
+        $aulas = $this->db->table('aula_professor')->where('professor_id', $id)->get()->getNumRows();
+        $regras = $this->db->table('professor_regras')->where('professor_id', $id)->get()->getNumRows();
 
         $restricoes = [
             'aulas' => $aulas, 

@@ -30,7 +30,8 @@
                         <div class="col-lg-4 col-md-6 col-sm-12">
                             <div class="form-group">
                                 <label for="matriz">Matriz</label>
-                                <select class="form-select" id="Matriz" name="matriz_id" required>
+                                <select class="js-example-basic-single filtro" style="width:100%;" id="Matriz" name="matriz_id" required>
+                                    <option value=""></option>
                                     <?php foreach ($matrizes as $matriz): ?>
                                         <option value="<?php echo esc($matriz['id']) ?>"><?php echo esc($matriz['nome']) ?></option>
                                     <?php endforeach; ?>
@@ -72,7 +73,8 @@
                         <div class="col-lg-4 col-md-6 col-sm-12">
                             <div class="form-group">
                                 <label for="grupo_ambiente">Grupo de Ambiente</label>
-                                <select class="form-select" id="grupo_ambiente" name="grupo_de_ambientes_id">
+                                <select class="js-example-basic-single filtro" style="width:100%;" id="grupo_ambiente" name="grupo_de_ambientes_id">
+                                    <option value=""></option>
                                     <?php foreach ($gruposAmbientes as $ga): ?>
                                         <option value="<?php echo esc($ga['id']) ?>"><?php echo esc($ga['nome']) ?></option>
                                     <?php endforeach; ?>

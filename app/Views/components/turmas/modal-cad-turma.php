@@ -47,7 +47,8 @@
                         <div class="col-md-6 col-sm-12">
                             <div class="form-group">
                                 <label for="curso_id">Curso</label>
-                                <select class="form-select" id="curso_id" name="curso_id" required>
+                                <select class="js-example-basic-single filtro" style="width:100%;" id="curso_id" name="curso_id" required>
+                                    <option value=""></option>
                                     <?php foreach ($cursos as $curso): ?>
                                         <option value="<?php echo esc($curso['id']) ?>"><?php echo esc($curso['nome']) ?></option>
                                     <?php endforeach; ?>
@@ -75,7 +76,7 @@
                             <div class="form-group">
                                 <label for="horario_preferencial_id">Horário Preferencial</label>
                                 <select class="form-select" id="horario_preferencial_id" name="horario_preferencial_id">
-                                <option value="">Selecione...</option>
+                                    <option value="">Selecione...</option>
                                     <?php foreach ($horarios as $hp): ?>
                                         <option value="<?php echo esc($hp['id']) ?>"><?php echo esc($hp['nome']) ?></option>
                                     <?php endforeach; ?>

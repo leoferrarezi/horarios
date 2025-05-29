@@ -68,7 +68,7 @@
                                         <th>Curso</th>
                                         <th>Sigla</th>
                                         <th>Semest</th>
-                                        <th>Per./Turma</th>                                        
+                                        <th>Per./Turma</th>
                                         <th>Aulas/Dia</th>
                                         <th>Horário</th>
                                         <th>Horário Pref</th>
@@ -85,10 +85,10 @@
                                         <?php foreach ($turmas as $t): //loop para percorrer todos os professores retornados do bd 
                                         ?>
                                             <tr>
-                                                <td><?php echo esc($t['curso']); ?></td>    
+                                                <td><?php echo esc($t['curso']); ?></td>
                                                 <td><?php echo esc($t['sigla']); ?></td>
                                                 <td><?php echo esc($t['semestre']); ?></td>
-                                                <td><?php echo esc($t['periodo']); ?>º</td>                                                
+                                                <td><?php echo esc($t['periodo']); ?>º</td>
                                                 <td><?php echo esc($t['tempos_diarios']); ?></td>
                                                 <td><?php echo esc($t['horario']); ?></td>
                                                 <td><?php echo esc($t['horario_preferencial']); ?></td>
@@ -172,11 +172,10 @@
 
 
     //essa linha abaixo é para detectar que o documento foi completamente carregado e executar o código após isso
-    $(document).ready(function() 
-    {
+    $(document).ready(function() {
         $("#sigla, #edit-sigla").on("invalid", function() {
             this.setCustomValidity("Preencha a sigla da turma!");
-        });     
+        });
 
         $("#periodo, #edit-periodo").on("invalid", function() {
             if (this.validity.valueMissing) {
@@ -381,7 +380,16 @@
 <!--Referente ao select 2-->
 <script>
     $(document).ready(function() {
-        $('.js-example-basic-single').select2({
+        // Inicializar somente modal
+        $('#modal-cad-turmas .js-example-basic-single').select2({
+            placeholder: "Selecione uma opção:",
+            allowClear: true,
+            width: '100%',
+            dropdownParent: $('#modal-cad-turmas')
+        });
+
+        // Para os outros .js-example-basic-single que estão na página principal:
+        $('.js-example-basic-single').not('#modal-cad-turmas .js-example-basic-single').select2({
             placeholder: "Selecione uma opção:",
             allowClear: true,
             width: '100%'

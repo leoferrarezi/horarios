@@ -235,7 +235,11 @@
                     <h5 class="text-info"><i class="fa fa-exclamation-triangle"></i> Intervalo entre turnos!</h5>
                     <div class="card bg-dark border-info mb-3">
                         <div class="card-body p-2">
-                            <h5 class="text-info mb-1">Este docente está com intervalo inadequado entre turnos.</h5>
+                            <h6 class="text-info mb-1" id="modalRemocaoIntervaloTipo">...</h6>
+                            <h6 class="text-info mb-1" id="modalRemocaoIntervaloTempo">...</h6>
+                            <h6 class="text-muted mb-1" id="modalRemocaoIntervaloCurso">...</h6>
+                            <h6 class="text-muted mb-1" id="modalRemocaoIntervaloTurma">...</h6>
+                            <p class="text-muted mb-1" id="modalRemocaoIntervaloDisciplina">...</p>
                         </div>
                     </div>
                 </div>
@@ -565,8 +569,45 @@
             {
                 $('#rowTresTurnos').show();
             }
-            else if($horario.data('intervalo') > 0)
+            else if($horario.data('intervalo') != 0)
             {
+                /*<h6 class="text-warning mb-1" id="modalRemocaoIntervaloTipo">...</h6>
+                <h6 class="text-warning mb-1" id="modalRemocaoIntervaloTempo">...</h6>*/
+
+                // Requisição para buscar os dados da aula causando problema de intervalo
+                $.get('<?php echo base_url('sys/tabela-horarios/dadosDaAula/'); ?>' + $horario.data('intervalo').split('-')[2],
+                function(data)
+                {
+                    $('#modalRemocaoIntervaloCurso').text("Curso: " + data[0].curso);
+                    $('#modalRemocaoIntervaloTurma').text("Turma: " + data[0].turma);
+                    $('#modalRemocaoIntervaloDisciplina').text("Disciplina: " + data[0].disciplina);
+
+                    var motivo = $horario.data('intervalo').split('-')[0];
+
+                    var timestamp = $horario.data('intervalo').split('-')[1];
+                    var horas = parseInt(timestamp / 60);
+                    var minutos = parseInt(timestamp % 60);
+                    timestamp = horas + "h e " + minutos + "m";
+                    $('#modalRemocaoIntervaloTempo').text("Tempo: " + timestamp);
+
+                    switch(motivo)
+                    {
+                        case '1':
+                            $('#modalRemocaoIntervaloTipo').text("Intervalo entre manhã e tarde (mínimo 01 hora).");                            
+                            break;
+                        case '2':
+                            $('#modalRemocaoIntervaloTipo').text("Intervalo entre tarde e noite (mínimo 01 hora).");
+                            break;
+                        case '3':
+                            $('#modalRemocaoIntervaloTipo').text("Intervalo entre noite e manhã (mínimo 11 horas).");
+                            break;
+                        case '4':
+                            $('#modalRemocaoIntervaloTipo').text("Intervalo entre noite e manhã (mínimo 11 horas).");
+                            break;
+                    }
+
+                }, 'json');
+
                 $('#rowIntervalo').show();
             }
             else if($horario.data('restricao') > 0)
@@ -579,9 +620,9 @@
                 $.get('<?php echo base_url('sys/tabela-horarios/dadosDaAula/'); ?>' + $horario.data('conflito'),
                 function(data)
                 {                    
-                        $('#modalRemocaoConflitoCurso').text("Curso: " + data[0].curso);
-                        $('#modalRemocaoConflitoTurma').text("Turma: " + data[0].turma);
-                        $('#modalRemocaoConflitoDisciplina').text("Disciplina: " + data[0].disciplina);
+                    $('#modalRemocaoConflitoCurso').text("Curso: " + data[0].curso);
+                    $('#modalRemocaoConflitoTurma').text("Turma: " + data[0].turma);
+                    $('#modalRemocaoConflitoDisciplina').text("Disciplina: " + data[0].disciplina);
 
                     if($horario.data('conflitoProfessor') == 1)
                     {
@@ -853,7 +894,7 @@
                         {
                             conflitoStyle = "text-info";
                             conflitoIcon = "fa-warning";
-                            intervalo = data.split("-")[0]; //1 manhã pra tarde, 2 tarde pra noite, 3 noite pra manhã do outro dia
+                            intervalo = data;
                         }
 
                             // Preenche o horário selecionado
@@ -1068,6 +1109,8 @@
         //Progração do evento "change" dos select de cursos
         $('#filtroCurso').on('change', function() 
         {
+            aulas = [];
+
             $(".loader-demo-box").css("visibility", "visible");
 
             //Limpar a tabela de horários inteira
@@ -1098,6 +1141,8 @@
         //Progração do evento "change" dos select de turmas
         $('#filtroTurma').on('change', function() 
         {
+            aulas = [];
+
             $(".loader-demo-box").css("visibility", "visible");
 
             $("#btn_atribuir_automaticamente").prop('disabled', true);
@@ -1488,7 +1533,7 @@
                                 conflitoStyle = "text-warning";
                                 conflitoIcon = "fa-warning";
                             }
-                            else if(obj.intervalo > 0)
+                            else if(obj.intervalo != 0)
                             {
                                 conflitoStyle = "text-info";
                                 conflitoIcon = "fa-warning";
@@ -1498,7 +1543,6 @@
 
                             if(obj.fixa == 1)
                                 btnFixar = "text-warning";
-
 
                             // Preenche o horário selecionado
                             horarioSelecionado.html(`

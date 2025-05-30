@@ -231,6 +231,15 @@
                     </div>
                 </div>
 
+                <div class="row" id="rowIntervalo">
+                    <h5 class="text-info"><i class="fa fa-exclamation-triangle"></i> Intervalo entre turnos!</h5>
+                    <div class="card bg-dark border-info mb-3">
+                        <div class="card-body p-2">
+                            <h5 class="text-info mb-1">Este docente está com intervalo inadequado entre turnos.</h5>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row" id="rowConflito">
                     <h5 class="text-danger"><i class="fa fa-exclamation-triangle"></i> Conflito identificado!</h5>
                     <div class="card bg-dark border-danger mb-3">
@@ -540,6 +549,7 @@
             $('#rowRestricao').hide();
             $('#rowConflito').hide();
             $('#rowTresTurnos').hide();
+            $('#rowIntervalo').hide();
 
             if($horario.data('fixa') == 1)
             {
@@ -554,6 +564,10 @@
             if($horario.data('tresturnos') > 0)
             {
                 $('#rowTresTurnos').show();
+            }
+            else if($horario.data('intervalo') > 0)
+            {
+                $('#rowIntervalo').show();
             }
             else if($horario.data('restricao') > 0)
             {
@@ -796,13 +810,14 @@
                         });
                         return;
                     }
-                    else if(data.indexOf("OK") >= 0 || data.indexOf("CONFLITO") >= 0 || data.indexOf("RESTRICAO") >= 0|| data.indexOf("TRES-TURNOS") >= 0)
+                    else if(data.indexOf("OK") >= 0 || data.indexOf("CONFLITO") >= 0 || data.indexOf("RESTRICAO") >= 0 || data.indexOf("TRES-TURNOS") >= 0 || data.indexOf("INTERVALO") >= 0)
                     {
                         var conflitoStyle = "text-primary";
                         var conflitoIcon = "fa-mortar-board";
                         var aulaConflito = 0;
                         var tresTurnos = 0;
                         var restricao = 0;
+                        var intervalo = 0;
                         var conflitoAmbiente = 0;
                         var conflitoProfessor = 0;
 
@@ -833,6 +848,12 @@
                             conflitoStyle = "text-warning";
                             conflitoIcon = "fa-warning";
                             conflitoProfessor = 1;
+                        }
+                        else if(data.indexOf("INTERVALO") >= 0)
+                        {
+                            conflitoStyle = "text-info";
+                            conflitoIcon = "fa-warning";
+                            intervalo = data.split("-")[0]; //1 manhã pra tarde, 2 tarde pra noite, 3 noite pra manhã do outro dia
                         }
 
                         // Preenche o horário selecionado
@@ -879,6 +900,7 @@
                             .data('conflitoProfessor', conflitoProfessor)
                             .data('restricao', restricao)
                             .data('tresturnos', tresTurnos)
+                            .data('intervalo', intervalo)
                             .data('aula_horario_id', aulaHorarioId)
                             .data('fixa', 0)
                             .removeClass('horario-vazio')
@@ -1466,6 +1488,11 @@
                                 conflitoStyle = "text-warning";
                                 conflitoIcon = "fa-warning";
                             }
+                            else if(obj.intervalo > 0)
+                            {
+                                conflitoStyle = "text-info";
+                                conflitoIcon = "fa-warning";
+                            }
 
                             var btnFixar = "text-primary";
 
@@ -1520,6 +1547,7 @@
                                 .data('conflitoProfessor', obj.choqueProfessor)
                                 .data('restricao', obj.restricao)
                                 .data('tresturnos', obj.tresturnos)
+                                .data('intervalo', obj.intervalo)
                                 .data('aula_horario_id', obj.id)
                                 .data('fixa', obj.fixa)
                                 .removeClass('horario-vazio')

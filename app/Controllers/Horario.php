@@ -54,23 +54,34 @@ class Horario extends BaseController
     }
     public function deletar()
     {
-
         $dadosPost = $this->request->getPost();
         $id = strip_tags($dadosPost['id']);
 
         $horarioModel = new HorariosModel();
         try {
-            $horarioModel->verificarReferencias(['id' => $id]);
+            $restricoes = $horarioModel->getRestricoes(['id' => $id]);
 
-            if ($horarioModel->delete($id)) {
-                session()->setFlashdata('sucesso', 'Horário removido com sucesso!');
-                return redirect()->to(base_url('/sys/horario'));
+            if (!$restricoes['tempos_aula'] && !$restricoes['turmas'] && !$restricoes['turmas_pref']) {
+                if ($horarioModel->delete($id)) {
+                    session()->setFlashdata('sucesso', 'Horário excluído com sucesso!');
+                    return redirect()->to(base_url('/sys/horario'));
+                } else {
+                    return redirect()->to(base_url('/sys/horario'))->with('erro', 'Erro inesperado ao excluir horário!');
+                }
             } else {
-                return redirect()->to(base_url('/sys/horario'))->with('erro', 'Falha ao deletar horário');
+                $mensagem = "O horário não pode ser excluído.<br>Este horário possui ";
+                if ($restricoes['tempos_aula'] && ($restricoes['turmas'] || $restricoes['turmas_pref'])) {
+                    $mensagem = $mensagem . "tempo(s) de aula e turma(s) relacionadas a ele!";
+                } else if ($restricoes['tempos_aula']) {
+                    $mensagem = $mensagem . "tempo(s) de aula relacionado(s) a ele!";
+                } else {
+                    $mensagem = $mensagem . "turma(s) relacionada(s) a ele!";
+                }
+                throw new ReferenciaException($mensagem);
             }
         } catch (ReferenciaException $e) {
             session()->setFlashdata('erro', $e->getMessage());
-            return redirect()->to(base_url('/sys/horario'))->with('erros', ['erro' => $e->getMessage()]);
+            return redirect()->to(base_url('/sys/horario'));
         }
     }
 }

@@ -50,25 +50,8 @@ class HorariosModel extends BaseModel
     protected $afterUpdate    = ['logUpdate'];
     protected $beforeFind     = [];
     protected $afterFind      = [];
-    protected $beforeDelete   = ['verificarReferencias'];
+    protected $beforeDelete   = ['getRestricoes'];
     protected $afterDelete    = ['logDelete'];
-
-    public function verificarReferencias(array $data)
-    {
-        $id = $data['id'];
-
-        $referencias = $this->verificarReferenciasEmTabelas($id);
-        $referencias = implode(", ", $referencias);
-        // Se o ID for referenciado em outras tabelas, lança a exceção
-        if (!empty($referencias)) {
-            // Passa o nome das tabelas onde o ID foi encontrado para a exceção
-            throw new ReferenciaException("Este horário não pode ser excluído, porque está em uso. <br>
-                    Para excluir este horário, primeiro remova as associações em {$referencias} que estão utilizando este horário'.");
-        }
-
-        // Se não houver referências, retorna os dados para permitir a exclusão
-        return $data;
-    }
 
     public function getHorariosAulas()
     {
@@ -90,36 +73,6 @@ class HorariosModel extends BaseModel
         return $horarios;
     }
 
-    private function verificarReferenciasEmTabelas($id)
-    {
-        // Conectar ao banco de dados
-        $db = \Config\Database::connect();
-
-        // Tabelas e colunas de chave estrangeira a serem verificadas
-        $tabelas = [
-            'tempos_de_aula' => 'horario_id',
-            'turmas' => 'horario_id',
-            'turmas' => 'horario_preferencial_id',
-
-        ];
-
-        $referenciasEncontradas = [];
-
-        // Verificar se o ID é referenciado
-        foreach ($tabelas as $tabela => $fk_coluna) {
-            $builder = $db->table($tabela);
-            $builder->where($fk_coluna, $id);
-            $query = $builder->get();
-
-            if ($query->getNumRows() > 0) {
-                // Adiciona a tabela à lista de referências encontradas
-                $referenciasEncontradas[] = $tabela;
-            }
-        }
-
-        // Retorna as tabelas onde o ID foi encontrado
-        return $referenciasEncontradas;
-    }
     protected function logInsert(array $data)
     {
         $this->registrarLog('Inserção', 'Nova grade de horário adicionado', $data['id'] ?? null);
@@ -136,5 +89,23 @@ class HorariosModel extends BaseModel
     {
         $this->registrarLog('Exclusão', 'Grade de horário removido', $data['id'][0] ?? null);
         return $data;
+    }
+
+    public function getRestricoes($id) 
+    {
+        $db = \Config\Database::connect();
+        $id = $id['id'];
+
+        $tempos_aula = $db->table('tempos_de_aula')->where('horario_id', $id)->get()->getNumRows();
+        $turmas = $db->table('turmas')->where('horario_id', $id)->get()->getNumRows();
+        $turmas_pref = $db->table('turmas')->where('horario_preferencial_id', $id)->get()->getNumRows();
+
+        $restricoes = [
+            'tempos_aula' => $tempos_aula, 
+            'turmas' => $turmas, 
+            'turmas_pref' => $turmas_pref
+        ];
+
+        return $restricoes;
     }
 }

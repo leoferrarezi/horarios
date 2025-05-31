@@ -283,7 +283,8 @@
 						handleTodosCheckbox('#checkTodosAmbientes', '#filtroAmbiente');
 
 						// Carrega ambientes quando um grupo é selecionado
-						$('#filtroGrupoAmbiente').on('change', function() {
+						$('#filtroGrupoAmbiente').on('change', function()
+						{
 							var grupos = $(this).val();
 							var ambienteSelect = $('#filtroAmbiente');
 							var checkTodosAmbientes = $('#checkTodosAmbientes');
@@ -341,7 +342,8 @@
 			});
 		}
 
-		function carregarAmbientesPorGrupo(grupos) {
+		function carregarAmbientesPorGrupo(grupos) 
+		{
 			var ambienteSelect = $('#filtroAmbiente');
 			ambienteSelect.empty().append('<option value="">Carregando...</option>').trigger('change');
 

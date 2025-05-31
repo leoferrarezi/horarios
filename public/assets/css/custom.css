@@ -118,3 +118,7 @@
   background-color: #495057 !important;
   /*Fundo da seleção de opções do select2*/
 }
+
+body {
+  background-color: #000;
+}

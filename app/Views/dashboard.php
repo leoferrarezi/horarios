@@ -71,7 +71,7 @@
 						<span class="menu-title">Gestão de Horários</span>
 						<i class="menu-arrow"></i>
 					</a>
-					<div class="collapse show" id="horarios">
+					<div class="collapse" id="horarios">
 						<ul class="nav flex-column sub-menu">
 
 							<li class="nav-item">

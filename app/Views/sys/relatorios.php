@@ -87,7 +87,7 @@
 	<div id="templateCurso">
 		<div class="row">
 			<div class="col-md-12 mb-1">
-				<div class="form-group mb-2">
+				<div class="form-group">
 					<div class="form-check d-flex align-items-center mb-1" style="margin-left: 0.375rem;">
 						<input class="form-check-input mt-0" type="checkbox" id="checkTodosCursos" name="todosCursos">
 						<label class="form-check-label" for="checkTodosCursos">Todos os Cursos</label>
@@ -101,7 +101,7 @@
 			</div>
 			<div class="col-md-12 mb-1">
 				<div class="form-group">
-					<div class="form-check d-flex align-items-center mb-2" style="margin-left: 0.375rem;">
+					<div class="form-check d-flex align-items-center mb-1" style="margin-left: 0.375rem;">
 						<input type="checkbox" class="form-check-input mt-0" id="checkTodasTurmas" disabled name="todasTurmas">
 						<label class="form-check-label" for="checkTodasTurmas">Todas as Turmas</label>
 					</div>
@@ -117,7 +117,7 @@
 		<div class="row">
 			<div class="col-md-12 mb-1">
 				<div class="form-group">
-					<div class="form-check d-flex align-items-center mb-2" style="margin-left: 0.375rem;">
+					<div class="form-check d-flex align-items-center mb-1" style="margin-left: 0.375rem;">
 						<input type="checkbox" class="form-check-input mt-0" id="checkTodosProfessores" name="todosProfessores">
 						<label class="form-check-label" for="checkTodosProfessores">Todos os Professores</label>
 					</div>

@@ -46,8 +46,7 @@ class Relatorios extends BaseController
     {
         $cursos = $this->request->getPost('cursos');
 
-        if (empty($cursos))
-        {
+        if (empty($cursos)) {
             return $this->response->setJSON([]);
         }
 
@@ -64,16 +63,14 @@ class Relatorios extends BaseController
     {
         $tipo = $this->request->getPost('tipo');
 
-        if (!$tipo)
-        {
+        if (!$tipo) {
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'Tipo de relatório não especificado'
             ]);
         }
 
-        switch ($tipo)
-        {
+        switch ($tipo) {
             case 'curso':
                 $dados = $this->filtrarCursos();
                 break;
@@ -122,13 +119,11 @@ class Relatorios extends BaseController
             ->join('tempos_de_aula', 'tempos_de_aula.id = aula_horario.tempo_de_aula_id')
             ->where('aula_horario.versao_id', (new \App\Models\VersoesModel())->getVersaoByUser(auth()->id()));
 
-        if (!empty($cursos))
-        {
+        if (!empty($cursos)) {
             $builder->whereIn('cursos.id', $cursos);
         }
 
-        if (!empty($turmas))
-        {
+        if (!empty($turmas)) {
             $builder->whereIn('turmas.id', $turmas);
         }
 
@@ -165,8 +160,7 @@ class Relatorios extends BaseController
             ->join('tempos_de_aula', 'tempos_de_aula.id = aula_horario.tempo_de_aula_id')
             ->where('aula_horario.versao_id', (new \App\Models\VersoesModel())->getVersaoByUser(auth()->id()));
 
-        if (!empty($professores))
-        {
+        if (!empty($professores)) {
             $builder->whereIn('professores.id', $professores);
         }
 
@@ -180,17 +174,19 @@ class Relatorios extends BaseController
     protected function filtrarAmbientes()
     {
         $ambientes = $this->request->getPost('ambientes') ?? [];
+        $grupos = $this->request->getPost('grupos_ambientes') ?? [];
 
         $builder = $this->aulaHorarioModel
             ->select('
-                ambientes.nome as ambiente,
-                cursos.nome as curso,
-                turmas.sigla as turma,
-                disciplinas.nome as disciplina,
-                professores.nome as professor,
-                tempos_de_aula.dia_semana,
-                CONCAT(LPAD(tempos_de_aula.hora_inicio, 2, "0"), ":", LPAD(tempos_de_aula.minuto_inicio, 2, "0")) as hora_inicio
-            ')
+            ambientes.nome as ambiente,
+            cursos.nome as curso,
+            turmas.sigla as turma,
+            disciplinas.nome as disciplina,
+            professores.nome as professor,
+            tempos_de_aula.dia_semana,
+            CONCAT(LPAD(tempos_de_aula.hora_inicio, 2, "0"), ":", LPAD(tempos_de_aula.minuto_inicio, 2, "0")) as hora_inicio,
+            CONCAT(LPAD(tempos_de_aula.hora_fim, 2, "0"), ":", LPAD(tempos_de_aula.minuto_fim, 2, "0")) as hora_fim
+        ')
             ->join('aulas', 'aulas.id = aula_horario.aula_id')
             ->join('disciplinas', 'disciplinas.id = aulas.disciplina_id')
             ->join('turmas', 'turmas.id = aulas.turma_id')
@@ -202,8 +198,12 @@ class Relatorios extends BaseController
             ->join('tempos_de_aula', 'tempos_de_aula.id = aula_horario.tempo_de_aula_id')
             ->where('aula_horario.versao_id', (new \App\Models\VersoesModel())->getVersaoByUser(auth()->id()));
 
-        if (!empty($ambientes))
-        {
+        if (!empty($grupos)) {
+            $builder->join('ambiente_grupo', 'ambiente_grupo.ambiente_id = ambientes.id')
+                ->whereIn('ambiente_grupo.grupo_de_ambientes_id', $grupos); // Ajuste aqui
+        }
+
+        if (!empty($ambientes)) {
             $builder->whereIn('ambientes.id', $ambientes);
         }
 
@@ -212,19 +212,17 @@ class Relatorios extends BaseController
             ->orderBy('tempos_de_aula.hora_inicio')
             ->orderBy('tempos_de_aula.minuto_inicio')
             ->findAll();
-    }    
+    }
 
     public function exportar()
     {
         $tipo = $this->request->getPost('tipoRelatorio');
 
-        if (!$tipo)
-        {
+        if (!$tipo) {
             die("Sem tipo selecionado.");
         }
 
-        switch ($tipo)
-        {
+        switch ($tipo) {
             case 'curso':
                 $dados = $this->filtrarCursos();
                 $this->exportarCursoTurma($dados);
@@ -246,47 +244,35 @@ class Relatorios extends BaseController
     {
         $tabelas = [];
 
-        foreach ($dados as $key => $value)
-        {
-            if (!in_array($value['ambiente'], $tabelas))
-            {
+        foreach ($dados as $key => $value) {
+            if (!in_array($value['ambiente'], $tabelas)) {
                 $tabelas[$value['ambiente']] = [];
             }
         }
 
-        foreach ($dados as $key => $value)
-        {
-            for($i = 1 ; $i <= 5 ; $i++)
-            {
-                if (!in_array($i, $tabelas[$value['ambiente']]))
-                {
+        foreach ($dados as $key => $value) {
+            for ($i = 1; $i <= 5; $i++) {
+                if (!in_array($i, $tabelas[$value['ambiente']])) {
                     $tabelas[$value['ambiente']][$i] = [];
                 }
             }
-        }        
+        }
 
-        foreach ($dados as $key => $value)
-        {
-            if (!in_array($value['hora_inicio'], $tabelas[$value['ambiente']][$value['dia_semana']]))
-            {
+        foreach ($dados as $key => $value) {
+            if (!in_array($value['hora_inicio'], $tabelas[$value['ambiente']][$value['dia_semana']])) {
                 $tabelas[$value['ambiente']][$value['dia_semana']][$value['hora_inicio']] = [];
             }
-        }        
+        }
 
-        foreach ($dados as $key => $value)
-        {
-            if(empty($tabelas[$value['ambiente']] [$value['dia_semana']] [$value['hora_inicio']] ['disciplina']))
-            {
-                $tabelas[$value['ambiente']] [$value['dia_semana']] [$value['hora_inicio']] ['professor'] = $value['professor'];
-                $tabelas[$value['ambiente']] [$value['dia_semana']] [$value['hora_inicio']] ['disciplina'] = $value['disciplina'];
-                $tabelas[$value['ambiente']] [$value['dia_semana']] [$value['hora_inicio']] ['curso'] = $value['curso'];
-                $tabelas[$value['ambiente']] [$value['dia_semana']] [$value['hora_inicio']] ['turma'] = $value['turma'];
-            }
-            else
-            {
-                if($tabelas[$value['ambiente']] [$value['dia_semana']] [$value['hora_inicio']] ['professor'] != $value['professor'])
-                {
-                    $tabelas[$value['ambiente']] [$value['dia_semana']] [$value['hora_inicio']] ['professor'] .= ', ' . $value['professor'];
+        foreach ($dados as $key => $value) {
+            if (empty($tabelas[$value['ambiente']][$value['dia_semana']][$value['hora_inicio']]['disciplina'])) {
+                $tabelas[$value['ambiente']][$value['dia_semana']][$value['hora_inicio']]['professor'] = $value['professor'];
+                $tabelas[$value['ambiente']][$value['dia_semana']][$value['hora_inicio']]['disciplina'] = $value['disciplina'];
+                $tabelas[$value['ambiente']][$value['dia_semana']][$value['hora_inicio']]['curso'] = $value['curso'];
+                $tabelas[$value['ambiente']][$value['dia_semana']][$value['hora_inicio']]['turma'] = $value['turma'];
+            } else {
+                if ($tabelas[$value['ambiente']][$value['dia_semana']][$value['hora_inicio']]['professor'] != $value['professor']) {
+                    $tabelas[$value['ambiente']][$value['dia_semana']][$value['hora_inicio']]['professor'] .= ', ' . $value['professor'];
                 }
             }
         }
@@ -329,26 +315,24 @@ class Relatorios extends BaseController
 
         $conta = 0;
 
-        foreach($tabelas as $ambiente => $dias)
-        {            
-            $temDias = [1,2,3,4,5];
+        foreach ($tabelas as $ambiente => $dias) {
+            $temDias = [1, 2, 3, 4, 5];
             $temHorarios = [];
 
             foreach ($dias as $dia => $horarios) //catalogar os dias da semana que estão no horário do curso/turma
             {
-                foreach ($horarios as $hora_inicio => $outros)
-                {
-                    if(in_array($hora_inicio,$temHorarios))
+                foreach ($horarios as $hora_inicio => $outros) {
+                    if (in_array($hora_inicio, $temHorarios))
                         continue;
-                    
-                    array_push($temHorarios,$hora_inicio);
+
+                    array_push($temHorarios, $hora_inicio);
                 }
             }
 
             sort($temDias);
             sort($temHorarios);
 
-            if($conta > 0 && $conta < sizeof($tabelas))
+            if ($conta > 0 && $conta < sizeof($tabelas))
                 $pdf->appendHTML('<div class="page_break"></div>');
 
             $pdf->appendHTML('
@@ -356,16 +340,15 @@ class Relatorios extends BaseController
                     <thead>
                         <tr>
                             <td colspan="' . (sizeof($temDias) + 1) . '" style="border: none; padding: 0px; text-align: center;">
-                                <div class="caption">'. $ambiente . '</div>
+                                <div class="caption">' . $ambiente . '</div>
                             </td>
                         </tr>
                         <tr>
                             <th width="5%">Horário</th>');
 
-            foreach ($temDias as $dia)
-            {
+            foreach ($temDias as $dia) {
                 $pdf->appendHTML('
-                    <th width="19%">'. $nome_dia[$dia] .'</th>
+                    <th width="19%">' . $nome_dia[$dia] . '</th>
                 ');
             }
 
@@ -373,16 +356,14 @@ class Relatorios extends BaseController
 
             $ultimoTurno = 0;
 
-            foreach ($temHorarios as $horario)
-            {
-                $horarioAtual = (int)(substr($horario,0,2));
+            foreach ($temHorarios as $horario) {
+                $horarioAtual = (int)(substr($horario, 0, 2));
                 $turnoAtual = ($horarioAtual <= 12) ? 1 : (($horarioAtual >= 13 && $horarioAtual <= 17) ? 2 : 3);
 
-                if($ultimoTurno == 0 || $turnoAtual != $ultimoTurno)
-                {
-                    if($turnoAtual == 1)
+                if ($ultimoTurno == 0 || $turnoAtual != $ultimoTurno) {
+                    if ($turnoAtual == 1)
                         $pdf->appendHTML('<tr><th colspan="' . (sizeof($temDias) + 1) . '" class="periodo">M A N H Ã</th></tr>');
-                    else if($turnoAtual == 2)
+                    else if ($turnoAtual == 2)
                         $pdf->appendHTML('<tr><th colspan="' . (sizeof($temDias) + 1) . '" class="periodo">T A R D E</th></tr>');
                     else
                         $pdf->appendHTML('<tr><th colspan="' . (sizeof($temDias) + 1) . '" class="periodo">N O I T E</th></tr>');
@@ -391,64 +372,59 @@ class Relatorios extends BaseController
                 $ultimoTurno = $turnoAtual;
 
                 $pdf->appendHTML('<tr>');
-                    $pdf->appendHTML('<td class="hora">' . $horario . '</td>');
+                $pdf->appendHTML('<td class="hora">' . $horario . '</td>');
 
-                    foreach ($temDias as $dia)
-                    {
-                        if(isset($tabelas[$ambiente][$dia]))
-                        {
-                            if(isset($tabelas[$ambiente][$dia][$horario]))
-                            {
-                                $pdf->appendHTML('<td>');
-                                
-                                if(strlen($tabelas[$ambiente][$dia][$horario]['disciplina']) >= 40)
-                                    $pdf->appendHTML('<small>');
+                foreach ($temDias as $dia) {
+                    if (isset($tabelas[$ambiente][$dia])) {
+                        if (isset($tabelas[$ambiente][$dia][$horario])) {
+                            $pdf->appendHTML('<td>');
 
-                                $pdf->appendHTML('<strong>' . $tabelas[$ambiente][$dia][$horario]['disciplina'] . '</strong>');
+                            if (strlen($tabelas[$ambiente][$dia][$horario]['disciplina']) >= 40)
+                                $pdf->appendHTML('<small>');
 
-                                if(strlen($tabelas[$ambiente][$dia][$horario]['disciplina']) >= 40)
-                                    $pdf->appendHTML('</small>');                                    
-                                
-                                $pdf->appendHTML('<br />');
-                                $pdf->appendHTML('<em>');
-                                
-                                if(strlen($tabelas[$ambiente][$dia][$horario]['curso']) >= 40)
-                                    $pdf->appendHTML('<small>');
-                                
-                                $pdf->appendHTML($tabelas[$ambiente][$dia][$horario]['curso']);
-                                
-                                if(strlen($tabelas[$ambiente][$dia][$horario]['curso']) >= 40)
-                                    $pdf->appendHTML('</small>');
+                            $pdf->appendHTML('<strong>' . $tabelas[$ambiente][$dia][$horario]['disciplina'] . '</strong>');
 
-                                $pdf->appendHTML('<br />');
+                            if (strlen($tabelas[$ambiente][$dia][$horario]['disciplina']) >= 40)
+                                $pdf->appendHTML('</small>');
 
-                                if(strlen($tabelas[$ambiente][$dia][$horario]['turma']) >= 40)
-                                    $pdf->appendHTML('<small>');
-                                
-                                $pdf->appendHTML($tabelas[$ambiente][$dia][$horario]['turma']);
-                                
-                                if(strlen($tabelas[$ambiente][$dia][$horario]['turma']) >= 40)
-                                    $pdf->appendHTML('</small>');
+                            $pdf->appendHTML('<br />');
+                            $pdf->appendHTML('<em>');
 
-                                $pdf->appendHTML('<br />');
+                            if (strlen($tabelas[$ambiente][$dia][$horario]['curso']) >= 40)
+                                $pdf->appendHTML('<small>');
 
-                                if(strlen($tabelas[$ambiente][$dia][$horario]['professor']) >= 40)
-                                    $pdf->appendHTML('<small>');
+                            $pdf->appendHTML($tabelas[$ambiente][$dia][$horario]['curso']);
 
-                                $pdf->appendHTML('<strong>' . $tabelas[$ambiente][$dia][$horario]['professor'] . '</strong>');
+                            if (strlen($tabelas[$ambiente][$dia][$horario]['curso']) >= 40)
+                                $pdf->appendHTML('</small>');
 
-                                if(strlen($tabelas[$ambiente][$dia][$horario]['professor']) >= 40)
-                                    $pdf->appendHTML('</small>');                                    
-                                
-                                $pdf->appendHTML('</em>');
-                                $pdf->appendHTML('</td>');
-                            }
-                            else
-                            {
-                                $pdf->appendHTML('<td>—</td>');
-                            }
+                            $pdf->appendHTML('<br />');
+
+                            if (strlen($tabelas[$ambiente][$dia][$horario]['turma']) >= 40)
+                                $pdf->appendHTML('<small>');
+
+                            $pdf->appendHTML($tabelas[$ambiente][$dia][$horario]['turma']);
+
+                            if (strlen($tabelas[$ambiente][$dia][$horario]['turma']) >= 40)
+                                $pdf->appendHTML('</small>');
+
+                            $pdf->appendHTML('<br />');
+
+                            if (strlen($tabelas[$ambiente][$dia][$horario]['professor']) >= 40)
+                                $pdf->appendHTML('<small>');
+
+                            $pdf->appendHTML('<strong>' . $tabelas[$ambiente][$dia][$horario]['professor'] . '</strong>');
+
+                            if (strlen($tabelas[$ambiente][$dia][$horario]['professor']) >= 40)
+                                $pdf->appendHTML('</small>');
+
+                            $pdf->appendHTML('</em>');
+                            $pdf->appendHTML('</td>');
+                        } else {
+                            $pdf->appendHTML('<td>—</td>');
                         }
                     }
+                }
 
                 $pdf->appendHTML('</tr>');
             }
@@ -468,52 +444,38 @@ class Relatorios extends BaseController
     {
         $tabelas = [];
 
-        foreach ($dados as $key => $value)
-        {
-            if (!in_array($value['professor'], $tabelas))
-            {
+        foreach ($dados as $key => $value) {
+            if (!in_array($value['professor'], $tabelas)) {
                 $tabelas[$value['professor']] = [];
             }
         }
 
-        foreach ($dados as $key => $value)
-        {
-            for($i = 1 ; $i <= 5 ; $i++)
-            {
-                if (!in_array($i, $tabelas[$value['professor']]))
-                {
+        foreach ($dados as $key => $value) {
+            for ($i = 1; $i <= 5; $i++) {
+                if (!in_array($i, $tabelas[$value['professor']])) {
                     $tabelas[$value['professor']][$i] = [];
                 }
             }
-        }        
+        }
 
-        foreach ($dados as $key => $value)
-        {
-            if (!in_array($value['hora_inicio'], $tabelas[$value['professor']][$value['dia_semana']]))
-            {
+        foreach ($dados as $key => $value) {
+            if (!in_array($value['hora_inicio'], $tabelas[$value['professor']][$value['dia_semana']])) {
                 $tabelas[$value['professor']][$value['dia_semana']][$value['hora_inicio']] = [];
             }
-        }        
+        }
 
-        foreach ($dados as $key => $value)
-        {
-            if(empty($tabelas[$value['professor']] [$value['dia_semana']] [$value['hora_inicio']] ['disciplina']))
-            {
-                $tabelas[$value['professor']] [$value['dia_semana']] [$value['hora_inicio']] ['professor'] = $value['professor'];
-                $tabelas[$value['professor']] [$value['dia_semana']] [$value['hora_inicio']] ['disciplina'] = $value['disciplina'];
-                $tabelas[$value['professor']] [$value['dia_semana']] [$value['hora_inicio']] ['ambiente'] = $value['ambiente'];
-                $tabelas[$value['professor']] [$value['dia_semana']] [$value['hora_inicio']] ['curso'] = $value['curso'];
-                $tabelas[$value['professor']] [$value['dia_semana']] [$value['hora_inicio']] ['turma'] = $value['turma'];
-            }
-            else
-            {
-                if($tabelas[$value['professor']] [$value['dia_semana']] [$value['hora_inicio']] ['professor'] != $value['professor'])
-                {
-                    $tabelas[$value['professor']] [$value['dia_semana']] [$value['hora_inicio']] ['professor'] .= ', ' . $value['professor'];
-                }
-                else if($tabelas[$value['professor']] [$value['dia_semana']] [$value['hora_inicio']] ['ambiente'] != $value['ambiente'])
-                {
-                    $tabelas[$value['professor']] [$value['dia_semana']] [$value['hora_inicio']] ['ambiente'] .= ', ' . $value['ambiente'];
+        foreach ($dados as $key => $value) {
+            if (empty($tabelas[$value['professor']][$value['dia_semana']][$value['hora_inicio']]['disciplina'])) {
+                $tabelas[$value['professor']][$value['dia_semana']][$value['hora_inicio']]['professor'] = $value['professor'];
+                $tabelas[$value['professor']][$value['dia_semana']][$value['hora_inicio']]['disciplina'] = $value['disciplina'];
+                $tabelas[$value['professor']][$value['dia_semana']][$value['hora_inicio']]['ambiente'] = $value['ambiente'];
+                $tabelas[$value['professor']][$value['dia_semana']][$value['hora_inicio']]['curso'] = $value['curso'];
+                $tabelas[$value['professor']][$value['dia_semana']][$value['hora_inicio']]['turma'] = $value['turma'];
+            } else {
+                if ($tabelas[$value['professor']][$value['dia_semana']][$value['hora_inicio']]['professor'] != $value['professor']) {
+                    $tabelas[$value['professor']][$value['dia_semana']][$value['hora_inicio']]['professor'] .= ', ' . $value['professor'];
+                } else if ($tabelas[$value['professor']][$value['dia_semana']][$value['hora_inicio']]['ambiente'] != $value['ambiente']) {
+                    $tabelas[$value['professor']][$value['dia_semana']][$value['hora_inicio']]['ambiente'] .= ', ' . $value['ambiente'];
                 }
             }
         }
@@ -556,19 +518,17 @@ class Relatorios extends BaseController
 
         $conta = 0;
 
-        foreach($tabelas as $professor => $dias)
-        {            
-            $temDias = [1,2,3,4,5];
+        foreach ($tabelas as $professor => $dias) {
+            $temDias = [1, 2, 3, 4, 5];
             $temHorarios = [];
 
             foreach ($dias as $dia => $horarios) //catalogar os dias da semana que estão no horário do curso/turma
             {
-                foreach ($horarios as $hora_inicio => $outros)
-                {
-                    if(in_array($hora_inicio,$temHorarios))
+                foreach ($horarios as $hora_inicio => $outros) {
+                    if (in_array($hora_inicio, $temHorarios))
                         continue;
-                    
-                    array_push($temHorarios,$hora_inicio);
+
+                    array_push($temHorarios, $hora_inicio);
                 }
             }
 
@@ -580,34 +540,31 @@ class Relatorios extends BaseController
                     <thead>
                         <tr>
                             <td colspan="' . (sizeof($temDias) + 1) . '" style="border: none; padding: 0px; text-align: center;">
-                                <div class="caption">'. $professor . '</div>
+                                <div class="caption">' . $professor . '</div>
                             </td>
                         </tr>
                         <tr>
                             <th width="5%">Horário</th>');
 
-            foreach ($temDias as $dia)
-            {
+            foreach ($temDias as $dia) {
                 $pdf->appendHTML('
-                    <th width="19%">'. $nome_dia[$dia] .'</th>
+                    <th width="19%">' . $nome_dia[$dia] . '</th>
                 ');
             }
 
             $pdf->appendHTML('</tr></thead><tbody>');
 
             $ultimoTurno = 0;
-            
 
-            foreach ($temHorarios as $horario)
-            {
-                $horarioAtual = (int)(substr($horario,0,2));
+
+            foreach ($temHorarios as $horario) {
+                $horarioAtual = (int)(substr($horario, 0, 2));
                 $turnoAtual = ($horarioAtual <= 12) ? 1 : (($horarioAtual >= 13 && $horarioAtual <= 17) ? 2 : 3);
 
-                if($ultimoTurno == 0 || $turnoAtual != $ultimoTurno)
-                {
-                    if($turnoAtual == 1)
+                if ($ultimoTurno == 0 || $turnoAtual != $ultimoTurno) {
+                    if ($turnoAtual == 1)
                         $pdf->appendHTML('<tr><th colspan="' . (sizeof($temDias) + 1) . '" class="periodo">M A N H Ã</th></tr>');
-                    else if($turnoAtual == 2)
+                    else if ($turnoAtual == 2)
                         $pdf->appendHTML('<tr><th colspan="' . (sizeof($temDias) + 1) . '" class="periodo">T A R D E</th></tr>');
                     else
                         $pdf->appendHTML('<tr><th colspan="' . (sizeof($temDias) + 1) . '" class="periodo">N O I T E</th></tr>');
@@ -616,64 +573,59 @@ class Relatorios extends BaseController
                 $ultimoTurno = $turnoAtual;
 
                 $pdf->appendHTML('<tr>');
-                    $pdf->appendHTML('<td class="hora">' . $horario . '</td>');
+                $pdf->appendHTML('<td class="hora">' . $horario . '</td>');
 
-                    foreach ($temDias as $dia)
-                    {
-                        if(isset($tabelas[$professor][$dia]))
-                        {
-                            if(isset($tabelas[$professor][$dia][$horario]))
-                            {
-                                $pdf->appendHTML('<td>');
-                                
-                                if(strlen($tabelas[$professor][$dia][$horario]['disciplina']) >= 40)
-                                    $pdf->appendHTML('<small>');
+                foreach ($temDias as $dia) {
+                    if (isset($tabelas[$professor][$dia])) {
+                        if (isset($tabelas[$professor][$dia][$horario])) {
+                            $pdf->appendHTML('<td>');
 
-                                $pdf->appendHTML('<strong>' . $tabelas[$professor][$dia][$horario]['disciplina'] . '</strong>');
+                            if (strlen($tabelas[$professor][$dia][$horario]['disciplina']) >= 40)
+                                $pdf->appendHTML('<small>');
 
-                                if(strlen($tabelas[$professor][$dia][$horario]['disciplina']) >= 40)
-                                    $pdf->appendHTML('</small>');                                    
-                                
-                                $pdf->appendHTML('<br />');
-                                $pdf->appendHTML('<em>');
-                                
-                                if(strlen($tabelas[$professor][$dia][$horario]['curso']) >= 40)
-                                    $pdf->appendHTML('<small>');
-                                
-                                $pdf->appendHTML($tabelas[$professor][$dia][$horario]['curso']);
-                                
-                                if(strlen($tabelas[$professor][$dia][$horario]['curso']) >= 40)
-                                    $pdf->appendHTML('</small>');
+                            $pdf->appendHTML('<strong>' . $tabelas[$professor][$dia][$horario]['disciplina'] . '</strong>');
 
-                                $pdf->appendHTML('<br />');
+                            if (strlen($tabelas[$professor][$dia][$horario]['disciplina']) >= 40)
+                                $pdf->appendHTML('</small>');
 
-                                if(strlen($tabelas[$professor][$dia][$horario]['turma']) >= 40)
-                                    $pdf->appendHTML('<small>');
-                                
-                                $pdf->appendHTML($tabelas[$professor][$dia][$horario]['turma']);
-                                
-                                if(strlen($tabelas[$professor][$dia][$horario]['turma']) >= 40)
-                                    $pdf->appendHTML('</small>');
+                            $pdf->appendHTML('<br />');
+                            $pdf->appendHTML('<em>');
 
-                                $pdf->appendHTML('<br />');
+                            if (strlen($tabelas[$professor][$dia][$horario]['curso']) >= 40)
+                                $pdf->appendHTML('<small>');
 
-                                if(strlen($tabelas[$professor][$dia][$horario]['ambiente']) >= 40)
-                                    $pdf->appendHTML('<small>');
+                            $pdf->appendHTML($tabelas[$professor][$dia][$horario]['curso']);
 
-                                $pdf->appendHTML('<strong>' . $tabelas[$professor][$dia][$horario]['ambiente'] . '</strong>');
+                            if (strlen($tabelas[$professor][$dia][$horario]['curso']) >= 40)
+                                $pdf->appendHTML('</small>');
 
-                                if(strlen($tabelas[$professor][$dia][$horario]['ambiente']) >= 40)
-                                    $pdf->appendHTML('</small>');                                    
-                                
-                                $pdf->appendHTML('</em>');
-                                $pdf->appendHTML('</td>');
-                            }
-                            else
-                            {
-                                $pdf->appendHTML('<td>—</td>');
-                            }
+                            $pdf->appendHTML('<br />');
+
+                            if (strlen($tabelas[$professor][$dia][$horario]['turma']) >= 40)
+                                $pdf->appendHTML('<small>');
+
+                            $pdf->appendHTML($tabelas[$professor][$dia][$horario]['turma']);
+
+                            if (strlen($tabelas[$professor][$dia][$horario]['turma']) >= 40)
+                                $pdf->appendHTML('</small>');
+
+                            $pdf->appendHTML('<br />');
+
+                            if (strlen($tabelas[$professor][$dia][$horario]['ambiente']) >= 40)
+                                $pdf->appendHTML('<small>');
+
+                            $pdf->appendHTML('<strong>' . $tabelas[$professor][$dia][$horario]['ambiente'] . '</strong>');
+
+                            if (strlen($tabelas[$professor][$dia][$horario]['ambiente']) >= 40)
+                                $pdf->appendHTML('</small>');
+
+                            $pdf->appendHTML('</em>');
+                            $pdf->appendHTML('</td>');
+                        } else {
+                            $pdf->appendHTML('<td>—</td>');
                         }
                     }
+                }
 
                 $pdf->appendHTML('</tr>');
             }
@@ -685,7 +637,7 @@ class Relatorios extends BaseController
 
             $conta++;
 
-            if($conta < sizeof($tabelas))
+            if ($conta < sizeof($tabelas))
                 $pdf->appendHTML('<div class="page_break"></div>');
         }
 
@@ -696,58 +648,42 @@ class Relatorios extends BaseController
     {
         $tabelas = [];
 
-        foreach ($dados as $key => $value)
-        {
-            if (!in_array($value['curso'], $tabelas))
-            {
+        foreach ($dados as $key => $value) {
+            if (!in_array($value['curso'], $tabelas)) {
                 $tabelas[$value['curso']] = [];
             }
         }
 
-        foreach ($dados as $key => $value)
-        {
-            if (!in_array($value['turma'], $tabelas[$value['curso']]))
-            {
+        foreach ($dados as $key => $value) {
+            if (!in_array($value['turma'], $tabelas[$value['curso']])) {
                 $tabelas[$value['curso']][$value['turma']] = [];
             }
         }
 
-        foreach ($dados as $key => $value)
-        {
-            for($i = 1 ; $i <= 5 ; $i++)
-            {
-                if (!in_array($i, $tabelas[$value['curso']][$value['turma']]))
-                {
+        foreach ($dados as $key => $value) {
+            for ($i = 1; $i <= 5; $i++) {
+                if (!in_array($i, $tabelas[$value['curso']][$value['turma']])) {
                     $tabelas[$value['curso']][$value['turma']][$i] = [];
                 }
             }
         }
 
-        foreach ($dados as $key => $value)
-        {
-            if (!in_array($value['hora_inicio'], $tabelas[$value['curso']][$value['turma']][$value['dia_semana']]))
-            {
+        foreach ($dados as $key => $value) {
+            if (!in_array($value['hora_inicio'], $tabelas[$value['curso']][$value['turma']][$value['dia_semana']])) {
                 $tabelas[$value['curso']][$value['turma']][$value['dia_semana']][$value['hora_inicio']] = [];
             }
-        }        
+        }
 
-        foreach ($dados as $key => $value)
-        {
-            if(empty($tabelas[$value['curso']] [$value['turma']] [$value['dia_semana']] [$value['hora_inicio']] ['disciplina']))
-            {
-                $tabelas[$value['curso']] [$value['turma']] [$value['dia_semana']] [$value['hora_inicio']] ['disciplina'] = $value['disciplina'];
-                $tabelas[$value['curso']] [$value['turma']] [$value['dia_semana']] [$value['hora_inicio']] ['professor'] = $value['professor'];
-                $tabelas[$value['curso']] [$value['turma']] [$value['dia_semana']] [$value['hora_inicio']] ['ambiente'] = $value['ambiente'];
-            }
-            else
-            {
-                if($tabelas[$value['curso']] [$value['turma']] [$value['dia_semana']] [$value['hora_inicio']] ['professor'] != $value['professor'])
-                {
-                    $tabelas[$value['curso']] [$value['turma']] [$value['dia_semana']] [$value['hora_inicio']] ['professor'] .= ', ' . $value['professor'];
-                }
-                else if($tabelas[$value['curso']] [$value['turma']] [$value['dia_semana']] [$value['hora_inicio']] ['ambiente'] != $value['ambiente'])
-                {
-                    $tabelas[$value['curso']] [$value['turma']] [$value['dia_semana']] [$value['hora_inicio']] ['ambiente'] .= ', ' . $value['ambiente'];
+        foreach ($dados as $key => $value) {
+            if (empty($tabelas[$value['curso']][$value['turma']][$value['dia_semana']][$value['hora_inicio']]['disciplina'])) {
+                $tabelas[$value['curso']][$value['turma']][$value['dia_semana']][$value['hora_inicio']]['disciplina'] = $value['disciplina'];
+                $tabelas[$value['curso']][$value['turma']][$value['dia_semana']][$value['hora_inicio']]['professor'] = $value['professor'];
+                $tabelas[$value['curso']][$value['turma']][$value['dia_semana']][$value['hora_inicio']]['ambiente'] = $value['ambiente'];
+            } else {
+                if ($tabelas[$value['curso']][$value['turma']][$value['dia_semana']][$value['hora_inicio']]['professor'] != $value['professor']) {
+                    $tabelas[$value['curso']][$value['turma']][$value['dia_semana']][$value['hora_inicio']]['professor'] .= ', ' . $value['professor'];
+                } else if ($tabelas[$value['curso']][$value['turma']][$value['dia_semana']][$value['hora_inicio']]['ambiente'] != $value['ambiente']) {
+                    $tabelas[$value['curso']][$value['turma']][$value['dia_semana']][$value['hora_inicio']]['ambiente'] .= ', ' . $value['ambiente'];
                 }
             }
         }
@@ -787,24 +723,21 @@ class Relatorios extends BaseController
 
         $nome_dia = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sabado'];
 
-        foreach($tabelas as $curso => $turmas)
-        {
-            foreach ($turmas as $turma => $dias)
-            {
+        foreach ($tabelas as $curso => $turmas) {
+            foreach ($turmas as $turma => $dias) {
                 $temDias = [];
                 $temHorarios = [];
 
                 foreach ($dias as $dia => $horarios) //catalogar os dias da semana que estão no horário do curso/turma
                 {
-                    if(!in_array($dia,$temDias))
-                        array_push($temDias,$dia);
+                    if (!in_array($dia, $temDias))
+                        array_push($temDias, $dia);
 
-                    foreach ($horarios as $hora_inicio => $outros)
-                    {
-                        if(in_array($hora_inicio,$temHorarios))
+                    foreach ($horarios as $hora_inicio => $outros) {
+                        if (in_array($hora_inicio, $temHorarios))
                             continue;
-                        
-                        array_push($temHorarios,$hora_inicio);
+
+                        array_push($temHorarios, $hora_inicio);
                     }
                 }
 
@@ -816,16 +749,15 @@ class Relatorios extends BaseController
                         <thead>
                             <tr>
                                 <td colspan="' . (sizeof($temDias) + 1) . '" style="border: none; padding: 0px; text-align: center;">
-                                    <div class="caption">'. $curso .' - ' . $turma . '</div>
+                                    <div class="caption">' . $curso . ' - ' . $turma . '</div>
                                 </td>
                             </tr>
                             <tr>
                                 <th width="5%">Horário</th>');
 
-                foreach ($temDias as $dia)
-                {
+                foreach ($temDias as $dia) {
                     $pdf->appendHTML('
-                        <th width="19%">'. $nome_dia[$dia] .'</th>
+                        <th width="19%">' . $nome_dia[$dia] . '</th>
                     ');
                 }
 
@@ -833,16 +765,14 @@ class Relatorios extends BaseController
 
                 $ultimoTurno = 0;
 
-                foreach ($temHorarios as $horario)
-                {
-                    $horarioAtual = (int)(substr($horario,0,2));
+                foreach ($temHorarios as $horario) {
+                    $horarioAtual = (int)(substr($horario, 0, 2));
                     $turnoAtual = ($horarioAtual <= 12) ? 1 : (($horarioAtual >= 13 && $horarioAtual <= 17) ? 2 : 3);
 
-                    if($ultimoTurno == 0 || $turnoAtual != $ultimoTurno)
-                    {
-                        if($turnoAtual == 1)
+                    if ($ultimoTurno == 0 || $turnoAtual != $ultimoTurno) {
+                        if ($turnoAtual == 1)
                             $pdf->appendHTML('<tr><th colspan="' . (sizeof($temDias) + 1) . '" class="periodo">M A N H Ã</th></tr>');
-                        else if($turnoAtual == 2)
+                        else if ($turnoAtual == 2)
                             $pdf->appendHTML('<tr><th colspan="' . (sizeof($temDias) + 1) . '" class="periodo">T A R D E</th></tr>');
                         else
                             $pdf->appendHTML('<tr><th colspan="' . (sizeof($temDias) + 1) . '" class="periodo">N O I T E</th></tr>');
@@ -851,54 +781,49 @@ class Relatorios extends BaseController
                     $ultimoTurno = $turnoAtual;
 
                     $pdf->appendHTML('<tr>');
-                        $pdf->appendHTML('<td class="hora">' . $horario . '</td>');
+                    $pdf->appendHTML('<td class="hora">' . $horario . '</td>');
 
-                        foreach ($temDias as $dia)
-                        {
-                            if(isset($tabelas[$curso][$turma][$dia]))
-                            {
-                                if(isset($tabelas[$curso][$turma][$dia][$horario]))
-                                {
-                                    $pdf->appendHTML('<td>');
-                                    
-                                    if(strlen($tabelas[$curso][$turma][$dia][$horario]['disciplina']) >= 40)
-                                        $pdf->appendHTML('<small>');
+                    foreach ($temDias as $dia) {
+                        if (isset($tabelas[$curso][$turma][$dia])) {
+                            if (isset($tabelas[$curso][$turma][$dia][$horario])) {
+                                $pdf->appendHTML('<td>');
 
-                                    $pdf->appendHTML('<strong>' . $tabelas[$curso][$turma][$dia][$horario]['disciplina'] . '</strong>');
+                                if (strlen($tabelas[$curso][$turma][$dia][$horario]['disciplina']) >= 40)
+                                    $pdf->appendHTML('<small>');
 
-                                    if(strlen($tabelas[$curso][$turma][$dia][$horario]['disciplina']) >= 40)
-                                        $pdf->appendHTML('</small>');                                    
-                                    
-                                    $pdf->appendHTML('<br />');
-                                    $pdf->appendHTML('<em>');
-                                    
-                                    if(strlen($tabelas[$curso][$turma][$dia][$horario]['professor']) >= 40)
-                                        $pdf->appendHTML('<small>');
-                                    
-                                    $pdf->appendHTML($tabelas[$curso][$turma][$dia][$horario]['professor']);
-                                    
-                                    if(strlen($tabelas[$curso][$turma][$dia][$horario]['professor']) >= 40)
-                                        $pdf->appendHTML('</small>');
+                                $pdf->appendHTML('<strong>' . $tabelas[$curso][$turma][$dia][$horario]['disciplina'] . '</strong>');
 
-                                    $pdf->appendHTML('<br />');
+                                if (strlen($tabelas[$curso][$turma][$dia][$horario]['disciplina']) >= 40)
+                                    $pdf->appendHTML('</small>');
 
-                                    if(strlen($tabelas[$curso][$turma][$dia][$horario]['ambiente']) >= 40)
-                                        $pdf->appendHTML('<small>');
+                                $pdf->appendHTML('<br />');
+                                $pdf->appendHTML('<em>');
 
-                                    $pdf->appendHTML('<strong>' . $tabelas[$curso][$turma][$dia][$horario]['ambiente'] . '</strong>');
+                                if (strlen($tabelas[$curso][$turma][$dia][$horario]['professor']) >= 40)
+                                    $pdf->appendHTML('<small>');
 
-                                    if(strlen($tabelas[$curso][$turma][$dia][$horario]['ambiente']) >= 40)
-                                        $pdf->appendHTML('</small>');                                    
-                                    
-                                    $pdf->appendHTML('</em>');
-                                    $pdf->appendHTML('</td>');
-                                }
-                                else
-                                {
-                                    $pdf->appendHTML('<td>—</td>');
-                                }
+                                $pdf->appendHTML($tabelas[$curso][$turma][$dia][$horario]['professor']);
+
+                                if (strlen($tabelas[$curso][$turma][$dia][$horario]['professor']) >= 40)
+                                    $pdf->appendHTML('</small>');
+
+                                $pdf->appendHTML('<br />');
+
+                                if (strlen($tabelas[$curso][$turma][$dia][$horario]['ambiente']) >= 40)
+                                    $pdf->appendHTML('<small>');
+
+                                $pdf->appendHTML('<strong>' . $tabelas[$curso][$turma][$dia][$horario]['ambiente'] . '</strong>');
+
+                                if (strlen($tabelas[$curso][$turma][$dia][$horario]['ambiente']) >= 40)
+                                    $pdf->appendHTML('</small>');
+
+                                $pdf->appendHTML('</em>');
+                                $pdf->appendHTML('</td>');
+                            } else {
+                                $pdf->appendHTML('<td>—</td>');
                             }
                         }
+                    }
 
                     $pdf->appendHTML('</tr>');
                 }
@@ -908,8 +833,26 @@ class Relatorios extends BaseController
                     </table>
                 ');
             }
-        }        
+        }
 
         $pdf->generatePDF();
+    }
+
+    public function getAmbientesByGrupo()
+    {
+        $grupos = $this->request->getPost('grupos');
+
+        if (empty($grupos)) {
+            return $this->response->setJSON([]);
+        }
+
+        $ambientes = $this->ambientesModel
+            ->select('ambientes.id, ambientes.nome')
+            ->join('ambiente_grupo', 'ambiente_grupo.ambiente_id = ambientes.id')
+            ->whereIn('ambiente_grupo.grupo_id', $grupos)
+            ->orderBy('ambientes.nome', 'ASC')
+            ->findAll();
+
+        return $this->response->setJSON($ambientes);
     }
 }

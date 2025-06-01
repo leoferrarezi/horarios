@@ -32,10 +32,10 @@ class Relatorios extends BaseController
     public function index()
     {
         $data = [
-            'cursos' => $this->cursosModel->findAll(),
-            'professores' => $this->professorModel->findAll(),
-            'ambientes' => $this->ambientesModel->findAll(),
-            'gruposAmbientes' => $this->gruposAmbientesModel->findAll(),
+            'cursos' => $this->cursosModel->orderBy('nome')->findAll(),
+            'professores' => $this->professorModel->orderBy('nome')->findAll(),
+            'ambientes' => $this->ambientesModel->orderBy('nome')->findAll(),
+            'gruposAmbientes' => $this->gruposAmbientesModel->orderBy('nome')->findAll(),
         ];
 
         $this->content_data['content'] = view('sys/relatorios', $data);

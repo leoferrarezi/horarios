@@ -33,6 +33,12 @@
 			color: #999 !important;
 			background-color: transparent !important;
 		}
+		.sidebar .nav.sub-menu {			
+			padding: 0 0 0 2rem;
+		}
+		.sidebar .nav .nav-item .nav-link .menu-title {
+			font-size: 0.80rem;
+		}
 	</style>
 
 </head>
@@ -47,147 +53,193 @@
 				</a>
 			</div>
 			<ul class="nav">
-				<li class="nav-item menu-items">
+				
+				<li class="nav-item">
 					<a class="nav-link" href="<?php echo base_url("/sys/home") ?>" style="margin-top:20px;">
 						<span class="menu-icon">
-							<i class="mdi mdi-home"></i>
+							<i class="mdi mdi-home" style="color: #0090e7"></i>
 						</span>
 						<span class="menu-title">Página inicial</span>
 					</a>
 				</li>
 
-				<li class="nav-item nav-category">
-					<span class="nav-link">Gestão de Horários</span>
+				<li class="nav-item">
+					<a class="nav-link" data-bs-toggle="collapse" href="#horarios" aria-expanded="true" aria-controls="horarios">
+						<span class="menu-icon">
+							<i class="mdi mdi-calendar-clock" style="color: #00d25b"></i>
+						</span>
+						<span class="menu-title">Gestão de Horários</span>
+						<i class="menu-arrow"></i>
+					</a>
+					<div class="collapse show" id="horarios">
+						<ul class="nav flex-column sub-menu">
+
+							<li class="nav-item">
+								<a class="nav-link" href="<?php echo base_url('sys/tabela-horarios'); ?>">
+									<span class="menu-icon">
+										<i class="mdi mdi-clock-time-eight"></i>
+									</span>
+									<span class="menu-title">Horários de Aula</span>
+								</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="<?php echo base_url('sys/versao'); ?>">
+									<span class="menu-icon">
+										<i class="mdi mdi-multicast"></i>
+									</span>
+									<span class="menu-title">Versões</span>
+								</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="<?php echo base_url('sys/relatorios'); ?>">
+									<span class="menu-icon">
+										<i class="mdi mdi-laptop"></i>
+									</span>
+									<span class="menu-title">Relatórios</span>
+								</a>
+							</li>
+						</ul>
+					</div>
 				</li>
 
 				<li class="nav-item">
-					<a class="nav-link" href="<?php echo base_url('sys/tabela-horarios'); ?>">
+					<a class="nav-link" data-bs-toggle="collapse" href="#cadastros" aria-expanded="false" aria-controls="cadastros">
 						<span class="menu-icon">
-							<i class="mdi mdi-clock-time-eight"></i>
+							<i class="fa fa-database" style="color: #8f5fe8"></i>
 						</span>
-						<span class="menu-title">Horários de Aula</span>
+						<span class="menu-title">Cadastros</span>
+						<i class="menu-arrow"></i>
 					</a>
+					<div class="collapse" id="cadastros">
+						<ul class="nav flex-column sub-menu">
+							<li class="nav-item">
+								<a class="nav-link" href="<?php echo base_url('sys/professor'); ?>">
+									<span class="menu-icon">
+										<i class="mdi mdi-account"></i>
+									</span>
+									<span class="menu-title">Professores</span>
+								</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="<?php echo base_url('sys/matriz'); ?>">
+									<span class="menu-icon">
+										<i class="mdi mdi-notebook-check"></i>
+									</span>
+									<span class="menu-title">Matriz Curricular</span>
+								</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="<?php echo base_url('sys/disciplina'); ?>">
+									<span class="menu-icon">
+										<i class="mdi mdi-book-open-variant"></i>
+									</span>
+									<span class="menu-title">Disciplinas</span>
+								</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="<?php echo base_url('sys/curso'); ?>">
+									<span class="menu-icon">
+										<i class="mdi mdi-school"></i>
+									</span>
+									<span class="menu-title">Cursos</span>
+								</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="<?php echo base_url('sys/horario'); ?>">
+									<span class="menu-icon">
+										<i class="mdi mdi-calendar-cursor-outline"></i>
+									</span>
+									<span class="menu-title">Grade de Horários</span>
+								</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="<?php echo base_url('sys/tempoAula'); ?>">
+									<span class="menu-icon">
+										<i class="mdi mdi-chair-school"></i>
+									</span>
+									<span class="menu-title">Tempos de Aula</span>
+								</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="<?php echo base_url('sys/turma'); ?>">
+									<span class="menu-icon">
+										<i class="mdi mdi-account-group"></i>
+									</span>
+									<span class="menu-title">Turmas</span>
+								</a>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="<?php echo base_url('sys/cadastro-ambientes'); ?>">
+									<span class="menu-icon">
+										<i class="mdi mdi-cast-education"></i>
+									</span>
+									<span class="menu-title">Ambientes</span>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="<?php echo base_url('sys/aulas'); ?>">
+									<span class="menu-icon">
+										<i class="mdi mdi-human-male-board"></i>
+									</span>
+									<span class="menu-title">Aulas</span>
+								</a>
+							</li>
+						</ul>
+					</div>
 				</li>
 
-				<li class="nav-item">
-					<a class="nav-link" href="<?php echo base_url('sys/versao'); ?>">
-						<span class="menu-icon">
-							<i class="mdi mdi-multicast"></i>
-						</span>
-						<span class="menu-title">Versões de Horários</span>
-					</a>
-				</li>
+				
 
-				<li class="nav-item nav-category">
-					<span class="nav-link">Relatórios</span>
-				</li>
-
-				<li class="nav-item">
-					<a class="nav-link" href="<?php echo base_url('sys/relatorios'); ?>">
-						<span class="menu-icon">
-							<i class="mdi mdi-laptop"></i>
-						</span>
-						<span class="menu-title">Horários de Aula</span>
-					</a>
-				</li>
-
-				<li class="nav-item nav-category">
-					<span class="nav-link">Cadastros</span>
-				</li>
-
-				<li class="nav-item">
-					<a class="nav-link" href="<?php echo base_url('sys/professor'); ?>">
-						<span class="menu-icon">
-							<i class="mdi mdi-account"></i>
-						</span>
-						<span class="menu-title">Professores</span>
-					</a>
-				</li>
-
-				<li class="nav-item">
-					<a class="nav-link" href="<?php echo base_url('sys/matriz'); ?>">
-						<span class="menu-icon">
-							<i class="mdi mdi-notebook-check"></i>
-						</span>
-						<span class="menu-title">Matriz Curricular</span>
-					</a>
-				</li>
-
-				<li class="nav-item">
-					<a class="nav-link" href="<?php echo base_url('sys/disciplina'); ?>">
-						<span class="menu-icon">
-							<i class="mdi mdi-book-open-variant"></i>
-						</span>
-						<span class="menu-title">Disciplinas</span>
-					</a>
-				</li>
-
-				<li class="nav-item">
-					<a class="nav-link" href="<?php echo base_url('sys/curso'); ?>">
-						<span class="menu-icon">
-							<i class="mdi mdi-school"></i>
-						</span>
-						<span class="menu-title">Cursos</span>
-					</a>
-				</li>
-
-				<li class="nav-item">
-					<a class="nav-link" href="<?php echo base_url('sys/horario'); ?>">
-						<span class="menu-icon">
-							<i class="mdi mdi-calendar-cursor-outline"></i>
-						</span>
-						<span class="menu-title">Grade de Horários</span>
-					</a>
-				</li>
-
-				<li class="nav-item">
-					<a class="nav-link" href="<?php echo base_url('sys/tempoAula'); ?>">
-						<span class="menu-icon">
-							<i class="mdi mdi-chair-school"></i>
-						</span>
-						<span class="menu-title">Tempos de Aula</span>
-					</a>
-				</li>
-
-				<li class="nav-item">
-					<a class="nav-link" href="<?php echo base_url('sys/turma'); ?>">
-						<span class="menu-icon">
-							<i class="mdi mdi-account-group"></i>
-						</span>
-						<span class="menu-title">Turmas</span>
-					</a>
-				</li>
-
-				<li class="nav-item">
-					<a class="nav-link" href="<?php echo base_url('sys/cadastro-ambientes'); ?>">
-						<span class="menu-icon">
-							<i class="mdi mdi-cast-education"></i>
-						</span>
-						<span class="menu-title">Ambientes</span>
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="<?php echo base_url('sys/aulas'); ?>">
-						<span class="menu-icon">
-							<i class="mdi mdi-human-male-board"></i>
-						</span>
-						<span class="menu-title">Aulas</span>
-					</a>
-				</li>
-
-				<?php if (auth()->user()->inGroup('admin')): ?>
-					<li class="nav-item nav-category">
-						<span class="nav-link">Gestão de Usuários</span>
-					</li>
+				<?php if (auth()->user()->inGroup('admin')): ?>					
 
 					<li class="nav-item">
-						<a class="nav-link" href="<?php echo base_url('sys/admin'); ?>">
+						<a class="nav-link" data-bs-toggle="collapse" href="#op_avancadas" aria-expanded="false" aria-controls="op_avancadas">
 							<span class="menu-icon">
-								<i class="mdi mdi-account-cog"></i>
+								<i class="fa fa-gears" style="color: #fc424a"></i>
 							</span>
-							<span class="menu-title">Usuários do Sistema</span>
-						</a>
+							<span class="menu-title">Avançado</span>
+							<i class="menu-arrow"></i>
+						</a>						
+
+						<div class="collapse" id="op_avancadas">
+							<ul class="nav flex-column sub-menu">
+								<li class="nav-item"> 
+									<a class="nav-link" href="<?php echo base_url('sys/admin'); ?>">
+										<span class="menu-icon">
+											<i class="fa fa-users"></i>
+										</span>
+										<span class="menu-title">Usuários do Sistema</span>
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="#">
+										<span class="menu-icon">
+											<i class="mdi mdi-backup-restore"></i>
+										</span>
+										<span class="menu-title">Backup</span>
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="#">
+										<span class="menu-icon">
+											<i class="fa fa-trash"></i>
+										</span>
+										<span class="menu-title">Limpeza</span>
+									</a>
+								</li>								
+							</ul>
+						</div>
 					</li>
+
 				<?php endif; ?>
 
 			</ul>

@@ -26,9 +26,6 @@ $routes->get('sys/cadastro-turmas', 'Turmas::index');
 //horarios de aula
 $routes->get('sys/cadastro-horarios-de-aula', 'TemposAula::cadastro');
 
-//Relatórios
-$routes->get('sys/relatorios', 'Relatorios::index');
-
 //adicionar o filter (middleware de login no group depois)
 $routes->group('sys', function ($routes) 
 {
@@ -172,10 +169,10 @@ $routes->group('sys', function ($routes)
     {
         $routes->get('/', 'Relatorios::index');
         $routes->post('filtrar', 'Relatorios::filtrar');
-        $routes->post('getTurmasByCurso', 'Relatorios::getTurmasByCurso');        
+        $routes->post('getTurmasByCurso', 'Relatorios::getTurmasByCurso');
+        $routes->post('getAmbientesByGrupo', 'Relatorios::getAmbientesByGrupo');
         $routes->get('relatorios/gerar', 'Relatorios::gerar');
         $routes->post('exportar', 'Relatorios::exportar');
     });
-
     
 });

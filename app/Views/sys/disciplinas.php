@@ -326,8 +326,17 @@
 <!--Referente ao select 2-->
 <script>
     $(document).ready(function() {
-        $('.js-example-basic-single').select2({
-            placeholder: "Selecione a matriz:",
+        // Inicializar somente modal
+        $('#modal-cad-disciplina .js-example-basic-single').select2({
+            placeholder: "Selecione uma opção:",
+            allowClear: true,
+            width: '100%',
+            dropdownParent: $('#modal-cad-disciplina')
+        });
+
+        // Para os outros .js-example-basic-single que estão na página principal:
+        $('.js-example-basic-single').not('#modal-cad-disciplina .js-example-basic-single').select2({
+            placeholder: "Selecione uma opção:",
             allowClear: true,
             width: '100%'
         });

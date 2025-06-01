@@ -324,4 +324,189 @@ class AulaHorarioModel extends Model
 
         return 0; // Sem três turnos para o dia
     }
+
+    public function verificarTempoEntreTurnos($aulaHorarioId)
+    {
+        // Obter professor(es) e o tempo de aula do horário atual
+        $builder = $this->select('professor_id, tempo_de_aula_id')
+            ->join('aula_professor', 'aula_professor.aula_id = aula_horario.aula_id')
+            ->where('aula_horario.id', $aulaHorarioId)
+            ->where('versao_id', (new VersoesModel())->getVersaoByUser(auth()->id()))
+            ->get();       
+
+        // Iterar sobre os resultados, para o caso de mais de um professor na aula
+        foreach ($builder->getResult() as $row)
+        {
+            $professor = $row->professor_id;
+            $tempo = $row->tempo_de_aula_id;
+
+            //Obter o dia da semana, hora e minuto de início do tempo de aula
+            $builder2 = $this->db->table('tempos_de_aula')->select('*')->where('id', $tempo)->get();
+            $dia_semana = $builder2->getRowArray()['dia_semana'];
+            $hora_inicio = $builder2->getRowArray()['hora_inicio'];
+            $hora_fim = $builder2->getRowArray()['hora_fim'];
+            $minuto_inicio = $builder2->getRowArray()['minuto_inicio'];
+            $minuto_fim = $builder2->getRowArray()['minuto_fim'];
+
+            //dados da aula sendo verificada
+            $aula_timestamp_inicio = $hora_inicio * 60 + $minuto_inicio;
+            $aula_timestamp_fim = $hora_fim * 60 + $minuto_fim;
+
+            //Flags para os turnos
+            $aula_turno = 0;
+
+            if ($hora_inicio < 12) $aula_turno = 1; // Manhã
+            else if ($hora_inicio >= 12 && $hora_inicio < 18) $aula_turno = 2; // Tarde
+            else if ($hora_inicio >= 18) $aula_turno = 3; // Noite
+
+            //Flags para os turnos
+            $manha = $tarde = $noite = false;
+
+            $menor_inicio_manha = $menor_inicio_tarde = $menor_inicio_noite = $amanha_manha_inicio = 9999999;
+            $maior_fim_manha = $maior_fim_tarde = $maior_fim_noite = $ontem_noite_fim = 0;
+
+            $menor_inicio_manha_aulaid = $menor_inicio_tarde_aulaid = $menor_inicio_noite_aulaid = $amanha_manha_inicio_aulaid = 0;
+            $maior_fim_manha_aulaid = $maior_fim_tarde_aulaid = $maior_fim_noite_aulaid = $ontem_noite_fim_aulaid = 0;
+
+            //Obter o dia da semana, hora e minuto de início do tempo de aula
+            $builder2 = $this->select('*, aula_horario.id as theid')
+                ->join('aula_professor', 'aula_professor.aula_id = aula_horario.aula_id')
+                ->join('tempos_de_aula', 'aula_horario.tempo_de_aula_id = tempos_de_aula.id')
+                ->where('aula_professor.professor_id', $professor)
+                ->whereIn('tempos_de_aula.dia_semana', [$dia_semana, ($dia_semana+1), ($dia_semana-1)]) //pega horários do dia da aula, e do dia seguinte e anterior também pra comparar a manhã com noite
+                ->get();
+
+            foreach ($builder2->getResult() as $row2)
+            {
+                //dados da aula vinda do banco de dados
+                $timestamp_inicio = $row2->hora_inicio * 60 + $row2->minuto_inicio;
+                $timestamp_fim = $row2->hora_fim * 60 + $row2->minuto_fim;
+
+                if ($row2->hora_inicio < 12)
+                {
+                    $manha = true;
+
+                    /*if($row2->dia_semana == $dia_semana && $timestamp_inicio < $menor_inicio_manha) //manhã de hoje - inicio
+                    {
+                        $menor_inicio_manha = $timestamp_inicio;
+                        $menor_inicio_manha_aulaid = $row2->theid;
+                    }*/
+
+                    if($row2->dia_semana == $dia_semana && $timestamp_fim > $maior_fim_manha) //manhã de hoje - fim
+                    {
+                        $maior_fim_manha = $timestamp_fim;
+                        $maior_fim_manha_aulaid = $row2->theid;
+                    }
+
+                    if($row2->dia_semana == ($dia_semana+1) && $timestamp_inicio < $amanha_manha_inicio) //manhã de amanhã - inicio
+                    {
+                        $amanha_manha_inicio = $timestamp_inicio;
+                        $amanha_manha_inicio_aulaid = $row2->theid;
+                    }
+                }
+                else if ($row2->hora_inicio >= 12 && $row2->hora_inicio < 18)
+                {
+                    $tarde = true;
+
+                    if($row2->dia_semana == $dia_semana && $timestamp_inicio < $menor_inicio_tarde) //tarde de hoje
+                    {
+                        $menor_inicio_tarde = $timestamp_inicio;
+                        $menor_inicio_tarde_aulaid = $row2->theid;
+                    }
+
+                    if($row2->dia_semana == $dia_semana && $timestamp_fim > $maior_fim_tarde) //tarde de hoje
+                    {
+                        $maior_fim_tarde = $timestamp_fim;
+                        $maior_fim_tarde_aulaid = $row2->theid;
+                    }
+                }
+                else if ($row2->hora_inicio >= 18)
+                {
+                    $noite = true;
+
+                    if($row2->dia_semana == $dia_semana && $timestamp_inicio < $menor_inicio_noite) //noite de hoje - inicio
+                    {
+                        $menor_inicio_noite = $timestamp_inicio;
+                        $menor_inicio_noite_aulaid = $row2->theid;
+                    }
+
+                    /*if($row2->dia_semana == $dia_semana && $timestamp_fim < $maior_fim_noite) //noite de hoje - fim
+                    {
+                        $maior_fim_noite = $timestamp_fim;
+                        $maior_fim_noite_aulaid = $row2->theid;
+                    }*/
+
+                    if($row2->dia_semana == ($dia_semana-1) && $timestamp_fim > $ontem_noite_fim) //noite de ontem
+                    {
+                        $ontem_noite_fim = $timestamp_fim;
+                        $ontem_noite_fim_aulaid = $row2->theid;
+                    }
+                }
+            }
+
+            // aula atual manhã, e tem aula a tarde
+            if(($aula_turno == 1 && $tarde)) 
+            {
+                if(($menor_inicio_tarde - $aula_timestamp_fim) < (60)) // uma hora de intervalo
+                    return "1-" . ($menor_inicio_tarde - $aula_timestamp_fim) . "-" . $menor_inicio_tarde_aulaid;
+                    //problema entre manhã e tarde = 1
+                    //seguido da diferença de tempo
+                    //seguido do id da aula que está causando o problema
+            }
+
+            // aula atual a tarde, e tem aula de manhã
+            if($aula_turno == 2 && $manha) 
+            {
+                if(($aula_timestamp_inicio - $maior_fim_manha) < (60)) // uma hora de intervalo
+                    return "1-" . ($aula_timestamp_inicio - $maior_fim_manha) . "-" . $maior_fim_manha_aulaid;
+                    //problema entre manhã e tarde = 1
+                    //seguido da diferença de tempo
+                    //seguido do id da aula que está causando o problema
+            }
+
+            // aula atual a tarde, e tem aula a noite
+            if($aula_turno == 2 && $noite)
+            {
+                if(($menor_inicio_noite - $aula_timestamp_fim) < (60)) // uma hora de intervalo
+                    return "2-" . ($menor_inicio_noite - $aula_timestamp_fim) . "-" . $menor_inicio_noite_aulaid;
+                    //problema entre tarde e noite = 2
+                    //seguido da diferença de tempo
+                    //seguido do id da aula que está causando o problema
+            }
+
+            // aula atual a noite, e tem aula a tarde
+            if($aula_turno == 3 && $tarde)
+            {
+                if(($aula_timestamp_inicio - $maior_fim_tarde) < (60)) // uma hora de intervalo
+                    return "2-" . ($aula_timestamp_inicio - $maior_fim_tarde) . "-" . $maior_fim_tarde_aulaid;
+                    //problema entre tarde e noite = 2
+                    //seguido da diferença de tempo
+                    //seguido do id da aula que está causando o problema
+            }
+
+            // aula atual noite, e tem aula amanhã de manhã
+            if($aula_turno == 3 && $amanha_manha_inicio != 9999999)
+            {
+                if((($amanha_manha_inicio+1440) - $aula_timestamp_fim) < (11*60)) // onze horas de intervalo
+                    return "3-" . (($amanha_manha_inicio+1440) - $aula_timestamp_fim) . "-" . $amanha_manha_inicio_aulaid; 
+                    //problema entre noite e manhã do dia seguinte = 3
+                    //seguido da diferença de tempo
+                    //seguido do id da aula que está causando o problema
+            }
+            
+            // aula atual manhã, e tem aula ontem a noite
+            if($aula_turno == 1 && $ontem_noite_fim != 0) 
+            {
+                if((($aula_timestamp_inicio+1440) - $ontem_noite_fim) < (11*60)) // onze horas de intervalo
+                    return "4-" . (($aula_timestamp_inicio+1440) - $ontem_noite_fim) . "-" . $ontem_noite_fim_aulaid;
+                    //problema entre manhã e noite do dia anterior = 4
+                    //seguido da diferença de tempo
+                    //seguido do id da aula que está causando o problema
+            }
+
+            //FALTA AVALIAR ALGUMAS SITUAÇÕES NO OPOSTO, POR EXEMPLO, VERIFICAR NA NOITE SE TEM HORÁRIO A TARDE COM POUCO TEMPO
+        }
+
+        return 0; // Sem problemas de intervalo
+    }
 }

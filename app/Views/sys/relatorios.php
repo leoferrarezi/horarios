@@ -29,13 +29,13 @@
 					</div>
 				</div>
 
-				<div id="filtrosDinamicos" class="mt-3">
+				<div id="filtrosDinamicos">
 					<div class="alert alert-info mb-0">
 						Selecione um tipo de relatório para exibir os filtros correspondentes
 					</div>
 				</div>
 
-				<div class="form-group d-flex justify-content-end mt-3">
+				<div class="form-group d-flex justify-content-start mt-4">
 
 					<button type="button" id="btnLimpar" class="btn btn-secondary me-2">
 						<i class="mdi mdi-filter-remove me-1"></i>Limpar Filtros
@@ -57,7 +57,7 @@
 <div class="col-md-12 grid-margin stretch-card" id="resultadosContainer" style="display: none;">
 	<div class="card">
 		<div class="card-body">
-			<div class="d-flex justify-content-between align-items-center mb-3">
+			<div class="d-flex justify-content-between align-items-center mb-1">
 				<h4 class="card-title">Resultados</h4>
 			</div>
 
@@ -86,9 +86,9 @@
 <div style="display:none;">
 	<div id="templateCurso">
 		<div class="row">
-			<div class="col-md-6 mb-3">
+			<div class="col-md-12 mb-1">
 				<div class="form-group">
-					<div class="form-check d-flex align-items-center mb-2" style="margin-left: 0.375rem;">
+					<div class="form-check d-flex align-items-center mb-1" style="margin-left: 0.375rem;">
 						<input class="form-check-input mt-0" type="checkbox" id="checkTodosCursos" name="todosCursos">
 						<label class="form-check-label" for="checkTodosCursos">Todos os Cursos</label>
 					</div>
@@ -99,9 +99,9 @@
 					</select>
 				</div>
 			</div>
-			<div class="col-md-6 mb-3">
+			<div class="col-md-12 mb-1">
 				<div class="form-group">
-					<div class="form-check d-flex align-items-center mb-2" style="margin-left: 0.375rem;">
+					<div class="form-check d-flex align-items-center mb-1" style="margin-left: 0.375rem;">
 						<input type="checkbox" class="form-check-input mt-0" id="checkTodasTurmas" disabled name="todasTurmas">
 						<label class="form-check-label" for="checkTodasTurmas">Todas as Turmas</label>
 					</div>
@@ -115,9 +115,9 @@
 
 	<div id="templateProfessor">
 		<div class="row">
-			<div class="col-md-12 mb-3">
+			<div class="col-md-12 mb-1">
 				<div class="form-group">
-					<div class="form-check d-flex align-items-center mb-2" style="margin-left: 0.375rem;">
+					<div class="form-check d-flex align-items-center mb-1" style="margin-left: 0.375rem;">
 						<input type="checkbox" class="form-check-input mt-0" id="checkTodosProfessores" name="todosProfessores">
 						<label class="form-check-label" for="checkTodosProfessores">Todos os Professores</label>
 					</div>
@@ -133,7 +133,20 @@
 
 	<div id="templateAmbiente">
 		<div class="row">
-			<div class="col-md-12 mb-3">
+			<div class="col-md-12 mb-1">
+				<div class="form-group">
+					<div class="form-check d-flex align-items-center mb-2" style="margin-left: 0.375rem;">
+						<input type="checkbox" class="form-check-input mt-0" id="checkTodosGruposAmbientes" name="todosGruposAmbientes">
+						<label class="form-check-label" for="checkTodosGruposAmbientes">Todos os Grupos de Ambientes</label>
+					</div>
+					<select class="form-control select2-multiple" multiple id="filtroGrupoAmbiente" name="grupos_ambientes[]">
+						<?php foreach ($gruposAmbientes as $grupo): ?>
+							<option value="<?= $grupo['id'] ?>"><?= $grupo['nome'] ?></option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+			</div>
+			<div class="col-md-12 mb-1">
 				<div class="form-group">
 					<div class="form-check d-flex align-items-center mb-2" style="margin-left: 0.375rem;">
 						<input type="checkbox" class="form-check-input mt-0" id="checkTodosAmbientes" name="todosAmbientes">
@@ -263,8 +276,34 @@
 							width: '100%'
 						});
 
+						// Configura checkbox "Todos os Grupos de Ambientes"
+						handleTodosCheckbox('#checkTodosGruposAmbientes', '#filtroGrupoAmbiente', '#checkTodosAmbientes', '#filtroAmbiente');
+
 						// Configura checkbox "Todos os Ambientes"
 						handleTodosCheckbox('#checkTodosAmbientes', '#filtroAmbiente');
+
+						// Carrega ambientes quando um grupo é selecionado
+						$('#filtroGrupoAmbiente').on('change', function()
+						{
+							var grupos = $(this).val();
+							var ambienteSelect = $('#filtroAmbiente');
+							var checkTodosAmbientes = $('#checkTodosAmbientes');
+
+							if (grupos && grupos.length > 0) {
+								// Desmarca "Todos os Ambientes" se estiver marcado
+								$('#checkTodosAmbientes').prop('checked', false);
+
+								// Carrega os ambientes do grupo selecionado
+								carregarAmbientesPorGrupo(grupos);
+							} else {
+								// Se nenhum grupo selecionado, mostra todos os ambientes
+								ambienteSelect.empty();
+								<?php foreach ($ambientes as $ambiente): ?>
+									ambienteSelect.append(new Option('<?= $ambiente['nome'] ?>', '<?= $ambiente['id'] ?>'));
+								<?php endforeach; ?>
+								ambienteSelect.trigger('change');
+							}
+						});
 					}, 50);
 					break;
 
@@ -299,6 +338,36 @@
 				error: function(xhr, status, error) {
 					console.error('Erro ao carregar turmas:', error);
 					turmaSelect.empty().append('<option disabled>Erro ao carregar turmas</option>').trigger('change');
+				}
+			});
+		}
+
+		function carregarAmbientesPorGrupo(grupos) 
+		{
+			var ambienteSelect = $('#filtroAmbiente');
+			ambienteSelect.empty().append('<option value="">Carregando...</option>').trigger('change');
+
+			$.ajax({
+				url: '<?= base_url('sys/relatorios/getAmbientesByGrupo') ?>',
+				type: 'POST',
+				data: {
+					grupos: grupos,
+					[csrfName]: csrfHash
+				},
+				dataType: 'json',
+				success: function(response) {
+					ambienteSelect.empty();
+
+					if (response && response.length > 0) {
+						$.each(response, function(index, item) {
+							ambienteSelect.append(new Option(item.nome, item.id));
+						});
+					}
+					ambienteSelect.trigger('change');
+				},
+				error: function(xhr, status, error) {
+					console.error('Erro ao carregar ambientes:', error);
+					ambienteSelect.empty().append('<option disabled>Erro ao carregar ambientes</option>').trigger('change');
 				}
 			});
 		}
@@ -348,6 +417,12 @@
 					break;
 
 				case 'ambiente':
+					if ($('#checkTodosGruposAmbientes').is(':checked')) {
+						// Não envia filtro de grupos (busca todos)
+					} else {
+						dados.grupos_ambientes = $('#filtroGrupoAmbiente').val();
+					}
+
 					if ($('#checkTodosAmbientes').is(':checked')) {
 						// Não envia filtro de ambientes (busca todos)
 					} else {
@@ -363,10 +438,12 @@
 				(dados.turmas && dados.turmas.length > 0) ||
 				(dados.professores && dados.professores.length > 0) ||
 				(dados.ambientes && dados.ambientes.length > 0) ||
+				(dados.grupos_ambientes && dados.grupos_ambientes.length > 0) ||
 				$('#checkTodosCursos').is(':checked') ||
 				$('#checkTodasTurmas').is(':checked') ||
 				$('#checkTodosProfessores').is(':checked') ||
-				$('#checkTodosAmbientes').is(':checked')) {
+				$('#checkTodosAmbientes').is(':checked') ||
+				$('#checkTodosGruposAmbientes').is(':checked')) {
 				filtroPreenchido = true;
 			}
 
@@ -429,6 +506,12 @@
 					break;
 
 				case 'ambiente':
+					if ($('#checkTodosGruposAmbientes').is(':checked')) {
+						// Não envia filtro de grupos (busca todos)
+					} else {
+						dados.grupos_ambientes = $('#filtroGrupoAmbiente').val();
+					}
+
 					if ($('#checkTodosAmbientes').is(':checked')) {
 						// Não envia filtro de ambientes (busca todos)
 					} else {
@@ -444,10 +527,12 @@
 				(dados.turmas && dados.turmas.length > 0) ||
 				(dados.professores && dados.professores.length > 0) ||
 				(dados.ambientes && dados.ambientes.length > 0) ||
+				(dados.grupos_ambientes && dados.grupos_ambientes.length > 0) ||
 				$('#checkTodosCursos').is(':checked') ||
 				$('#checkTodasTurmas').is(':checked') ||
 				$('#checkTodosProfessores').is(':checked') ||
-				$('#checkTodosAmbientes').is(':checked')) {
+				$('#checkTodosAmbientes').is(':checked') ||
+				$('#checkTodosGruposAmbientes').is(':checked')) {
 				filtroPreenchido = true;
 			}
 
@@ -539,7 +624,7 @@
 
 			/*
 			formExportar
-			<input type="hidden" name="tipoRelatorio" id="tipoRelatorioExportar">					
+			<input type="hidden" name="tipoRelatorio" id="tipoRelatorioExportar">
 			<input type="hidden" name="cursos[]" id="cursosExportar">
 			<input type="hidden" name="todosCursos" id="cursosTodosExportar">
 			<input type="hidden" name="turmas[]" id="turmasExportar">
@@ -548,6 +633,8 @@
 			<input type="hidden" name="todosProfessores[]" id="professoresTodosExportar">
 			<input type="hidden" name="ambientes[]" id="ambientesExportar">
 			<input type="hidden" name="todosAmbientes" id="ambientesTodosExportar">
+			<input type="hidden" name="grupos_ambientes[]" id="gruposAmbientesExportar">
+			<input type="hidden" name="todosGruposAmbientes" id="gruposAmbientesTodosExportar">
 			*/
 		});
 

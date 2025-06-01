@@ -231,6 +231,19 @@
                     </div>
                 </div>
 
+                <div class="row" id="rowIntervalo">
+                    <h5 class="text-info"><i class="fa fa-exclamation-triangle"></i> Intervalo entre turnos!</h5>
+                    <div class="card bg-dark border-info mb-3">
+                        <div class="card-body p-2">
+                            <h6 class="text-info mb-1" id="modalRemocaoIntervaloTipo">...</h6>
+                            <h6 class="text-info mb-1" id="modalRemocaoIntervaloTempo">...</h6>
+                            <h6 class="text-muted mb-1" id="modalRemocaoIntervaloCurso">...</h6>
+                            <h6 class="text-muted mb-1" id="modalRemocaoIntervaloTurma">...</h6>
+                            <p class="text-muted mb-1" id="modalRemocaoIntervaloDisciplina">...</p>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row" id="rowConflito">
                     <h5 class="text-danger"><i class="fa fa-exclamation-triangle"></i> Conflito identificado!</h5>
                     <div class="card bg-dark border-danger mb-3">
@@ -283,8 +296,8 @@
                     <div class="col-md-12">
                         <div class="form-group" style="margin-bottom: 10px;">
                             <label for="curso">Curso:</label>
-                            <select class="form-select filtro" id="filtroCurso">
-                                <option value="0">-</option>
+                            <select class="js-example-basic-single filtro" style="width:100%;" id="filtroCurso">
+                                <option value=""></option>
                                 <?php foreach ($cursos as $curso): ?>
                                     <option value="<?php echo esc($curso['id']) ?>" data-regime="<?php echo esc($curso['regime']) ?>"><?php echo esc($curso['nome']) ?></option>
                                 <?php endforeach; ?>
@@ -297,8 +310,8 @@
                     <div class="col-md-12">
                         <div class="form-group" style="margin-bottom: 10px;">
                             <label for="curso">Turma:</label>
-                            <select class="form-select filtro" id="filtroTurma">
-                                <option value="0">-</option>
+                            <select class="js-example-basic-single filtro" style="width:100%;" id="filtroTurma">
+                                <option value=""></option>
                             </select>
                         </div>
                     </div>
@@ -407,77 +420,77 @@
 
             $.post('<?php echo base_url('sys/tabela-horarios/fixarAula'); ?>', 
             {
-                tipo: tipo, //1 = fixar, 0 = desfixar
-                aula_horario_id: aula_horario_id
-            },
+                    tipo: tipo, //1 = fixar, 0 = desfixar
+                    aula_horario_id: aula_horario_id
+                },
             function(data)
             {
                 if(data == "1")
                 {
-                    //encontrar o botão pelo nomezim e mudar a cor, além de desativar a remoção de alguma forma
+                        //encontrar o botão pelo nomezim e mudar a cor, além de desativar a remoção de alguma forma
                     if(tipo == 1)
                     {
-                        $("#btnFixar_horario_" + aula_horario_id)
-                            .removeClass("text-primary")
-                            .addClass("text-warning")
-                            .off()
+                            $("#btnFixar_horario_" + aula_horario_id)
+                                .removeClass("text-primary")
+                                .addClass("text-warning")
+                                .off()
                             .click(function(e) 
                             {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                fixarAulaHorario(0, aula_horario_id, aula_id); //desfixar
-                            });                        
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    fixarAulaHorario(0, aula_horario_id, aula_id); //desfixar
+                                });
 
-                        $.toast({
-                            heading: 'Sucesso',
-                            text: 'A aula foi marcada como fixa no horário.',
-                            showHideTransition: 'slide',
-                            icon: 'success',
-                            loaderBg: '#f96868',
-                            position: 'top-center'
-                        });
+                            $.toast({
+                                heading: 'Sucesso',
+                                text: 'A aula foi marcada como fixa no horário.',
+                                showHideTransition: 'slide',
+                                icon: 'success',
+                                loaderBg: '#f96868',
+                                position: 'top-center'
+                            });
 
-                        elemento.data('fixa', 1);
+                            elemento.data('fixa', 1);
                     }
                     else
                     {
-                        $("#btnFixar_horario_" + aula_horario_id)
-                            .removeClass("text-warning")
-                            .addClass("text-primary")
-                            .off()
+                            $("#btnFixar_horario_" + aula_horario_id)
+                                .removeClass("text-warning")
+                                .addClass("text-primary")
+                                .off()
                             .click(function(e) 
                             {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                fixarAulaHorario(1, aula_horario_id, aula_id); //fixar
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    fixarAulaHorario(1, aula_horario_id, aula_id); //fixar
+                                });
+
+                            $.toast({
+                                heading: 'Sucesso',
+                                text: 'A aula foi desmarcada como fixa no horário.',
+                                showHideTransition: 'slide',
+                                icon: 'success',
+                                loaderBg: '#f96868',
+                                position: 'top-center'
                             });
 
-                        $.toast({
-                            heading: 'Sucesso',
-                            text: 'A aula foi desmarcada como fixa no horário.',
-                            showHideTransition: 'slide',
-                            icon: 'success',
-                            loaderBg: '#f96868',
-                            position: 'top-center'
-                        });
-
-                        elemento.data('fixa', 0);
-                    }                    
+                            elemento.data('fixa', 0);
+                        }
                 }
                 else
                 {
-                    // Mostra feedback de erro
-                    $.toast({
-                        heading: 'Erro',
-                        text: 'Ocorreu um erro ao tentar fixar/desafixar a aula no horário.',
-                        showHideTransition: 'slide',
-                        icon: 'error',
-                        loaderBg: '#f96868',
-                        position: 'top-center'
-                    });
-                }
-            });
-        }                
+                        // Mostra feedback de erro
+                        $.toast({
+                            heading: 'Erro',
+                            text: 'Ocorreu um erro ao tentar fixar/desafixar a aula no horário.',
+                            showHideTransition: 'slide',
+                            icon: 'error',
+                            loaderBg: '#f96868',
+                            position: 'top-center'
+                        });
+                    }
+                });
+        }
 
         // Função para mover disciplina de volta para pendentes
         function moverDisciplinaParaPendentes(horarioElement) 
@@ -540,6 +553,7 @@
             $('#rowRestricao').hide();
             $('#rowConflito').hide();
             $('#rowTresTurnos').hide();
+            $('#rowIntervalo').hide();
 
             if($horario.data('fixa') == 1)
             {
@@ -554,6 +568,47 @@
             if($horario.data('tresturnos') > 0)
             {
                 $('#rowTresTurnos').show();
+            }
+            else if($horario.data('intervalo') != 0)
+            {
+                /*<h6 class="text-warning mb-1" id="modalRemocaoIntervaloTipo">...</h6>
+                <h6 class="text-warning mb-1" id="modalRemocaoIntervaloTempo">...</h6>*/
+
+                // Requisição para buscar os dados da aula causando problema de intervalo
+                $.get('<?php echo base_url('sys/tabela-horarios/dadosDaAula/'); ?>' + $horario.data('intervalo').split('-')[2],
+                function(data)
+                {
+                    $('#modalRemocaoIntervaloCurso').text("Curso: " + data[0].curso);
+                    $('#modalRemocaoIntervaloTurma').text("Turma: " + data[0].turma);
+                    $('#modalRemocaoIntervaloDisciplina').text("Disciplina: " + data[0].disciplina);
+
+                    var motivo = $horario.data('intervalo').split('-')[0];
+
+                    var timestamp = $horario.data('intervalo').split('-')[1];
+                    var horas = parseInt(timestamp / 60);
+                    var minutos = parseInt(timestamp % 60);
+                    timestamp = horas + "h e " + minutos + "m";
+                    $('#modalRemocaoIntervaloTempo').text("Tempo: " + timestamp);
+
+                    switch(motivo)
+                    {
+                        case '1':
+                            $('#modalRemocaoIntervaloTipo').text("Intervalo entre manhã e tarde (mínimo 01 hora).");                            
+                            break;
+                        case '2':
+                            $('#modalRemocaoIntervaloTipo').text("Intervalo entre tarde e noite (mínimo 01 hora).");
+                            break;
+                        case '3':
+                            $('#modalRemocaoIntervaloTipo').text("Intervalo entre noite e manhã (mínimo 11 horas).");
+                            break;
+                        case '4':
+                            $('#modalRemocaoIntervaloTipo').text("Intervalo entre noite e manhã (mínimo 11 horas).");
+                            break;
+                    }
+
+                }, 'json');
+
+                $('#rowIntervalo').show();
             }
             else if($horario.data('restricao') > 0)
             {
@@ -571,39 +626,39 @@
 
                     if($horario.data('conflitoProfessor') == 1)
                     {
-                        $('#modalRemocaoConflitoProfessor')
-                            .html('<i class="fa fa-exclamation-circle me-1"></i> ' + 'Professor: ' + data[0].professor)
-                            .addClass('text-danger')
-                            .removeClass('text-warning');
+                            $('#modalRemocaoConflitoProfessor')
+                                .html('<i class="fa fa-exclamation-circle me-1"></i> ' + 'Professor: ' + data[0].professor)
+                                .addClass('text-danger')
+                                .removeClass('text-warning');
                     }
                     else
                     {
-                        $('#modalRemocaoConflitoProfessor')
-                            .text("Professor: " + data[0].professor)
-                            .addClass('text-warning')
-                            .removeClass('text-danger');
-                    }
+                            $('#modalRemocaoConflitoProfessor')
+                                .text("Professor: " + data[0].professor)
+                                .addClass('text-warning')
+                                .removeClass('text-danger');
+                        }
 
 
                     if($horario.data('conflitoAmbiente') == 1)
                     {
-                        $('#modalRemocaoConflitoAmbiente')
-                            .html('<i class="fa fa-exclamation-circle me-1"></i> ' + 'Ambiente(s): ')
-                            .addClass('text-danger')
-                            .removeClass('text-warning');
+                            $('#modalRemocaoConflitoAmbiente')
+                                .html('<i class="fa fa-exclamation-circle me-1"></i> ' + 'Ambiente(s): ')
+                                .addClass('text-danger')
+                                .removeClass('text-warning');
                     }
                     else
                     {
-                        $('#modalRemocaoConflitoAmbiente')
-                            .text("Ambiente(s): ")
-                            .addClass('text-warning')
-                            .removeClass('text-danger');
-                    }
+                            $('#modalRemocaoConflitoAmbiente')
+                                .text("Ambiente(s): ")
+                                .addClass('text-warning')
+                                .removeClass('text-danger');
+                        }
 
-                    $.each(data, function(index, value) {
-                        $('#modalRemocaoConflitoAmbiente').append(value.ambiente + " | ");
-                    });
-                }, 'json');
+                        $.each(data, function(index, value) {
+                            $('#modalRemocaoConflitoAmbiente').append(value.ambiente + " | ");
+                        });
+                    }, 'json');
 
                 $('#rowConflito').show();
             }
@@ -619,55 +674,55 @@
                 // Requisição para remover a disciplina ao horário no backend
                 $.post('<?php echo base_url('sys/tabela-horarios/removerAula'); ?>', 
                 {
-                    aula_id: aulaId,
-                    tempo_de_aula_id: horarioId
-                },
+                        aula_id: aulaId,
+                        tempo_de_aula_id: horarioId
+                    },
                 function(data)
                 {
                     if(data == "1")
                     {
-                        moverDisciplinaParaPendentes(horarioElement);
+                            moverDisciplinaParaPendentes(horarioElement);
 
-                        // Limpa o horário
-                        $horario.html('')
-                            .removeClass('horario-preenchido')
-                            .addClass('horario-vazio')
-                            .removeData(['disciplina', 'professor', 'ambiente', 'aula-id', 'aulas-total', 'aulas-pendentes'])
-                            .off('click')
-                            .click(function() {
-                                horarioSelecionado = $(this);
-                                carregarDisciplinasPendentes($(this).attr('id'));
-                                modalAtribuirDisciplina.show();
+                            // Limpa o horário
+                            $horario.html('')
+                                .removeClass('horario-preenchido')
+                                .addClass('horario-vazio')
+                                .removeData(['disciplina', 'professor', 'ambiente', 'aula-id', 'aulas-total', 'aulas-pendentes'])
+                                .off('click')
+                                .click(function() {
+                                    horarioSelecionado = $(this);
+                                    carregarDisciplinasPendentes($(this).attr('id'));
+                                    modalAtribuirDisciplina.show();
+                                });
+
+                            configurarDragAndDrop();
+
+                            // Fecha o modal
+                            modalConfirmarRemocao.hide();
+
+                            // Mostra feedback de sucesso
+                            $.toast({
+                                heading: 'Sucesso',
+                                text: 'A disciplina foi removida do horário.',
+                                showHideTransition: 'slide',
+                                icon: 'success',
+                                loaderBg: '#f96868',
+                                position: 'top-center'
                             });
-
-                        configurarDragAndDrop();
-
-                        // Fecha o modal
-                        modalConfirmarRemocao.hide();
-
-                        // Mostra feedback de sucesso
-                        $.toast({
-                            heading: 'Sucesso',
-                            text: 'A disciplina foi removida do horário.',
-                            showHideTransition: 'slide',
-                            icon: 'success',
-                            loaderBg: '#f96868',
-                            position: 'top-center'
-                        });
                     }
                     else
                     {
-                        // Mostra feedback de erro
-                        $.toast({
-                            heading: 'Erro',
-                            text: 'Ocorreu um erro ao remover a aula do horário.',
-                            showHideTransition: 'slide',
-                            icon: 'error',
-                            loaderBg: '#f96868',
-                            position: 'top-center'
-                        });
-                    }
-                });                
+                            // Mostra feedback de erro
+                            $.toast({
+                                heading: 'Erro',
+                                text: 'Ocorreu um erro ao remover a aula do horário.',
+                                showHideTransition: 'slide',
+                                icon: 'error',
+                                loaderBg: '#f96868',
+                                position: 'top-center'
+                            });
+                        }
+                    });
             });
 
             // Mostra o modal
@@ -693,7 +748,7 @@
             // Drag over para horários
             $('.horario-vazio').on('dragover', function(e)
             {
-                e.preventDefault();                
+                e.preventDefault();
 
                 $(this).addClass('drag-over');
             });
@@ -762,10 +817,10 @@
             const ambienteSelecionadoId = $("#selectAmbiente").val();
             var ambientesSelecionadosNome = [];
 
-            var data = $('#selectAmbiente').select2('data'); 
+            var data = $('#selectAmbiente').select2('data');
             data.forEach(function (item)
             { 
-                ambientesSelecionadosNome.push(item.text); 
+                ambientesSelecionadosNome.push(item.text);
             });
 
             const aulaId = $('#modalSelecionarAmbiente').data('aula-id');
@@ -778,54 +833,55 @@
                 // Requisição para atribuir a disciplina ao horário no backend
                 $.post('<?php echo base_url('sys/tabela-horarios/atribuirAula'); ?>', 
                 {
-                    aula_id: aulaId,
-                    tempo_de_aula_id: horarioId,
-                    ambiente_id: ambienteSelecionadoId
-                },
+                        aula_id: aulaId,
+                        tempo_de_aula_id: horarioId,
+                        ambiente_id: ambienteSelecionadoId
+                    },
                 function(data) 
                 {
                     if(data == "0") 
                     {
-                        $.toast({
-                            heading: 'Erro',
-                            text: 'Ocorreu um erro ao atribuir a disciplina ao horário.',
-                            showHideTransition: 'slide',
-                            icon: 'error',
-                            loaderBg: '#f96868',
-                            position: 'top-center'
-                        });
-                        return;
+                            $.toast({
+                                heading: 'Erro',
+                                text: 'Ocorreu um erro ao atribuir a disciplina ao horário.',
+                                showHideTransition: 'slide',
+                                icon: 'error',
+                                loaderBg: '#f96868',
+                                position: 'top-center'
+                            });
+                            return;
                     }
-                    else if(data.indexOf("OK") >= 0 || data.indexOf("CONFLITO") >= 0 || data.indexOf("RESTRICAO") >= 0|| data.indexOf("TRES-TURNOS") >= 0)
+                    else if(data.indexOf("OK") >= 0 || data.indexOf("CONFLITO") >= 0 || data.indexOf("RESTRICAO") >= 0 || data.indexOf("TRES-TURNOS") >= 0 || data.indexOf("INTERVALO") >= 0)
                     {
                         var conflitoStyle = "text-primary";
                         var conflitoIcon = "fa-mortar-board";
                         var aulaConflito = 0;
                         var tresTurnos = 0;
                         var restricao = 0;
+                        var intervalo = 0;
                         var conflitoAmbiente = 0;
                         var conflitoProfessor = 0;
 
-                        var aulaHorarioId = data.split("-")[0];
+                            var aulaHorarioId = data.split("-")[0];
 
                         if(data.indexOf("TRES-TURNOS") >= 0)
                         {
-                            conflitoStyle = "text-danger";
-                            conflitoIcon = "fa-warning";
-                            tresTurnos = 1;
+                                conflitoStyle = "text-danger";
+                                conflitoIcon = "fa-warning";
+                                tresTurnos = 1;
                         }
                         else if(data.indexOf("RESTRICAO") >= 0)
                         {
-                            conflitoStyle = "text-danger";
-                            conflitoIcon = "fa-warning";
-                            restricao = data.split("-")[3];
+                                conflitoStyle = "text-danger";
+                                conflitoIcon = "fa-warning";
+                                restricao = data.split("-")[3];
                         }
                         else if(data.indexOf("AMBIENTE") >= 0)
                         {
-                            aulaConflito = data.split("-")[3];
-                            conflitoStyle = "text-warning";
-                            conflitoIcon = "fa-warning";
-                            conflitoAmbiente = 1;
+                                aulaConflito = data.split("-")[3];
+                                conflitoStyle = "text-warning";
+                                conflitoIcon = "fa-warning";
+                                conflitoAmbiente = 1;
                         }
                         else if(data.indexOf("PROFESSOR") >= 0)
                         {
@@ -834,9 +890,15 @@
                             conflitoIcon = "fa-warning";
                             conflitoProfessor = 1;
                         }
+                        else if(data.indexOf("INTERVALO") >= 0)
+                        {
+                            conflitoStyle = "text-info";
+                            conflitoIcon = "fa-warning";
+                            intervalo = data;
+                        }
 
-                        // Preenche o horário selecionado
-                        horarioSelecionado.html(`
+                            // Preenche o horário selecionado
+                            horarioSelecionado.html(`
                             <div class="card border-1 shadow-sm bg-gradient" style="cursor: pointer; height: 100%;">
                                 <div class="card-body p-1 d-flex flex-column justify-content-center align-items-center text-center">
                                     <h6 class="text-wrap mb-0 fs-6 ${conflitoStyle}" style="font-size: 0.75rem !important; margin-right: 15px">
@@ -857,13 +919,13 @@
                                 </div>
                             </div>
                         `);
-                            
+
                         $("#btnFixar_horario_" + aulaHorarioId).off().click(function(e) 
                         {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            fixarAulaHorario(1, aulaHorarioId, horarioId);
-                        });
+                                e.preventDefault();
+                                e.stopPropagation();
+                                fixarAulaHorario(1, aulaHorarioId, horarioId);
+                            });
 
                         // Adiciona os dados ao horário
                         horarioSelecionado
@@ -879,6 +941,7 @@
                             .data('conflitoProfessor', conflitoProfessor)
                             .data('restricao', restricao)
                             .data('tresturnos', tresTurnos)
+                            .data('intervalo', intervalo)
                             .data('aula_horario_id', aulaHorarioId)
                             .data('fixa', 0)
                             .removeClass('horario-vazio')
@@ -888,31 +951,31 @@
                                 mostrarModalConfirmacaoRemocao(this);
                             });
 
-                        // Atualiza a quantidade de aulas pendentes no card
-                        const aulasPendentes = cardAula.data('aulas-pendentes') - 1;
-                        cardAula.data('aulas-pendentes', aulasPendentes);
-                        cardAula.find('.aulas-pendentes').text(aulasPendentes);
+                            // Atualiza a quantidade de aulas pendentes no card
+                            const aulasPendentes = cardAula.data('aulas-pendentes') - 1;
+                            cardAula.data('aulas-pendentes', aulasPendentes);
+                            cardAula.find('.aulas-pendentes').text(aulasPendentes);
 
-                        // Se zerou, remove o card
+                            // Se zerou, remove o card
                         if (aulasPendentes <= 0) 
                         {
-                            cardAula.remove();
+                                cardAula.remove();
+                            }
+
+                            atualizarContadorPendentes();
+                            modalSelecionarAmbiente.hide();
+
+                            // Mostra feedback de sucesso
+                            $.toast({
+                                heading: 'Sucesso',
+                                text: 'A disciplina foi atribuída ao horário.',
+                                showHideTransition: 'slide',
+                                icon: 'success',
+                                loaderBg: '#f96868',
+                                position: 'top-center'
+                            });
                         }
-
-                        atualizarContadorPendentes();
-                        modalSelecionarAmbiente.hide();
-
-                        // Mostra feedback de sucesso
-                        $.toast({
-                            heading: 'Sucesso',
-                            text: 'A disciplina foi atribuída ao horário.',
-                            showHideTransition: 'slide',
-                            icon: 'success',
-                            loaderBg: '#f96868',
-                            position: 'top-center'
-                        });
-                    }                
-                });                
+                    });
             }
         });
 
@@ -954,12 +1017,12 @@
 
                 var disciplinaRow = '' +
                     '<tr>' +
-                        '<td>' + $(this).data("disciplina") + '</td>' +
-                        '<td>' + $(this).data("professor") + '</td>' +
-                        '<td>' + $(this).data("aulas-pendentes") + ' aula(s)</td>' +
-                        '<td>' +
-                            '<button type="button" class="btn btn-primary btn-sm botao_atribuir" id="botao_atribuir_' + $(this).data("aula-id") + '" >Atribuir</button>' +
-                        '</td>' +
+                    '<td>' + $(this).data("disciplina") + '</td>' +
+                    '<td>' + $(this).data("professor") + '</td>' +
+                    '<td>' + $(this).data("aulas-pendentes") + ' aula(s)</td>' +
+                    '<td>' +
+                    '<button type="button" class="btn btn-primary btn-sm botao_atribuir" id="botao_atribuir_' + $(this).data("aula-id") + '" >Atribuir</button>' +
+                    '</td>' +
                     '</tr>';
 
                 $("#tabelaDisciplinasModal tbody").append(disciplinaRow);
@@ -1046,6 +1109,8 @@
         //Progração do evento "change" dos select de cursos
         $('#filtroCurso').on('change', function() 
         {
+            aulas = [];
+
             $(".loader-demo-box").css("visibility", "visible");
 
             //Limpar a tabela de horários inteira
@@ -1064,18 +1129,20 @@
             {
                 $.each(data, function(idx, obj) 
                 {
-                    $('#filtroTurma').append('<option value="' + obj.id + '">' + obj.sigla + '</option>');
-                });
-            }, 'json')
+                        $('#filtroTurma').append('<option value="' + obj.id + '">' + obj.sigla + '</option>');
+                    });
+                }, 'json')
             .done(function() 
             {
-                $(".loader-demo-box").css("visibility", "hidden");
-            });
+                    $(".loader-demo-box").css("visibility", "hidden");
+                });
         });
 
         //Progração do evento "change" dos select de turmas
         $('#filtroTurma').on('change', function() 
         {
+            aulas = [];
+
             $(".loader-demo-box").css("visibility", "visible");
 
             $("#btn_atribuir_automaticamente").prop('disabled', true);
@@ -1092,83 +1159,83 @@
                 //Buscar aulas da turma selecionada.
                 $.get('<?php echo base_url('sys/aulas/getAulasFromTurma/'); ?>' + $('#filtroTurma').val(), function(data) 
                 {
-                    //Limpar todas as aulas pendentes.
-                    $('#aulasContainer').empty();
-
-                    //Verifica se a aula atual já está na lista, para a questão de mais de um professor.
-                    $.each(data, function(idx, obj) 
-                    {
-                        var found = false;
-
-                        //Vetor dentro do obj para casos de aulas com mais de um professor
-                        obj.professores = [];
+                        //Limpar todas as aulas pendentes.
+                        $('#aulasContainer').empty();
 
                         //Verifica se a aula atual já está na lista, para a questão de mais de um professor.
+                    $.each(data, function(idx, obj) 
+                    {
+                            var found = false;
+
+                            //Vetor dentro do obj para casos de aulas com mais de um professor
+                            obj.professores = [];
+
+                            //Verifica se a aula atual já está na lista, para a questão de mais de um professor.
                         $("#aulasContainer").children().each(function() 
                         {
-                            //Verifica o numero da aula através do id do card.
-                            var aula = $(this).attr('id').split('_')[1];
+                                //Verifica o numero da aula através do id do card.
+                                var aula = $(this).attr('id').split('_')[1];
 
                             if (aula == obj.id) 
                             {
-                                found = true; //encontrado
-                                //Adiciona o professor na aula já existente (visual do card)
-                                $('#professor_aula_' + obj.id).append(' &nbsp; ' +
-                                    '<i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>' +
-                                    '<small class="text-secondary">' + obj.professor.split(" ")[0] + '</small>'
-                                );
+                                    found = true; //encontrado
+                                    //Adiciona o professor na aula já existente (visual do card)
+                                    $('#professor_aula_' + obj.id).append(' &nbsp; ' +
+                                        '<i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>' +
+                                        '<small class="text-secondary">' + obj.professor.split(" ")[0] + '</small>'
+                                    );
 
-                                //Adiciona o professor na aula já existente (atributo data-professor)
-                                $('#aula_' + obj.id).data('professor', $('#aula_' + obj.id).data('professor') + ',' + obj.professor.split(" ")[0]);
+                                    //Adiciona o professor na aula já existente (atributo data-professor)
+                                    $('#aula_' + obj.id).data('professor', $('#aula_' + obj.id).data('professor') + ',' + obj.professor.split(" ")[0]);
 
-                                //Coloca o professor adicional no vetor da aula já existente
-                                let objetoAlterar = getAulaById(obj.id);
-                                objetoAlterar.professores.push(obj.professor.split(" ")[0]);
-                            }
-                        });
+                                    //Coloca o professor adicional no vetor da aula já existente
+                                    let objetoAlterar = getAulaById(obj.id);
+                                    objetoAlterar.professores.push(obj.professor.split(" ")[0]);
+                                }
+                            });
 
-                        var regime = $('#filtroCurso option:selected').data('regime');
+                            var regime = $('#filtroCurso option:selected').data('regime');
 
-                        //Se não encontrou a aula atual, adiciona na lista.
+                            //Se não encontrou a aula atual, adiciona na lista.
                         if (!found) 
                         {
-                            var cardAula = '' +
-                                '<div id="aula_' + obj.id + '" draggable="true" data-aula-id="' + obj.id + '" data-disciplina="' + obj.disciplina + '" data-professor="' + obj.professor.split(" ")[0] + '" data-aulas-total="' + (obj.ch / ((regime == 2) ? 20 : 40)) + '" data-aulas-pendentes="' + (obj.ch / ((regime == 2) ? 20 : 40)) + '" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">' +
+                                var cardAula = '' +
+                                    '<div id="aula_' + obj.id + '" draggable="true" data-aula-id="' + obj.id + '" data-disciplina="' + obj.disciplina + '" data-professor="' + obj.professor.split(" ")[0] + '" data-aulas-total="' + (obj.ch / ((regime == 2) ? 20 : 40)) + '" data-aulas-pendentes="' + (obj.ch / ((regime == 2) ? 20 : 40)) + '" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">' +
                                     '<div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">' +
-                                        '<h6 class="text-primary">' +
-                                        '<i class="mdi mdi-book-outline me-1"></i> ' + obj.disciplina +
-                                        '</h6>' +
-                                        '<div class="d-flex align-items-center mb-0 py-0" id="professor_aula_' + obj.id + '">' +
-                                            '<i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>' +
-                                            '<small class="text-secondary">' + obj.professor.split(" ")[0] + '</small>' +
-                                        '</div>' +
-                                        '<div class="d-flex align-items-center">' +
-                                            '<i class="mdi mdi-door fs-6 text-muted me-1"></i>' +
-                                            '<small class="text-secondary"><span class="aulas-pendentes">' + (obj.ch / ((regime == 2) ? 20 : 40)) + '</span> aula(s)</small>' +
-                                        '</div>' +
+                                    '<h6 class="text-primary">' +
+                                    '<i class="mdi mdi-book-outline me-1"></i> ' + obj.disciplina +
+                                    '</h6>' +
+                                    '<div class="d-flex align-items-center mb-0 py-0" id="professor_aula_' + obj.id + '">' +
+                                    '<i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>' +
+                                    '<small class="text-secondary">' + obj.professor.split(" ")[0] + '</small>' +
                                     '</div>' +
-                                '</div>';
+                                    '<div class="d-flex align-items-center">' +
+                                    '<i class="mdi mdi-door fs-6 text-muted me-1"></i>' +
+                                    '<small class="text-secondary"><span class="aulas-pendentes">' + (obj.ch / ((regime == 2) ? 20 : 40)) + '</span> aula(s)</small>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '</div>';
 
-                            $('#aulasContainer').append(cardAula);
+                                $('#aulasContainer').append(cardAula);
 
-                            //Coloca o professor no vetor da aula
-                            obj.professores.push(obj.professor.split(" ")[0]);
+                                //Coloca o professor no vetor da aula
+                                obj.professores.push(obj.professor.split(" ")[0]);
 
-                            //adiciona a aula carregada no vetor de aulas
-                            aulas.push(obj);
+                                //adiciona a aula carregada no vetor de aulas
+                                aulas.push(obj);
 
-                            //faz o somatório de aulas da turma
-                            quantasAulas += (obj.ch / ((regime == 2) ? 20 : 40));
-                        }
-                    });
-                }, 'json')
+                                //faz o somatório de aulas da turma
+                                quantasAulas += (obj.ch / ((regime == 2) ? 20 : 40));
+                            }
+                        });
+                    }, 'json')
                 .done(function() 
                 {
-                    $("#aulasCounter").html(quantasAulas);
-                    $("#btn_atribuir_automaticamente").prop('disabled', false);
-                    configurarDragAndDrop();
-                    $(".loader-demo-box").css("visibility", "hidden");
-                });
+                        $("#aulasCounter").html(quantasAulas);
+                        $("#btn_atribuir_automaticamente").prop('disabled', false);
+                        configurarDragAndDrop();
+                        $(".loader-demo-box").css("visibility", "hidden");
+                    });
 
                 //Buscar horários da turma selecionada para montar a tabela de horários.
                 $.get('<?php echo base_url('sys/tempoAula/getTemposFromTurma/'); ?>' + $('#filtroTurma').val(), function(data) 
@@ -1211,15 +1278,15 @@
 
                     var htmlDaTableHead = '' +
                         '<tr>' +
-                            '<th class="col-1">Horário</th>';
+                        '<th class="col-1">Horário</th>';
 
-                            //Iterar pelos dias existentes no horário
+                    //Iterar pelos dias existentes no horário
                             $.each(dias, function(idx, obj) 
                             {
-                                htmlDaTableHead += '<th class="col-1">' + nome_dia[obj] + '</th>';
-                            });
+                        htmlDaTableHead += '<th class="col-1">' + nome_dia[obj] + '</th>';
+                    });
 
-                            htmlDaTableHead += '' +
+                    htmlDaTableHead += '' +
                         '</tr>';
 
                     //Insere os horários na tabela se tiver aula pela manhã
@@ -1227,9 +1294,9 @@
                     {
                         var htmlDaTabela = '' +
                             '<thead>' +
-                                '<tr>' +
-                                    '<th colspan="' + (dias.length + 1) + '" class="text-center bg-primary text-white">MANHÃ</th>' +
-                                '</tr>' +
+                            '<tr>' +
+                            '<th colspan="' + (dias.length + 1) + '" class="text-center bg-primary text-white">MANHÃ</th>' +
+                            '</tr>' +
                             '</thead>' +
                             htmlDaTableHead;
 
@@ -1259,14 +1326,14 @@
                                 {
                                     var linhaDeHorarios = '' +
                                         '<tr>' +
-                                            '<td class="coluna-fixa">' + obj.hora_inicio + ':' + obj.minuto_inicio + '-' + obj.hora_fim + ':' + obj.minuto_fim + '</td>';
+                                        '<td class="coluna-fixa">' + obj.hora_inicio + ':' + obj.minuto_inicio + '-' + obj.hora_fim + ':' + obj.minuto_fim + '</td>';
                                             for (var i = 0; i < dias.length; i++) 
                                             {
-                                                linhaDeHorarios += '<td class="horario-vazio" id="horario_' +
-                                                    getIdByDiaHoraMinuto(horarios, dias[i], obj.hora_inicio, obj.minuto_inicio, obj.hora_fim, obj.minuto_fim) +
-                                                    '"></td>';
-                                            }
-                                            linhaDeHorarios += '' +
+                                        linhaDeHorarios += '<td class="horario-vazio" id="horario_' +
+                                            getIdByDiaHoraMinuto(horarios, dias[i], obj.hora_inicio, obj.minuto_inicio, obj.hora_fim, obj.minuto_fim) +
+                                            '"></td>';
+                                    }
+                                    linhaDeHorarios += '' +
                                         '</tr>'
 
                                     $('#tabela-horarios-manha').append(linhaDeHorarios);
@@ -1291,9 +1358,9 @@
                     {
                         var htmlDaTabela = '' +
                             '<thead>' +
-                                '<tr>' +
-                                    '<th colspan="' + (dias.length + 1) + '" class="text-center bg-primary text-white">TARDE</th>' +
-                                '</tr>' +
+                            '<tr>' +
+                            '<th colspan="' + (dias.length + 1) + '" class="text-center bg-primary text-white">TARDE</th>' +
+                            '</tr>' +
                             '</thead>' +
                             htmlDaTableHead;
 
@@ -1323,14 +1390,14 @@
                                 {
                                     var linhaDeHorarios = '' +
                                         '<tr>' +
-                                            '<td class="coluna-fixa">' + obj.hora_inicio + ':' + obj.minuto_inicio + '-' + obj.hora_fim + ':' + obj.minuto_fim + '</td>';
+                                        '<td class="coluna-fixa">' + obj.hora_inicio + ':' + obj.minuto_inicio + '-' + obj.hora_fim + ':' + obj.minuto_fim + '</td>';
                                             for (var i = 0; i < dias.length; i++) 
                                             {
-                                                linhaDeHorarios += '<td class="horario-vazio" id="horario_' +
-                                                    getIdByDiaHoraMinuto(horarios, dias[i], obj.hora_inicio, obj.minuto_inicio, obj.hora_fim, obj.minuto_fim) +
-                                                    '"></td>';
-                                            }
-                                            linhaDeHorarios += '' +
+                                        linhaDeHorarios += '<td class="horario-vazio" id="horario_' +
+                                            getIdByDiaHoraMinuto(horarios, dias[i], obj.hora_inicio, obj.minuto_inicio, obj.hora_fim, obj.minuto_fim) +
+                                            '"></td>';
+                                    }
+                                    linhaDeHorarios += '' +
                                         '</tr>'
 
                                     $('#tabela-horarios-tarde').append(linhaDeHorarios);
@@ -1356,9 +1423,9 @@
                     {
                         var htmlDaTabela = '' +
                             '<thead>' +
-                                '<tr>' +
-                                    '<th colspan="' + (dias.length + 1) + '" class="text-center bg-primary text-white">NOITE</th>' +
-                                '</tr>' +
+                            '<tr>' +
+                            '<th colspan="' + (dias.length + 1) + '" class="text-center bg-primary text-white">NOITE</th>' +
+                            '</tr>' +
                             '</thead>' +
                             htmlDaTableHead;
 
@@ -1387,14 +1454,14 @@
                                 if (obj.hora_inicio >= 18) {
                                     var linhaDeHorarios = '' +
                                         '<tr>' +
-                                            '<td class="coluna-fixa">' + obj.hora_inicio + ':' + obj.minuto_inicio + '-' + obj.hora_fim + ':' + obj.minuto_fim + '</td>';
+                                        '<td class="coluna-fixa">' + obj.hora_inicio + ':' + obj.minuto_inicio + '-' + obj.hora_fim + ':' + obj.minuto_fim + '</td>';
                                             for (var i = 0; i < dias.length; i++) 
                                             {
-                                                linhaDeHorarios += '<td class="horario-vazio" id="horario_' +
-                                                    getIdByDiaHoraMinuto(horarios, dias[i], obj.hora_inicio, obj.minuto_inicio, obj.hora_fim, obj.minuto_fim) +
-                                                    '"></td>';
-                                            }
-                                            linhaDeHorarios += '' +
+                                        linhaDeHorarios += '<td class="horario-vazio" id="horario_' +
+                                            getIdByDiaHoraMinuto(horarios, dias[i], obj.hora_inicio, obj.minuto_inicio, obj.hora_fim, obj.minuto_fim) +
+                                            '"></td>';
+                                    }
+                                    linhaDeHorarios += '' +
                                         '</tr>'
 
                                     $('#tabela-horarios-noite').append(linhaDeHorarios);
@@ -1442,7 +1509,7 @@
 
                             obj.ambiente.forEach(function (item)
                             { 
-                                ambientesSelecionadosNome.push(getAmbienteNome(item)); 
+                                ambientesSelecionadosNome.push(getAmbienteNome(item));
                             });
 
                             horarioSelecionado = $(`#horario_${obj.tempo_de_aula_id}`);
@@ -1466,12 +1533,16 @@
                                 conflitoStyle = "text-warning";
                                 conflitoIcon = "fa-warning";
                             }
+                            else if(obj.intervalo != 0)
+                            {
+                                conflitoStyle = "text-info";
+                                conflitoIcon = "fa-warning";
+                            }
 
                             var btnFixar = "text-primary";
 
                             if(obj.fixa == 1)
                                 btnFixar = "text-warning";
-
 
                             // Preenche o horário selecionado
                             horarioSelecionado.html(`
@@ -1495,7 +1566,7 @@
                                     </div>
                                 </div>
                             `);
-                            
+
                             $("#btnFixar_horario_" + obj.id).off().click(function(e) 
                             {
                                 e.preventDefault();
@@ -1520,6 +1591,7 @@
                                 .data('conflitoProfessor', obj.choqueProfessor)
                                 .data('restricao', obj.restricao)
                                 .data('tresturnos', obj.tresturnos)
+                                .data('intervalo', obj.intervalo)
                                 .data('aula_horario_id', obj.id)
                                 .data('fixa', obj.fixa)
                                 .removeClass('horario-vazio')
@@ -1546,7 +1618,7 @@
                     });
 
                     // Configura eventos após preencher a tabela
-                    configurarDragAndDrop();                    
+                    configurarDragAndDrop();
 
                 }, 'json');
             } 
@@ -1560,7 +1632,17 @@
 
                 //Esconder o div do loader
                 $(".loader-demo-box").css("visibility", "hidden");
-            }                       
-        });        
+            }
+        });
+    });
+</script>
+
+<!--Referente ao select 2-->
+<script>
+    $(document).ready(function() {
+        $('.js-example-basic-single').select2({
+            placeholder: "Selecione uma opção:",
+            width: '100%'
+        });
     });
 </script>

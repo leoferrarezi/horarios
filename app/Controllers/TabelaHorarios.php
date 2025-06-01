@@ -103,7 +103,15 @@ class TabelaHorarios extends BaseController
             {
                 echo "$aulaHorarioId-CONFLITO-PROFESSOR-$choque"; // choque de professor
                 return;
-            }            
+            }
+
+            $intervalo = $aulaHorarioModel->verificarTempoEntreTurnos($aulaHorarioId);
+
+            if ($intervalo > 0)
+            {
+                echo "$intervalo-INTERVALO";
+                return;
+            }
 
             echo "$aulaHorarioId-OK"; // tudo certo e sem choques
         }

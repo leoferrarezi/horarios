@@ -81,11 +81,10 @@ class MatrizCurricularModel extends Model
     
     public function getRestricoes($id) 
     {
-        $db = \Config\Database::connect();
         $id = $id['id'];
         
-        $cursos = $db->table('cursos')->where('matriz_id', $id)->get()->getNumRows();
-        $disciplinas = $db->table('disciplinas')->where('matriz_id', $id)->get()->getNumRows();
+        $cursos = $this->db->table('cursos')->where('matriz_id', $id)->get()->getNumRows();
+        $disciplinas = $this->db->table('disciplinas')->where('matriz_id', $id)->get()->getNumRows();
 
         $restricoes = [
             'cursos' => $cursos, 

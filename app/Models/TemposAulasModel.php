@@ -88,55 +88,6 @@ class TemposAulasModel extends Model
             ->findAll(); // Retorna todos os registros
     }
 
-    public function verificarReferencias(array $data)
-    {
-        $id = $data['id'];
-
-        $referencias = $this->verificarReferenciasEmTabelas($id);
-        $referencias = implode(", ", $referencias);
-        // Se o ID for referenciado em outras tabelas, lança a exceção
-        if (!empty($referencias))
-        {
-            // Passa o nome das tabelas onde o ID foi encontrado para a exceção
-            throw new ReferenciaException("Este tempo de aula não pode ser excluído, porque está em uso. <br>
-                    Para excluir este tempo de aula, primeiro remova as associações em {$referencias} que estão utilizando este tempo de aula'.");
-        }
-
-        // Se não houver referências, retorna os dados para permitir a exclusão
-        return $data;
-    }
-
-    private function verificarReferenciasEmTabelas($id)
-    {
-        // Conectar ao banco de dados
-        $db = \Config\Database::connect();
-
-        // Tabelas e colunas de chave estrangeira a serem verificadas
-        $tabelas = [
-            'aula_horario' => 'tempo_de_aula_id',
-            'professor_regras' => 'tempo_de_aula_id',
-        ];
-
-        $referenciasEncontradas = [];
-
-        // Verificar se o ID é referenciado
-        foreach ($tabelas as $tabela => $fk_coluna)
-        {
-            $builder = $db->table($tabela);
-            $builder->where($fk_coluna, $id);
-            $query = $builder->get();
-
-            if ($query->getNumRows() > 0)
-            {
-                // Adiciona a tabela à lista de referências encontradas
-                $referenciasEncontradas[] = $tabela;
-            }
-        }
-
-        // Retorna as tabelas onde o ID foi encontrado
-        return $referenciasEncontradas;
-    }
-
     public function getTemposAulas($professorID = null)
     {
         $builder = $this->table('tempos_de_aula')
@@ -228,11 +179,10 @@ class TemposAulasModel extends Model
 
     public function getRestricoes($id)
     {
-        $db = \Config\Database::connect();
         $id = $id['id'];
 
-        $aula_horario = $db->table('aula_horario')->where('tempo_de_aula_id', $id)->get()->getNumRows();
-        $professor_regras = $db->table('professor_regras')->where('tempo_de_aula_id', $id)->get()->getNumRows();
+        $aula_horario = $this->db->table('aula_horario')->where('tempo_de_aula_id', $id)->get()->getNumRows();
+        $professor_regras = $this->db->table('professor_regras')->where('tempo_de_aula_id', $id)->get()->getNumRows();
 
         $restricoes = [
             'horarios' => $aula_horario, 

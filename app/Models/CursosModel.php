@@ -92,10 +92,9 @@ class CursosModel extends Model
 
     public function getRestricoes($id) 
     {
-        $db = \Config\Database::connect();
         $id = $id['id'];
 
-        $turmas = $db->table('turmas')->where('curso_id', $id)->get()->getNumRows();
+        $turmas = $this->db->table('turmas')->where('curso_id', $id)->get()->getNumRows();
         
         $restricoes = [
             'turmas' => $turmas

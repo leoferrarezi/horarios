@@ -332,7 +332,8 @@
                 showHideTransition: 'slide',
                 icon: 'error',
                 loaderBg: '#f96868',
-                position: 'top-center'
+                position: 'top-center', 
+                hideAfter: false
             });
         <?php endif; ?>
     });

@@ -107,10 +107,9 @@ class DisciplinasModel extends Model
 
     public function getRestricoes($id)
     {
-        $db = \Config\Database::connect();
         $id = $id['id'];
 
-        $aulas = $db->table('aulas')->where('disciplina_id', $id)->get()->getNumRows();
+        $aulas = $this->db->table('aulas')->where('disciplina_id', $id)->get()->getNumRows();
         
         $restricoes = [
             'aulas' => $aulas

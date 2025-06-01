@@ -51,51 +51,21 @@ class AmbientesModel extends Model
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
-    protected $beforeDelete   = [];
+    protected $beforeDelete   = ['getRestricoes'];
     protected $afterDelete    = [];
 
-    public function verificarReferencias(array $data)
+    public function getRestricoes($id)
     {
-        $id = $data['id'];
+        $id = $id['id'];
 
-        $referencias = $this->verificarReferenciasEmTabelas($id);
-        $referencias = implode(", ", $referencias);
-        // Se o ID for referenciado em outras tabelas, lança a exceção
-        if (!empty($referencias)) {
-            // Passa o nome das tabelas onde o ID foi encontrado para a exceção
-            throw new ReferenciaException("Este ambiente não pode ser excluído, porque está em uso. <br>
-                    Para excluir este ambiente, primeiro remova as associações em {$referencias} que estão utilizando este ambiente'.");
-        }
+        $grupos = $this->db->table('ambiente_grupo')->where('ambiente_id', $id)->get()->getNumRows();
+        $horarios = $this->db->table('aula_horario_ambiente')->where('ambiente_id', $id)->get()->getNumRows();
 
-        // Se não houver referências, retorna os dados para permitir a exclusão
-        return $data;
-    }
-
-    private function verificarReferenciasEmTabelas($id)
-    {
-        // Conectar ao banco de dados
-        $db = \Config\Database::connect();
-
-        // Tabelas e colunas de chave estrangeira a serem verificadas
-        $tabelas = [
-            'ambiente_grupo' => 'ambiente_id',
+        $restricoes = [
+            'grupos' => $grupos, 
+            'horarios' => $horarios
         ];
 
-        $referenciasEncontradas = [];
-
-        // Verificar se o ID é referenciado
-        foreach ($tabelas as $tabela => $fk_coluna) {
-            $builder = $db->table($tabela);
-            $builder->where($fk_coluna, $id);
-            $query = $builder->get();
-
-            if ($query->getNumRows() > 0) {
-                // Adiciona a tabela à lista de referências encontradas
-                $referenciasEncontradas[] = $tabela;
-            }
-        }
-
-        // Retorna as tabelas onde o ID foi encontrado
-        return $referenciasEncontradas;
+        return $restricoes;
     }
 }

@@ -7,6 +7,7 @@ use App\Controllers\BaseController;
 use App\Models\AmbienteGrupoModel;
 use App\Models\AmbientesModel;
 use App\Models\GruposAmbientesModel;
+use CodeIgniter\Exceptions\ReferenciaException;
 
 class Ambientes extends BaseController
 {
@@ -75,28 +76,33 @@ class Ambientes extends BaseController
 
     public function deletarAmbiente()
     {
-        $ambienteId = $this->request->getPost('id');
-        $ambienteModel = new AmbientesModel();
-        $ambienteGrupoModel = new AmbienteGrupoModel();
+        $dadosPost = $this->request->getPost();
+        $id = (int)strip_tags($dadosPost['id']);
 
-        $ambiente = $ambienteModel->find($ambienteId);
-        if (!$ambiente) {
-            session()->setFlashdata('erro', 'Ambiente não encontrado.');
+        $ambienteModel = new AmbientesModel();
+        try {
+            $restricoes = $ambienteModel->getRestricoes(['id' => $id]);
+
+            if (!$restricoes['horarios']) {
+                $ambienteGrupoModel = new AmbienteGrupoModel();
+                $ambienteGrupoModel->where('ambiente_id', $id)->delete();
+                if ($ambienteModel->delete($id)) {
+                    session()->setFlashdata('sucesso', 'Ambiente excluído com sucesso!');
+                    return redirect()->to(base_url('/sys/cadastro-ambientes'));
+                } else {
+                    return redirect()->to(base_url('/sys/cadastro-ambientes'))->with('erro', 'Erro inesperado ao excluir Ambiente!');
+                }
+            } else {
+                $mensagem = "O Ambiente não pode ser excluído.<br>Este ambiente possui ";
+                if ($restricoes['horarios']) {
+                    $mensagem = $mensagem . "horário(s) relacionado(s) a ele!";
+                }
+                throw new ReferenciaException($mensagem);
+            }
+        } catch (ReferenciaException $e) {
+            session()->setFlashdata('erro', $e->getMessage());
             return redirect()->to(base_url('/sys/cadastro-ambientes'));
         }
-
-        $relacoes = $ambienteGrupoModel->where('ambiente_id', $ambienteId)->findAll();
-        foreach ($relacoes as $relacao) {
-            $ambienteGrupoModel->delete($relacao['id']);
-        }
-
-        if ($ambienteModel->delete($ambienteId)) {
-            session()->setFlashdata('sucesso', 'Ambiente removido com sucesso!');
-        } else {
-            session()->setFlashdata('erro', 'Erro ao excluir o ambiente.');
-        }
-
-        return redirect()->to(base_url('/sys/cadastro-ambientes'));
     }
 
     public function salvarGrupoAmbientes()
@@ -135,28 +141,33 @@ class Ambientes extends BaseController
 
     public function deletarGrupoAmbientes()
     {
-        $grupoId = $this->request->getPost('id');
+        $dadosPost = $this->request->getPost();
+        $id = (int)strip_tags($dadosPost['id']);
+
         $gruposAmbientesModel = new GruposAmbientesModel();
-        $ambienteGrupoModel = new AmbienteGrupoModel();
+        try {
+            $restricoes = $gruposAmbientesModel->getRestricoes(['id' => $id]);
 
-        $grupo = $gruposAmbientesModel->find($grupoId);
-        if (!$grupo) {
-            session()->setFlashdata('erro', 'Grupo não encontrado.');
-            return redirect()->to(base_url('/sys/cadastro-ambientes'));
+            if (!$restricoes['disciplinas']) {
+                $ambienteGrupoModel = new AmbienteGrupoModel();
+                $ambienteGrupoModel->where('grupo_de_ambiente_id', $id)->delete();
+                if ($gruposAmbientesModel->delete($id)) {
+                    session()->setFlashdata('sucesso', 'Grupo de Ambientes excluído com sucesso!');
+                    return redirect()->to(base_url('/sys/cadastro-ambientes'));
+                } else {
+                    return redirect()->to(base_url('/sys/cadastro-ambientes'))->with('erro', 'Erro inesperado ao excluir Grupo de Ambientes!');
+                }
+            } else {
+                $mensagem = "O grupo não pode ser excluído.<br>Este grupo possui ";
+                if($restricoes['disciplinas']) {
+                    $mensagem = $mensagem . "disciplina(s) relacionada(s) a ele!";
+                }
+                throw new ReferenciaException($mensagem);
+            }
+        } catch (ReferenciaException $e) {
+            session()->setFlashdata('erro', $e->getMessage());
+			return redirect()->to(base_url('/sys/cadastro-ambientes'));
         }
-
-        $relacoes = $ambienteGrupoModel->where('grupo_de_ambiente_id', $grupoId)->findAll();
-        foreach ($relacoes as $relacao) {
-            $ambienteGrupoModel->delete($relacao['id']);
-        }
-
-        if ($gruposAmbientesModel->delete($grupoId)) {
-            session()->setFlashdata('sucesso', 'Grupo de ambientes removido com sucesso!');
-        } else {
-            session()->setFlashdata('erro', 'Erro ao excluir o grupo de ambientes.');
-        }
-
-        return redirect()->to(base_url('/sys/cadastro-ambientes'));
     }
 
     public function adicionarAmbientesAoGrupo()

@@ -36,7 +36,7 @@ class Aulas extends BaseController
 		$data['consulta'] = $aulaModel->getAulasComTurmaDisciplinaEProfessores();
 
 		$this->content_data['content'] = view('sys/aulas', $data);
-        return view('dashboard', $this->content_data);
+		return view('dashboard', $this->content_data);
 	}
 
 	public function salvar()
@@ -47,10 +47,13 @@ class Aulas extends BaseController
 		$aula_prof = new AulaProfessorModel();
 		$versaoModel = new VersoesModel();
 
-		foreach ($dadosPost['turmas'] as $k => $v) {
+		foreach ($dadosPost['turmas'] as $k => $v)
+		{
 			$insert = ["disciplina_id" => $dadosPost['disciplina'], "turma_id" => $v, "versao_id" => $versaoModel->getVersaoByUser(auth()->id())];
-			if ($id_aula = $aula->insert($insert)) {
-				foreach ($dadosPost['professores'] as $k2 => $v2) {
+			if ($id_aula = $aula->insert($insert))
+			{
+				foreach ($dadosPost['professores'] as $k2 => $v2)
+				{
 					$prof_insert = ["professor_id" => $v2, "aula_id" => $id_aula];
 					$aula_prof->insert($prof_insert);
 				}
@@ -67,7 +70,6 @@ class Aulas extends BaseController
 		*/
 	}
 
-	//TODO - SISTEMA DE VERSÕES NA ATUALIZAÇÃO
 	public function atualizar()
 	{
 		$dadosPost = $this->request->getPost();
@@ -79,49 +81,65 @@ class Aulas extends BaseController
 		$aula_prof = new AulaProfessorModel();
 		$aula_prof->where('aula_id', $id)->delete();
 
-		foreach ($dadosPost['professores'] as $k => $v) {
+		foreach ($dadosPost['professores'] as $k => $v)
+		{
 			$prof_insert = ["professor_id" => $v, "aula_id" => $id];
 			$aula_prof->insert($prof_insert);
 		}
 
 		$update = ["id" => $id, "disciplina_id" => $dadosPost['disciplina'], "turma_id" => $dadosPost['turma'], "versao_id" => $versaoModel->getVersaoByUser(auth()->id())];
 
-		if ($aula->save($update)) {
+		if ($aula->save($update))
+		{
 			session()->setFlashdata('sucesso', 'Dados da Aula atualizados com sucesso!');
 			return redirect()->to(base_url('/sys/aulas'));
-		} else {
+		}
+		else
+		{
 			$data['erros'] = $aula->errors(); //o(s) erro(s)
 			return redirect()->to(base_url('/sys/aulas'))->with('erros', $data['erros']);
 		}
 	}
 
-	//TODO - Realizar a conferencia das referências
 	public function deletar()
 	{
 		$dadosPost = $this->request->getPost();
 		$id = (int)strip_tags($dadosPost['id']);
 
 		$aulasModel = new AulasModel();
-		try {
+		try
+		{
 			$restricoes = $aulasModel->getRestricoes(['id' => $id]);
 
-			if (!$restricoes['horarios']) {
+			if (!$restricoes['horarios'])
+			{
 				$aulaProfModel = new AulaProfessorModel();
 				$aulaProfModel->where('aula_id', $id)->delete();
-				if ($aulasModel->delete($id)) {
+
+				if ($aulasModel->delete($id))
+				{
 					session()->setFlashdata('sucesso', 'Aula excluída com sucesso!');
 					return redirect()->to(base_url('/sys/aulas'));
-				} else {
+				}
+				else
+				{
 					return redirect()->to(base_url('/sys/aulas'))->with('erro', 'Erro inesperado ao excluir Aula!');
 				}
-			} else {
+			}
+			else
+			{
 				$mensagem = "A aula não pode ser excluída.<br>Esta aula possui ";
-				if($restricoes['professores'] && $restricoes['horarios']) {
+
+				if ($restricoes['professores'] && $restricoes['horarios'])
+				{
 					$mensagem = $mensagem . "horário(s) relacionado(s) a ela!";
 				}
+
 				throw new ReferenciaException($mensagem);
 			}
-		} catch (ReferenciaException $e) {
+		}
+		catch (ReferenciaException $e)
+		{
 			session()->setFlashdata('erro', $e->getMessage());
 			return redirect()->to(base_url('/sys/aulas'));
 		}
@@ -130,12 +148,14 @@ class Aulas extends BaseController
 	public function getAulasFromTurma($turma)
 	{
 		$aula = new AulasModel();
+		
 		$aulas = $aula->select('aulas.id, disciplinas.nome as disciplina, disciplinas.ch, professores.nome as professor')
-						->join('disciplinas', 'disciplinas.id = aulas.disciplina_id')
-						->join('aula_professor', 'aula_professor.aula_id = aulas.id')
-						->join('professores', 'professores.id = aula_professor.professor_id')
-						->where('aulas.turma_id', $turma)
-						->findAll();
+			->join('disciplinas', 'disciplinas.id = aulas.disciplina_id')
+			->join('aula_professor', 'aula_professor.aula_id = aulas.id')
+			->join('professores', 'professores.id = aula_professor.professor_id')
+			->where('aulas.turma_id', $turma)
+			->where('aulas.versao_id', (new VersoesModel())->getVersaoByUser(auth()->id()))
+			->findAll();
 
 		return json_encode($aulas);
 	}

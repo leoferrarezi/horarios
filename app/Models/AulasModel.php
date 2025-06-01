@@ -91,7 +91,7 @@ class AulasModel extends Model
             ->findAll();
     }
 
-    public function checkAulaByVersao($versao)
+    /*public function checkAulaByVersao($versao)
     {
         $builder = $this->db->table($this->table);
         $builder->where('versao_id', $versao);
@@ -105,15 +105,14 @@ class AulasModel extends Model
         {
             return false; // A versão não existe na tabela
         }
-    }
+    }*/
 
     public function getRestricoes($id) 
     {
-        $db = \Config\Database::connect();
         $id = $id['id'];
 
-        $professores = $db->table('aula_professor')->where('aula_id', $id)->get()->getNumRows();
-        $horarios = $db->table('aula_horario')->where('aula_id', $id)->get()->getNumRows();
+        $professores = $this->db->table('aula_professor')->where('aula_id', $id)->get()->getNumRows();
+        $horarios = $this->db->table('aula_horario')->where('aula_id', $id)->get()->getNumRows();
 
         $restricoes = [
             'professores' => $professores, 
@@ -121,6 +120,5 @@ class AulasModel extends Model
         ];
 
         return $restricoes;
-    }
-    
+    }    
 }

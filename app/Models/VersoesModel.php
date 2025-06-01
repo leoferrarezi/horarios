@@ -90,27 +90,112 @@ class VersoesModel extends Model
 
     public function copyAllData($versaoOld)
     {         
+        // Obtem o ID da versão mais recente
         $builder = $this->db->table('versoes');
         $builder->select('id');
         $builder->orderBy('id', 'DESC');
         $versaoNew = $builder->get()->getRowArray()['id'];
+        
+        // Selecionar todas as aulas da versão antiga
+        $builder = $this->db->table('aulas')
+            ->select('id, disciplina_id, turma_id')
+            ->where('versao_id', $versaoOld);
+        
+        $aulas = $builder->get()->getResultArray();
 
-        $builder = $this->db->table('aulas');
-        $query = "SELECT disciplina_id, turma_id, $versaoNew FROM aulas WHERE versao_id = $versaoOld";
-        $builder->ignore(true)->setQueryAsData(new RawSql($query), null, "disciplina_id, turma_id, versao_id")->insertBatch();
+        // Inserir as aulas na nova versão
+        if (!empty($aulas))
+        {
+            foreach ($aulas as $aula)
+            {
+                //Inserir a aula na nova versão
+                $insert = [
+                    'disciplina_id' => $aula['disciplina_id'],
+                    'turma_id' => $aula['turma_id'],
+                    'versao_id' => $versaoNew
+                ];
+                $builder = $this->db->table('aulas');
+                $builder->insert($insert);
 
-        //$builder = $this->db->table('aula_horario');
-        //$query = "SELECT aula_id, tempo_de_aula_id, $versaoNew, ambiente_id FROM aula_horario WHERE versao_id = $versaoOld";
-        //$builder->ignore(true)->setQueryAsData(new RawSql($query), null, "aula_id, tempo_de_aula_id, versao_id, ambiente_id")->insertBatch();
+                $id_aula_antiga = $aula['id'];
+                $id_nova_aula = $this->db->insertID();
+
+                // Selecionar os horários da aula antiga
+                $builder = $this->db->table('aula_professor')
+                    ->select('professor_id')
+                    ->where('aula_id', $id_aula_antiga);
+
+                $professores = $builder->get()->getResultArray();
+
+                // Inserir os professores na nova aula
+                if (!empty($professores))
+                {
+                    foreach ($professores as $professor) 
+                    {
+                        $insert = [
+                            'aula_id' => $id_nova_aula,
+                            'professor_id' => $professor['professor_id']
+                        ];
+                        $builder = $this->db->table('aula_professor');
+                        $builder->insert($insert);
+                    }
+                }
+
+                // Selecionar os horários da aula antiga
+                $builder = $this->db->table('aula_horario')
+                    ->select('id, tempo_de_aula_id, fixa')
+                    ->where('aula_id', $id_aula_antiga);
+                
+                $horarios = $builder->get()->getResultArray();
+
+                // Inserir os horários na nova aula
+                if (!empty($horarios))
+                {
+                    foreach ($horarios as $horario)
+                    {
+                        $insert = [
+                            'aula_id' => $id_nova_aula,
+                            'tempo_de_aula_id' => $horario['tempo_de_aula_id'],
+                            'versao_id' => $versaoNew,
+                            'fixa' => $horario['fixa']
+                        ];
+                        $builder = $this->db->table('aula_horario');
+                        $builder->insert($insert);
+
+                        $id_novo_horario = $this->db->insertID();
+
+                        // Selecionar os ambientes do horário antigo
+                        $builder = $this->db->table('aula_horario_ambiente')
+                            ->select('ambiente_id')
+                            ->where('aula_horario_id', $horario['id']);
+
+                        $ambientes = $builder->get()->getResultArray();
+
+                        // Inserir os ambientes na nova aula
+                        if (!empty($ambientes))
+                        {
+                            foreach ($ambientes as $ambiente) 
+                            {
+                                $insert = [
+                                    'aula_horario_id' => $id_novo_horario,
+                                    'ambiente_id' => $ambiente['ambiente_id']
+                                ];
+                                $builder = $this->db->table('aula_horario_ambiente');
+                                $builder->insert($insert);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public function getRestricoes($id) 
     {
-        $db = \Config\Database::connect();
         $id = $id['id'];
 
-        $aulas = $db->table('aulas')->where('versao_id', $id)->get()->getNumRows();
-        $aulaHorarios = $db->table('aula_horario')->where('versao_id', $id)->get()->getNumRows();
+        $aulas = $this->db->table('aulas')->where('versao_id', $id)->get()->getNumRows();
+        $aulaHorarios = $this->db->table('aula_horario')->where('versao_id', $id)->get()->getNumRows();
 
         $restricoes = [
             'aulas' => $aulas, 

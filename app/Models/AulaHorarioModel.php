@@ -125,7 +125,7 @@ class AulaHorarioModel extends Model
         $this->db->simpleQuery("UPDATE aula_horario SET fixa = 0 WHERE id = '$tempo_de_aula_id'");
     }
 
-    public function checkAulaHorarioByVersao($versao)
+    /*public function checkAulaHorarioByVersao($versao)
     {
         $builder = $this->db->table($this->table);
         $builder->where('versao_id', $versao);
@@ -139,7 +139,7 @@ class AulaHorarioModel extends Model
         {
             return false; // A versão não existe na tabela
         }
-    }
+    }*/
 
     public function checkAulaHorarioByAula($aula)
     {
@@ -184,6 +184,7 @@ class AulaHorarioModel extends Model
                 ->where('tempos_de_aula.dia_semana', $dia_semana)
                 ->where('(tempos_de_aula.hora_inicio * 60 + tempos_de_aula.minuto_inicio) <=', $hora_inicio * 60 + $minuto_inicio)
                 ->where('(tempos_de_aula.hora_fim * 60 + tempos_de_aula.minuto_fim) >', $hora_inicio * 60 + $minuto_inicio)
+                ->where('versao_id', (new VersoesModel())->getVersaoByUser(auth()->id()))
                 ->get();
 
             if ($builder3->getNumRows() > 0)
@@ -221,6 +222,7 @@ class AulaHorarioModel extends Model
                 ->where('tempos_de_aula.dia_semana', $dia_semana)
                 ->where('(tempos_de_aula.hora_inicio * 60 + tempos_de_aula.minuto_inicio) <=', $hora_inicio * 60 + $minuto_inicio)
                 ->where('(tempos_de_aula.hora_fim * 60 + tempos_de_aula.minuto_fim) >', $hora_inicio * 60 + $minuto_inicio)
+                ->where('versao_id', (new VersoesModel())->getVersaoByUser(auth()->id()))
                 ->get();
 
             if ($builder3->getNumRows() > 0)
@@ -280,7 +282,7 @@ class AulaHorarioModel extends Model
             ->join('aula_professor', 'aula_professor.aula_id = aula_horario.aula_id')
             ->where('aula_horario.id', $aulaHorarioId)
             ->where('versao_id', (new VersoesModel())->getVersaoByUser(auth()->id()))
-            ->get();       
+            ->get();
 
         // Iterar sobre os resultados, para o caso de mais de um professor na aula
         foreach ($builder->getResult() as $row)
@@ -302,6 +304,7 @@ class AulaHorarioModel extends Model
                 ->join('tempos_de_aula', 'aula_horario.tempo_de_aula_id = tempos_de_aula.id')
                 ->where('aula_professor.professor_id', $professor)
                 ->where('tempos_de_aula.dia_semana', $dia_semana)
+                ->where('versao_id', (new VersoesModel())->getVersaoByUser(auth()->id()))
                 ->get();
 
             foreach ($builder2->getResult() as $row2)
@@ -332,7 +335,7 @@ class AulaHorarioModel extends Model
             ->join('aula_professor', 'aula_professor.aula_id = aula_horario.aula_id')
             ->where('aula_horario.id', $aulaHorarioId)
             ->where('versao_id', (new VersoesModel())->getVersaoByUser(auth()->id()))
-            ->get();       
+            ->get();
 
         // Iterar sobre os resultados, para o caso de mais de um professor na aula
         foreach ($builder->getResult() as $row)
@@ -374,6 +377,7 @@ class AulaHorarioModel extends Model
                 ->join('tempos_de_aula', 'aula_horario.tempo_de_aula_id = tempos_de_aula.id')
                 ->where('aula_professor.professor_id', $professor)
                 ->whereIn('tempos_de_aula.dia_semana', [$dia_semana, ($dia_semana+1), ($dia_semana-1)]) //pega horários do dia da aula, e do dia seguinte e anterior também pra comparar a manhã com noite
+                ->where('versao_id', (new VersoesModel())->getVersaoByUser(auth()->id()))
                 ->get();
 
             foreach ($builder2->getResult() as $row2)

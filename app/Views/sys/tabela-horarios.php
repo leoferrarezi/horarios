@@ -337,7 +337,7 @@
 
                 <hr class="my-2" />
 
-                <div class="position-absolute start-0 end-0" style="top: 160px; bottom: 15px;">
+                <div class="position-absolute start-0 end-0" style="top: 130px; bottom: 15px;">
                     <div class="h-100 overflow-y-auto custom-scrollbar" id="aulasContainer" style="overflow-x: hidden;">
                     </div>
                 </div>

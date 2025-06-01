@@ -24,8 +24,7 @@ class Turmas extends Migration
 
             'sigla' => [
                 'type'          => 'VARCHAR',
-                'constraint'    => 32,
-                'unique'        => TRUE
+                'constraint'    => 32
             ],
 
             'ano' => [

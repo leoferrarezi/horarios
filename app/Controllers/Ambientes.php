@@ -141,28 +141,33 @@ class Ambientes extends BaseController
 
     public function deletarGrupoAmbientes()
     {
-        $grupoId = $this->request->getPost('id');
+        $dadosPost = $this->request->getPost();
+        $id = (int)strip_tags($dadosPost['id']);
+
         $gruposAmbientesModel = new GruposAmbientesModel();
-        $ambienteGrupoModel = new AmbienteGrupoModel();
+        try {
+            $restricoes = $gruposAmbientesModel->getRestricoes(['id' => $id]);
 
-        $grupo = $gruposAmbientesModel->find($grupoId);
-        if (!$grupo) {
-            session()->setFlashdata('erro', 'Grupo não encontrado.');
-            return redirect()->to(base_url('/sys/cadastro-ambientes'));
+            if (!$restricoes['disciplinas']) {
+                $ambienteGrupoModel = new AmbienteGrupoModel();
+                $ambienteGrupoModel->where('grupo_de_ambiente_id', $id)->delete();
+                if ($gruposAmbientesModel->delete($id)) {
+                    session()->setFlashdata('sucesso', 'Grupo de Ambientes excluído com sucesso!');
+                    return redirect()->to(base_url('/sys/cadastro-ambientes'));
+                } else {
+                    return redirect()->to(base_url('/sys/cadastro-ambientes'))->with('erro', 'Erro inesperado ao excluir Grupo de Ambientes!');
+                }
+            } else {
+                $mensagem = "O grupo não pode ser excluído.<br>Este grupo possui ";
+                if($restricoes['disciplinas']) {
+                    $mensagem = $mensagem . "disciplina(s) relacionada(s) a ele!";
+                }
+                throw new ReferenciaException($mensagem);
+            }
+        } catch (ReferenciaException $e) {
+            session()->setFlashdata('erro', $e->getMessage());
+			return redirect()->to(base_url('/sys/cadastro-ambientes'));
         }
-
-        $relacoes = $ambienteGrupoModel->where('grupo_de_ambiente_id', $grupoId)->findAll();
-        foreach ($relacoes as $relacao) {
-            $ambienteGrupoModel->delete($relacao['id']);
-        }
-
-        if ($gruposAmbientesModel->delete($grupoId)) {
-            session()->setFlashdata('sucesso', 'Grupo de ambientes removido com sucesso!');
-        } else {
-            session()->setFlashdata('erro', 'Erro ao excluir o grupo de ambientes.');
-        }
-
-        return redirect()->to(base_url('/sys/cadastro-ambientes'));
     }
 
     public function adicionarAmbientesAoGrupo()

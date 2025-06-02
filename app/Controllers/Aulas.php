@@ -60,10 +60,12 @@ class Aulas extends BaseController
 			}
 		}
 
+		echo "ok";
+
 		//Criar e testar uma FLAG pra informar se foi sucesso mesmo.
 		//Importante efetuar o rollback de tudo que der errado pra não deixar dados-fantasma no banco
-		session()->setFlashdata('sucesso', 'Aula(s) cadastrada(s) com sucesso!');
-		return redirect()->to(base_url('/sys/aulas'));
+		//session()->setFlashdata('sucesso', 'Aula(s) cadastrada(s) com sucesso!');
+		//return redirect()->to(base_url('/sys/aulas'));
 		/*
 			$data['erros'] = $aula->errors(); //o(s) erro(s)
 			return redirect()->to(base_url('/sys/aulas'))->with('erros', $data['erros'])->withInput();

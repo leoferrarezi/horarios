@@ -1,3 +1,8 @@
+<script>
+    //inicialização precoce pra poder controlar via modal
+    var table;
+</script>
+
 <!-- incluir os componentes modais antes do restante do documento -->
 <?php echo view('components/aulas/modal-cad-aula'); ?>
 <?php echo view('components/aulas/modal-edit-aula'); ?>
@@ -153,7 +158,7 @@
 
         <?php //if (!empty($aula)): ?>
 
-            var table = $("#listagem-aulas").DataTable(
+            table = $("#listagem-aulas").DataTable(
             {
                 ajax:{
                     url:"<?php echo base_url('sys/aulas/getTableByAjax'); ?>",
@@ -296,18 +301,6 @@
             });
 
         <?php //endif; ?>
-
-        // Exibe mensagem de sucesso se o flashdata estiver com 'sucesso'
-        <?php if (session()->getFlashdata('sucesso')): ?>
-            $.toast({
-                heading: 'Sucesso',
-                text: '<?php echo session()->getFlashdata('sucesso'); ?>',
-                showHideTransition: 'slide',
-                icon: 'success',
-                loaderBg: '#f96868',
-                position: 'top-center'
-            });
-        <?php endif; ?>
 
         // Exibe mensagem de erro se o flashdata estiver com 'erro'
         <?php if (session()->has('erros')): ?>

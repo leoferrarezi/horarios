@@ -9,7 +9,7 @@
             </div>
             <form id="cadastrarAula" class="forms-sample" method="post" action='<?php echo base_url('sys/aulas/salvar'); ?>'>
                 <div class="modal-body">
-                    <?php echo csrf_field() ?>
+                    <?php //echo csrf_field() ?>
 
                     <div class="form-group">
                         <label for="curso">Curso</label>
@@ -46,7 +46,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary me-2">Salvar</button>
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
                 </div>
             </form>
         </div>
@@ -76,13 +76,18 @@
                 "id": "<?php echo $disciplina['id'] ?>", "nome": "<?php echo $disciplina['nome'] ?>", "matriz": "<?php echo $disciplina['matriz_id'] ?>"
             },
         <?php endforeach; ?>
-    ];    
+    ];
 
-    function updateSelectTurmas() {
+    function updateSelectTurmas() 
+    {
         $('.select2-turmas').empty();
-        turmas.forEach(function(obj) {
-            if (obj.curso == $("#curso option:selected").val()) {
-                $(".select2-turmas").append($('<option>', {
+
+        turmas.forEach(function(obj) 
+        {
+            if (obj.curso == $("#curso option:selected").val()) 
+            {
+                $(".select2-turmas").append($('<option>', 
+                {
                     value: obj.id,
                     text: obj.sigla
                 }));
@@ -90,39 +95,51 @@
         });
     }
 
-    function getMatrizFromCurso() {
+    function getMatrizFromCurso() 
+    {
         var matriz = -1;
-        cursos.forEach(function(obj) {
-            if(obj.id == $("#curso option:selected").val()) {
+
+        cursos.forEach(function(obj) 
+        {
+            if(obj.id == $("#curso option:selected").val()) 
+            {
                 matriz = obj.matriz;
             }
         });
+
         return matriz;
     }
 
-    function updateSelectDisciplinas() {
+    function updateSelectDisciplinas() 
+    {
         let matriz = getMatrizFromCurso();
         $('#disciplina').empty();
-        disciplinas.forEach(function(obj) {
-            if (obj.matriz == matriz) {
-                $("#disciplina").append($('<option>', {
+
+        disciplinas.forEach(function(obj) 
+        {
+            if (obj.matriz == matriz) 
+            {
+                $("#disciplina").append($('<option>', 
+                {
                     value: obj.id,
                     text: obj.nome
                 }));
             }
         });
-    }
+    }    
 
-    (function($) {
-        'use strict';
-
+    $(document).ready(function() 
+    {
         updateSelectTurmas();
         updateSelectDisciplinas();
 
-        if ($(".select2-turmas").length) {
-            $(".select2-turmas").select2({
+        if ($(".select2-turmas").length) 
+        {
+            $(".select2-turmas").select2(
+            {
                 language: {
-                    noResults:function(){
+                    noResults:function()
+                    {
                         return"Nenhum resultado encontrado"
                     }
                 },
@@ -130,10 +147,13 @@
             });
         }
 
-        if ($(".select2-professores").length){
-            $(".select2-professores").select2({
+        if ($(".select2-professores").length)
+        {
+            $(".select2-professores").select2(
+            {
                 language: {
-                    noResults:function(){
+                    noResults:function()
+                    {
                         return"Nenhum resultado encontrado"
                     }
                 },
@@ -141,10 +161,13 @@
             });
         }
 
-        if ($("#disciplina").length) {
-            $("#disciplina").select2({
+        if ($("#disciplina").length) 
+        {
+            $("#disciplina").select2(
+            {
                 language: {
-                    noResults:function(){
+                    noResults:function()
+                    {
                         return"Nenhum resultado encontrado"
                     }
                 },
@@ -152,10 +175,58 @@
             });
         }
 
-        $("#curso").on("change", function() {
+        $("#curso").on("change", function() 
+        {
             updateSelectTurmas();
             updateSelectDisciplinas();
         });
 
-    })(jQuery);
+        $("#cadastrarAula").on("submit", function(e) 
+        {
+            e.preventDefault();
+
+            let form = $(this);
+            let url = form.attr('action');
+            let data = form.serialize();
+
+            $.ajax(
+            {
+                type: "POST",
+                url: url,
+                data: data,
+
+                success: function(response) 
+                {
+                    if (response == "ok") 
+                    {
+                        // Limpar os campos
+                        updateSelectDisciplinas();
+                        $("#professores").val(null).trigger("change");
+
+                        // Mensagem de sucesso
+                        $.toast({
+                            heading: 'Sucesso',
+                            text: 'Aula cadastrada com sucesso!',
+                            showHideTransition: 'slide',
+                            icon: 'success',
+                            loaderBg: '#f96868',
+                            position: 'top-center'
+                        });
+
+                        // Recarregar a tabela de aulas
+                        table.ajax.reload();
+                    } 
+                    else 
+                    {
+                        alert("Erro ao cadastrar a aula: " + response);
+                    }
+                },
+                error: function() 
+                {
+                    alert("Erro inesperado ao salvar a aula.");
+                }
+            });
+        });
+    });
+
 </script>

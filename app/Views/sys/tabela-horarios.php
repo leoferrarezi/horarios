@@ -1182,15 +1182,15 @@
                                 //Adiciona o professor na aula já existente (visual do card)
                                 $('#professor_aula_' + obj.id).append(' &nbsp; ' +
                                     '<i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>' +
-                                    '<small class="text-secondary">' + obj.professor.split(" ")[0] + '</small>'
+                                    '<small class="text-secondary">' + obj.professor/*.split(" ")[0]*/ + '</small>'
                                 );
 
                                 //Adiciona o professor na aula já existente (atributo data-professor)
-                                $('#aula_' + obj.id).data('professor', $('#aula_' + obj.id).data('professor') + ',' + obj.professor.split(" ")[0]);
+                                $('#aula_' + obj.id).data('professor', $('#aula_' + obj.id).data('professor') + ',' + obj.professor/*.split(" ")[0]*/);
 
                                 //Coloca o professor adicional no vetor da aula já existente
                                 let objetoAlterar = getAulaById(obj.id);
-                                objetoAlterar.professores.push(obj.professor.split(" ")[0]);
+                                objetoAlterar.professores.push(obj.professor/*.split(" ")[0]*/);
                             }
                         });
 
@@ -1200,14 +1200,14 @@
                         if (!found) 
                         {
                             var cardAula = '' +
-                                '<div id="aula_' + obj.id + '" draggable="true" data-aula-id="' + obj.id + '" data-disciplina="' + obj.disciplina + '" data-professor="' + obj.professor.split(" ")[0] + '" data-aulas-total="' + (obj.ch / ((regime == 2) ? 20 : 40)) + '" data-aulas-pendentes="' + (obj.ch / ((regime == 2) ? 20 : 40)) + '" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">' +
+                                '<div id="aula_' + obj.id + '" draggable="true" data-aula-id="' + obj.id + '" data-disciplina="' + obj.disciplina + '" data-professor="' + obj.professor/*.split(" ")[0]*/ + '" data-aulas-total="' + (obj.ch / ((regime == 2) ? 20 : 40)) + '" data-aulas-pendentes="' + (obj.ch / ((regime == 2) ? 20 : 40)) + '" class="card border-1 shadow-sm mx-4 my-1 bg-gradient" style="cursor: pointer;">' +
                                 '<div class="card-body p-0 d-flex flex-column justify-content-center align-items-center text-center">' +
                                 '<h6 class="text-primary">' +
                                 '<i class="mdi mdi-book-outline me-1"></i> ' + obj.disciplina +
                                 '</h6>' +
                                 '<div class="d-flex align-items-center mb-0 py-0" id="professor_aula_' + obj.id + '">' +
                                 '<i class="mdi mdi-account-tie fs-6 text-muted me-1"></i>' +
-                                '<small class="text-secondary">' + obj.professor.split(" ")[0] + '</small>' +
+                                '<small class="text-secondary">' + obj.professor/*.split(" ")[0]*/ + '</small>' +
                                 '</div>' +
                                 '<div class="d-flex align-items-center">' +
                                 '<i class="mdi mdi-door fs-6 text-muted me-1"></i>' +
@@ -1219,7 +1219,7 @@
                             $('#aulasContainer').append(cardAula);
 
                             //Coloca o professor no vetor da aula
-                            obj.professores.push(obj.professor.split(" ")[0]);
+                            obj.professores.push(obj.professor/*.split(" ")[0]*/);
 
                             //adiciona a aula carregada no vetor de aulas
                             aulas.push(obj);

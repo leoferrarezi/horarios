@@ -59,7 +59,7 @@
                             <select class="js-example-basic-single" style="width:100%;" id="filtroCurso">
                                 <option value=""></option>
                                 <?php foreach ($cursos as $curso): ?>
-                                    <option value="<?php echo esc($curso['nome']) ?>"><?php echo esc($curso['nome']) ?></option>
+                                    <option value="<?php echo esc($curso['id']) ?>"><?php echo esc($curso['nome']) ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -67,11 +67,8 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="curso">Turma:</label>
-                            <select class="js-example-basic-single" style="width:100%;" id="filtroTurma">
+                            <select class="js-example-basic-single filtro" style="width:100%;" id="filtroTurma">
                                 <option value=""></option>
-                                <?php foreach ($turmas as $turma): ?>
-                                    <option value="<?php echo esc($turma['sigla']) ?>"><?php echo esc($turma['sigla']) ?></option>
-                                <?php endforeach; ?>
                             </select>
                         </div>
                     </div>
@@ -87,7 +84,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table mb-4" id="listagem-aulas">
+                    <table class="table mb-4" id="listagem-aulas" style="width:100%;">
                         <thead>
                             <tr>
                                 <th>Curso</th>
@@ -98,56 +95,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php if (!empty($consulta)): ?>
-                                <?php foreach ($consulta as $aula): ?>
-                                    <tr>
-                                        <td><?php echo esc($aula['curso_nome']); ?></td>
-                                        <td><?php echo esc($aula['turma_sigla']); ?></td>
-                                        <td><?php echo esc($aula['disciplina_nome']); ?></td>
-                                        <td><?php echo str_replace(",", "<br />", esc($aula['professores_nome'])); ?></td>
-                                        <td>
-                                            <div class="d-flex">
-                                                <span data-bs-toggle="tooltip" data-placement="top" title="Atualizar dados da aula">
-                                                    <button
-                                                        type="button"
-                                                        class="justify-content-center align-items-center d-flex btn btn-inverse-success button-trans-success btn-icon me-1"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#modal-edit-aula"
-                                                        data-id="<?php echo esc($aula['id']); ?>"
-                                                        data-curso="<?php echo esc($aula['curso_nome']); ?>"
-                                                        data-curso_id="<?php echo esc($aula['curso_id']); ?>"
-                                                        data-turma="<?php echo esc($aula['turma_sigla']); ?>"
-                                                        data-turma_id="<?php echo esc($aula['turma_id']); ?>"
-                                                        data-disciplina="<?php echo esc($aula['disciplina_nome']); ?>"
-                                                        data-disciplina_id="<?php echo esc($aula['disciplina_id']); ?>"
-                                                        data-profs="<?php echo esc($aula['professores_nome']); ?>"
-                                                        data-profs_id="<?php echo esc($aula['professores_id']); ?>">
-                                                        <i class="fa fa-edit"></i>
-                                                    </button>
-                                                </span>
-
-                                                <span data-bs-toggle="tooltip" data-placement="top" title="Excluir aula">
-                                                    <button
-                                                        type="button"
-                                                        class="justify-content-center align-items-center d-flex btn btn-inverse-danger button-trans-danger btn-icon me-1"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#modal-deletar-aula"
-                                                        data-id="<?php echo esc($aula['id']); ?>"
-                                                        data-curso="<?php echo esc($aula['curso_nome']); ?>"
-                                                        data-turma="<?php echo esc($aula['turma_sigla']); ?>"
-                                                        data-disciplina="<?php echo esc($aula['disciplina_nome']); ?>">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php else: ?>
-                                <tr>
-                                    <td colspan="4">Nenhuma aula cadastrada.</td>
-                                </tr>
-                            <?php endif; ?>
+                            <!-- preenchido por ajax -->
                         </tbody>
                     </table>
                 </div>
@@ -173,47 +121,112 @@
     const dataTableLangUrl = "<?php echo base_url('assets/js/traducao-dataTable/pt_br.json'); ?>";
 
     //essa linha abaixo é para detectar que o documento foi completamente carregado e executar o código após isso
-    $(document).ready(function() {
+    $(document).ready(function() 
+    {
+        $('.js-example-basic-single').select2(
+        {
+            placeholder: "Selecione uma opção:",
+            allowClear: true,
+            width: '100%'
+        });
 
-        $("#turmas").on("invalid", function() {
-            if (this.validity.valueMissing) {
+        $("#turmas").on("invalid", function() 
+        {
+            if (this.validity.valueMissing) 
+            {
                 this.setCustomValidity("Selecione ao menos uma turma!");
             }
         });
-        $("#professores, #professoresEdit").on("invalid", function() {
-            if (this.validity.valueMissing) {
+
+        $("#professores, #professoresEdit").on("invalid", function() 
+        {
+            if (this.validity.valueMissing) 
+            {
                 this.setCustomValidity("Selecione ao menos um professor!");
             }
         });
 
-        $("#turmas, #professores, #professoresEdit").on("change", function() {
+        $("#turmas, #professores, #professoresEdit").on("change", function() 
+        {
             this.setCustomValidity("");
         });
 
+        <?php //if (!empty($aula)): ?>
 
-        <?php if (!empty($aula)): ?>
-
-            var table = $("#listagem-aulas").DataTable({
-
+            var table = $("#listagem-aulas").DataTable(
+            {
+                ajax:{
+                    url:"<?php echo base_url('sys/aulas/getTableByAjax'); ?>",
+                    dataSrc:""
+                },                
                 aLengthMenu: [
                     [25, 50, 100, -1],
                     [25, 50, 100, "Todos"],
                 ],
-
                 language: {
                     search: "Pesquisar:",
                     url: dataTableLangUrl,
                 },
-
                 ordering: true,
                 order: [
                     [0, 'asc'],
                     [1, 'asc']
                 ],
-                columns: [null, null, null, null, null]
+                columns: [
+                    { data: 'curso_nome' },
+                    { data: 'turma_sigla' },
+                    { data: 'disciplina_nome' },
+                    { data: 'professores_nome' },
+                    { data: null }
+                ],
+                columnDefs: [
+                    {
+                        targets: 4,
+                        data: null,
+                        className: 'dt-left',
+                        render: function (data, type, row, meta) {
+                            return `
+                                <div class="d-flex">
+                                    <span data-bs-toggle="tooltip" data-placement="top" title="Atualizar dados da aula">
+                                        <button
+                                            type="button"
+                                            class="justify-content-center align-items-center d-flex btn btn-inverse-success button-trans-success btn-icon me-1"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modal-edit-aula"
+                                            data-id="${data.id}"
+                                            data-curso="${data.curso_nome}"
+                                            data-curso_id="${data.curso_id}"
+                                            data-turma="${data.turma_sigla}"
+                                            data-turma_id="${data.turma_id}"
+                                            data-disciplina="${data.disciplina_nome}"
+                                            data-disciplina_id="${data.disciplina_id}"
+                                            data-profs="${data.professores_nome}"
+                                            data-profs_id="${data.professores_id}">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                    </span>
+                                    <span data-bs-toggle="tooltip" data-placement="top" title="Excluir aula">
+                                        <button
+                                            type="button"
+                                            class="justify-content-center align-items-center d-flex btn btn-inverse-danger button-trans-danger btn-icon me-1"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modal-deletar-aula"
+                                            data-id="${data.id}"
+                                            data-curso="${data.curso_nome}"
+                                            data-turma="${data.turma_sigla}"
+                                            data-disciplina="${data.disciplina_nome}">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            `;
+                        }
+                    }
+                ]
             });
 
-            $('#modal-edit-aula').on('show.bs.modal', function(event) {
+            $('#modal-edit-aula').on('show.bs.modal', function(event) 
+            {
                 var button = $(event.relatedTarget);
 
                 var id = button.data('id');
@@ -235,8 +248,8 @@
             });
 
             //Mesma abordagem do código acima, para o modal de excluir professor
-            $('#modal-deletar-aula').on('show.bs.modal', function(event) {
-
+            $('#modal-deletar-aula').on('show.bs.modal', function(event) 
+            {
                 var button = $(event.relatedTarget);
 
                 var id = button.data('id');
@@ -255,13 +268,34 @@
             $('[data-bs-toggle="tooltip"]').tooltip();
 
             //Seleciona opção do filtro para a tabela
-            $('#filtroCurso, #filtroTurma').on('change', function() {
-                table.columns(0).search($('#filtroCurso').val());
-                table.columns(1).search($('#filtroTurma').val());
+            $('#filtroCurso').on('change', function() 
+            {
+                $('#filtroTurma').find('option').remove().end().append('<option value="0">-</option>');
+                $('#filtroTurma option[value="0"]').prop('selected', true);
+
+                //Buscar turmas do curso selecionado.
+                if($('#filtroCurso').val() > 0)
+                {
+                    $.get('<?php echo base_url('sys/turma/getTurmasByCurso/'); ?>' + $('#filtroCurso').val(), function(data) 
+                    {
+                        $.each(data, function(idx, obj) 
+                        {
+                            $('#filtroTurma').append('<option value="' + obj.id + '">' + obj.sigla + '</option>');
+                        });
+                    }, 'json')
+                }
+
+                table.columns(0).search($('#filtroCurso option:selected').text());                
                 table.draw();
             });
 
-        <?php endif; ?>
+            $('#filtroTurma').on('change', function()
+            {
+                table.columns(1).search($('#filtroTurma option:selected').text());
+                table.draw();
+            });
+
+        <?php //endif; ?>
 
         // Exibe mensagem de sucesso se o flashdata estiver com 'sucesso'
         <?php if (session()->getFlashdata('sucesso')): ?>
@@ -307,14 +341,3 @@
         });
     </script>
 <?php endif; ?>
-
-<!--Referente ao select 2-->
-<script>
-    $(document).ready(function() {
-        $('.js-example-basic-single').select2({
-            placeholder: "Selecione uma opção:",
-            allowClear: true,
-            width: '100%'
-        });
-    });
-</script>

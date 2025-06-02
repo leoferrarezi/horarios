@@ -159,4 +159,11 @@ class Aulas extends BaseController
 
 		return json_encode($aulas);
 	}
+
+	public function getTableByAjax()
+	{
+		$aulaModel = new AulasModel();
+		$aulas = $aulaModel->getAulasComTurmaDisciplinaEProfessores();
+		return trim(json_encode($aulas));
+	}
 }

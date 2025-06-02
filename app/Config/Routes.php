@@ -140,6 +140,7 @@ $routes->group('sys', function ($routes)
         $routes->post('deletar', 'Aulas::deletar');
         $routes->post('atualizar', 'Aulas::atualizar');
         $routes->get('getAulasFromTurma/(:num)', 'Aulas::getAulasFromTurma/$1');
+        $routes->get('getTableByAjax', 'Aulas::getTableByAjax');        
     });
 
     $routes->group('versao', function ($routes) {

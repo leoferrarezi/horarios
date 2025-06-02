@@ -1129,13 +1129,13 @@
             {
                 $.each(data, function(idx, obj) 
                 {
-                        $('#filtroTurma').append('<option value="' + obj.id + '">' + obj.sigla + '</option>');
-                    });
-                }, 'json')
+                    $('#filtroTurma').append('<option value="' + obj.id + '">' + obj.sigla + '</option>');
+                });
+            }, 'json')
             .done(function() 
             {
-                    $(".loader-demo-box").css("visibility", "hidden");
-                });
+                $(".loader-demo-box").css("visibility", "hidden");
+            });
         });
 
         //Progração do evento "change" dos select de turmas

@@ -48,7 +48,7 @@ class PDF
 		$this->html .= $html;
 	}
 
-	public function generatePDF()
+	public function generatePDF($file_name)
 	{
 		$render = '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8" />';
 		$render .= '<style>';
@@ -68,6 +68,6 @@ class PDF
 
 		//echo $render;
 		
-		$this->dompdf->stream();
+		$this->dompdf->stream($file_name . ".pdf", ['Attachment' => 1]);
 	}
 }
